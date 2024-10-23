@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+    <context:component-scan base-package="
+        com.coma.app.view.common,
+        com.coma.app.view.community,
+        com.coma.app.view.crew.battle,
+        com.coma.app.view.crew.community,
+        com.coma.app.view.crew.join,
+        com.coma.app.view.function,
+        com.coma.app.view.gym,
+        com.coma.app.view.main,
+        com.coma.app.view.member,
+        com.coma.app.view.mypage,
+        com.coma.app.view.ranking,
+        com.coma.app.view.store"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>
