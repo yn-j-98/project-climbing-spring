@@ -5,170 +5,99 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.coma.app.biz.favorite.FavoriteDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.coma.app.biz.common.JDBCUtil;
 
 @Repository
-public class GradeDAO implements GradeService{
-	//데이터 추가
-	private final String INSERT = "INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)\r\n"
-			+ "VALUES(?,?,?,?)";
-
+public class GradeDAO {
+	//데이터 추가 GRADE_PROFILE, GRADE_NAME, GRADE_MIN_POINT, GRADE_MAX_POINT
+	private final String INSERT = "INSERT INTO GRADE(GRADE_PROFILE, GRADE_NAME, GRADE_MIN_POINT, GRADE_MAX_POINT) VALUES(?, ?, ?, ?)";
 	//max_point기준으로 내림차순 정렬해서 출력
-	private final String ALL_DESC = "SELECT\r\n"
-			+ "	GRADE_NUM,\r\n"
-			+ "	GRADE_PROFILE,\r\n"
-			+ "	GRADE_NAME,\r\n"
-			+ "	GRADE_MIN_POINT,\r\n"
-			+ "	GRADE_MAX_POINT\r\n"
-			+ "FROM\r\n"
-			+ "	GRADE\r\n"
-			+ "ORDER BY\r\n"
-			+ "	GRADE_MAX_POINT DESC";
-
+	private final String ALL_DESC = "SELECT GRADE_NUM, GRADE_PROFILE, GRADE_NAME, GRADE_MIN_POINT, GRADE_MAX_POINT FROM GRADE ORDER BY GRADE_MAX_POINT DESC";
 	//PK로 등급 찾기 GRADE_NUM
-	private final String ONE = "SELECT\r\n"
-			+ "	GRADE_NUM,\r\n"
-			+ "	GRADE_PROFILE,\r\n"
-			+ "	GRADE_NAME,\r\n"
-			+ "	GRADE_MIN_POINT,\r\n"
-			+ "	GRADE_MAX_POINT\r\n"
-			+ "FROM\r\n"
-			+ "	GRADE\r\n"
-			+ "WHERE\r\n"
-			+ "	GRADE_NUM = ?";
+	private final String ONE = "SELECT GRADE_NUM, GRADE_PROFILE, GRADE_NAME, GRADE_MIN_POINT, GRADE_MAX_POINT FROM GRADE WHERE GRADE_NUM = ?";
+
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
 	public boolean insert(GradeDTO gradeDTO) {
-		System.out.println("grade.GradeDAO.insert 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			//데이터 추가
-			pstmt=conn.prepareStatement(INSERT);
-			pstmt.setString(1, gradeDTO.getModel_grade_profile());
-			pstmt.setString(2, gradeDTO.getModel_grade_name());
-			pstmt.setInt(3, gradeDTO.getModel_grade_min_point());
-			pstmt.setInt(4, gradeDTO.getModel_grade_max_point());
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("grade.GradeDAO.insert 실패");
-				return false;
-			}
-
-		} catch (SQLException e) {
-			System.out.println("grade.GradeDAO.insert SQL문 실패");
+		System.out.println("com.coma.app.biz.grade.insert 시작");
+		//데이터 추가 GRADE_PROFILE, GRADE_NAME, GRADE_MIN_POINT, GRADE_MAX_POINT
+		int result=jdbcTemplate.update(INSERT,gradeDTO.getGrade_profile(),gradeDTO.getGrade_name(),gradeDTO.getGrade_min_point(),gradeDTO.getGrade_max_point());
+		if(result<=0) {
+			System.out.println("com.coma.app.biz.grade.insert SQL문 실패");
 			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
 		}
-		System.out.println("grade.GradeDAO.insert 성공");
+		System.out.println("com.coma.app.biz.grade.insert 성공");
 		return true;
 	}
-	public boolean update(GradeDTO gradeDTO) {
-		System.out.println("grade.GradeDAO.update 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			pstmt=conn.prepareStatement("");
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("grade.GradeDAO.update 실패");
-				return false;
-			}
 
-		} catch (SQLException e) {
-			System.err.println("grade.GradeDAO.update SQL문 실패");
-			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
-		}
-		System.out.println("grade.GradeDAO.update 성공");
-		return true;
+	public boolean update(GradeDTO gradeDTO) { // TODO 없는 CRUD
+		System.out.println("com.coma.app.biz.grade.update 시작");
+		return false;
 	}
-	public boolean delete(GradeDTO gradeDTO) {
-		System.err.println("grade.GradeDAO.delete 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			pstmt=conn.prepareStatement("");
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("grade.GradeDAO.delete 실패");
-				return false;
-			}
 
-		} catch (SQLException e) {
-			System.err.println("grade.GradeDAO.delete SQL문 실패");
-			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
-		}
-		System.out.println("grade.GradeDAO.delete 성공");
-		return true;
+	public boolean delete(GradeDTO gradeDTO) { // TODO 없는 CRUD
+		System.out.println("com.coma.app.biz.grade.delete 시작");
+		return false;
 	}
 
 	public GradeDTO selectOne(GradeDTO gradeDTO){
-		System.out.println("grade.GradeDAO.selectOne 시작");
-		GradeDTO data = null;
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
+		System.out.println("com.coma.app.biz.grade.selectOne 시작");
+
+		GradeDTO data= null;
+		Object[] args = {gradeDTO.getGrade_num()};
 		try {
 			//PK로 등급 찾기 GRADE_NUM
-			pstmt=conn.prepareStatement(ONE);
-			pstmt.setInt(1, gradeDTO.getModel_grade_num());
-
-			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
-				System.out.println("grade.GradeDAO.selectOne 검색 성공");
-				data = new GradeDTO();
-				data.setModel_grade_num(rs.getInt("GRADE_NUM"));
-				data.setModel_grade_name(rs.getString("GRADE_NAME"));
-				data.setModel_grade_profile(rs.getString("GRADE_PROFILE"));
-				data.setModel_grade_min_point(rs.getInt("GRADE_MIN_POINT"));
-				data.setModel_grade_max_point(rs.getInt("GRADE_MAX_POINT"));
-			}
-		} catch (SQLException e) {
-			System.err.println("grade.GradeDAO.selectOne SQL문 실패");
-			return null;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
+			data= jdbcTemplate.queryForObject(ONE,args,new GradeRowMapper());
 		}
-		System.out.println("grade.GradeDAO.selectOne 성공");
+		catch(Exception e) {
+			System.out.println("com.coma.app.biz.grade.selectOne SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.grade.selectOne 성공");
 		return data;
 	}
 
-	public ArrayList<GradeDTO> selectAll(GradeDTO gradeDTO){
-		System.out.println("grade.GradeDAO.selectAll 시작");
-		ArrayList<GradeDTO> datas = new ArrayList<GradeDTO>();
-		int rsCnt=1;//로그용
-		Connection conn = JDBCUtil.connect();
-		PreparedStatement pstmt = null;
+	public List<GradeDTO> selectAll(GradeDTO gradeDTO){
+		System.out.println("com.coma.app.biz.grade.selectAll 시작");
+
+		List<GradeDTO> datas = null;
 		try {
 			//max_point기준으로 내림차순 정렬해서 출력
-			pstmt=conn.prepareStatement(ALL_DESC);
-			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
-				System.out.println(rsCnt+"번행 출력중...");
-				GradeDTO data = new GradeDTO();
-				data.setModel_grade_num(rs.getInt("GRADE_NUM"));
-				data.setModel_grade_name(rs.getString("GRADE_NAME"));
-				data.setModel_grade_profile(rs.getString("GRADE_PROFILE"));
-				data.setModel_grade_min_point(rs.getInt("GRADE_MIN_POINT"));
-				data.setModel_grade_max_point(rs.getInt("GRADE_MAX_POINT"));
-				datas.add(data);
-				rsCnt++;
-			}
-
-		}catch(SQLException e) {
-			System.err.println("grade.GradeDAO.selectAll SQL문 실패");
-			return datas;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
+			datas = jdbcTemplate.query(ALL_DESC, new GradeRowMapper());
 		}
-		System.out.println("grade.GradeDAO.selectAll 성공");
+		catch (Exception e) {
+			System.out.println("com.coma.app.biz.grade.selectAll SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.grade.selectAll 성공");
 		return datas;
-
 	}
+}
+
+class GradeRowMapper implements RowMapper<GradeDTO> {
+
+	public GradeDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		GradeDTO gradeDTO=new GradeDTO();
+		System.out.print("FavoriteRowMapper DB에서 가져온 데이터 {");
+		gradeDTO.setGrade_num(rs.getInt("GRADE_NUM"));
+		System.err.println("gym_num = ["+gradeDTO.getGrade_num()+"]");
+		gradeDTO.setGrade_profile(rs.getString("GRADE_PROFILE"));
+		System.err.println("gym_profile = ["+gradeDTO.getGrade_profile()+"]");
+		gradeDTO.setGrade_name(rs.getString("GRADE_NAME"));
+		System.err.println("gym_name = ["+gradeDTO.getGrade_name()+"]");
+		gradeDTO.setGrade_min_point(rs.getInt("GRADE_MIN_POINT"));
+		System.err.println("gym_min_point = ["+gradeDTO.getGrade_min_point()+"]");
+		gradeDTO.setGrade_max_point(rs.getInt("GRADE_MAX_POINT"));
+		System.err.println("gym_max_point = ["+gradeDTO.getGrade_max_point()+"]");
+		System.out.println("}");
+		return gradeDTO;
+	};
 }

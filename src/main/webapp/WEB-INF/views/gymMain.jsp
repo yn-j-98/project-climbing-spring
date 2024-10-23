@@ -60,11 +60,11 @@
 
 									<!-- 암벽장 리스트 -->
 									<c:forEach var="data" items="${model_gym_datas}">
-										<form action="GymInformationPage.do" id="gym_list">
+										<form action="GYMINFORMATIONPAGE.do" id="gym_list">
 											<input type="hidden" id="gym_name_input" name="gym_name">
 											<input type="hidden" id="gym_location_input"
 												name="gym_location"> <input type="hidden"
-												name="VIEW_GYM_NUM" value="${data.model_gym_num}">
+												name="model_gym_num" value="${data.model_gym_num}">
 											<div class="card card-stats card-round p-3 mt-3"
 												onclick="handleClick(this)" id="${data.model_gym_name}">
 

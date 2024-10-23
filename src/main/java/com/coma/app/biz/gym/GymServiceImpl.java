@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service("gymService")
-public class GymServiceImpl implements GymService{
-
+@Service("GymService")
+public class GymServiceImpl implements GymService {
+	
 	@Autowired
-	GymDAO gymDAO;
+	private GymDAO gymDAO;
 	
 	@Override
 	public List<GymDTO> selectAll(GymDTO gymDTO) {
@@ -35,4 +35,5 @@ public class GymServiceImpl implements GymService{
 	public boolean delete(GymDTO gymDTO) {
 		return this.gymDAO.delete(gymDTO);
 	}
+
 }

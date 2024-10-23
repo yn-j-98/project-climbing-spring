@@ -17,33 +17,17 @@ MemberDTO {
 	private String member_location;        //사용자 현재지역
 	private Date member_registration_date; //회원가입날짜
 	private String member_role;            //관리자 권한
-
+	
 	//DTO에만 존재하는 데이터
 	private String member_grade_profile; //사용자의 등급 사진
 	private String member_grade_name; //사용자의 등급 이름
 	private int member_crew_current_size; //사용자의 크루의 현재 인원수
 	private String member_condition;       //개발자 데이터
-	private String member_crew_name;      //사용자가 속한 크루 이름
-	private String member_crew_profile;   //사용자가 속한 크루 이미지 url
-	private String member_crew_leader;   //사용자가 속한 크루장 pk
-	private String VIEW_AUTO_LOGIN;
+	private String member_crew_name;		//사용자가 속한 크루 이름
+	private String member_crew_profile;	//사용자가 속한 크루 이미지 url
+	private String member_crew_leader;	//사용자가 속한 크루장 pk
+	private String VIEW_AUTO_LOGIN; // 자동로그인 체크
 	private int VIEW_USE_POINT;
-
-	public int getVIEW_USE_POINT() {
-		return VIEW_USE_POINT;
-	}
-
-	public void setVIEW_USE_POINT(int VIEW_USE_POINT) {
-		this.VIEW_USE_POINT = VIEW_USE_POINT;
-	}
-
-	public String getVIEW_AUTO_LOGIN() {
-		return VIEW_AUTO_LOGIN;
-	}
-
-	public void setVIEW_AUTO_LOGIN(String VIEW_AUTO_LOGIN) {
-		this.VIEW_AUTO_LOGIN = VIEW_AUTO_LOGIN;
-	}
 
 	public String getMember_id() {
 		return member_id;
@@ -197,6 +181,22 @@ MemberDTO {
 		this.member_crew_leader = member_crew_leader;
 	}
 
+	public String getVIEW_AUTO_LOGIN() {
+		return VIEW_AUTO_LOGIN;
+	}
+
+	public void setVIEW_AUTO_LOGIN(String VIEW_AUTO_LOGIN) {
+		this.VIEW_AUTO_LOGIN = VIEW_AUTO_LOGIN;
+	}
+
+	public int getVIEW_USE_POINT() {
+		return VIEW_USE_POINT;
+	}
+
+	public void setVIEW_USE_POINT(int VIEW_USE_POINT) {
+		this.VIEW_USE_POINT = VIEW_USE_POINT;
+	}
+
 	@Override
 	public String toString() {
 		return "MemberDTO{" +
@@ -220,7 +220,7 @@ MemberDTO {
 				", member_crew_profile='" + member_crew_profile + '\'' +
 				", member_crew_leader='" + member_crew_leader + '\'' +
 				", VIEW_AUTO_LOGIN='" + VIEW_AUTO_LOGIN + '\'' +
-				", VIEW_USE_POINT='" + VIEW_USE_POINT + '\'' +
+				", VIEW_USE_POINT=" + VIEW_USE_POINT +
 				'}';
 	}
 }

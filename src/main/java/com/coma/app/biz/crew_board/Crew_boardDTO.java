@@ -13,8 +13,6 @@ public class Crew_boardDTO {
 	private int crew_board_min_num;	      // 페이지네이션 데이터
 	private String crew_board_condition;  // 개발자 데이터
 
-	private int page;	      // 페이지네이션 데이터
-
 	public int getCrew_board_num() {
 		return crew_board_num;
 	}
@@ -95,21 +93,19 @@ public class Crew_boardDTO {
 		this.crew_board_condition = crew_board_condition;
 	}
 
-	public int getPage() {
-		return page;
-	}
-
-	public void setPage(int page) {
-		this.page = page;
-	}
 	@Override
 	public String toString() {
-		return "Crew_boardDTO [crew_board_num=" + crew_board_num + ", crew_board_writer_id="
-				+ crew_board_writer_id + ", crew_board_content=" + crew_board_content
-				+ ", crew_board_title=" + crew_board_title + ", crew_board_cnt=" + crew_board_cnt
-				+ ", crew_board_member_profile=" + crew_board_member_profile + ", crew_board_total="
-				+ crew_board_total + ", crew_board_max_num=" + crew_board_max_num
-				+ ", crew_board_min_num=" + crew_board_min_num + ", crew_board_condition="
-				+ crew_board_condition + ", page=" + page + "]";
+		return "Crew_boardDTO{" +
+				"crew_board_num=" + crew_board_num +
+				", crew_board_writer_id='" + crew_board_writer_id + '\'' +
+				", crew_board_content='" + crew_board_content + '\'' +
+				", crew_board_title='" + crew_board_title + '\'' +
+				", crew_board_cnt=" + crew_board_cnt +
+				", crew_board_member_profile='" + crew_board_member_profile + '\'' +
+				", crew_board_total=" + crew_board_total +
+				", crew_board_max_num=" + crew_board_max_num +
+				", crew_board_min_num=" + crew_board_min_num +
+				", crew_board_condition='" + crew_board_condition + '\'' +
+				'}';
 	}
 }

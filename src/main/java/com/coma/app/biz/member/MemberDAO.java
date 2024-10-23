@@ -43,25 +43,25 @@ public class MemberDAO {
 	//회원정보 업데이트 MEMBER_PASSWORD, MEMBER_PROFILE, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
 	private final String UPDATE_ALL = "UPDATE MEMBER\r\n"
 			+ "SET\r\n"
-			+ "   MEMBER_PASSWORD = ?,\r\n"
-			+ "   MEMBER_PROFILE = ?,\r\n"
-			+ "   MEMBER_PHONE = ?,\r\n"
-			+ "   MEMBER_LOCATION = ?\r\n"
+			+ "	MEMBER_PASSWORD = ?,\r\n"
+			+ "	MEMBER_PROFILE = ?,\r\n"
+			+ "	MEMBER_PHONE = ?,\r\n"
+			+ "	MEMBER_LOCATION = ?\r\n"
 			+ "WHERE MEMBER_ID = ?";
 
 	//회원정보 업데이트 (profile X) MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
 	private final String UPDATE_WITHOUT_PROFILE = "UPDATE MEMBER\r\n"
 			+ "SET\r\n"
-			+ "   MEMBER_PASSWORD = ?,\r\n"
-			+ "   MEMBER_PHONE = ?,\r\n"
-			+ "   MEMBER_LOCATION = ?\r\n"
+			+ "	MEMBER_PASSWORD = ?,\r\n"
+			+ "	MEMBER_PHONE = ?,\r\n"
+			+ "	MEMBER_LOCATION = ?\r\n"
 			+ "WHERE MEMBER_ID = ?";
 
 	//크루가입 (크루가입시 가입날짜입력때문에 분리) MEMBER_ID
 	private final String UPDATE_CREW = "UPDATE MEMBER\r\n" //FIXME 관리자 권한이 아닌 사람들만
 			+ "SET\r\n"
-			+ "   MEMBER_CREW_NUM = 1,\r\n"
-			+ "   MEMBER_CREW_JOIN_DATE = SYSDATE()\r\n"
+			+ "	MEMBER_CREW_NUM = 1,\r\n"
+			+ "	MEMBER_CREW_JOIN_DATE = SYSDATE()\r\n"
 			+ "WHERE MEMBER_ID = ?";
 
 	//관리자 권한 변경 MEMBER_ROLE, MEMBER_ID
@@ -73,28 +73,29 @@ public class MemberDAO {
 			+ "WHERE MEMBER_REGISTRATION_DATE >= DATE_ADD(SYSDATE(), INTERVAL - (INTERVAL '7' DAY) * 86400 SECOND) AND ROLE='F'";
 
 	//크루 랭킹 상위 10개 조회
-	private final String ALL_TOP10_CREW_RANK = "SELECT \n" +
-			"    SUB.CREW_PROFILE,\n" +
-			"    SUB.CREW_NAME,\n" +
-			"    SUB.MEMBER_CREW_RANK\n" +
-			"FROM (\n" +
-			"    SELECT\n" +
-			"        C.CREW_PROFILE,\n" +
-			"        C.CREW_NAME,\n" +
-			"        SUM(M.MEMBER_TOTAL_POINT) AS MEMBER_CREW_RANK\n" +
-			"    FROM\n" +
-			"        MEMBER M\n" +
-			"    JOIN\n" +
-			"        CREW C \n" +
-			"    ON \n" +
-			"        M.MEMBER_CREW_NUM = C.CREW_NUM\n" +
-			"    GROUP BY\n" +
-			"        C.CREW_PROFILE,\n" +
-			"        C.CREW_NAME\n" +
-			"    ORDER BY\n" +
-			"        MEMBER_CREW_RANK DESC\n" +
-			") SUB\n" +
-			"LIMIT 10";
+	private final String ALL_TOP10_CREW_RANK = "SELECT\r\n"
+			+ "    ROWNUM AS RANKING,\r\n"
+			+ "    SUB.CREW_PROFILE,\r\n"
+			+ "    SUB.CREW_NAME,\r\n"
+			+ "    MEMBER_CREW_RANK\r\n"
+			+ "FROM (\r\n"
+			+ "    SELECT\r\n"
+			+ "        C.CREW_PROFILE,\r\n"
+			+ "        C.CREW_NAME,\r\n"
+			+ "        SUM(M.MEMBER_TOTAL_POINT) AS MEMBER_CREW_RANK\r\n"
+			+ "    FROM\r\n"
+			+ "        MEMBER M\r\n"
+			+ "    JOIN\r\n"
+			+ "        CREW C \r\n"
+			+ "    ON \r\n"
+			+ "        M.MEMBER_CREW_NUM = C.CREW_NUM\r\n"
+			+ "    GROUP BY\r\n"
+			+ "        C.CREW_PROFILE,\r\n"
+			+ "        C.CREW_NAME\r\n"
+			+ "    ORDER BY\r\n"
+			+ "        MEMBER_CREW_RANK DESC\r\n"
+			+ ") SUB\r\n"
+			+ "LIMIT 10";
 
 	//상위 개인 랭킹 10개
 	private final String ALL_TOP10_RANK = "SELECT\r\n"
@@ -116,19 +117,19 @@ public class MemberDAO {
 
 	//특정 사용자가 속한 크루 찾기 MEMBER_ID
 	private final String SEARCH_MY_CREW = "SELECT\r\n"
-			+ "   M.MEMBER_CREW_NUM\r\n"
+			+ "	M.MEMBER_CREW_NUM\r\n"
 			+ "FROM\r\n"
-			+ "   MEMBER M\r\n"
+			+ "	MEMBER M\r\n"
 			+ "JOIN\r\n"
-			+ "   CREW C\r\n"
+			+ "	CREW C\r\n"
 			+ "ON\r\n"
-			+ "   M.MEMBER_CREW_NUM = C.CREW_NUM\r\n"
+			+ "	M.MEMBER_CREW_NUM = C.CREW_NUM\r\n"
 			+ "WHERE\r\n"
-			+ "   MEMBER_ID = ?";
+			+ "	MEMBER_ID = ?";
 
 	//크루 랭킹 전체 출력
 	private final String ALL_CREW_RANK = "SELECT\r\n"
-			+ "   C.CREW_NUM,\r\n"
+			+ "	C.CREW_NUM,\r\n"
 			+ "    C.CREW_NAME,\r\n"
 			+ "    C.CREW_LEADER,\r\n"
 			+ "    C.CREW_MAX_MEMBER_SIZE,\r\n"
@@ -141,7 +142,7 @@ public class MemberDAO {
 			+ "ON \r\n"
 			+ "    M.MEMBER_CREW_NUM = C.CREW_NUM\r\n"
 			+ "GROUP BY\r\n"
-			+ "   C.CREW_NUM,\r\n"
+			+ "	C.CREW_NUM,\r\n"
 			+ "    C.CREW_NAME,\r\n"
 			+ "    C.CREW_LEADER,\r\n"
 			+ "    C.CREW_MAX_MEMBER_SIZE\r\n"

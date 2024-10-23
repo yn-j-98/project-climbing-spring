@@ -1,14 +1,13 @@
 package com.coma.app.biz.reply;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import com.coma.app.biz.common.JDBCUtil;
 
 @Repository
 public class ReplyDAO {
@@ -28,8 +27,8 @@ public class ReplyDAO {
 			+ "	REPLY_BOARD_NUM = ?";
 
 	//댓글작성 REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID
-	// PK는 AUTO-INCREMENT사용으로 서브쿼리문 사용X
-	private final String INSERT = "INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES (?, ?, ?)";
+	private final String INSERT="INSERT INTO REPLY (REPLY_NUM, REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID)\r\n"
+			+ "VALUES ((SELECT NVL(MAX(REPLY_NUM),0)+1 FROM REPLY),?,?,?)";
 
 	//댓글 내용 수정 REPLY_CONTENT, REPLY_NUM
 	private final String UPDATE="UPDATE REPLY SET REPLY_CONTENT = ? WHERE REPLY_NUM = ?";
@@ -40,137 +39,92 @@ public class ReplyDAO {
 	//댓글 선택 SELECTONE REPLY_NUM
 	private final String SELECTONE = "SELECT REPLY_NUM, REPLY_BOARD_NUM, REPLY_CONTENT, REPLY_WRITER_ID FROM REPLY WHERE REPLY_NUM = ?";
 
+	@Autowired
+	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
+
 	public boolean insert(ReplyDTO replyDTO) {
-		System.out.println("reply.ReplyDAO.insert 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			//댓글작성 reply_content, reply_board_num, reply_writer_id
-			pstmt=conn.prepareStatement(INSERT);
-			pstmt.setString(1, replyDTO.getModel_reply_content());
-			pstmt.setInt(2, replyDTO.getModel_reply_board_num());
-			pstmt.setString(3, replyDTO.getModel_reply_writer_id());
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("reply.ReplyDAO.insert 실패");
-				return false;
-			}
-
-		} catch (SQLException e) {
-			System.out.println("reply.ReplyDAO.insert SQL문 실패");
+		System.out.println("com.coma.app.biz.reply.insert 시작");
+		//댓글작성 REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID
+		int result=jdbcTemplate.update(INSERT,replyDTO.getReply_content(),replyDTO.getReply_board_num(),replyDTO.getReply_writer_id());
+		if(result<=0) {
+			System.out.println("com.coma.app.biz.reply.insert SQL문 실패");
 			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
 		}
-		System.out.println("reply.ReplyDAO.insert 성공");
+		System.out.println("com.coma.app.biz.reply.insert 성공");
 		return true;
 	}
+
 	public boolean update(ReplyDTO replyDTO) {
-		System.out.println("reply.ReplyDAO.update 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			//댓글 내용 수정 reply_content, reply_num
-			pstmt=conn.prepareStatement(UPDATE);
-			pstmt.setString(1, replyDTO.getModel_reply_content());
-			pstmt.setInt(2, replyDTO.getModel_reply_num());
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("reply.ReplyDAO.update 실패");
-				return false;
-			}
-
-		} catch (SQLException e) {
-			System.err.println("reply.ReplyDAO.update SQL문 실패");
+		System.out.println("com.coma.app.biz.reply.update 시작");
+		//댓글 내용 수정 REPLY_CONTENT, REPLY_NUM
+		int result=jdbcTemplate.update(UPDATE,replyDTO.getReply_content(),replyDTO.getReply_num());
+		if(result<=0) {
+			System.out.println("com.coma.app.biz.reply.update SQL문 실패");
 			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
 		}
-		System.out.println("reply.ReplyDAO.update 성공");
+		System.out.println("com.coma.app.biz.reply.update 성공");
 		return true;
 	}
-	public boolean delete(ReplyDTO replyDTO) {
-		System.err.println("reply.ReplyDAO.delete 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			//댓글 삭제 reply_num
-			pstmt=conn.prepareStatement(DELETE);
-			pstmt.setInt(1, replyDTO.getModel_reply_num());
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("reply.ReplyDAO.delete 실패");
-				return false;
-			}
 
-		} catch (SQLException e) {
-			System.err.println("reply.ReplyDAO.delete SQL문 실패");
+	public boolean delete(ReplyDTO replyDTO) {
+		System.err.println("com.coma.app.biz.reply.delete 시작");
+		//댓글 삭제 REPLY_NUM
+		int result=jdbcTemplate.update(DELETE,replyDTO.getReply_num());
+		if(result<=0) {
+			System.err.println("com.coma.app.biz.reply.delete SQL문 실패");
 			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
 		}
-		System.out.println("reply.ReplyDAO.delete 성공");
+		System.err.println("com.coma.app.biz.reply.delete 성공");
 		return true;
 	}
 
 	public ReplyDTO selectOne(ReplyDTO replyDTO){
-		System.out.println("reply.ReplyDAO.selectOne 시작");
+		System.out.println("com.coma.app.biz.reply.selectOne 시작");
+
 		ReplyDTO data = null;
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
+		Object[] args = {replyDTO.getReply_num()};
 		try {
 			//댓글 선택 SELECTONE REPLY_NUM
-			pstmt=conn.prepareStatement(SELECTONE);
-			pstmt.setInt(1, replyDTO.getModel_reply_num());
-
-			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
-				System.out.println("reply.ReplyDAO.selectOne 검색 성공");
-				data = new ReplyDTO();
-				data.setModel_reply_num(rs.getInt("REPLY_NUM"));
-				data.setModel_reply_content(rs.getString("REPLY_CONTENT"));
-				data.setModel_reply_board_num(rs.getInt("REPLY_BOARD_NUM"));
-				data.setModel_reply_writer_id(rs.getString("REPLY_WRITER_ID"));
-			}
-		} catch (SQLException e) {
-			System.err.println("reply.ReplyDAO.selectOne SQL문 실패");
-			return null;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
+			data= jdbcTemplate.queryForObject(SELECTONE,args,new ReplySelectRowMapper());
 		}
-		System.out.println("reply.ReplyDAO.selectOne 성공");
+		catch (Exception e) {
+			System.out.println("com.coma.app.biz.reply.selectOne SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.reply.selectOne 성공");
 		return data;
 	}
 
-	public ArrayList<ReplyDTO> selectAll(ReplyDTO replyDTO){
-		System.out.println("reply.ReplayDAO.selectAll 시작");
-		ArrayList<ReplyDTO> datas = new ArrayList<ReplyDTO>();
-		int rsCnt=1;//로그용
-		Connection conn = JDBCUtil.connect();
-		PreparedStatement pstmt = null;
+	public List<ReplyDTO> selectAll(ReplyDTO replyDTO){
+		System.out.println("com.coma.app.biz.reply.selectAll 시작");
+
+		List<ReplyDTO> datas=null;
+		Object[] args = {replyDTO.getReply_board_num()};
 		try {
-			//해당글에 댓글목록출력 reply_board_num
-			pstmt=conn.prepareStatement(SELECTALL);
-			pstmt.setInt(1,replyDTO.getModel_reply_board_num());
-			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
-				System.out.println(rsCnt+"번행 출력중...");
-				ReplyDTO data = new ReplyDTO();
-				data.setModel_reply_num(rs.getInt("REPLY_NUM"));
-				data.setModel_reply_content(rs.getString("REPLY_CONTENT"));
-				data.setModel_reply_writer_id(rs.getString("REPLY_WRITER_ID"));
-				datas.add(data);
-				rsCnt++;
-			}
-
-		}catch(SQLException e) {
-			System.err.println("reply.ReplyDAO selectAll SQL문 실패");
-			return datas;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
+			// 해당글에 댓글목록출력 REPLY_BOARD_NUM
+			datas= jdbcTemplate.query(SELECTALL,args,new ReplySelectRowMapper());
 		}
-		System.out.println("reply.ReplayDAO.selectAll 성공");
+		catch (Exception e) {
+			System.out.println("com.coma.app.biz.reply.selectAll SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.reply.selectAll 성공");
 		return datas;
-
 	}
+}
+
+class ReplySelectRowMapper implements RowMapper<ReplyDTO> {
+
+	public ReplyDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ReplyDTO replyDTO=new ReplyDTO();
+		System.out.print("GymSelectRowMapper DB에서 가져온 데이터 {");
+		replyDTO.setReply_num(rs.getInt("REPLY_NUM"));
+		System.err.println("reply_num = ["+replyDTO.getReply_num()+"]");
+		replyDTO.setReply_board_num(rs.getInt("REPLY_BOARD_NUM"));
+		System.err.println("reply_board_num = ["+replyDTO.getReply_board_num()+"]");
+		replyDTO.setReply_content(rs.getString("REPLY_CONTENT"));
+		System.err.println("reply_content = ["+replyDTO.getReply_content()+"]");
+		replyDTO.setReply_writer_id(rs.getString("REPLY_WRITER_ID"));
+		System.err.print("reply_writer_id = ["+replyDTO.getReply_writer_id()+"]");
+		System.out.println("}");
+		return replyDTO;
+	};
 }

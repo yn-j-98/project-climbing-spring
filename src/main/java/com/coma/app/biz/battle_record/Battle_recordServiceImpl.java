@@ -1,41 +1,25 @@
-package com.coma.app.biz.battle_record;
+package com.coma.app.biz.battle_record;//package com.coma.app.biz.battle_record;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import com.coma.app.biz.battle.BattleDAO;
-import com.coma.app.biz.battle.BattleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service("battle_recordService")
-public class Battle_recordServiceImpl implements Battle_recordService{
+@Service("battle_record")
+public class Battle_recordServiceImpl implements Battle_recordService {
 
 	@Autowired
-	Battle_recordDAO battle_recordDAO;
+	private Battle_recordDAO battle_recordDAO;
 
 	@Override
-	public List<Battle_recordDTO> selectAllWinner(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.selectAllWinner(battle_recordDTO);}
+	public ArrayList<Battle_recordDTO> selectAll(Battle_recordDTO battle_recordDTO) {
+		return this.battle_recordDAO.selectAll(battle_recordDTO);
+	}
 
 	@Override
-	public List<Battle_recordDTO> selectAllParticipantCrew(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.selectAllParticipantCrew(battle_recordDTO);}
-
-	@Override
-	public List<Battle_recordDTO> selectAllParticipantBattle(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.selectAllParticipantBattle(battle_recordDTO);}
-
-	@Override
-	public List<Battle_recordDTO> selectAllWinnerParticipantGym(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.selectAllWinnerParticipantGym(battle_recordDTO);}
-
-	@Override
-	public Battle_recordDTO selectOneBattle(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.selectOneBattle(battle_recordDTO);}
-
-	@Override
-	public Battle_recordDTO selectOneBattleRecord(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.selectOneBattleRecord(battle_recordDTO);}
-
-	@Override
-	public Battle_recordDTO selectOneCountCrew(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.selectOneCountCrew(battle_recordDTO);}
-
-	@Override
-	public boolean insert(Battle_recordDTO battle_recordDTO) {return this.battle_recordDAO.insert(battle_recordDTO);}
+	public Battle_recordDTO selectOne(Battle_recordDTO battle_recordDTO) {
+		return this.battle_recordDAO.selectOne(battle_recordDTO);
+	}
 
 	@Override
 	public boolean update(Battle_recordDTO battle_recordDTO) {
@@ -43,7 +27,13 @@ public class Battle_recordServiceImpl implements Battle_recordService{
 	}
 
 	@Override
-	public boolean delete(Battle_recordDTO battle_recordDTO) {
-		return this.battle_recordDAO.delete(battle_recordDTO);
+	public boolean insert(Battle_recordDTO battle_recordDTO) {
+		return this.battle_recordDAO.insert(battle_recordDTO);
 	}
+
+	@Override
+	public boolean delete(Battle_recordDTO battle_recordDTO) {
+		return false;
+	}
+
 }
