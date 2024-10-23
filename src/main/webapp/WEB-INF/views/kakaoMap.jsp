@@ -10,6 +10,15 @@
 .custom-info-window {
     white-space: nowrap; /*줄바꿈 방지*/
 }
+body {
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* 전체 높이를 사용 */
+        }
+        #map {
+            width: 100%; /* 100% 너비 */
+            height: 100%; /* 100% 높이 */
+        }
 </style>
 
 </head>
@@ -37,90 +46,90 @@
     var map = new kakao.maps.Map(container, options); // 카카오 맵 내장객체에 담는다
     
     
-    // 주소-좌표 변환 객체를 생성합니다
+ 	// 주소-좌표 변환 객체를 생성합니다
     var geocoder = new kakao.maps.services.Geocoder();
     
-   // json타입으로 작성된 datas 받아온다
-   var datas=${datas};
-    
-   // 받아온 json 데이터 만큼 반복해서
-   datas.forEach(function(data){
-      
-      // 주소값으로 좌표값 검색
-       geocoder.addressSearch(data.address, function(result, status) {
-          
-           // 정상적으로 검색이 완료됐으면 
-           if (status === kakao.maps.services.Status.OK) {
-              
-              // searchPosition에 x,y 좌표를 담는다
-                 var searchPosition = new kakao.maps.LatLng(result[0].y, result[0].x);
-   
-               // 장소에 대한 정보 배열 생성
-               var places = [ // json으로 front >> front로 보내고 싶을 때 사용하면 된다
-                   {   
-                       position: searchPosition, // x,y좌표 배열에 저장
-                       title: data.title, // 장소 제목
-                       id: data.title // 고유 식별자
-                   }
-                   // 추가 장소는 이 배열에 추가하면 됨
-               ];
-               
-               // 마커와 정보 창을 추가하는 함수
-               function addMarkersAndInfoWindows() {
-                     places.forEach(function(place){
-                        
-                        // 마커를 생성
-                         var marker = new kakao.maps.Marker({
-                           position: place.position, // 마커의 위치
-                           map: map // 마커를 추가할 지도 객체
-                       });
-   
-                       // 마커 클릭 시 이벤트
-                       kakao.maps.event.addListener(marker, 'click', function() {
-                          gymClick(place.id); // 해당 ID를 가진 div를 클릭
-                       });
-                       
-                       // 마커에 표시할 인포윈도우를 생성
-                       var infowindow = new kakao.maps.InfoWindow({
-                           content: '<div class="custom-info-window">' + place.title + '</div>' // 인포윈도우에 표시할 내용
-                       });
-                       
-                       // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록
-                       // 이벤트 리스너로는 클로저를 만들어 등록
-                       // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록
-                       kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-                       kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-                  });
-               }
-              
-               // div 클릭 이벤트 트리거 함수
-               function gymClick(id) {
-                   var div = document.getElementById(id);
-                   if (div) {
-                       div.click(); 
-                   }
-               }
-               
-               // 인포윈도우를 표시하는 클로저를 만드는 함수 
-               function makeOverListener(map, marker, infowindow) {
-                   return function() {
-                       infowindow.open(map, marker);
-                   };
-               }
-   
-               // 인포윈도우를 닫는 클로저를 만드는 함수 
-               function makeOutListener(infowindow) {
-                   return function() {
-                       infowindow.close();
-                   };
-               }
-               
-               // 마커와 정보 창 추가
-               addMarkersAndInfoWindows();
-           } 
-       });
-    });
-   
+	// json타입으로 작성된 datas 받아온다
+	var datas=${datas};
+	 
+	// 받아온 json 데이터 만큼 반복해서
+	datas.forEach(function(data){
+		
+		// 주소값으로 좌표값 검색
+	    geocoder.addressSearch(data.address, function(result, status) {
+	    	
+	        // 정상적으로 검색이 완료됐으면 
+	        if (status === kakao.maps.services.Status.OK) {
+	        	
+	        	// searchPosition에 x,y 좌표를 담는다
+	           	var searchPosition = new kakao.maps.LatLng(result[0].y, result[0].x);
+	
+	         	// 장소에 대한 정보 배열 생성
+	            var places = [ // json으로 front >> front로 보내고 싶을 때 사용하면 된다
+	                {	
+	                    position: searchPosition, // x,y좌표 배열에 저장
+	                    title: data.title, // 장소 제목
+	                    id: data.title // 고유 식별자
+	                }
+	                // 추가 장소는 이 배열에 추가하면 됨
+	            ];
+	         	
+	         	// 마커와 정보 창을 추가하는 함수
+	            function addMarkersAndInfoWindows() {
+	               	places.forEach(function(place){
+	            	   	
+	               		// 마커를 생성
+	                   	var marker = new kakao.maps.Marker({
+	                        position: place.position, // 마커의 위치
+	                        map: map // 마커를 추가할 지도 객체
+	                    });
+	
+	                    // 마커 클릭 시 이벤트
+	                    kakao.maps.event.addListener(marker, 'click', function() {
+	                    	gymClick(place.id); // 해당 ID를 가진 div를 클릭
+	                    });
+	                    
+	                 	// 마커에 표시할 인포윈도우를 생성
+	                    var infowindow = new kakao.maps.InfoWindow({
+	                        content: '<div class="custom-info-window">' + place.title + '</div>' // 인포윈도우에 표시할 내용
+	                    });
+	                 	
+	                    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록
+	                    // 이벤트 리스너로는 클로저를 만들어 등록
+	                    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록
+	                    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+	                    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+	               });
+	            }
+	        	
+	         	// div 클릭 이벤트 트리거 함수
+	            function gymClick(id) {
+	                var div = document.getElementById(id);
+	                if (div) {
+	                    div.click(); 
+	                }
+	            }
+	            
+	         	// 인포윈도우를 표시하는 클로저를 만드는 함수 
+	            function makeOverListener(map, marker, infowindow) {
+	                return function() {
+	                    infowindow.open(map, marker);
+	                };
+	            }
+	
+	            // 인포윈도우를 닫는 클로저를 만드는 함수 
+	            function makeOutListener(infowindow) {
+	                return function() {
+	                    infowindow.close();
+	                };
+	            }
+	            
+	        	 // 마커와 정보 창 추가
+	            addMarkersAndInfoWindows();
+	        } 
+	    });
+	 });
+	
     function handleClick(element) {
         // 배경색을 회색으로 변경
         element.classList.toggle('active');
@@ -142,6 +151,6 @@
 
 </script>
 
-      
+		
 </body>
 </html>

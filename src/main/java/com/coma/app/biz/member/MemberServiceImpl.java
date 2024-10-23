@@ -2,14 +2,20 @@ package com.coma.app.biz.member;
 
 import java.util.List;
 
+import com.coma.app.biz.board.BoardDAO;
+import com.coma.app.biz.board.BoardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("memberService")
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
+	
+	@Autowired
+	private MemberDAO memberDAO;
 
 	@Autowired
-	MemberDAO memberDAO;
+	private BoardDAO boardDAO;
+
 
 	@Override
 	public List<MemberDTO> selectAllSearchRank(MemberDTO memberDTO) {
@@ -36,6 +42,10 @@ public class MemberServiceImpl implements MemberService{
 		return this.memberDAO.selectAllTop10Rank(memberDTO);
 	}
 
+	@Override
+	public List<MemberDTO> selectAllSearchCrew(MemberDTO memberDTO) {
+		return this.memberDAO.selectAllSearchCrew(memberDTO);
+	}
 
 	@Override
 	public List<MemberDTO> selectAllSearchCrewMemberName(MemberDTO memberDTO) {

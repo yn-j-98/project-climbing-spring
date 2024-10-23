@@ -1,152 +1,90 @@
 package com.coma.app.biz.favorite;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.coma.app.biz.common.JDBCUtil;
 
 @Repository
-public class FavoriteDAO implements FavoriteService{
+public class FavoriteDAO {
 	//좋아요 추가 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
-	private final String INSERT = "INSERT INTO FAVORITE(FAVORITE_NUM,FAVORITE_MEMBER_ID,FAVORITE_GYM_NUM)\r\n"
-			+ "VALUES ((SELECT NVL(MAX(FAVORITE_NUM),0)+1 FROM FAVORITE),?,?)";
-	
+	private final String INSERT = "INSERT INTO FAVORITE(FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM) VALUES(?, ?)";
 	//좋아요 삭제 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
 	private final String DELETE = "DELETE FROM FAVORITE WHERE FAVORITE_MEMBER_ID = ? AND FAVORITE_GYM_NUM =?";
-	
-	//좋아요 찾기 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
-	private final String ONE = "SELECT FAVORITE_NUM,FAVORITE_MEMBER_ID,FAVORITE_GYM_NUM FROM FAVORITE\r\n"
-			+ "WHERE FAVORITE_MEMBER_ID = ? AND FAVORITE_GYM_NUM =?";
+	//좋아요 불러오기 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
+	private final String ONE = "SELECT FAVORITE_NUM, FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM FROM FAVORITE WHERE FAVORITE_MEMBER_ID = ? AND FAVORITE_GYM_NUM =?";
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
+
 	public boolean insert(FavoriteDTO favoriteDTO) {
-		System.out.println("favorite.FavoriteDAO.insert 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			//좋아요 추가 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
-			pstmt=conn.prepareStatement(INSERT);
-			pstmt.setString(1, favoriteDTO.getFavorite_member_id());
-			pstmt.setInt(2, favoriteDTO.getFavorite_gym_num());
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("favorite.FavoriteDAO.insert 실패");
-				return false;
-			}
-		} catch (SQLException e) {
-			System.out.println("favorite.FavoriteDAO.insert SQL문 실패");
+		System.out.println("com.coma.app.biz.favorite.insert 시작");
+		//좋아요 추가 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
+		int result=jdbcTemplate.update(INSERT, favoriteDTO.getModel_favorite_member_id(), favoriteDTO.getModel_favorite_gym_num());
+		if(result<=0) {
+			System.out.println("com.coma.app.biz.favorite.insert SQL문 실패");
 			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
 		}
-		System.out.println("favorite.FavoriteDAO.insert 성공");
+		System.out.println("com.coma.app.biz.favorite.insert 성공");
 		return true;
 	}
-	public boolean update(FavoriteDTO favoriteDTO) {
-		System.out.println("favorite.FavoriteDAO.update 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			pstmt=conn.prepareStatement("");
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("favorite.FavoriteDAO.update 실패");
-				return false;
-			}
 
-		} catch (SQLException e) {
-			System.err.println("favorite.FavoriteDAO.update SQL문 실패");
-			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
-		}
-		System.out.println("favorite.FavoriteDAO.update 성공");
-		return true;
+	private boolean update(FavoriteDTO favoriteDTO) { // TODO 없는 CRUD
+		System.out.println("com.coma.app.biz.favorite.update 시작");
+		return false;
 	}
+
 	public boolean delete(FavoriteDTO favoriteDTO) {
-		System.err.println("favorite.FavoriteDAO.delete 시작");
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
-		try {
-			//좋아요 삭제 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
-			pstmt=conn.prepareStatement(DELETE);
-			pstmt.setString(1, favoriteDTO.getFavorite_member_id());
-			pstmt.setInt(2, favoriteDTO.getFavorite_gym_num());
-			int rs = pstmt.executeUpdate();
-			if(rs<=0) {
-				System.err.println("favorite.FavoriteDAO.delete 실패");
-				return false;
-			}
-
-		} catch (SQLException e) {
-			System.err.println("favorite.FavoriteDAO.delete SQL문 실패");
+		System.err.println("com.coma.app.biz.favorite.delete 시작");
+		//좋아요 삭제 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
+		int result=jdbcTemplate.update(DELETE, favoriteDTO.getModel_favorite_member_id(), favoriteDTO.getModel_favorite_gym_num());
+		if(result<=0) {
+			System.err.println("com.coma.app.biz.favorite.delete SQL문 실패");
 			return false;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
 		}
-		System.out.println("favorite.FavoriteDAO.delete 성공");
+		System.err.println("com.coma.app.biz.favorite.delete 성공");
 		return true;
 	}
 
 	public FavoriteDTO selectOne(FavoriteDTO favoriteDTO){
-		System.out.println("favorite.FavoriteDAO.selectOne 시작");
+		System.out.println("com.coma.app.biz.favorite.selectOne 시작");
+		//좋아요 불러오기 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
 		FavoriteDTO data = null;
-		Connection conn=JDBCUtil.connect();
-		PreparedStatement pstmt=null;
+		Object[] args = { favoriteDTO.getModel_favorite_member_id(), favoriteDTO.getModel_favorite_gym_num() };
 		try {
-			//좋아요 찾기 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
-			pstmt=conn.prepareStatement(ONE);
-			pstmt.setString(1, favoriteDTO.getFavorite_member_id());
-			pstmt.setInt(2, favoriteDTO.getFavorite_gym_num());
-			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
-				System.out.println("favorite.FavoriteDAO.selectOne 검색 성공");
-				data = new FavoriteDTO();
-				data.setFavorite_num(rs.getInt("FAVORITE_NUM"));
-				data.setFavorite_member_id(rs.getString("FAVORITE_MEMBER_ID"));
-				data.setFavorite_gym_num(rs.getInt("FAVORITE_GYM_NUM"));
-			}
-		} catch (SQLException e) {
-			System.err.println("favorite.FavoriteDAO.selectOne SQL문 실패");
-			return null;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
+			data= jdbcTemplate.queryForObject(ONE,args,new FavoriteRowMapper());
 		}
-		System.out.println("favorite.FavoriteDAO.selectOne 성공");
+		catch (Exception e) {
+			System.out.println("com.coma.app.biz.favorite.selectOne SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.favorite.selectOne 성공");
 		return data;
 	}
 
-	public ArrayList<FavoriteDTO> selectAll(FavoriteDTO favoriteDTO){
+	public List<FavoriteDTO> selectAll(FavoriteDTO favoriteDTO){ // TODO 없는 CRUD
 		System.out.println("favorite.FavoriteDAO.selectAll 시작");
-		ArrayList<FavoriteDTO> datas = new ArrayList<FavoriteDTO>();
-		int rsCnt=1;//로그용
-		Connection conn = JDBCUtil.connect();
-		PreparedStatement pstmt = null;
-		try {
-			pstmt=conn.prepareStatement("");
-			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
-				System.out.println(rsCnt+"번행 출력중...");
-				FavoriteDTO data = new FavoriteDTO();
-				data.setFavorite_num(rs.getInt("FAVORITE_NUM"));
-				data.setFavorite_member_id(rs.getString("FAVORITE_MEMBER_ID"));
-				data.setFavorite_gym_num(rs.getInt("FAVORITE_GYM_NUM"));
-				datas.add(data);
-				rsCnt++;
-			}
+		List<FavoriteDTO> datas = null;
 
-		}catch(SQLException e) {
-			System.err.println("favorite.FavoriteDAO.selectAll SQL문 실패");
-			return datas;
-		}finally {
-			JDBCUtil.disconnect(pstmt,conn);
-		}
-		System.out.println("favorite.FavoriteDAO.selectAll 성공");
 		return datas;
-
 	}
+}
+
+class FavoriteRowMapper implements RowMapper<FavoriteDTO> {
+
+	public FavoriteDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		FavoriteDTO favoriteDTO=new FavoriteDTO();
+		System.out.print("FavoriteRowMapper DB에서 가져온 데이터 {");
+		favoriteDTO.setModel_favorite_num(rs.getInt("FAVORITE_NUM"));
+		System.err.println("gym_num = ["+favoriteDTO.getModel_favorite_num()+"]");
+		favoriteDTO.setModel_favorite_member_id(rs.getString("FAVORITE_MEMBER_ID"));
+		System.err.println("member_id = ["+favoriteDTO.getModel_favorite_member_id()+"]");
+		favoriteDTO.setModel_favorite_gym_num(rs.getInt("FAVORITE_GYM_NUM"));
+		System.err.print("gym_num = ["+favoriteDTO.getModel_favorite_gym_num()+"]");
+		System.out.println("}");
+		return favoriteDTO;
+	};
 }

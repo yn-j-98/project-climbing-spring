@@ -1,21 +1,20 @@
 package com.coma.app.biz.board;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import com.coma.app.biz.common.JDBCUtil;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class BoardDAO {
 	// 전체 글 출력(ALL) 페이지네이션 윈도우함수 ROW_NUMBER()사용 board_min_num, board_max_num
-	//MySQL은 서브쿼리 별칭 지정이 필수적
 	private final String ALL = "SELECT\r\n"
-			+ "    RN,\r\n"
-			+ "    BOARD_NUM,\r\n"
+			+ "	RN,\r\n"
+			+ "	BOARD_NUM,\r\n"
 			+ "    BOARD_TITLE,\r\n"
 			+ "    BOARD_CONTENT,\r\n"
 			+ "    BOARD_CNT,\r\n"
@@ -32,12 +31,11 @@ public class BoardDAO {
 			+ "        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\r\n"
 			+ "    FROM \r\n"
 			+ "        BOARD\r\n"
-			+ ") AS RANK\r\n"
+			+ ")\r\n"
 			+ "WHERE RN BETWEEN ? AND ?";
 
 	// 최신글6개 검색
-	//ROWNUM 대신 LIMIT 구문 사용
-	private final String ALL_ROWNUM = "SELECT\r\n"
+	private final String ALL_ROWNUM = "SELECT \r\n"
 			+ "    BOARD_NUM,\r\n"
 			+ "    BOARD_TITLE,\r\n"
 			+ "    BOARD_CONTENT,\r\n"
@@ -60,8 +58,8 @@ public class BoardDAO {
 			+ "        B.BOARD_WRITER_ID = M.MEMBER_ID\r\n"
 			+ "    ORDER BY \r\n"
 			+ "        B.BOARD_NUM DESC\r\n"
-			+ ") AS b\r\n"
-			+ "LIMIT 6";
+			+ ")\r\n"
+			+ "WHERE ROWNUM <= 6";
 
 	// 전체 글 개수 FIXME TOTAL
 	private final String ONE_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD";
@@ -70,25 +68,15 @@ public class BoardDAO {
 	private final String ONE_SEARCH_ID_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD WHERE BOARD_WRITER_ID = ?";
 
 	//제목으로 검색한 글 개수 BOARD_TITLE
-	//문자열 연결 CONCAT함수 사용
-	private final String ONE_SEARCH_TITLE_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL \r\n"
-			+ "FROM BOARD \r\n"
-			+ "WHERE BOARD_LOCATION LIKE CONCAT('%', ?, '%') \r\n"
-			+ "  AND BOARD_TITLE LIKE CONCAT('%', ?, '%')";
+	private final String ONE_SEARCH_TITLE_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD WHERE BOARD_LOCATION LIKE '%'||?||'%' AND BOARD_TITLE LIKE '%'||?||'%'";
 
 	//이름으로 검색한 글 개수 MEMBER_NAME AS BOARD_WRITER_ID
-	//문자열 연결 CONCAT함수 사용
-	private final String ONE_SEARCH_NAME_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL \r\n"
-			+ "FROM BOARD B \r\n"
-			+ "JOIN MEMBER M ON B.BOARD_WRITER_ID = M.MEMBER_ID \r\n"
-			+ "WHERE M.MEMBER_NAME LIKE CONCAT('%', ?, '%')";
+	private final String ONE_SEARCH_NAME_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD B, MEMBER M WHERE B.BOARD_WRITER_ID = M.MEMBER_ID AND M.MEMBER_NAME LIKE '%'||?||'%'";
 
 	//똑같은 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
-	//LIMIT <OFFSET>, <ROW_COUNT>
-	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
 	private final String ALL_SEARCH_MATCH_ID = "SELECT\r\n"
-			+ "    BOARD_PAGENATION.RN,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_NUM,\r\n"
+			+ "	BOARD_PAGENATION.RN,\r\n"
+			+ "	BOARD_PAGENATION.BOARD_NUM,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_TITLE,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CONTENT,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CNT,\r\n"
@@ -105,21 +93,18 @@ public class BoardDAO {
 			+ "        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\r\n"
 			+ "    FROM \r\n"
 			+ "        BOARD\r\n"
-			+ ") AS BOARD_PAGENATION\r\n"
+			+ ") BOARD_PAGENATION\r\n"
 			+ "JOIN\r\n"
-			+ "    MEMBER M\r\n"
+			+ "	MEMBER M\r\n"
 			+ "ON\r\n"
-			+ "    M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "WHERE BOARD_PAGENATION.BOARD_WRITER_ID = ?\r\n"
-			+ "LIMIT ?, ?";
+			+ "	M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
+			+ "WHERE  BOARD_PAGENATION.BOARD_WRITER_ID = ? \r\n"
+			+ "AND BOARD_PAGENATION.RN BETWEEN ? AND ?";
 
 	//비슷한 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
-	//CONCAT 함수 사용
-	//LIMIT <OFFSET>, <ROW_COUNT>
-	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
 	private final String ALL_SEARCH_PATTERN_ID = "SELECT\r\n"
-			+ "    BOARD_PAGENATION.RN,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_NUM,\r\n"
+			+ "	BOARD_PAGENATION.RN,\r\n"
+			+ "	BOARD_PAGENATION.BOARD_NUM,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_TITLE,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CONTENT,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CNT,\r\n"
@@ -132,24 +117,22 @@ public class BoardDAO {
 			+ "        BOARD_CONTENT, \r\n"
 			+ "        BOARD_CNT, \r\n"
 			+ "        BOARD_LOCATION, \r\n"
-			+ "        BOARD_WRITER_ID\r\n"
+			+ "        BOARD_WRITER_ID,\r\n"
+			+ "        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\r\n"
 			+ "    FROM \r\n"
 			+ "        BOARD\r\n"
-			+ ") AS BOARD_PAGENATION\r\n"
+			+ ") BOARD_PAGENATION\r\n"
 			+ "JOIN\r\n"
-			+ "    MEMBER M\r\n"
+			+ "	MEMBER M\r\n"
 			+ "ON\r\n"
-			+ "    M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "WHERE BOARD_PAGENATION.BOARD_WRITER_ID LIKE CONCAT('%', ?, '%') \r\n"
-			+ "LIMIT ?, ?";
-
-
+			+ "	M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
+			+ "WHERE  BOARD_PAGENATION.BOARD_WRITER_ID LIKE '%'||?||'%' \r\n"
+			+ "AND BOARD_PAGENATION.RN BETWEEN ? AND ?";
 
 	//제목으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_TITLE, board_min_num, board_max_num
-	//LIMIT <OFFSET>, <ROW_COUNT>
-	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
 	private final String ALL_SEARCH_TITLE = "SELECT\r\n"
-			+ "    BOARD_PAGENATION.BOARD_NUM,\r\n"
+			+ "	BOARD_PAGENATION.RN,\r\n"
+			+ "	BOARD_PAGENATION.BOARD_NUM,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_TITLE,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CONTENT,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CNT,\r\n"
@@ -162,24 +145,22 @@ public class BoardDAO {
 			+ "        BOARD_CONTENT, \r\n"
 			+ "        BOARD_CNT, \r\n"
 			+ "        BOARD_LOCATION, \r\n"
-			+ "        BOARD_WRITER_ID\r\n"
+			+ "        BOARD_WRITER_ID,\r\n"
+			+ "        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\r\n"
 			+ "    FROM \r\n"
 			+ "        BOARD\r\n"
-			+ ") AS BOARD_PAGENATION\r\n"
+			+ ") BOARD_PAGENATION\r\n"
 			+ "JOIN\r\n"
-			+ "    MEMBER M\r\n"
+			+ "	MEMBER M\r\n"
 			+ "ON\r\n"
-			+ "    M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "WHERE BOARD_PAGENATION.BOARD_LOCATION LIKE CONCAT('%', ?, '%') \r\n"
-			+ "AND BOARD_PAGENATION.BOARD_TITLE LIKE CONCAT('%', ?, '%') \r\n"
-			+ "LIMIT ?, ?";
-
+			+ "	M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
+			+ "WHERE BOARD_PAGENATION.BOARD_LOCATION LIKE '%'||?||'%' and BOARD_PAGENATION.BOARD_TITLE LIKE '%'||?||'%'\r\n"
+			+ "AND BOARD_PAGENATION.RN BETWEEN ? AND ?";
 
 	//이름으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID 재사용 BOARD_WRITER_ID, board_min_num, board_max_num
-	//LIMIT <OFFSET>, <ROW_COUNT>
-	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
 	private final String ALL_SEARCH_NAME = "SELECT\r\n"
-			+ "    BOARD_PAGENATION.BOARD_NUM,\r\n"
+			+ "	BOARD_PAGENATION.RN,\r\n"
+			+ "	BOARD_PAGENATION.BOARD_NUM,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_TITLE,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CONTENT,\r\n"
 			+ "    BOARD_PAGENATION.BOARD_CNT,\r\n"
@@ -192,21 +173,21 @@ public class BoardDAO {
 			+ "        BOARD_CONTENT, \r\n"
 			+ "        BOARD_CNT, \r\n"
 			+ "        BOARD_LOCATION, \r\n"
-			+ "        BOARD_WRITER_ID\r\n"
+			+ "        BOARD_WRITER_ID,\r\n"
+			+ "        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\r\n"
 			+ "    FROM \r\n"
 			+ "        BOARD\r\n"
-			+ ") AS BOARD_PAGENATION\r\n"
+			+ ") BOARD_PAGENATION\r\n"
 			+ "JOIN\r\n"
-			+ "    MEMBER M\r\n"
+			+ "	MEMBER M\r\n"
 			+ "ON\r\n"
-			+ "    M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "WHERE M.MEMBER_NAME LIKE CONCAT('%', ?, '%') \r\n"
-			+ "LIMIT ?, ?";
-
+			+ "	M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
+			+ "WHERE  M.MEMBER_NAME LIKE '%'||?||'%' \r\n"
+			+ "AND BOARD_PAGENATION.RN BETWEEN ? AND ?";
 
 	// 게시글 작성 BOARD_NUM,BOARD_TITLE,BOARD_CONTENT,BOARD_LOCATION,BOARD_WRITER_ID
-	// PK는 AUTO-INCREMENT사용으로 서브쿼리문 사용X
-	private final String INSERT = "INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (?, ?, ?, ?)";
+	private final String INSERT ="INSERT INTO BOARD (BOARD_NUM,BOARD_TITLE,BOARD_CONTENT,BOARD_LOCATION,BOARD_WRITER_ID)\r\n"
+			+ "VALUES ((SELECT NVL(MAX(BOARD_NUM),0)+1 FROM BOARD),?,?,?,?)";
 
 	// 게시글 삭제 BOARD_NUM
 	private final String DELETE ="DELETE FROM BOARD WHERE BOARD_NUM = ? AND BOARD_WRITER_ID = ?";
@@ -223,629 +204,240 @@ public class BoardDAO {
 	//게시글 조회수 변경 BOARD_CNT BOARD_NUM
 	private final String UPDATE_CNT = "UPDATE BOARD SET BOARD_CNT = ? WHERE BOARD_NUM = ?";
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-
 	public boolean insert(BoardDTO boardDTO) {
 		System.out.println("board.BoardDAO.insert 시작");
-		int result = jdbcTemplate.update(INSERT,boardDTO.getBoard_title().replace("'", "\'"), boardDTO.getBoard_content().replace("'", "\'"),boardDTO.getBoard_location(),boardDTO.getBoard_writer_id());
-		if(result<=0){
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.insert sql 실패 : insert = " + INSERT );
-			return false;
+		Connection conn = JDBCUtil.connect();
+		PreparedStatement pstmt = null;
+		try {
+			// 게시글 작성 BOARD_TITLE,BOARD_CONTENT,BOARD_LOCATION,BOARD_WRITER_ID
+			pstmt = conn.prepareStatement(INSERT);
+			pstmt.setString(1,boardDTO.getModel_board_title().replace("'", "\'"));
+			pstmt.setString(2,boardDTO.getModel_board_content().replace("'", "\'"));
+			pstmt.setString(3,boardDTO.getModel_board_location());
+			pstmt.setString(4, boardDTO.getModel_board_writer_id());
+			int rs = pstmt.executeUpdate();
+			if(rs<=0) {
+				System.err.println("board.BoardDAO.insert 실패");
+				return false;
+			}
 		}
+		catch(SQLException e) {
+			System.err.println("board.BoardDAO.insert SQL문 실패");
+			return false;
+		}finally {
+			JDBCUtil.disconnect(pstmt, conn);
+		}
+		System.out.println("board.BoardDAO.insert 성공");
 		return true;
 	}
-
-	//게시글 내용, 제목 변경 BOARD_CONTENT, BOARD_TITLE, BOARD_NUM FIXME
-	public boolean updateContentTitle(BoardDTO boardDTO) {
-		System.out.println("board.BoardDAO.updateContentTitle 시작");
-		int result = jdbcTemplate.update(UPDATE_CONTENT_TITLE,boardDTO.getBoard_content().replace("'", "\'"),boardDTO.getBoard_title().replace("'", "\'"),boardDTO.getBoard_location().replace("'", "\'"));
-		if(result <= 0){
-			System.err.println("	[에러]com.coma.app.biz.board.boardDAO.updateContentTitle sql 실패 : UPDATE = " + UPDATE_CONTENT_TITLE );
+	public boolean update(BoardDTO boardDTO) {
+		System.out.println("board.BoardDAO.update 시작");
+		Connection conn = JDBCUtil.connect();
+		PreparedStatement pstmt =null;
+		try {
+			//게시글 내용, 제목 변경 BOARD_CONTENT, BOARD_TITLE, BOARD_NUM FIXME
+			if(boardDTO.getModel_board_condition().equals("BOARD_UPDATE_CONTENT_TITLE")) {
+				pstmt = conn.prepareStatement(UPDATE_CONTENT_TITLE);
+				pstmt.setString(1, boardDTO.getModel_board_content().replace("'", "\'"));
+				pstmt.setString(2, boardDTO.getModel_board_title().replace("'", "\'"));
+				pstmt.setString(3, boardDTO.getModel_board_location().replace("'", "\'"));
+				pstmt.setInt(4, boardDTO.getModel_board_num());
+			}
+			//게시글 조회수 변경 BOARD_CNT BOARD_NUM
+			else if(boardDTO.getModel_board_condition().equals("BOARD_UPDATE_CNT")) {
+				pstmt = conn.prepareStatement(UPDATE_CNT);
+				pstmt.setInt(1, boardDTO.getModel_board_cnt());
+				pstmt.setInt(2, boardDTO.getModel_board_num());
+			}
+			else {
+				System.err.println("condition 틀림");
+				return false;
+			}
+			int rs = pstmt.executeUpdate();
+			if(rs <= 0) {
+				System.err.println("board.BoardDAO.update 실패");
+				return false;
+			}
+		}catch(SQLException e) {
+			System.err.println("board.BoardDAO.update SQL문 실패");
 			return false;
+		}finally {
+			JDBCUtil.disconnect(pstmt, conn);
 		}
+
+		System.out.println("board.BoardDAO.update 성공");
 		return true;
 	}
-
-	//게시글 조회수 변경 BOARD_CNT BOARD_NUM
-	public boolean updateCnt(BoardDTO boardDTO) {
-		System.out.println("board.BoardDAO.updateCnt 시작");
-		int result = jdbcTemplate.update(UPDATE_CNT,boardDTO.getBoard_cnt(),boardDTO.getBoard_num());
-		if(result <= 0){
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.updateCnt sql 실패 : UPDATE = " + UPDATE_CNT );
-			return false;
-		}
-		return true;
-	}
-
 	public boolean delete(BoardDTO boardDTO) {
 		System.out.println("board.BoardDAO.delete 시작");
-		int result = jdbcTemplate.update(DELETE,boardDTO.getBoard_num(),boardDTO.getBoard_writer_id());
-		if(result <= 0){
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.delete sql 실패 : UPDATE = " + DELETE);
+		Connection conn = JDBCUtil.connect();
+		PreparedStatement pstmt =null;
+		try {
+			// 게시글 삭제 BOARD_NUM
+			pstmt = conn.prepareStatement(DELETE);
+			pstmt.setInt(1, boardDTO.getModel_board_num());
+			pstmt.setString(2, boardDTO.getModel_board_writer_id());
+			int rs = pstmt.executeUpdate();
+			if(rs <= 0) {
+				System.err.println("board.BoardDAO.delete 실패");
+				return false;
+			}
+		}catch(SQLException e) {
+			System.err.println("board.BoardDAO.delete SQL문 실패");
 			return false;
+		}finally {
+			JDBCUtil.disconnect(pstmt, conn);
 		}
+		System.out.println("board.BoardDAO.delete 성공");
 		return true;
 	}
-
-	//게시글 PK 검색 BOARD_NUM
 	public BoardDTO selectOne(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOne 시작");
-		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_num()};
+		System.out.println("board.BoardDAO.selectOne 시작");
+		BoardDTO data =null;
+		String sqlq; // 쿼리수행결과 구분용 데이터
+		Connection conn = JDBCUtil.connect();
+		PreparedStatement pstmt = null;
 		try {
-			result = jdbcTemplate.queryForObject(ONE, args, new BoardRowMapperOne());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOn 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//게시글 PK 및 사용자 아이디 검색 BOARD_NUM
-	public BoardDTO selectOneWriterId(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneWriterId 시작");
-		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_num(), boardDTO.getBoard_writer_id()};
-		try {
-			result = jdbcTemplate.queryForObject(ONE_WRITER_ID, args, new BoardRowMapperOneWriterId());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneWriterId 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	// 전체 글 개수 FIXME
-	public BoardDTO selectOneCount(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneCount 시작");
-		BoardDTO result = null;
-		try {
-			result = jdbcTemplate.queryForObject(ONE_COUNT, new BoardRowMapperOneCount());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneCount 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//ID로 검색한 글 개수 BOARD_WRITER_ID
-	public BoardDTO selectOneSearchIdCount(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchIdCount 시작");
-		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_searchKeyword().replace("'", "\'")};
-		try {
-			result = jdbcTemplate.queryForObject(ONE_SEARCH_ID_COUNT, args, new BoardRowMapperOneSearchIdCount());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchIdCount 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//제목으로 검색한 글 개수 BOARD_TITLE
-	public BoardDTO selectOneSearchTitleCount(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchTitleCount 시작");
-		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_location().replace("'", "\'"), boardDTO.getBoard_location().replace("'", "\'")};
-		try {
-			result = jdbcTemplate.queryForObject(ONE_SEARCH_TITLE_COUNT, args, new BoardRowMapperOneSearchTitleCount());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchTitleCount 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//이름으로 검색한 글 개수 MEMBER_NAME AS BOARD_WRITER_ID
-	public BoardDTO selectOneSearchNameCount(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 시작");
-		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_searchKeyword().replace("'", "\'")};
-		try {
-			result = jdbcTemplate.queryForObject(ONE_SEARCH_NAME_COUNT, args, new BoardRowMapperOneSearchNameCount());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//똑같은 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
-	//FIXME LIMIT절 사용으로 pstmt 수정
-	public List<BoardDTO> selectAllSearchMatchId(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 시작");
-		List<BoardDTO> result = null;
-		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_searchKeyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
-		try {
-			result = jdbcTemplate.query(ALL_SEARCH_MATCH_ID, args, new boardRowMapperAllSearchMatchId());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//비슷한 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
-	//FIXME LIMIT절 사용으로 pstmt 수정
-	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchPatternId 시작");
-		List<BoardDTO> result = null;
-		Object[] args = {boardDTO.getBoard_searchKeyword().replace("'", "\'"), boardDTO.getBoard_min_num(), 10};
-		try {
-			result = jdbcTemplate.query(ALL_SEARCH_PATTERN_ID, args, new boardRowMapperAllSearchPatternId());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//제목으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_TITLE, board_min_num, board_max_num
-	//FIXME LIMIT절 사용으로 pstmt 수정
-	public List<BoardDTO> selectAllSearchTitle(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchTitle 시작");
-		List<BoardDTO> result = null;
-		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_searchKeyword().replace("'", "\'"), boardDTO.getBoard_searchKeyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
-		try {
-			result = jdbcTemplate.query(ALL_SEARCH_TITLE, args, new boardRowMapperAllSearchTitle());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAllSearchTitle 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	//이름으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID 재사용 BOARD_WRITER_ID, board_min_num, board_max_num FIXME
-	//FIXME LIMIT절 사용으로 pstmt 수정
-	public List<BoardDTO> selectAllSearchName(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectallsearchName 시작");
-		List<BoardDTO> result = null;
-		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_searchKeyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
-		try {
-			result = jdbcTemplate.query(ALL_SEARCH_NAME, args, new boardRowMapperAllSearchName());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAllSearchName 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	// 전체 글 출력(ALL) 페이지네이션 윈도우함수 ROW_NUMBER()사용 board_min_num, board_max_num
-	//FIXME LIMIT절 사용으로 pstmt 수정
-	public List<BoardDTO> selectAll(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAll 시작");
-		List<BoardDTO> result = null;
-		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_min_num(), offset};
-		try {
-			result = jdbcTemplate.query(ALL, args, new boardRowMapperAll());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAll 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	// 최신글6개 검색
-	//ROWNUM 대신 LIMIT 구문 사용
-	public List<BoardDTO> selectAllRownum(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllRownum 시작");
-		List<BoardDTO> result = null;
-		try {
-			result = jdbcTemplate.query(ALL_ROWNUM, new boardRowMapperAllRownum());
-		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAllRownum 실패 " + e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
-	}
-}
-class BoardRowMapperOne implements RowMapper<BoardDTO>{
-	@Override
-	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.board.boardDAO.selectOne 검색 성공");
-		BoardDTO boardDTO = new BoardDTO();
-		try{
-			boardDTO.setBoard_num(resultSet.getInt("BOARD_NUM"));
+			//게시글 PK 검색 BOARD_NUM
+			if(boardDTO.getModel_board_condition().equals("BOARD_ONE")) {
+				pstmt = conn.prepareStatement(ONE);
+				pstmt.setInt(1, boardDTO.getModel_board_num());
+				sqlq="one";
+			}
+			//게시글 PK 및 사용자 아이디 검색 BOARD_NUM
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ONE_WRITER_ID")) {
+				pstmt = conn.prepareStatement(ONE_WRITER_ID);
+				pstmt.setInt(1, boardDTO.getModel_board_num());
+				pstmt.setString(2, boardDTO.getModel_board_writer_id());
+				sqlq="one";
+			}
+			// 전체 글 개수 FIXME
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ONE_COUNT")) {
+				pstmt = conn.prepareStatement(ONE_COUNT);
+				sqlq = "count";
+			}
+			//ID로 검색한 글 개수 BOARD_WRITER_ID
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ONE_SEARCH_ID_COUNT")) {
+				pstmt = conn.prepareStatement(ONE_SEARCH_ID_COUNT);
+				pstmt.setString(1, boardDTO.getModel_board_searchKeyword().replace("'", "\'"));
+				sqlq = "count";
+			}
+			//제목으로 검색한 글 개수 BOARD_TITLE
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ONE_SEARCH_TITLE_COUNT")) {
+				pstmt = conn.prepareStatement(ONE_SEARCH_TITLE_COUNT);
+				pstmt.setString(1, boardDTO.getModel_board_location().replace("'", "\'"));
+				pstmt.setString(2, boardDTO.getModel_board_searchKeyword().replace("'", "\'"));
+				sqlq = "count";
+			}
+			//이름으로 검색한 글 개수 MEMBER_NAME AS BOARD_WRITER_ID
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ONE_SEARCH_NAME_COUNT")) {
+				pstmt = conn.prepareStatement(ONE_SEARCH_NAME_COUNT);
+				pstmt.setString(1, boardDTO.getModel_board_searchKeyword().replace("'", "\'"));
+				sqlq = "count";
+			}
+			else {
+				System.err.println("condition 틀림");
+				return null;
+			}
+			//FIXME
+			System.out.println("쿼리수행결과 구분용 데이터 = "+sqlq);
+			ResultSet rs = pstmt.executeQuery();
+			boolean flag = rs.next();
+			if (flag && sqlq.equals("one")) {
+				System.out.println("BoardDAO.selectOne 검색 성공");
+				data = new BoardDTO();
+				data.setModel_board_num(rs.getInt("BOARD_NUM"));
+				data.setModel_board_title(rs.getString("BOARD_TITLE"));
+				data.setModel_board_content(rs.getString("BOARD_CONTENT"));
+				data.setModel_board_writer_id(rs.getString("BOARD_WRITER_ID"));
+				data.setModel_board_cnt(rs.getInt("BOARD_CNT"));
+				data.setModel_board_location(rs.getString("BOARD_LOCATION"));
+			}
+			else if (flag && sqlq.equals("count")) {
+				System.out.println("BoardDAO.selectOne 검색 성공");
+				data = new BoardDTO();
+				data.setModel_board_total(rs.getInt("BOARD_TOTAL"));
+			}
 		}catch(SQLException e) {
-			System.err.println("Board_num = 0");
-			boardDTO.setBoard_num(0);
+			System.err.println("board.BoardDAO.selectOne SQL문 실패");
+			return null;
+		}finally {
+			JDBCUtil.disconnect(pstmt, conn);
 		}
-		try{
-			boardDTO.setBoard_title(resultSet.getString("BOARD_TITLE"));
-		}catch (SQLException e) {
-			System.err.println("Board_title = null");
-			boardDTO.setBoard_title(null);
+		System.out.println("board.BoardDAO.selectOne 성공");
+		return data;
+	}
+	public ArrayList<BoardDTO> selectAll(BoardDTO boardDTO){
+		System.out.println("board.BoardDAO.selectAll 시작");
+		ArrayList<BoardDTO> datas = new ArrayList<BoardDTO>();
+		Connection conn =JDBCUtil.connect();
+		PreparedStatement pstmt = null;
+		int rsCnt=1; //로그용
+		try {
+			//똑같은 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
+			if(boardDTO.getModel_board_condition().equals("BOARD_ALL_SEARCH_MATCH_ID")) {
+				pstmt = conn.prepareStatement(ALL_SEARCH_MATCH_ID);
+				pstmt.setString(1, boardDTO.getModel_board_searchKeyword().replace("'", "\'"));
+				pstmt.setInt(2, boardDTO.getModel_board_min_num());
+				pstmt.setInt(3, boardDTO.getModel_board_max_num());
+			}
+			//비슷한 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ALL_SEARCH_PATTERN_ID")) {
+				pstmt = conn.prepareStatement(ALL_SEARCH_PATTERN_ID);
+				pstmt.setString(1, boardDTO.getModel_board_searchKeyword().replace("'", "\'"));
+				pstmt.setInt(2, boardDTO.getModel_board_min_num());
+				pstmt.setInt(3, boardDTO.getModel_board_max_num());
+			}
+			//제목으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_TITLE, board_min_num, board_max_num
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ALL_SEARCH_TITLE")) {
+				pstmt = conn.prepareStatement(ALL_SEARCH_TITLE);
+				pstmt.setString(1, boardDTO.getModel_board_location().replace("'", "\'"));
+				pstmt.setString(2, boardDTO.getModel_board_searchKeyword().replace("'", "\'"));
+				pstmt.setInt(3, boardDTO.getModel_board_min_num());
+				pstmt.setInt(4, boardDTO.getModel_board_max_num());
+			}
+			//이름으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID 재사용 BOARD_WRITER_ID, board_min_num, board_max_num FIXME
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ALL_SEARCH_NAME")) {
+				pstmt = conn.prepareStatement(ALL_SEARCH_NAME);
+				pstmt.setString(1, boardDTO.getModel_board_searchKeyword().replace("'", "\'"));
+				pstmt.setInt(2, boardDTO.getModel_board_min_num());
+				pstmt.setInt(3, boardDTO.getModel_board_max_num());
+			}
+			// 전체 글 출력(ALL) 페이지네이션 윈도우함수 ROW_NUMBER()사용 board_min_num, board_max_num
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ALL")) {
+				pstmt = conn.prepareStatement(ALL);
+				pstmt.setInt(1, boardDTO.getModel_board_min_num());
+				pstmt.setInt(2, boardDTO.getModel_board_max_num());
+			}
+			// 최신글6개 검색
+			else if(boardDTO.getModel_board_condition().equals("BOARD_ALL_ROWNUM")) {
+				pstmt = conn.prepareStatement(ALL_ROWNUM);
+			}
+			else {
+				System.err.println("condition 틀림");
+				return datas;
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				System.out.println(rsCnt+"번째 행 출력중 ..");
+				BoardDTO data = new BoardDTO();
+				data.setModel_board_num(rs.getInt("BOARD_NUM"));
+				data.setModel_board_title(rs.getString("BOARD_TITLE"));
+				data.setModel_board_content(rs.getString("BOARD_CONTENT"));
+				data.setModel_board_cnt(rs.getInt("BOARD_CNT"));
+				data.setModel_board_location(rs.getString("BOARD_LOCATION"));
+				data.setModel_board_writer_id(rs.getString("BOARD_WRITER_ID"));
+				datas.add(data);
+				rsCnt++;
+			}
+		} catch (SQLException e) {
+			System.err.println("board.BoardDAO.selectAll SQL문 실패");
+			return datas;
+		}finally {
+			JDBCUtil.disconnect(pstmt, conn);
 		}
-		try{
-			boardDTO.setBoard_content(resultSet.getString("BOARD_CONTENT"));
-		}catch (SQLException e) {
-			System.err.println("Board_content = null");
-			boardDTO.setBoard_content(null);
-		}
-		try{
-			boardDTO.setBoard_cnt(resultSet.getInt("BOARD_CNT"));
-		}catch (SQLException e) {
-			System.err.println("Board_cnt = 0");
-			boardDTO.setBoard_cnt(0);
-		}
-		try{
-			boardDTO.setBoard_location(resultSet.getString("BOARD_LOCATION"));
-		}catch (SQLException e) {
-			System.err.println("Board_location = null");
-			boardDTO.setBoard_location(null);
-		}
-		try{
-			boardDTO.setBoard_writer_id(resultSet.getString("BOARD_WRITER_ID"));
-		}catch (SQLException e) {
-			System.err.println("Board_writer_id = null");
-			boardDTO.setBoard_writer_id(null);
-		}
-		return boardDTO;
+		System.out.println("board.BoardDAO.selectAll 성공");
+		return datas;
+
 	}
 }
-
-class BoardRowMapperOneWriterId implements RowMapper<BoardDTO>{
-	@Override
-	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.board.boardDAO.selectOneWriterId 검색 성공");
-		BoardDTO boardDTO = new BoardDTO();
-		try{
-			boardDTO.setBoard_num(resultSet.getInt("BOARD_NUM"));
-		}catch(SQLException e) {
-			System.err.println("Board_num = 0");
-			boardDTO.setBoard_num(0);
-		}
-		try{
-			boardDTO.setBoard_title(resultSet.getString("BOARD_TITLE"));
-		}catch (SQLException e) {
-			System.err.println("Board_title = null");
-			boardDTO.setBoard_title(null);
-		}
-		try{
-			boardDTO.setBoard_content(resultSet.getString("BOARD_CONTENT"));
-		}catch (SQLException e) {
-			System.err.println("Board_content = null");
-			boardDTO.setBoard_content(null);
-		}
-		try{
-			boardDTO.setBoard_cnt(resultSet.getInt("BOARD_CNT"));
-		}catch (SQLException e) {
-			System.err.println("Board_cnt = 0");
-			boardDTO.setBoard_cnt(0);
-		}
-		try{
-			boardDTO.setBoard_location(resultSet.getString("BOARD_LOCATION"));
-		}catch (SQLException e) {
-			System.err.println("Board_location = null");
-			boardDTO.setBoard_location(null);
-		}
-		try{
-			boardDTO.setBoard_writer_id(resultSet.getString("BOARD_WRITER_ID"));
-		}catch (SQLException e) {
-			System.err.println("Board_writer_id = null");
-			boardDTO.setBoard_writer_id(null);
-		}
-		return boardDTO;
-	}
-}
-class BoardRowMapperOneCount implements RowMapper<BoardDTO>{
-	@Override
-	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.board.boardDAO.selectOneCount 검색 성공");
-		BoardDTO boardDTO = new BoardDTO();
-		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
-		}catch (SQLException e) {
-			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
-		}
-		return boardDTO;
-	}
-}
-class BoardRowMapperOneSearchIdCount implements RowMapper<BoardDTO>{
-	@Override
-	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.board.boardDAO.selectOneSearchIdCount 검색 성공");
-		BoardDTO boardDTO = new BoardDTO();
-		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
-		}catch (SQLException e) {
-			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
-		}
-		return boardDTO;
-	}
-}
-class BoardRowMapperOneSearchTitleCount implements RowMapper<BoardDTO>{
-	@Override
-	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.board.boardDAO.selectOneSearchTitleCount 검색 성공");
-		BoardDTO boardDTO = new BoardDTO();
-		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
-		}catch (SQLException e) {
-			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
-		}
-		return boardDTO;
-	}
-}
-class BoardRowMapperOneSearchNameCount implements RowMapper<BoardDTO>{
-	@Override
-	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.board.boardDAO.selectOneSearchNameCount 검색 성공");
-		BoardDTO boardDTO = new BoardDTO();
-		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
-		}catch (SQLException e) {
-			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
-		}
-		return boardDTO;
-	}
-}
-
-	class boardRowMapperAllSearchMatchId implements RowMapper<BoardDTO>{
-		@Override
-		public BoardDTO mapRow(ResultSet rs, int i) throws SQLException {
-			System.out.println("com.coma.app.biz.board.selectAllSearchMatchId 검색 성공");
-			BoardDTO boardDTO = new BoardDTO();
-			try{
-				boardDTO.setBoard_num(rs.getInt("BOARD_NUM"));
-			} catch (SQLException e) {
-				System.err.println("Board_num = 0");
-				boardDTO.setBoard_num(0);
-			}
-			try{
-				boardDTO.setBoard_title(rs.getString("BOARD_TITLE"));
-			} catch (SQLException e) {
-				System.err.println("Board_title = null");
-				boardDTO.setBoard_title(null);
-			}
-			try{
-				boardDTO.setBoard_content(rs.getString("BOARD_CONTENT"));
-			} catch (SQLException e) {
-				System.err.println("Board_content = null");
-				boardDTO.setBoard_content(null);
-			}
-			try{
-				boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
-			}catch (SQLException e) {
-				System.err.println("Board_location = null");
-				boardDTO.setBoard_location(null);
-			}
-			try{
-				boardDTO.setBoard_writer_id(rs.getString("BOARD_WRITER_ID"));
-			}catch (SQLException e) {
-				System.err.println("Board_writer_id = null");
-				boardDTO.setBoard_writer_id(null);
-			}
-			return null;
-		}
-	}
-	class boardRowMapperAllSearchPatternId implements RowMapper<BoardDTO>{
-		@Override
-		public BoardDTO mapRow(ResultSet rs, int i) throws SQLException {
-			System.out.println("com.coma.app.biz.board.selectAllSearchPatternId 검색 성공");
-			BoardDTO boardDTO = new BoardDTO();
-			try{
-				boardDTO.setBoard_num(rs.getInt("BOARD_NUM"));
-			} catch (SQLException e) {
-				System.err.println("Board_num = 0");
-				boardDTO.setBoard_num(0);
-			}
-			try{
-				boardDTO.setBoard_title(rs.getString("BOARD_TITLE"));
-			} catch (SQLException e) {
-				System.err.println("Board_title = null");
-				boardDTO.setBoard_title(null);
-			}
-			try{
-				boardDTO.setBoard_content(rs.getString("BOARD_CONTENT"));
-			} catch (SQLException e) {
-				System.err.println("Board_content = null");
-				boardDTO.setBoard_content(null);
-			}
-			try{
-				boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
-			}catch (SQLException e) {
-				System.err.println("Board_location = null");
-				boardDTO.setBoard_location(null);
-			}
-			try{
-				boardDTO.setBoard_writer_id(rs.getString("BOARD_WRITER_ID"));
-			}catch (SQLException e) {
-				System.err.println("Board_writer_id = null");
-				boardDTO.setBoard_writer_id(null);
-			}
-			return null;
-		}
-	}
-
-	class boardRowMapperAllSearchTitle implements RowMapper<BoardDTO>{
-		@Override
-		public BoardDTO mapRow(ResultSet rs, int i) throws SQLException {
-			System.out.println("com.coma.app.biz.board.selectAllSearchTitle 검색 성공");
-			BoardDTO boardDTO = new BoardDTO();
-			try{
-				boardDTO.setBoard_num(rs.getInt("BOARD_NUM"));
-			} catch (SQLException e) {
-				System.err.println("Board_num = 0");
-				boardDTO.setBoard_num(0);
-			}
-			try{
-				boardDTO.setBoard_title(rs.getString("BOARD_TITLE"));
-			} catch (SQLException e) {
-				System.err.println("Board_title = null");
-				boardDTO.setBoard_title(null);
-			}
-			try{
-				boardDTO.setBoard_content(rs.getString("BOARD_CONTENT"));
-			} catch (SQLException e) {
-				System.err.println("Board_content = null");
-				boardDTO.setBoard_content(null);
-			}
-			try{
-				boardDTO.setBoard_cnt(rs.getInt("BOARD_CNT"));
-			} catch (SQLException e) {
-				System.err.println("Board_cnt = 0");
-				boardDTO.setBoard_cnt(0);
-			}
-			try{
-				boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
-			}catch (SQLException e) {
-				System.err.println("Board_location = null");
-				boardDTO.setBoard_location(null);
-			}
-			try{
-				boardDTO.setBoard_writer_id(rs.getString("BOARD_WRITER_ID"));
-			}catch (SQLException e) {
-				System.err.println("Board_writer_id = null");
-				boardDTO.setBoard_writer_id(null);
-			}
-			return null;
-		}
-	}
-	class boardRowMapperAll implements RowMapper<BoardDTO>{
-		@Override
-		public BoardDTO mapRow(ResultSet rs, int i) throws SQLException {
-			System.out.println("com.coma.app.biz.board.selectAll 검색 성공");
-			BoardDTO boardDTO = new BoardDTO();
-			try{
-				boardDTO.setBoard_num(rs.getInt("BOARD_NUM"));
-			} catch (SQLException e) {
-				System.err.println("Board_num = 0");
-				boardDTO.setBoard_num(0);
-			}
-			try{
-				boardDTO.setBoard_title(rs.getString("BOARD_TITLE"));
-			} catch (SQLException e) {
-				System.err.println("Board_title = null");
-				boardDTO.setBoard_title(null);
-			}
-			try{
-				boardDTO.setBoard_content(rs.getString("BOARD_CONTENT"));
-			} catch (SQLException e) {
-				System.err.println("Board_content = null");
-				boardDTO.setBoard_content(null);
-			}
-			try{
-				boardDTO.setBoard_cnt(rs.getInt("BOARD_CNT"));
-			} catch (SQLException e) {
-				System.err.println("Board_cnt = 0");
-				boardDTO.setBoard_cnt(0);
-			}
-			try{
-				boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
-			}catch (SQLException e) {
-				System.err.println("Board_location = null");
-				boardDTO.setBoard_location(null);
-			}
-			try{
-				boardDTO.setBoard_writer_id(rs.getString("BOARD_WRITER_ID"));
-			}catch (SQLException e) {
-				System.err.println("Board_writer_id = null");
-				boardDTO.setBoard_writer_id(null);
-			}
-			return null;
-		}
-	}
-
-	class boardRowMapperAllSearchName implements RowMapper<BoardDTO>{
-		@Override
-		public BoardDTO mapRow(ResultSet rs, int i) throws SQLException {
-			System.out.println("com.coma.app.biz.board.selectAllSearchName 검색 성공");
-			BoardDTO boardDTO = new BoardDTO();
-			try{
-				boardDTO.setBoard_num(rs.getInt("BOARD_NUM"));
-			} catch (SQLException e) {
-				System.err.println("Board_num = 0");
-				boardDTO.setBoard_num(0);
-			}
-			try{
-				boardDTO.setBoard_title(rs.getString("BOARD_TITLE"));
-			} catch (SQLException e) {
-				System.err.println("Board_title = null");
-				boardDTO.setBoard_title(null);
-			}
-			try{
-				boardDTO.setBoard_content(rs.getString("BOARD_CONTENT"));
-			} catch (SQLException e) {
-				System.err.println("Board_content = null");
-				boardDTO.setBoard_content(null);
-			}
-			try{
-				boardDTO.setBoard_cnt(rs.getInt("BOARD_CNT"));
-			} catch (SQLException e) {
-				System.err.println("Board_cnt = 0");
-				boardDTO.setBoard_cnt(0);
-			}
-			try{
-				boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
-			}catch (SQLException e) {
-				System.err.println("Board_location = null");
-				boardDTO.setBoard_location(null);
-			}
-			try{
-				boardDTO.setBoard_writer_id(rs.getString("BOARD_WRITER_ID"));
-			}catch (SQLException e) {
-				System.err.println("Board_writer_id = null");
-				boardDTO.setBoard_writer_id(null);
-			}
-			return null;
-		}
-	}
-	class boardRowMapperAllRownum implements RowMapper<BoardDTO>{
-		@Override
-		public BoardDTO mapRow(ResultSet rs, int i) throws SQLException {
-			System.out.println("com.coma.app.biz.board.selectAllRownum 검색 성공");
-			BoardDTO boardDTO = new BoardDTO();
-			try{
-				boardDTO.setBoard_num(rs.getInt("BOARD_NUM"));
-			} catch (SQLException e) {
-				System.err.println("Board_num = 0");
-				boardDTO.setBoard_num(0);
-			}
-			try{
-				boardDTO.setBoard_title(rs.getString("BOARD_TITLE"));
-			} catch (SQLException e) {
-				System.err.println("Board_title = null");
-				boardDTO.setBoard_title(null);
-			}
-			try{
-				boardDTO.setBoard_content(rs.getString("BOARD_CONTENT"));
-			} catch (SQLException e) {
-				System.err.println("Board_content = null");
-				boardDTO.setBoard_content(null);
-			}
-			try{
-				boardDTO.setBoard_cnt(rs.getInt("BOARD_CNT"));
-			} catch (SQLException e) {
-				System.err.println("Board_cnt = 0");
-				boardDTO.setBoard_cnt(0);
-			}
-			try{
-				boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
-			}catch (SQLException e) {
-				System.err.println("Board_location = null");
-				boardDTO.setBoard_location(null);
-			}
-			try{
-				boardDTO.setBoard_writer_id(rs.getString("BOARD_WRITER_ID"));
-			}catch (SQLException e) {
-				System.err.println("Board_writer_id = null");
-				boardDTO.setBoard_writer_id(null);
-			}
-			return null;
-		}
-	}
-
-
-
-
-

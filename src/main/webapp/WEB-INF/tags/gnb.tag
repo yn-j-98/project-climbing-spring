@@ -14,7 +14,7 @@
 			<nav class="navbar h-100 flex-column justify-content-between">
 				<ul class="navbar-nav text-center">
 					<li class="nav-item p-3"><a class="nav-link" href="StorePage.do">상점</a></li>
-					<li class="nav-item p-3"><a class="nav-link" href="GymMainPage.do">암벽장</a></li>
+					<li class="nav-item p-3"><a class="nav-link" href="GYMMAINPAGEACTION.do">암벽장</a></li>
 					<li class="nav-item p-3"><a class="nav-link" href="CrewListPage.do">크루</a></li>
 					<li class="nav-item p-3"><a class="nav-link" href="CrewRankingPage.do">랭킹</a></li>
 					<li class="nav-item p-3"><a class="nav-link" href="MainCommunityPage.do">커뮤니티</a></li>

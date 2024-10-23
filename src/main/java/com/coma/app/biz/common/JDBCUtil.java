@@ -6,16 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class JDBCUtil {
-//	private static final String driverName="oracle.jdbc.driver.OracleDriver";
-//	private static final String url="jdbc:oracle:thin:@localhost:1521:xe";
-//	private static final String userName="COMA"; 
-//	private static final String password="1234";
-	
-	private static final String driverName="com.mysql.cj.jdbc.Driver";
-	private static final String url="jdbc:mysql://root@localhost:3306/coma";
-	private static final String userName="root"; 
-	private static final String password="1234";
-	
+	   private static final String driverName="com.mysql.cj.jdbc.Driver";
+	   private static final String url="jdbc:mysql://root@localhost:3306/KIM";
+	   private static final String userName="root"; 
+	   private static final String password="1234";
 	
 	public static Connection connect() {
 		Connection conn=null;
@@ -49,3 +43,4 @@ public class JDBCUtil {
 		}		
 	}
 }
+
