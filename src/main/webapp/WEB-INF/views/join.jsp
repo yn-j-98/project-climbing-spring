@@ -41,7 +41,7 @@
 	<div class="container pt-3">
 		<div class="page-inner">
 			<div class="card card-stats card-round p-3">
-				<form id="signup-form" action="JOINACTION.do" method="post">
+				<form id="signup-form" action="join.do" method="post">
 					<div class="card-header">
 						<h3 class="text-center">회원가입</h3>
 					</div>
@@ -53,7 +53,7 @@
 							<div class="col-md-7">
 								<div class="form-group">
 									<input type="email" class="form-control" id="member_id"
-										name="VIEW_EMAIL" placeholder="이메일을 입력해주세요" required /> <small
+										name="member_id" placeholder="이메일을 입력해주세요" required /> <small
 										id="errorId" class="form-text text-muted"
 										style="display: none;"></small>
 								</div>
@@ -74,7 +74,7 @@
 							<div class="col-md-10">
 								<div class="form-group">
 									<input type="password" class="form-control"
-										id="member_password" name="VIEW_PASSWORD"
+										id="member_password" name="member_password"
 										placeholder="비밀번호를 입력해주세요" required />
 								</div>
 							</div>
@@ -86,7 +86,7 @@
 							<div class="col-md-10">
 								<div id="password-check-container" class="form-group">
 									<input type="password" class="form-control" id="password_check"
-										name="VIEW_PASSWORD_CHECK" placeholder="비밀번호를 확인해주세요" required />
+										name="password_check" placeholder="비밀번호를 확인해주세요" required />
 									<small id="errorPassword" class="form-text text-muted"
 										style="display: none;"></small>
 								</div>
@@ -99,7 +99,7 @@
 							<div class="col-md-10">
 								<div class="form-group">
 									<input type="text" class="form-control" id="member_name"
-										name="VIEW_NAME" placeholder="이름을 입력해주세요" required />
+										name="member_name" placeholder="이름을 입력해주세요" required />
 								</div>
 							</div>
 						</div>
@@ -109,7 +109,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<select id="member_location" name="VIEW_LOCATION">
+									<select id="member_location" name="member_location">
 										<option>서울특별시</option>
 										<option>세종특별자치도</option>
 										<option>부산광역시</option>
@@ -139,7 +139,7 @@
 							<div class="col-md-7">
 								<div class="form-group">
 									<input type="text" class="form-control" id="member_phoneNumber"
-										name="VIEW_PHONENUMBER"
+										name="member_phone"
 										placeholder="하이폰(-)을 제외한 전화번호 11자리를 입력해주세요" required />
 								</div>
 							</div>
@@ -155,7 +155,7 @@
 							<div class="col-md-7">
 								<div class="form-group">
 									<input type="text" class="form-control" id="phone_check"
-										name="VIEW_PHONE_CHECK" placeholder="인증번호를 입력해주세요" disabled
+										name="phone_check" placeholder="인증번호를 입력해주세요" disabled
 										required /> <small id="errorCheck"
 										class="form-text text-muted" style="display: none;"></small>
 								</div>
@@ -169,7 +169,7 @@
 					<div class="card-action text-center">
 						<button type="button"
 							class="btn btn-black px-5 mb-3 mb-sm-0 me-0 me-sm-4"
-							onclick="window.location.href='MAINPAGEACTION.do';">취소</button>
+							onclick="window.location.href='main.do';">취소</button>
 						<button type="submit" class="btn btn-primary px-5" id="joinbtn">가입</button>
 					</div>
 				</form>
@@ -316,7 +316,7 @@
 	    
 	 	// 카카오톡, 네이버 API를 통해 회원가입으로 넘어온다면 아이디 자동으로 넘어와서 입력되고 수정불가능하게 한다
 	    var idField = $('#member_id'); // 아이디 input
-		var idMember = '${model_member_id}' // C에서 가져온값
+		var idMember = '${member_id}' // C에서 가져온값
 		if(idMember!="") { // C에서 받아온 아이디가 있다면
 			idField.prop('readonly', true); // input창 비활성화
 			idField.val(idMember); // 받아온값으로 value값 넣기

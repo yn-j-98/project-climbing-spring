@@ -29,34 +29,34 @@
 		<div class="page-inner">
 			<div class="col-12 d-flex justify-content-center pb-3">
 				<h2>
-					<b>${model_battle_record.model_battle_record_gym_name}</b>
+					<b>${battle_record.battle_record_gym_name}</b>
 				</h2>
 			</div>
 			<div class="col-12 d-flex justify-content-center">
 
-				<p>크루전 개최 날짜: ${model_battle_record.model_battle_record_game_date}</p>
+				<p>크루전 개최 날짜: ${battle_record.battle_record_game_date}</p>
 			</div>
 			<div class="row border-top border-dark pb-3"></div>
 			<div class="row">
 				<div class="col-md-7 d-flex align-items-center">
-					<p class="mb-0">위치 : ${model_battle_record.model_battle_record_gym_location}</p>
+					<p class="mb-0">위치 : ${battle_record.battle_record_gym_location}</p>
 				</div>
 				<div class="col-md-5 d-flex align-items-center justify-content-end">
-					<p class="mb-0">참여 크루 수 : ${model_battle_total.model_battle_total}</p>
+					<p class="mb-0">참여 크루 수 : ${battle_total.battle_total}</p>
 				</div>
 			</div>
 			<div class="row border-bottom border-dark pb-3"></div>
 			<div class="row py-5">
 				<div class="col-12 d-flex justify-content-center">
 					<c:choose>
-					    <c:when test="${not empty model_battle_record_datas}">
-					        <c:forEach var="model_battle_crew" items="${model_battle_record_datas}">
+					    <c:when test="${not empty battle_record_datas}">
+					        <c:forEach var="battle_crew" items="${battle_record_datas}">
 					            <div class="battle-info">
 					            	<p>크루전 결과:
-					            		<c:if test="${model_battle_flag}">
+					            		<c:if test="${battle_flag}">
 					            		<!-- is_winner가 있다면 -->
 										    <c:choose>
-										        <c:when test="${model_battle_crew.model_battle_record_is_winner == 'T'}">
+										        <c:when test="${battle_crew.battle_record_is_winner == 'T'}">
 										            승리
 										        </c:when>
 										        <c:otherwise>
@@ -64,13 +64,13 @@
 										        </c:otherwise>
 										    </c:choose>
 									    </c:if>
-									    <c:if test="${!model_battle_flag}">
+									    <c:if test="${!battle_flag}">
 									    	경기 시작전
 									    </c:if>
 									</p>
-					                <p>크루전 MVP: ${model_battle_crew.model_battle_record_mvp_id}</p>
-					                <p>크루명: ${model_battle_crew.model_battle_record_crew_name}</p>
-					                <p>해당 크루의 크루장: ${model_battle_crew.model_battle_record_crew_leader}</p>
+					                <p>크루전 MVP: ${battle_crew.battle_record_mvp_id}</p>
+					                <p>크루명: ${battle_crew.battle_record_crew_name}</p>
+					                <p>해당 크루의 크루장: ${battle_crew.battle_record_crew_leader}</p>
 					            </div>
 					        </c:forEach>
 					    </c:when>

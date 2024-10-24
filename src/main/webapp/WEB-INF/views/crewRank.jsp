@@ -35,11 +35,11 @@
 			<div class="row pt-2 pb-5">
 				<div class="col-12">
 					<div class="d-flex justify-content-center align-items-center">
-						<a href="CrewRankingPage.do" class="text-dark text-decoration-underline link-primary">
+						<a href="crewRank.do" class="text-dark text-decoration-underline link-primary">
 							<h3 class="m-0"><b>크루 랭킹</b></h3>
 						</a>
 						<h3 class="px-5 m-0">/</h3>
-						<a href="RankingPage.do" class="text-dark text-decoration-none link-primary">
+						<a href="personalRank.do" class="text-dark text-decoration-none link-primary">
 							<p class="fs-4 m-0">개인 랭킹</p>
 						</a>
 					</div>

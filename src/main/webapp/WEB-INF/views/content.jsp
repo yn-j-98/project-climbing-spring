@@ -10,8 +10,7 @@
 
 <!-- Fonts and icons -->
 <script src="assets/js/plugin/webfont/webfont.min.js"></script>
-<script src="https://kit.fontawesome.com/7f7b0ec58f.js"
-	crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
 
 <!-- CSS Files -->
 <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
@@ -35,35 +34,33 @@ figure.image_resized img {
 		<div class="page-inner">
 			<div class="row py-3">
 				<div class="col-12">
-					<h1 class="text-center">${BOARD.model_board_title}</h1>
+					<h1 class="text-center">${BOARD.board_title}</h1>
 				</div>
 			</div>
 			<div class="row border-bottom border-dark pb-3">
 				<div class="col-md-1 d-flex justify-content-end align-items-center">
 					<div class="avatar avatar-sm">
-						<img src="${member_profile}" alt="profile"
-							class="avatar-img rounded-circle" />
+						<img src="${member_profile}" alt="profile" class="avatar-img rounded-circle" />
 					</div>
 				</div>
 				<div class="col-md-11 d-flex align-items-center">
-					<p class="mb-0">작성자: ${BOARD.model_board_writer_id}</p>
+					<p class="mb-0">작성자: ${BOARD.board_writer_id}</p>
 				</div>
 			</div>
 			<div class="row py-5">
 				<div class="col-12 d-flex justify-content-center">
 					<div class="w-75">
-						<p class="text-start">${BOARD.model_board_content}</p>
+						<p class="text-start">${BOARD.board_content}</p>
 					</div>
 				</div>
 			</div>
 			<div class="row border-top border-dark py-3">
-				<form action="REPLYACTION.do" method="POST">
-					<input type="hidden" name="board_id" value="${BOARD.model_board_num}" />
+				<form action="reply.do" method="POST">
+					<input type="hidden" name="board_id" value="${BOARD.board_num}" />
 					<div class="row">
 						<div class="col-11">
 							<div class="form-group">
-								<input name="reply_content" type="text" class="form-control"
-									id="comment" placeholder="댓글를 입력해주세요" />
+								<input name="reply_content" type="text" class="form-control" id="comment" placeholder="댓글를 입력해주세요" />
 							</div>
 						</div>
 						<div class="col-1 d-flex align-items-center">
@@ -77,20 +74,20 @@ figure.image_resized img {
 					<c:when test="${not empty REPLY}">
 						<div class="row border-top border-bottom py-3 px-5 comment-item">
 			               <div class="col-md-2">
-			                  <p>작성자: ${reply.model_reply_writer_id}</p>
+			                  <p>작성자: ${reply.reply_writer_id}</p>
 			               </div>
 			               <div class="col-md-9">
-			                  <form action="REPLYUPDATEACTION.do" method="POST">
-			                     <input type="hidden" name="board_id" value="${BOARD.model_board_num}" />
-			                     <input type="hidden" name="reply_id" value="${reply.model_reply_num}" />
-			                     <p class="comment-text">${reply.model_reply_content}</p>
+			                  <form action="replyUpdate.do" method="POST">
+			                     <input type="hidden" name="reply_board_num" value="${BOARD.board_num}" />
+			                     <input type="hidden" name="reply_num" value="${reply.reply_num}" />
+			                     <p class="comment-text">${reply.reply_content}</p>
 			                     <div class="edit-form d-none">
 			                        <div class="row">
 			                           <div class="col-8">
 			                              <input type="text" class="form-control comment-edit" name="reply_content"/>
 			                           </div>
 			                           <div class="col-4">
-			                              <a href="REPLYUPDATE.do">
+			                              <a href="replyUpdate.do">
 			                                 <button type="submit" class="btn btn-primary save-edit">변경완료</button>
 			                              </a>
 			                           </div>
@@ -99,16 +96,14 @@ figure.image_resized img {
 			                  </form>
 			               </div>
 			               <div class="col-1">
-			                  <c:if test="${MEMBER_ID eq reply.model_reply_writer_id}">
+			                  <c:if test="${MEMBER_ID eq reply.reply_writer_id}">
 			                     <div class="dropdown">
-			                        <button class="btn btn-icon btn-clean me-0" type="button"
-			                           id="dropdownMenuButton" data-bs-toggle="dropdown"
-			                           aria-haspopup="true" aria-expanded="false">
+			                        <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			                           <i class="fas fa-ellipsis-h"></i>
 			                        </button>
 			                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			                           <a class="dropdown-item" id="edit-comment">수정</a>
-			                           <a class="dropdown-item" href="REPLYDELETEACTION.do?replyId=${reply.model_reply_num}&board_num=${BOARD.model_board_num}">삭제</a>
+			                           <a class="dropdown-item" href="replyDelete.do?reply_num=${reply.reply_num}&reply_board_num=${BOARD.board_num}">삭제</a>
 			                        </div>
 			                     </div>
 			                  </c:if>
