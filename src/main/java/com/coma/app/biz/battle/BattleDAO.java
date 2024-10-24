@@ -129,7 +129,7 @@ public class BattleDAO {
 			"        B.BATTLE_REGISTRATION_DATE,\n" +
 			"        B.BATTLE_GAME_DATE\n" +
 			"    FROM \n" +
-			"        COMA.BATTLE B\n" +
+			"        BATTLE B\n" +
 			"    ORDER BY \n" +
 			"        B.BATTLE_NUM DESC\n" +
 			"    LIMIT 4\n" +
