@@ -1,7 +1,6 @@
 package com.coma.app.biz.battle;
 
 import java.util.List;
-
 public interface BattleService {
 	List<BattleDTO> selectAllActive(BattleDTO battleDTO);
 	List<BattleDTO> selectAllGymBattle(BattleDTO battleDTO);
