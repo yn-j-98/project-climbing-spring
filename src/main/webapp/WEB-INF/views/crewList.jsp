@@ -69,26 +69,26 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<c:if test="${empty model_crew_datas}">
+				<c:if test="${empty crew_datas}">
 					<div class="alert alert-danger" role="alert">
 						크루가 없습니다
 					</div>
 				</c:if>
-				<c:if test="${not empty model_crew_datas}">
-					<c:forEach var="model_crew_data" items="${model_crew_datas}">
+				<c:if test="${not empty crew_datas}">
+					<c:forEach var="crew_data" items="${crew_datas}">
 						<c:choose>
-							<c:when test="${model_crew_data != null}">
+							<c:when test="${crew_data != null}">
 								<div class="col-md-10">
 									<div class="card card-stats card-round pt-4 px-4 pb-4">
 										<div class="row justify-content-center">
 								
 											<div class="col-md-5">
 												<!-- 아래 링크를 클릭하면 선택한 크루의 설명창이 뜨게 됨 -->
-												<a href="CrewInformationPage.do?view_crew_num=${model_crew_data.model_crew_num}"><b>${model_crew_data.model_crew_name}</b></a>
+												<a href="CrewInformationPage.do?view_crew_num=${crew_data.crew_num}"><b>${crew_data.crew_name}</b></a>
 											</div>
-											<div class="col-md-4">${model_crew_data.model_crew_leader}</div>
+											<div class="col-md-4">${crew_data.crew_leader}</div>
 											<div class="col-md-3">최대 크루원 수:
-												${model_crew_data.model_crew_max_member_size}</div>
+												${crew_data.crew_max_member_size}</div>
 											</div>
 									</div>
 								</div>
@@ -239,7 +239,7 @@
 
 		// DOM이 완전히 로드된 후 페이지네이션을 생성
 		document.addEventListener("DOMContentLoaded", function() {
-			const _totalCount = ${model_crew_page_total}; // 서버에서 전달된 전체 게시물 개수
+			const _totalCount = ${crew_page_total}; // 서버에서 전달된 전체 게시물 개수
 			const currentPage = ${currentPage};
 			renderpagination(currentPage, _totalCount); // 페이지네이션 생성 함수 호출
 

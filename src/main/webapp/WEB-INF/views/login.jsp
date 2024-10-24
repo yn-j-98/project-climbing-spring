@@ -51,7 +51,7 @@
 							<div class="col-md-9 p-0">
 								<div class="form-group">
 									<input type="email" class="form-control" id="email"
-										name="VIEW_EMAIL" required placeholder="아이디를 입력해주세요" />
+										name="member_id" required placeholder="아이디를 입력해주세요" />
 								</div>
 							</div>
 						</div>
@@ -63,7 +63,7 @@
 							<div class="col-md-9 p-0">
 								<div class="form-group">
 									<input type="password" class="form-control" id="password"
-										name="VIEW_PASSWORD" required placeholder="비밀번호를 입력해주세요" />
+										name="member_password" required placeholder="비밀번호를 입력해주세요" />
 								</div>
 							</div>
 						</div>
@@ -215,7 +215,7 @@
 						success : function(res) {
 							// 사용자 정보에서 이메일을 추출함
 							var email = res.kakao_account.email;
-							
+
 							Kakao.Auth.logout();
 							
 							// 추출한 이메일을 C에게 전송
@@ -295,7 +295,7 @@
 					} else {
 						// DB에 해당 이메일이 존재하지 않는다면 회원가입 페이지로 이동
 						alert('회원가입 페이지로 이동합니다.')
-						window.location.href = 'JOINPAGEACTION.do?model_member_id='
+						window.location.href = 'JOINPAGEACTION.do?member_id='
 								+ response;
 					}
 

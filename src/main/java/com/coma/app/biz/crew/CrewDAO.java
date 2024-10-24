@@ -1,8 +1,9 @@
-package com.coma.app.biz.crew;//package model.crew;
+package com.coma.app.biz.crew;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,7 +28,7 @@ public class CrewDAO {
 			+ "FROM (\r\n"
 			+ "    SELECT \r\n"
 			+ "        CREW_NUM,\r\n"
-			+ "    	CREW_NAME,\r\n"
+			+ "    	   CREW_NAME,\r\n"
 			+ "    	CREW_DESCRIPTION,\r\n"
 			+ "    	CREW_MAX_MEMBER_SIZE,\r\n"
 			+ "    	CREW_LEADER,\r\n"
@@ -36,7 +37,7 @@ public class CrewDAO {
 			+ "        ROW_NUMBER() OVER (ORDER BY CREW_NUM) AS RN\r\n"
 			+ "    FROM \r\n"
 			+ "       	CREW\r\n"
-			+ ")\r\n"
+			+ ")AS subquery\r\n"
 			+ "WHERE RN BETWEEN ? AND ?";
 
 	//크루 총 개수
@@ -44,10 +45,19 @@ public class CrewDAO {
 
 
 	//특정 크루 현재 인원수 CREW_NUM
-	private final String ONE_COUNT_CURRENT_MEMBER_SIZE = "SELECT \r\n"
-			+ "CREW_NUM,CREW_NAME,CREW_DESCRIPTION,CREW_MAX_MEMBER_SIZE,CREW_LEADER,CREW_BATTLE_STATUS,CREW_PROFILE,\r\n"
-			+ "(SELECT count(*) from member where MEMBER_CREW_NUM = ?) AS CREW_CURRENT_MEMBER_SIZE\r\n"
-			+ "FROM CREW WHERE CREW_NUM = ?";
+	private final String ONE_COUNT_CURRENT_MEMBER_SIZE = "SELECT \n" +
+			"    CREW_NUM,\n" +
+			"    CREW_NAME,\n" +
+			"    CREW_DESCRIPTION,\n" +
+			"    CREW_MAX_MEMBER_SIZE,\n" +
+			"    CREW_LEADER,\n" +
+			"    CREW_BATTLE_STATUS,\n" +
+			"    CREW_PROFILE,\n" +
+			"    (SELECT COUNT(*) FROM member WHERE MEMBER_CREW_NUM = ?) AS CREW_CURRENT_MEMBER_SIZE\n" +
+			"FROM \n" +
+			"    CREW \n" +
+			"WHERE \n" +
+			"    CREW_NUM = ?";
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -74,7 +84,7 @@ public class CrewDAO {
 		CrewDTO result = null;
 		Object[] args = {crewDTO.getCrew_num()};
 		try {
-			result = jdbcTemplate.queryForObject(ONE, args, new crewRowMapperOne());
+			result = jdbcTemplate.queryForObject(ONE, args, new CrewRowMapperOne());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchIdCount 실패 " + e.getMessage());
 			e.printStackTrace();
@@ -87,7 +97,7 @@ public class CrewDAO {
 		System.out.println("crew.CrewDAO.selectOneCount 시작");
 		CrewDTO result = null;
 		try {
-			result = jdbcTemplate.queryForObject(ONE_COUNT, new crewRowMapperOneCount());
+			result = jdbcTemplate.queryForObject(ONE_COUNT, new CrewRowMapperOneCount());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.crew.CrewDAO.selectOneCount 실패 " + ONE_COUNT);
 			e.printStackTrace();
@@ -101,7 +111,7 @@ public class CrewDAO {
 		CrewDTO result = null;
 		Object[] args = {crewDTO.getCrew_num(), crewDTO.getCrew_num()};
 		try {
-			result = jdbcTemplate.queryForObject(ONE_COUNT_CURRENT_MEMBER_SIZE, args, new crewRowMapperOneCountCurrentMemberSize());
+			result = jdbcTemplate.queryForObject(ONE_COUNT_CURRENT_MEMBER_SIZE, args, new CrewRowMapperOneCountCurrentMemberSize());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.crew.CrewDAO.selectOneCountCurretMemberSize 실패 " + ONE_COUNT_CURRENT_MEMBER_SIZE);
 			e.printStackTrace();
@@ -115,7 +125,7 @@ public class CrewDAO {
 		List<CrewDTO> result = null;
 		Object[] args = {crewDTO.getCrew_min_num(),crewDTO.getCrew_max_num()};
 		try {
-			result = jdbcTemplate.query(ALL, args, new crewRowMapperAll());
+			result = jdbcTemplate.query(ALL, args, new CrewRowMapperAll());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.crew_board.selectAllCrewBoard 실패 " + e.getMessage());
 			e.printStackTrace();
@@ -124,7 +134,7 @@ public class CrewDAO {
 	}
 }
 
-class crewRowMapperAll implements RowMapper<CrewDTO> {
+class CrewRowMapperAll implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		System.out.println("com.coma.app.biz.crew.selectAll 검색 성공");
@@ -176,7 +186,7 @@ class crewRowMapperAll implements RowMapper<CrewDTO> {
 }
 
 
-class crewRowMapperOne implements RowMapper<CrewDTO> {
+class CrewRowMapperOne implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		System.out.println("com.coma.app.biz.crew.selectOne 검색 성공");
@@ -227,7 +237,7 @@ class crewRowMapperOne implements RowMapper<CrewDTO> {
 	}
 }
 
-class crewRowMapperOneCount implements RowMapper<CrewDTO> {
+class CrewRowMapperOneCount implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		System.out.println("com.coma.app.biz.crew.selectOneCount 검색 성공");
@@ -242,7 +252,7 @@ class crewRowMapperOneCount implements RowMapper<CrewDTO> {
 	}
 }
 
-class crewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
+class CrewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		System.out.println("com.coma.app.biz.crew.selectOneCountCurrentMemberSize 검색 성공");
