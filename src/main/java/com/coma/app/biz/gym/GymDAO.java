@@ -164,7 +164,7 @@ class GymSelectRowMapperOneAll implements RowMapper<GymDTO> {
 		System.err.println("gym_location = ["+gymDTO.getGym_location()+"]");
 		gymDTO.setGym_reservation_cnt(rs.getInt("GYM_RESERVATION_CNT"));
 		System.err.println("gym_reservation = ["+gymDTO.getGym_reservation_cnt()+"]");
-		gymDTO.setGym_price(rs.getString("GYM_PRICE"));
+		gymDTO.setGym_price(rs.getInt("GYM_PRICE"));
 		System.err.println("gym_price = ["+gymDTO.getGym_price()+"]");
 		gymDTO.setGym_battle_num(rs.getInt("GYM_BATTLE_NUM"));
 		System.err.println("gym_battle_num = ["+gymDTO.getGym_battle_num()+"]");

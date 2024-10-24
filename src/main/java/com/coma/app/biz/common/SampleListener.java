@@ -79,7 +79,7 @@ public class SampleListener implements ServletContextListener {
 			System.out.println("model.SampleListener.makeSampleProduct 크롤링 시작");
 			int PK=0;//자동부여하는 PK 
 			for(ProductDTO product_data : product_datas) {//FIXME TODO
-				product_data.setModel_product_num(PK);
+				product_data.setProduct_num(PK);
 				PK++;
 			}
 			System.out.println("model.SampleListener.makeSampleProduct 크롤링 완료");
@@ -101,10 +101,10 @@ public class SampleListener implements ServletContextListener {
 						//암벽장 등록 GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION
 						try {
 							pstmt = conn.prepareStatement(GYM_INSERT);
-							pstmt.setString(1,gym_data.getModel_gym_name());
-							pstmt.setString(2,gym_data.getModel_gym_profile());
-							pstmt.setString(3,gym_data.getModel_gym_description());
-							pstmt.setString(4, gym_data.getModel_gym_location());
+							pstmt.setString(1,gym_data.getGym_name());
+							pstmt.setString(2,gym_data.getGym_profile());
+							pstmt.setString(3,gym_data.getGym_description());
+							pstmt.setString(4, gym_data.getGym_location());
 							int result = pstmt.executeUpdate();
 							if(result<=0) {
 								System.err.println("model.SampleListener.makeSampleGym 데이터 없음");

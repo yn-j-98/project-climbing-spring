@@ -9,6 +9,15 @@ public class ProductDTO {
 	private int product_discount_price; //상품 할인된 가격
 	private String product_link; //상품 링크
 
+	private int page;
+
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+
 	public int getProduct_num() {
 		return product_num;
 	}

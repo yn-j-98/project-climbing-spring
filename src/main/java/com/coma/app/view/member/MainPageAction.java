@@ -2,6 +2,8 @@ package com.coma.app.view.member;
 
 import java.util.List;
 
+import com.coma.app.biz.member.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +15,9 @@ import com.coma.app.biz.member.MemberDTO;
 
 @Controller("main")
 public class MainPageAction{
-	
+
+	@Autowired
+	MemberService memberService;
 	
 	@RequestMapping("/MAINPAGEACTION.do")
 	public String main(Model model, MemberDAO memberDAO, MemberDTO memberDTO) throws Exception {
@@ -57,7 +61,7 @@ public class MainPageAction{
 		// memberService 메서드 쓸거야(memberDAO), member 패키지안에 어노테이션 (memberService) 스캔해줘
 //		MemberService memberservice = (MemberService)factory.getBean("memberService");
 		
-        List<MemberDTO> member_all_top10_crew_rank= memberDAO.selectAll(memberDTO);
+        List<MemberDTO> member_all_top10_crew_rank= memberService.selectAllTop10CrewRank(memberDTO);
 		
 //		member_all_top10_crew_rank=memberservice.selectAll(memberDTO);
 		
@@ -78,7 +82,7 @@ public class MainPageAction{
         //개인 랭킹 부분
 		memberDTO.setMember_condition("MEMBER_ALL_TOP10_RANK");//개인 랭킹 10개 컨디션
         
-		List<MemberDTO> member_all_top_rank= memberDAO.selectAll(memberDTO);
+		List<MemberDTO> member_all_top_rank= memberService.selectAllTop10Rank(memberDTO);
 //		member_all_top_rank = memberservice.selectAll(memberDTO);
         
 //        for (MemberDTO data : datas) {

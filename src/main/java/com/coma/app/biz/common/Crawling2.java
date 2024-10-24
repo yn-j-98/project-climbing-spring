@@ -177,13 +177,13 @@ public class Crawling2 {
                   WebElement productDiscountPrice = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(product_discount_price)));
 
                   ProductDTO productDTO = new ProductDTO();
-                  productDTO.setModel_product_name(productName.getText());
-                  productDTO.setModel_product_profile(productImg.getAttribute("src"));
-                  productDTO.setModel_product_discount_rate(productDiscountRate.getText());
-                  productDTO.setModel_product_default_price(Integer.parseInt(productDefaultPrice.getText().replace("원", "").replace(",", "")));
-                  productDTO.setModel_product_discount_price(Integer.parseInt(productDiscountPrice.getText().replace("원신규회원", "").replace(",", "")));
-                  productDTO.setModel_product_link(tag);//상품 링크 FIXME
-                  System.out.println("이미지 = "+productDTO.getModel_product_profile());
+                  productDTO.setProduct_name(productName.getText());
+                  productDTO.setProduct_profile(productImg.getAttribute("src"));
+                  productDTO.setProduct_discount_rate(productDiscountRate.getText());
+                  productDTO.setProduct_default_price(Integer.parseInt(productDefaultPrice.getText().replace("원", "").replace(",", "")));
+                  productDTO.setProduct_discount_price(Integer.parseInt(productDiscountPrice.getText().replace("원신규회원", "").replace(",", "")));
+                  productDTO.setProduct_link(tag);//상품 링크 FIXME
+                  System.out.println("이미지 = "+productDTO.getProduct_profile());
                   datas.add(productDTO);
 
                   // 들어갔던 링크를 빠져나오기 위해
@@ -395,10 +395,10 @@ public class Crawling2 {
             System.out.println("309 location = "+location);
 
             GymDTO gymDTO = new GymDTO();
-            gymDTO.setModel_gym_profile(img_url);
-            gymDTO.setModel_gym_name(name);
-            gymDTO.setModel_gym_description(description);
-            gymDTO.setModel_gym_location(location);
+            gymDTO.setGym_profile(img_url);
+            gymDTO.setGym_name(name);
+            gymDTO.setGym_description(description);
+            gymDTO.setGym_location(location);
             datas.add(gymDTO);
 
             // 들어갔던 링크를 빠져나오기 위해

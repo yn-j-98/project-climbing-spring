@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.coma.app.biz.battle_record.Battle_recordServiceImpl;
+import com.coma.app.biz.crew.CrewService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,8 @@ public class CrewJoinPageController{
 	private Battle_recordDAO battle_recordDAO;
     @Autowired
     private Battle_recordServiceImpl battle_recordService;
+	@Autowired
+	private CrewService crewService;
 
 	@RequestMapping("/CrewListPage.do")
 	public String crewListPage(HttpSession session, Model model, CrewDAO crewDAO, CrewDTO crewDTO) {
@@ -75,7 +79,7 @@ public class CrewJoinPageController{
 			crewDTO.setCrew_max_num(maxBoard);
 
 			crewDTO.setCrew_condition("CREW_ALL");//크루 전체 목록 컨디션
-			ArrayList<CrewDTO> crew_datas = crewDAO.selectAll(crewDTO);
+			List<CrewDTO> crew_datas = crewService.selectAll(crewDTO);
 			if(!crew_datas.isEmpty()) {
 				System.out.println("CrewListPageAction 72"+crew_datas.get(0).getCrew_num());
 			}

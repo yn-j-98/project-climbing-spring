@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.member.MemberService;
+import com.coma.app.biz.reservation.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,9 +32,11 @@ public class MypageController {
 	private BoardService boardService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private ReservationService reservationService;
 
 	@RequestMapping("/MYPAGEPAGEACTION.do")
-	public String myPage(HttpSession session, ServletContext servletContext, Model model, MemberDAO memberDAO, MemberDTO memberDTO, BoardDAO boardDAO, BoardDTO boardDTO, ReservationDTO reservationDTO, ReservationDAO reservationDAO) {
+	public String myPage(HttpSession session, ServletContext servletContext, Model model,MemberDTO memberDTO,BoardDTO boardDTO, ReservationDTO reservationDTO) {
 		//기본으로 넘어가야하는 페이지 와 redirect 여부를 설정
 		String path = "myPage";
 
@@ -106,10 +109,10 @@ public class MypageController {
 			//model에 reservation 테이블 정보를 요청
 
 			//로그인 정보를 전달하기 위해 DTO에 추가
-			reservationDTO.setModel_reservation_member_id(member_id);
+			reservationDTO.setReservation_member_id(member_id);
 
 			//요청해서 받을 값 (예약 PK번호 / 예약 암벽장 PK 번호 / 예약 암벽장 이름 / 예약 가격 / 암벽장 예약 날짜)
-			ArrayList<ReservationDTO> model_Reservation_Datas = reservationDAO.selectAll(reservationDTO);
+			List<ReservationDTO> model_Reservation_Datas = reservationService.selectAll(reservationDTO);
 
 			//내 예약 정보를 model_reservation_datas 에 담아서 View로 전달
 			model.addAttribute("model_reservation_datas", model_Reservation_Datas);
