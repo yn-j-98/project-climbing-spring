@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.member.MemberService;
+import com.coma.app.biz.reply.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,8 @@ public class CommunityPageController{
     private BoardService boardService;
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private ReplyService replyService;
 
     @RequestMapping("/MainCommunityPage.do")
     public String mainCommunityPage(Model model,BoardDTO boardDTO) {
@@ -197,8 +200,7 @@ public class CommunityPageController{
 	}
     
     @RequestMapping("/BOARDONEPAGEACTION.do")
-	public String boardOnePage(ServletContext servletContext, Model model, BoardDTO boardDTO, MemberDAO memberDAO, MemberDTO memberDTO,
-			ReplyDAO replyDAO, ReplyDTO replyDTO) {
+	public String boardOnePage(ServletContext servletContext, Model model, BoardDTO boardDTO,  MemberDTO memberDTO, ReplyDTO replyDTO) {
 		// 글 하나 선택 페이지
 		String path = "post"; // 선택한 글 하나 보는 페이지
 
@@ -211,7 +213,7 @@ public class CommunityPageController{
 		// MemberDAO에서 프로필 정보를 가져옴
 		memberDTO.setMember_id(boardDTO.getBoard_writer_id()); // 세션에 있는 사용자의 아이디
 		//memberDTO.setMember_condition("MEMBER_SEARCH_ID"); // member selectOne 컨디션
-		memberDTO = memberDAO.selectOneSearchId(memberDTO); // 프로필 사진을 보여주기 위해 member selectOne
+		memberDTO = memberService.selectOneSearchId(memberDTO); // 프로필 사진을 보여주기 위해 member selectOne
 		System.out.println("회원 정보 조회: " + memberDTO);
 
 		String filename = memberDTO.getMember_profile();
@@ -227,8 +229,8 @@ public class CommunityPageController{
 
 		System.out.println("게시글 조회수 업데이트: " + board_cnt);
 
-		replyDTO.setModel_reply_board_num(boardDTO.getBoard_num()); // boardDTO 안에 있는 것들만 보내는 것들로
-		ArrayList<ReplyDTO> replyList = replyDAO.selectAll(replyDTO);
+		replyDTO.setReply_board_num(boardDTO.getBoard_num()); // boardDTO 안에 있는 것들만 보내는 것들로
+		List<ReplyDTO> replyList = replyService.selectAll(replyDTO);
 
 		//System.out.println("댓글 리스트 조회: " + replyList);
 

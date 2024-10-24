@@ -253,9 +253,9 @@ public class Crawling {
                     String board_div_detail_writer = "coma@naver.com";
 
                     BoardDTO boardDTO = new BoardDTO();
-                    boardDTO.setModel_board_title(board_div_detail_title.getText());
-                    boardDTO.setModel_board_content(board_div_detail_content.getText());
-                    boardDTO.setModel_board_writer_id(board_div_detail_writer);
+                    boardDTO.setBoard_title(board_div_detail_title.getText());
+                    boardDTO.setBoard_content(board_div_detail_content.getText());
+                    boardDTO.setBoard_writer_id(board_div_detail_writer);
                     datas.add(boardDTO);
 
                     // 들어갔던 링크에서 나가기

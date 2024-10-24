@@ -38,7 +38,7 @@ public class GymReservationController {
 		//해당 기능에서 공통으로 사용할 변수 and 객체
 		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
 		int view_reservation_use_point=memberDTO.getVIEW_USE_POINT();
-		int gym_num = gymDTO.getModel_gym_num();
+		int gym_num = gymDTO.getGym_num();
 		//최대 사용 포인트
 		int max_Point = 5000;
 		
@@ -81,21 +81,21 @@ public class GymReservationController {
 			}
 			//양수 : 예약금액 = 암벽장금액 - 사용 포인트
 			else {
-				reservation_price = gymDTO.getModel_gym_price() - view_reservation_use_point;			
+				reservation_price = gymDTO.getGym_price() - view_reservation_use_point;
 			}
 			//사용 포인트 변경하는 로직 종료
 			//------------------------------------------------------------
 			//예약 가능 인원 수 구하는 로직 시작
 			//암벽장 번호를 Gym DTO 에 입력하여 암벽장 정보를 요청합니다.
-			gymDTO.setModel_gym_condition("GYM_ONE");
+			gymDTO.setGym_condition("GYM_ONE");
 			//해당 암벽장 정보의 예약 최대 인원을 요청합니다.
-			int reservation_total_cnt = gymDAO.selectOne(gymDTO).getModel_gym_reservation_cnt();
+			int reservation_total_cnt = gymDAO.selectOne(gymDTO).getGym_reservation_cnt();
 
 			//암벽장 번호와 예약 날짜를 Reservation DTO 에 추가해줍니다.
-			reservationDTO.setModel_reservation_gym_num(gym_num);
-			reservationDTO.setModel_reservation_condition("RESERVATION_ONE_COUNT");//TODO 컨디션 추가해야함
+			reservationDTO.setReservation_gym_num(gym_num);
+			reservationDTO.setReservation_condition("RESERVATION_ONE_COUNT");//TODO 컨디션 추가해야함
 			//model 에 selectOne 을 요청하여 현재 예약한 인원을 요청합니다.
-			int reservation_current_cnt = reservationDAO.selectOne(reservationDTO).getModel_reservation_total();
+			int reservation_current_cnt = reservationDAO.selectOne(reservationDTO).getReservation_total();
 			//예약 인원이 resrvation_cnt = resrvation_total_cnt - resrvation_current_cnt
 			reservation_cnt = reservation_total_cnt - reservation_current_cnt;
 			//만약 0보다 작다면
@@ -126,7 +126,7 @@ public class GymReservationController {
 		}
 		model.addAttribute("model_gym_num", gym_num);
 		model.addAttribute("MEMBER_NAME", member_name);
-		model.addAttribute("reservation_date", reservationDTO.getModel_reservation_date());
+		model.addAttribute("reservation_date", reservationDTO.getReservation_date());
 		model.addAttribute("reservation_cnt", reservation_cnt);
 		model.addAttribute("reservation_price", reservation_price);
 		model.addAttribute("use_point", view_reservation_use_point);
@@ -146,9 +146,9 @@ public class GymReservationController {
 		//------------------------------------------------------------
 		//해당 기능에서 공통으로 사용할 변수 and 객체
 		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
-		int view_reservation_gym_num = reservationDTO.getModel_reservation_gym_num();
+		int view_reservation_gym_num = reservationDTO.getReservation_gym_num();
 		int view_reservation_use_point=memberDTO.getVIEW_USE_POINT();
-		int view_reservation_price = reservationDTO.getModel_reservation_price();
+		int view_reservation_price = reservationDTO.getReservation_price();
 		//예약금액 변수
 		int reservation_price = 0;
 		
@@ -158,15 +158,15 @@ public class GymReservationController {
 		//------------------------------------------------------------
 		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 시작
 		//(예약일 / 암벽장번호 / login) 정보를 ReservationDTO에 추가합니다.
-		reservationDTO.setModel_reservation_member_id(member_id);
-		reservationDTO.setModel_reservation_condition("RESERVATION_ONE_SEARCH");
+		reservationDTO.setReservation_member_id(member_id);
+		reservationDTO.setReservation_condition("RESERVATION_ONE_SEARCH");
 		//Reservation selectOne 을 요청
 		ReservationDTO reservation_Check = reservationDAO.selectOne(reservationDTO);
 		//요청 값이 null 이 아니라면 해당 날짜에 이미 예약되어있는 사용자 이므로
 		//not null == error_message : 해당 날짜에는 이미 예약되어있습니다. (예약 번호 : Reservation PK 값)
 		//path			 			: 암벽장 페이지
 		if(reservation_Check != null) {
-			model.addAttribute("msg", "해당 날짜에는 이미 예약되어있습니다. (예약 번호 : "+reservation_Check.getModel_reservation_num()+")");
+			model.addAttribute("msg", "해당 날짜에는 이미 예약되어있습니다. (예약 번호 : "+reservation_Check.getReservation_num()+")");
 			model.addAttribute("path", view_path);
 			return path;
 		}
@@ -175,10 +175,10 @@ public class GymReservationController {
 		//------------------------------------------------------------
 		//예약 정보가 정상문제 없는지 확인하는 로직 시작
 		//암벽장 번호를 Gym DTO 에 추가해줍니다.
-		gymDTO.setModel_gym_condition("GYM_ONE"); // TODO 컨디션 추가해야함
-		gymDTO.setModel_gym_num(view_reservation_gym_num);
+		gymDTO.setGym_condition("GYM_ONE"); // TODO 컨디션 추가해야함
+		gymDTO.setGym_num(view_reservation_gym_num);
 		//model 에 selectOne으로 암벽장 가격을 가져옵니다.
-		int gym_price = gymDAO.selectOne(gymDTO).getModel_gym_price();
+		int gym_price = gymDAO.selectOne(gymDTO).getGym_price();
 		
 		//사용자가 최대 Point 보다 많이 입력했다면 최대 포인트로 고정합니다.
 		int max_Point = 5000;
@@ -240,11 +240,11 @@ public class GymReservationController {
 		//예약 정보 저장 하기 위한 로직 시작
 		//(암벽장 번호 / 예약일 / 예약금액)을 ReservationDTO에 추가합니다.
 		System.out.println("(GymReservationAction.java) 사용자 예약 암벽장 사람 로그 : "+member_id);
-		reservationDTO.setModel_reservation_member_id(member_id);
+		reservationDTO.setReservation_member_id(member_id);
 		System.out.println("(GymReservationAction.java) 사용자 예약 암벽장 번호 로그 : "+view_reservation_gym_num);
-		reservationDTO.setModel_reservation_gym_num(view_reservation_gym_num);
+		reservationDTO.setReservation_gym_num(view_reservation_gym_num);
 		System.out.println("(GymReservationAction.java) 사용자 예약 암벽장 가격 로그 : "+reservation_price);
-		reservationDTO.setModel_reservation_price(reservation_price);
+		reservationDTO.setReservation_price(reservation_price);
 		
 		//model 에 Reservation 테이블에 Insert 해줍니다.
 		boolean flag = reservationDAO.insert(reservationDTO);

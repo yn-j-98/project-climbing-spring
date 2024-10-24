@@ -24,7 +24,7 @@ public class FavoriteDAO {
 	public boolean insert(FavoriteDTO favoriteDTO) {
 		System.out.println("com.coma.app.biz.favorite.insert 시작");
 		//좋아요 추가 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
-		int result=jdbcTemplate.update(INSERT, favoriteDTO.getModel_favorite_member_id(), favoriteDTO.getModel_favorite_gym_num());
+		int result=jdbcTemplate.update(INSERT, favoriteDTO.getFavorite_member_id(), favoriteDTO.getFavorite_gym_num());
 		if(result<=0) {
 			System.out.println("com.coma.app.biz.favorite.insert SQL문 실패");
 			return false;
@@ -33,7 +33,7 @@ public class FavoriteDAO {
 		return true;
 	}
 
-	private boolean update(FavoriteDTO favoriteDTO) { // TODO 없는 CRUD
+	public boolean update(FavoriteDTO favoriteDTO) { // TODO 없는 CRUD
 		System.out.println("com.coma.app.biz.favorite.update 시작");
 		return false;
 	}
@@ -41,7 +41,7 @@ public class FavoriteDAO {
 	public boolean delete(FavoriteDTO favoriteDTO) {
 		System.err.println("com.coma.app.biz.favorite.delete 시작");
 		//좋아요 삭제 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
-		int result=jdbcTemplate.update(DELETE, favoriteDTO.getModel_favorite_member_id(), favoriteDTO.getModel_favorite_gym_num());
+		int result=jdbcTemplate.update(DELETE, favoriteDTO.getFavorite_member_id(), favoriteDTO.getFavorite_gym_num());
 		if(result<=0) {
 			System.err.println("com.coma.app.biz.favorite.delete SQL문 실패");
 			return false;
@@ -54,7 +54,7 @@ public class FavoriteDAO {
 		System.out.println("com.coma.app.biz.favorite.selectOne 시작");
 		//좋아요 불러오기 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
 		FavoriteDTO data = null;
-		Object[] args = { favoriteDTO.getModel_favorite_member_id(), favoriteDTO.getModel_favorite_gym_num() };
+		Object[] args = { favoriteDTO.getFavorite_member_id(), favoriteDTO.getFavorite_gym_num() };
 		try {
 			data= jdbcTemplate.queryForObject(ONE,args,new FavoriteRowMapper());
 		}
@@ -78,12 +78,12 @@ class FavoriteRowMapper implements RowMapper<FavoriteDTO> {
 	public FavoriteDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		FavoriteDTO favoriteDTO=new FavoriteDTO();
 		System.out.print("FavoriteRowMapper DB에서 가져온 데이터 {");
-		favoriteDTO.setModel_favorite_num(rs.getInt("FAVORITE_NUM"));
-		System.err.println("gym_num = ["+favoriteDTO.getModel_favorite_num()+"]");
-		favoriteDTO.setModel_favorite_member_id(rs.getString("FAVORITE_MEMBER_ID"));
-		System.err.println("member_id = ["+favoriteDTO.getModel_favorite_member_id()+"]");
-		favoriteDTO.setModel_favorite_gym_num(rs.getInt("FAVORITE_GYM_NUM"));
-		System.err.print("gym_num = ["+favoriteDTO.getModel_favorite_gym_num()+"]");
+		favoriteDTO.setFavorite_num(rs.getInt("FAVORITE_NUM"));
+		System.err.println("gym_num = ["+favoriteDTO.getFavorite_num()+"]");
+		favoriteDTO.setFavorite_member_id(rs.getString("FAVORITE_MEMBER_ID"));
+		System.err.println("member_id = ["+favoriteDTO.getFavorite_member_id()+"]");
+		favoriteDTO.setFavorite_gym_num(rs.getInt("FAVORITE_GYM_NUM"));
+		System.err.print("gym_num = ["+favoriteDTO.getFavorite_gym_num()+"]");
 		System.out.println("}");
 		return favoriteDTO;
 	};
