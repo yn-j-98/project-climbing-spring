@@ -17,7 +17,7 @@ public class ReplyController{
 	public String replay(HttpSession session, Model model, ReplyDTO replyDTO, ReplyDAO replyDAO) {
 		// 기본으로 넘어가야하는 페이지와 redirect 여부를 설정
 		String path = "info";
-		String info_path = "BOARDONEPAGEACTION.do?model_board_num=" + replyDTO.getModel_reply_board_num();
+		String info_path = "BOARDONEPAGEACTION.do?model_board_num=" + replyDTO.getReply_board_num();
 		// 로그인 정보가 있는지 확인
 		String memeber_id = (String)session.getAttribute("MEMBER_ID");
 		System.out.println("로그인 확인: " + memeber_id);
@@ -44,7 +44,7 @@ public class ReplyController{
 	@RequestMapping("/REPLYDELETEACTION.do")
     public String execute(HttpSession session, Model model, ReplyDTO replyDTO, ReplyDAO replyDAO) {
 		String path = "info";
-		String info_path = "BOARDONEPAGEACTION.do?model_board_num=" + replyDTO.getModel_reply_board_num();
+		String info_path = "BOARDONEPAGEACTION.do?model_board_num=" + replyDTO.getReply_board_num();
 		// 로그인 정보가 있는지 확인
 		String memeber_id = (String)session.getAttribute("MEMBER_ID");
 		System.out.println("로그인 확인: " + memeber_id);
@@ -72,7 +72,7 @@ public class ReplyController{
 	@RequestMapping("/REPLYUPDATEACTION.do")
     public String replyUpdate(HttpSession session, Model model, ReplyDTO replyDTO, ReplyDAO replyDAO) {
 		String path = "info";
-		String info_path = "BOARDONEPAGEACTION.do?model_board_num=" + replyDTO.getModel_reply_board_num();
+		String info_path = "BOARDONEPAGEACTION.do?model_board_num=" + replyDTO.getReply_board_num();
 		// 로그인 정보가 있는지 확인
 		String memeber_id = (String)session.getAttribute("MEMBER_ID");
 		System.out.println("로그인 확인: " + memeber_id);

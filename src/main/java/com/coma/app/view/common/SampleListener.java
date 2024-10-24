@@ -55,13 +55,13 @@ public class SampleListener {
                         // 게시글 작성 BOARD_NUM,BOARD_TITLE,BOARD_CONTENT,BOARD_LOCATION,BOARD_WRITER_ID
                         try {
                             pstmt = conn.prepareStatement(INSERT);
-                            System.out.println(board_data.getModel_board_title().replace("'", "\'"));
-                            pstmt.setString(1,board_data.getModel_board_title().replace("'", "\'"));
-                            System.out.println(board_data.getModel_board_content().replace("'", "\'"));
-                            pstmt.setString(2,board_data.getModel_board_content().replace("'", "\'"));
+                            System.out.println(board_data.getBoard_title().replace("'", "\'"));
+                            pstmt.setString(1,board_data.getBoard_title().replace("'", "\'"));
+                            System.out.println(board_data.getBoard_content().replace("'", "\'"));
+                            pstmt.setString(2,board_data.getBoard_content().replace("'", "\'"));
                             pstmt.setString(3,"서울특별시");
-                            System.out.println(board_data.getModel_board_writer_id());
-                            pstmt.setString(4, board_data.getModel_board_writer_id());
+                            System.out.println(board_data.getBoard_writer_id());
+                            pstmt.setString(4, board_data.getBoard_writer_id());
                             int result = pstmt.executeUpdate();
                             if(result<=0) {
                                 System.err.println("board.BoardDAO.makeSampleBoard 데이터 없음");

@@ -3,6 +3,7 @@ package com.coma.app.view.gym;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.coma.app.biz.gym.GymService;
 import com.coma.app.biz.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,12 +29,13 @@ public class GymMainController {
 
 	@Autowired
 	private Battle_recordDAO battle_recordDAO;
-
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private GymService gymService;
 
 	@RequestMapping("/GymMainPage.do")
-	public String gymMain(Model model, GymDAO gymDAO, GymDTO gymDTO) {
+	public String gymMain(Model model, GymDTO gymDTO) {
 		String path = "gymMain"; // view에서 알려줄 예정
 
 		//---------------------------------------------------------------------------
@@ -59,18 +61,18 @@ public class GymMainController {
 			max_gym = page_num * gym_size; // 최대 게시글 번호 계산
 		}
 		//페이지네이션 값과 condition 값을 DTO에 추가하여 (6개출력)
-		gymDTO.setModel_gym_max_num(max_gym);
-		gymDTO.setModel_gym_min_num(min_gym);
-		gymDTO.setModel_gym_condition("GYM_ONE_COUNT"); //컨디션 추가해야함
+		gymDTO.setGym_max_num(max_gym);
+		gymDTO.setGym_min_num(min_gym);
+		gymDTO.setGym_condition("GYM_ONE_COUNT"); //컨디션 추가해야함
 
 		//암벽장 총 개수를 요청 selectOne
-		GymDTO model_gym_total = gymDAO.selectOne(gymDTO);
+		GymDTO model_gym_total = gymService.selectOne(gymDTO);
 
 		System.out.println("min_gym"+min_gym);
 		System.out.println("max_gym"+max_gym);
 		//암벽장 리스트를 model에 요청 selectAll
 		//암벽장 테이블에서 받을 값(암벽장 번호 / 암벽장 이름 / 암벽장 주소)
-		ArrayList<GymDTO> model_gym_datas = gymDAO.selectAll(gymDTO);
+		List<GymDTO> model_gym_datas = gymService.selectAll(gymDTO);
 		System.out.println(model_gym_datas);
 		//------------------------------------------------------------
 		//지도 API를 사용하기 위해 json 형식으로 보내는 로직
@@ -79,9 +81,9 @@ public class GymMainController {
 		if(!model_gym_datas.isEmpty()) {
 			for (GymDTO data_gym : model_gym_datas) {
 				// datas(크롤링한 암벽장 데이터)만큼 암벽장 이름과
-				json += "{\"title\":\"" + data_gym.getModel_gym_name() + "\",";
+				json += "{\"title\":\"" + data_gym.getGym_name() + "\",";
 				// 암벽장 장소를 json 형식으로 쓰여져있는 String 값으로 추가해서
-				json += "\"address\":\"" + data_gym.getModel_gym_location() + "\"},";
+				json += "\"address\":\"" + data_gym.getGym_location() + "\"},";
 			}
 			// 끝에있는 쉼표 제거한 뒤 저장
 			json = json.substring(0, json.lastIndexOf(",")); 
@@ -94,7 +96,7 @@ public class GymMainController {
 		model.addAttribute("model_gym_datas", model_gym_datas);
 
 		//암벽장 전체 개수를 View로 전달
-		model.addAttribute("model_gym_total", model_gym_total.getModel_gym_total());
+		model.addAttribute("model_gym_total", model_gym_total.getGym_total());
 
 		//암벽장 페이지 페이지 번호를 전달.
 		model.addAttribute("page_num", page_num);
@@ -136,19 +138,19 @@ public class GymMainController {
 		//View에서 전달해준 암벽장 번호를 gym DTO에 저장하고
 		System.out.println("암벽장 PK : "+ gymDTO);
 		
-		int gym_num = gymDTO.getModel_gym_num();
+		int gym_num = gymDTO.getGym_num();
 		
-		gymDTO.setModel_gym_condition("GYM_ONE");//TODO 컨디션값 입력해야함
+		gymDTO.setGym_condition("GYM_ONE");//TODO 컨디션값 입력해야함
 
 		//gym selectOne으로 Model에 암벽장정보를 요청합니다.
 		//데이터 : 암벽장 번호 / 암벽장 이름 / 암벽장 사진 / 암벽장 설명 / 암벽장 주소 / 암벽장 가격
 		GymDTO data = gymDAO.selectOne(gymDTO);
-		model_gym_num = data.getModel_gym_num();
-		model_gym_name = data.getModel_gym_name();
-		model_gym_profile = "https://"+data.getModel_gym_profile();
-		model_gym_description = data.getModel_gym_description();
-		model_gym_location = data.getModel_gym_location();
-		model_gym_price = data.getModel_gym_price();
+		model_gym_num = data.getGym_num();
+		model_gym_name = data.getGym_name();
+		model_gym_profile = "https://"+data.getGym_profile();
+		model_gym_description = data.getGym_description();
+		model_gym_location = data.getGym_location();
+		model_gym_price = data.getGym_price();
 		//암벽장 정보 로직 종료
 		//---------------------------------------------------------------------------
 		//해당 암벽장에서 승리한 크루 목록 로직 시작
@@ -167,12 +169,12 @@ public class GymMainController {
 		//---------------------------------------------------------------------------
 		//해당 암벽장에 등록되어 있는 크루전 정보 로직 시작
 		// View에서 전달해준 암벽장 번호를 DTO에 저장하고
-		gymDTO.setModel_gym_condition("GYM_ONE"); //TODO 컨디션 추가해야함
+		gymDTO.setGym_condition("GYM_ONE"); //TODO 컨디션 추가해야함
 		// Battle selectOne으로 Model에 해당 암벽장에서 크루전 정보 요청
 		//데이터 : 크루전 번호 / 크루전 날짜
 		GymDTO gym_data = gymDAO.selectOne(gymDTO);
-		model_gym_battle_num = gym_data.getModel_gym_battle_num();
-		model_gym_battle_game_date = gym_data.getModel_gym_battle_game_date();
+		model_gym_battle_num = gym_data.getGym_battle_num();
+		model_gym_battle_game_date = gym_data.getGym_battle_game_date();
 		//해당 암벽장에 등록되어 있는 크루전 정보 로직 종료
 		//---------------------------------------------------------------------------
 		//로그인한 사용자라면
