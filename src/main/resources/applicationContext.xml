@@ -31,11 +31,11 @@
                                           com.coma.app.biz.reply,
                                           com.coma.app.biz.reservation"/>
 
-   <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+<!--   <aop:aspectj-autoproxy></aop:aspectj-autoproxy>-->
 
    <bean class="org.apache.commons.dbcp.BasicDataSource" id="ds" destroy-method="close">
       <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="url" value="jdbc:mysql://localhost:3306/KIM"/>
+      <property name="url" value="jdbc:mysql://localhost:3306/coma"/>
       <property name="username" value="root"/>
       <property name="password" value="1234"/>
    </bean>

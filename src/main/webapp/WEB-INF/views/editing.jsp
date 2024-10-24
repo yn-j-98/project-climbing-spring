@@ -59,7 +59,7 @@
                 </div>
             </div>
             <!-- Form for Posting -->
-            <form action="BOARDINSERTACTION.do" method="POST" name="editing">
+            <form action="boardInsert.do" method="POST" name="editing" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-1 d-flex align-items-center justify-content-center justify-content-md-end">
                         <h3>제목</h3>
@@ -67,7 +67,7 @@
                     <div class="col-md-11">
                         <div class="form-group">
                         <!-- 제목 바이트 제한 : 100자 -->
-                            <input type="text" class="form-control" id="title" name="VIEW_TITLE" required placeholder="글의 제목을 입력해주세요 ( 제한 : 100자 )" maxlength="100"/>
+                            <input type="text" class="form-control" id="title" name="board_title" required placeholder="글의 제목을 입력해주세요 ( 제한 : 100자 )" maxlength="100"/>
                             <!-- 바이트 제한을 넘어서면 작게 안내문구 보이도록 설정 -->
                             <div id="titleError" class="byte-error">제목은 100자를 넘을 수 없습니다.</div>
                         </div>
@@ -108,7 +108,7 @@
                     <div class="col-md-11">
                         <div class="form-group">
                             <div class="input-group">
-                                <textarea id="content" class="form-control" name="VIEW_CONTENT">
+                                <textarea id="content" class="form-control" name="board_content">
                                 	<!-- 수정할 게시글을 불러올 영역 -->
                                 </textarea>
                             </div>

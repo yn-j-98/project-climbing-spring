@@ -1,19 +1,15 @@
 package com.coma.app.biz.battle_record;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.coma.app.biz.common.JDBCUtil;
 
 @Repository
 public class Battle_recordDAO{
@@ -69,62 +65,62 @@ public class Battle_recordDAO{
 			+ "	B.BATTLE_NUM = ?";
 	
 	//크루전 등록 확인여부 BATTLE_RECORD_BATTLE_NUM, BATTLE_RECORD_CREW_NUM
-	private final String ONE_BATTLE_RECORD = "SELECT\r\n"
-			+ "	BATTLE_NUM\r\n"
-			+ "	BATTLE_GYM_NUM,\r\n"
-			+ "	BATTLE_GAME_DATE\r\n"
-			+ "FROM\r\n"
-			+ "	COMA.BATTLE B\r\n"
-			+ "JOIN\r\n"
-			+ "	COMA.BATTLE_RECORD BR\r\n"
-			+ "ON\r\n"
-			+ "	BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\r\n"
-			+ "WHERE	 \r\n"
-			+ "	BR.BATTLE_RECORD_CREW_NUM = ? AND\r\n"
-			+ "	(BATTLE_GAME_DATE > (SELECT SYSDATE() FROM DUAL) OR\r\n"
-			+ "	BATTLE_GAME_DATE IS NULL)";
+	private final String ONE_BATTLE_RECORD = "SELECT\n" +
+			"    BATTLE_NUM,\n" +
+			"    BATTLE_GYM_NUM,\n" +
+			"    BATTLE_GAME_DATE\n" +
+			"FROM\n" +
+			"    COMA.BATTLE B\n" +
+			"JOIN\n" +
+			"    COMA.BATTLE_RECORD BR\n" +
+			"ON\n" +
+			"    BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\n" +
+			"WHERE\n" +
+			"    BR.BATTLE_RECORD_CREW_NUM = ? AND\n" +
+			"    (BATTLE_GAME_DATE > NOW() OR\n" +
+			"    BATTLE_GAME_DATE IS NULL)";
 	
 	//해당 크루전 참가한 크루 개수 BATTLE_RECORD_BATTLE_NUM
-	private final String ONE_COUNT_CREW = "SELECT\r\n"
-			+ "    BR.BATTLE_RECORD_BATTLE_NUM,\r\n"
-			+ "    COUNT_BATTLE.BATTLE_CREW_TOTAL\r\n"
-			+ "FROM\r\n"
-			+ "	COMA.BATTLE_RECORD BR\r\n"
-			+ "JOIN\r\n"
-			+ "    COMA.BATTLE B \r\n"
-			+ "ON \r\n"
-			+ "    B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\r\n"
-			+ "JOIN\r\n"
-			+ "    (\r\n"
-			+ "    SELECT\r\n"
-			+ "		BATTLE_RECORD_BATTLE_NUM,\r\n"
-			+ "		COUNT(DISTINCT BATTLE_RECORD_CREW_NUM) AS BATTLE_CREW_TOTAL\r\n"
-			+ "	FROM\r\n"
-			+ "		COMA.BATTLE_RECORD\r\n"
-			+ "	GROUP BY BATTLE_RECORD_BATTLE_NUM\r\n"
-			+ "    ) COUNT_BATTLE\r\n"
-			+ "ON\r\n"
-			+ "	BR.BATTLE_RECORD_BATTLE_NUM = COUNT_BATTLE.BATTLE_RECORD_BATTLE_NUM\r\n"
-			+ "WHERE\r\n"
-			+ "    BR.BATTLE_RECORD_BATTLE_NUM = ?";
+	private final String ONE_COUNT_CREW = "SELECT\n" +
+			"    BR.BATTLE_RECORD_BATTLE_NUM,\n" +
+			"    COUNT_BATTLE.BATTLE_CREW_TOTAL\n" +
+			"FROM\n" +
+			"    COMA.BATTLE_RECORD BR\n" +
+			"JOIN\n" +
+			"    COMA.BATTLE B \n" +
+			"ON \n" +
+			"    B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\n" +
+			"JOIN\n" +
+			"    (\n" +
+			"    SELECT\n" +
+			"        BATTLE_RECORD_BATTLE_NUM,\n" +
+			"        COUNT(DISTINCT BATTLE_RECORD_CREW_NUM) AS BATTLE_CREW_TOTAL\n" +
+			"    FROM\n" +
+			"        COMA.BATTLE_RECORD\n" +
+			"    GROUP BY BATTLE_RECORD_BATTLE_NUM\n" +
+			"    ) COUNT_BATTLE\n" +
+			"ON\n" +
+			"    BR.BATTLE_RECORD_BATTLE_NUM = COUNT_BATTLE.BATTLE_RECORD_BATTLE_NUM\n" +
+			"WHERE\n" +
+			"    BR.BATTLE_RECORD_BATTLE_NUM = ?";
 	
 	//해당 크루전 참가한 크루 전부 출력 BATTLE_RECORD_BATTLE_NUM
-	private final String ALL_PARTICIPANT_CREW = "SELECT\r\n"
-			+ "	BR.BATTLE_RECORD_BATTLE_NUM,\r\n"
-			+ "	BR.BATTLE_RECORD_IS_WINNER,\r\n"
-			+ "	BR.BATTLE_RECORD_MVP_ID,\r\n"
-			+ "	BR.BATTLE_RECORD_CREW_NUM,\r\n"
-			+ "	C.CREW_NAME,\r\n"
-			+ "	C.CREW_LEADER,\r\n"
-			+ "	C.CREW_PROFILE\r\n"
-			+ "FROM\r\n"
-			+ "	COMA.BATTLE_RECORD BR\r\n"
-			+ "JOIN\r\n"
-			+ "	COMA.CREW C\r\n"
-			+ "ON\r\n"
-			+ "	BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\r\n"
-			+ "WHERE\r\n"
-			+ "	BR.BATTLE_RECORD_BATTLE_NUM = ?";
+	private final String ALL_PARTICIPANT_CREW = "SELECT\n" +
+			"    BR.BATTLE_RECORD_BATTLE_NUM,\n" +
+			"    BR.BATTLE_RECORD_IS_WINNER,\n" +
+			"    BR.BATTLE_RECORD_MVP_ID,\n" +
+			"    BR.BATTLE_RECORD_CREW_NUM,\n" +
+			"    C.CREW_NAME,\n" +
+			"    C.CREW_LEADER,\n" +
+			"    C.CREW_PROFILE\n" +
+			"FROM\n" +
+			"    COMA.BATTLE_RECORD BR\n" +
+			"JOIN\n" +
+			"    COMA.CREW C\n" +
+			"ON\n" +
+			"    BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\n" +
+			"WHERE\n" +
+			"    BR.BATTLE_RECORD_BATTLE_NUM = ?";
 	
 	//크루전 등록 BATTLE_RECORD_BATTLE_NUM, BATTLE_RECORD_CREW_NUM
 	private final String INSERT = "INSERT INTO COMA.BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM) VALUES (?,?)";
@@ -178,6 +174,7 @@ public class Battle_recordDAO{
 				+ "WHERE \r\n"
 				+ "    B.BATTLE_GYM_NUM = ? \r\n"
 				+ "    AND BR.BATTLE_RECORD_IS_WINNER = 'T'";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
