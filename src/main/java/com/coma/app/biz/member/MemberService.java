@@ -1,7 +1,5 @@
 package com.coma.app.biz.member;
 
-import com.coma.app.biz.board.BoardDTO;
-
 import java.util.List;
 
 public interface MemberService {
