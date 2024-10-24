@@ -41,20 +41,20 @@
 				</div>
 			</div>
 			<div class="row py-5">
-				<c:forEach var="product" items="${model_product_datas}">
+				<c:forEach var="product" items="${product_datas}">
 					<div class="col-3 d-flex align-items-center flex-column">
 						<div class="imageBox p-4">
-							<a href="${product.model_product_link}">
-								<img class="w-100 h-100" src="${product.model_product_profile}">
+							<a href="${product.product_link}">
+								<img class="w-100 h-100" src="${product.product_profile}">
 							</a>
 						</div>
 						<div>
-						    <h4>${product.model_product_name}</h4>
+						    <h4>${product.product_name}</h4>
 							<p>
-								<span class="fs-4 text-danger">${product.model_product_discount_rate}%</span>
-								<span class="fs-4 "><s>${product.model_product_default_price}원</s></span>
+								<span class="fs-4 text-danger">${product.product_discount_rate}%</span>
+								<span class="fs-4 "><s>${product.product_default_price}원</s></span>
 							</p>
-							<h4 class="text-danger">${product.model_product_discount_price}원</h4>
+							<h4 class="text-danger">${product.product_discount_price}원</h4>
 						</div>
 					</div>
 				</c:forEach>
@@ -121,7 +121,7 @@
 	        preli.id = 'prev-btn';
 	        preli.className = 'page-item';
 	        preli.insertAdjacentHTML("beforeend",
-			           "<a id='allprev' class='page-link' href='StorePage.do?page="+prev+"' aria-label='Previous'>" 
+			           "<a id='allprev' class='page-link' href='store.do?page="+prev+"' aria-label='Previous'>" 
 			                +"<span aria-hidden='true'>&laquo;</span> </a>");
 	        fragmentPage.appendChild(preli);
 	    }
@@ -131,7 +131,7 @@
 	        const li = document.createElement("li");
 	        li.className = 'page-item';
 	        li.insertAdjacentHTML("beforeend",
-		              "<a class='page-link m-2' href='StorePage.do?page=" + i + "' id='page-" + i + "' data-num='" + i + "'>" +
+		              "<a class='page-link m-2' href='store.do?page=" + i + "' id='page-" + i + "' data-num='" + i + "'>" +
 		                i +
 		            "</a>");
 
@@ -145,7 +145,7 @@
 	        endli.id = 'next-btn';
 	        endli.className = 'page-item';
 	        endli.insertAdjacentHTML("beforeend",
-			     "<a class='page-link' href='StorePage.do?page=" + next +"' id='allnext' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a>");
+			     "<a class='page-link' href='store.do?page=" + next +"' id='allnext' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a>");
 		
 
 			fragmentPage.appendChild(endli);
@@ -154,7 +154,7 @@
 	    // 생성된 페이지네이션 버튼들을 화면에 추가 
 	   document.getElementById('pagination').appendChild(fragmentPage);
 	   
-	};
+	}
 	
     // 페이지 버튼 클릭 이벤트 처리
     $("#pagination a").click(function (e) {

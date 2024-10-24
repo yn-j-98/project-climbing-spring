@@ -33,11 +33,11 @@
 			<div class="row pt-2 pb-5">
 				<div class="col-12">
 					<div class="d-flex justify-content-center align-items-center">
-						<a href="MainCommunityPage.do" class="text-dark text-decoration-none link-primary">
+						<a href="community.do" class="text-dark text-decoration-none link-primary">
 							<p class="fs-4 m-0">전체</p>
 						</a>
 						<h3 class="px-5 m-0">/</h3>
-						<a href="LocationPage.do" class="text-dark text-decoration-underline link-primary">
+						<a href="location.do" class="text-dark text-decoration-underline link-primary">
 							<h3 class="m-0"><b>지역</b></h3>
 						</a>
 					</div>
@@ -45,11 +45,11 @@
 			</div>
 			<div class="row pt-3">
 				<div class="col-12 p-0">
-					<form action="LocationPage.do" method="GET">
+					<form action="location.do" method="GET">
 						<div class="row">
 							<div class="col-md-3 col-lg-3">
 								<div class="form-group">
-									<select name="VIEW_BOARD_LIST"
+									<select name="search_keyword"
 										class="form-select form-control-lg">
 										<option value="SEOUL">서울</option>
 										<option value="GYEONGGI">경기</option>
@@ -62,7 +62,7 @@
 							<div class="col-md-6 col-lg-7">
 								<div class="form-group">
 									<div class="input-icon">
-										<input name="VIEW_BOARD_KEYWORD" type="text" class="form-control"
+										<input name="search_content" type="text" class="form-control"
 											placeholder="검색어를 입력해주세요" /> <span class="input-icon-addon">
 											<button type="submit" class="btn">
 												<i class="fa fa-search"></i>
@@ -73,7 +73,7 @@
 							</div>
 							<div
 								class="col-md-3 col-lg-2 d-flex align-items-center justify-content-end">
-								<a href="INSERTBOARDPAGEACTION.do" class="d-block btn">
+								<a href="boardInsert.do" class="d-block btn">
 									<button type="button"
 										class="btn btn-primary btn-round px-5 py-3">글 작성</button>
 								</a>
@@ -90,7 +90,7 @@
 								<div class="card card-stats card-round mb-0">
 									<div class="card-body p-5 d-flex justify-content-between">
 										<h3 class="card-title">
-											<a href="BOARDONEPAGEACTION.do?board_num=${board.board_num}"
+											<a href="content.do?board_num=${board.board_num}"
 												class="link-dark"> ${board.board_title}</a>
 										</h3>
 										<div class="info-user">
@@ -176,7 +176,7 @@
 		        preli.className = 'page-item';
 		        if(board_list != null){
 			         preli.insertAdjacentHTML("beforeend",
-			        	    "<a id='allprev' class='page-link' href='LocationPage.do?page=" + prev + "&VIEW_BOARD_LIST="+board_list+"&VIEW_BOARD_KEYWORD="+board_keyword+"' aria-label='Previous'>" + 
+			        	    "<a id='allprev' class='page-link' href='location.do?page=" + prev + "&VIEW_BOARD_LIST="+board_list+"&VIEW_BOARD_KEYWORD="+board_keyword+"' aria-label='Previous'>" + 
 			        	    "<span aria-hidden='true'>&laquo;</span>" + 
 			        	    "</a>"
 			        	);
@@ -184,7 +184,7 @@
 			        }
 			        else{
 				        preli.insertAdjacentHTML("beforeend",
-						           "<a id='allprev' class='page-link' href='LocationPage.do?page="+prev+"' aria-label='Previous'>" 
+						           "<a id='allprev' class='page-link' href='location.do?page="+prev+"' aria-label='Previous'>" 
 						                +"<span aria-hidden='true'>&laquo;</span> </a>");
 			        }
 		        fragmentPage.appendChild(preli);
@@ -196,7 +196,7 @@
 		        li.className = 'page-item';
 		        if(board_list != null){
 			        li.insertAdjacentHTML("beforeend",
-			        	    "<a class='page-link m-2' href='LocationPage.do?page=" + i + "&VEIW_BOARD_LIST="+board_list+"&VIEW_BOARD_KEYWORD="+board_keyword+"' id='page-" + i + "' data-num='" + i + "'>" +
+			        	    "<a class='page-link m-2' href='location.do?page=" + i + "&VEIW_BOARD_LIST="+board_list+"&VIEW_BOARD_KEYWORD="+board_keyword+"' id='page-" + i + "' data-num='" + i + "'>" +
 			        	    i +
 			        	    "</a>"
 			        	);
@@ -204,7 +204,7 @@
 			        }
 			        else{
 				        li.insertAdjacentHTML("beforeend",
-					              "<a class='page-link m-2' href='LocationPage.do?page=" + i + "' id='page-" + i + "' data-num='" + i + "'>" +
+					              "<a class='page-link m-2' href='location.do?page=" + i + "' id='page-" + i + "' data-num='" + i + "'>" +
 					                i +
 					            "</a>");
 			        }
@@ -220,7 +220,7 @@
 		        endli.className = 'page-item';
 		        if(board_list != null){
 			        endli.insertAdjacentHTML("beforeend",
-			        	    "<a class='page-link' href='LocationPage.do?page=" + next + "&VIEW_BOARD_LIST="+board_list+"&VIEW_BOARD_KEYWORD="+board_keyword+"' id='allnext' aria-label='Next'>" + 
+			        	    "<a class='page-link' href='location.do?page=" + next + "&VIEW_BOARD_LIST="+board_list+"&VIEW_BOARD_KEYWORD="+board_keyword+"' id='allnext' aria-label='Next'>" + 
 			        	    "<span aria-hidden='true'>&raquo;</span>" +
 			        	    "</a>"
 			        	);
@@ -228,7 +228,7 @@
 			        }
 			        else{
 				        endli.insertAdjacentHTML("beforeend",
-						     "<a class='page-link' href='LocationPage.do?page=" + next +"' id='allnext' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a>");
+						     "<a class='page-link' href='location.do?page=" + next +"' id='allnext' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a>");
 				        
 			        }
 
@@ -238,7 +238,7 @@
 		    // 생성된 페이지네이션 버튼들을 화면에 추가 
 		   document.getElementById('pagination').appendChild(fragmentPage);
 		   
-		};
+		}
 		
 	    // 페이지 버튼 클릭 이벤트 처리
 	    $("#pagination a").click(function (e) {

@@ -35,7 +35,7 @@
 </script>
 <script type="text/javascript">
 	//외부 js 파일에서 사용하기 위해 전역변수로 설정하여 데이터를 불러옵니다.
-	var contentData = '${BOARD_CONTENT}';
+	var contentData = '${board_content}';
 </script>
 <script type="module" src="./js/CKEditor_read.js"></script>
 
@@ -77,9 +77,9 @@
                <div class="col-md-11">
                   <div class="form-group">
                   <!-- C에서 DATA 가져오기 -->
-                     <input type="text" class="form-control" id="title" name="VIEW_TITLE" value="${BOARD_TITLE}" required
+                     <input type="text" class="form-control" id="title" name="board_title" value="${board_title}" required
                         placeholder="글의 제목을 입력해주세요" />
-                     <input type="hidden" class="" id="" name="VIEW_BOARD_NUM" value="${BOARD_NUM}"/>
+                     <input type="hidden" class="" id="" name="board_num" value="${board_num}"/>
                      <!-- 바이트 제한을 넘어서면 작게 안내문구 보이도록 설정 -->
                      <div id="titleError" class="byte-error">제목은 100자를 넘을 수 없습니다.</div>
                   </div>
@@ -91,7 +91,7 @@
 				</div>
 				<div class="col-md-11">
 				<div class="form-group">
-					<select class="form-control form-select" id="location" name="VIEW_BOARD_LOCATION">
+					<select class="form-control form-select" id="location" name="board_location">
 						<option value="" class="text-muted">지역</option>
 						<option value="SEOUL">서울특별시</option>
 						<option value="SEJONG">세종특별자치도</option>
@@ -122,7 +122,7 @@
                   <div class="form-group">
                      <div class="input-group" style="height: 400px !important;">
                      <!-- C에서 DATA 가져오기 -->
-                        <textarea id="readEditor" class="form-control" name="VIEW_CONTENT">
+                        <textarea id="readEditor" class="form-control" name="board_content">
                         	<!-- 수정할 게시글을 불러올 영역 -->
                         </textarea>
                      </div>
@@ -154,15 +154,15 @@
    <script src="assets/js/core/bootstrap.min.js"></script>
    
    <script type="text/javascript">
-    function cancelEditing() {
+    function cancelEditing( ){
     	// 취소버튼을 누르면 메인페이지 C로 이동
-    	window.location.href = 'MYPAGEPAGEACTION.do';
-    };
+    	window.location.href = 'mypage.do';
+    }
       
       
     document.addEventListener("DOMContentLoaded", function() {
     	var select = document.getElementById("location");
-    	select.value = "${BOARD_LOCATION}";  // Controller에서 보내주는 지역 옵션 선택
+    	select.value = "${board_location}";  // Controller에서 보내주는 지역 옵션 선택
     });
    </script>
    
@@ -216,7 +216,7 @@
     }
 
     function cancelEditing() {
-        window.location.href = 'MainCommunityPage.do';
+        window.location.href = 'community.do';
     }
 
     // 페이지 로드 시 초기 바이트 수 업데이트

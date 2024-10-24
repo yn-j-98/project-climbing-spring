@@ -40,7 +40,7 @@
 	<!-- container start -->
 
 	<div class="container pt-3">
-		<form action="CHANGEMEMBERACTION.do" method="post"
+		<form action="changeMember.do" method="post"
 			enctype="multipart/form-data">
 			<div class="page-inner">
 			<!-- 비밀번호 확인 창 -->
@@ -77,8 +77,8 @@
 						<div class="row my-3">
 							<div class="col-12 d-flex justify-content-center">
 								<div class="avatar avatar-xxl">
-									<img src="${data.model_member_profile}" alt="profile"
-										class="avatar-img rounded-circle">
+									<img src="${data.member_profile}" alt="profile"
+										class="avatar-img rounded-circle" id="previewImage">
 								</div>
 							</div>
 							<div class="row pt-3">
@@ -97,7 +97,7 @@
 							<div class="col-md-10">
 								<div class="form-group">
 									<input type="text" class="form-control" id="member_name"
-										name="VIEW_NAME" value="${data.model_member_name}" readonly />
+										name="member_name" value="${data.member_name}" readonly />
 								</div>
 							</div>
 						</div>
@@ -108,7 +108,7 @@
 							<div class="col-md-10">
 								<div class="form-group">
 									<input type="text" class="form-control" id="phone"
-										name="VIEW_PHONE" value="${data.model_member_phone}"
+										name="member_phone" value="${data.member_phone}"
 										placeholder="전화번호를 입력해주세요" />
 								</div>
 							</div>
@@ -119,7 +119,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<select id="member_location" name="VIEW_LOCATION">
+									<select id="member_location" name="member_location">
 										<option>서울특별시</option>
 										<option>세종특별자치도</option>
 										<option>부산광역시</option>
@@ -148,7 +148,7 @@
 							<div class="col-md-10">
 								<div class="form-group">
 									<input type="password" class="form-control"
-										id="update_password" name="VIEW_UPDATE_PASSWORD"
+										id="update_password" name="member_password"
 										placeholder="변경할 비밀번호를 입력해주세요" />
 								</div>
 							</div>
@@ -160,7 +160,7 @@
 							<div class="col-md-10">
 								<div id="password-check-container" class="form-group">
 									<input type="password" class="form-control" id="password_check"
-										name="VIEW_PASSWORD_CHECK" placeholder="변경할 비밀번호를 확인해주세요" /> <small
+										name="password_check" placeholder="변경할 비밀번호를 확인해주세요" /> <small
 										id="errorPassword" class="form-text text-muted"
 										style="display: none;"></small>
 								</div>
@@ -170,7 +170,7 @@
 					<div class="card-action text-center">
 						<button type="button"
 							class="btn btn-black px-5 mb-3 mb-sm-0 me-0 me-sm-4"
-							onclick="window.location.href='MYPAGEPAGEACTION.do';">취소</button>
+							onclick="window.location.href='mypage.do';">취소</button>
 						<button type="submit" id="update" class="btn btn-primary px-5">수정</button>
 					</div>
 				</div>
@@ -242,9 +242,9 @@
       $(document).ready(function() {
          $("#check-pw-btn").click(function(event) { // 확인 버튼 누르는 함수
             
-            var passwordCheckPageField = document.getElementById('passwordCheckPage'); // 비밀번호 확인 box
-            var editmyPageField = document.getElementById('editmyPage'); // 회원정보 수정 box
-            var passwordCheckField = document.getElementById('member_password'); // 비밀번호 확인 input
+            var passwordCheckPageField = $('#passwordCheckPage'); // 비밀번호 확인 box
+            var editmyPageField = $('#editmyPage'); // 회원정보 수정 box
+            var passwordCheckField = $('#member_password'); // 비밀번호 확인 input
             var passwordCheck = passwordCheckField.value; // 비밀번호 확인 input 입력값
             $.ajax({
                   type: "POST",
@@ -281,6 +281,8 @@
                var file = fileInput.files[0];
                var fileError = document.getElementById('fileError'); // small 태그
                fileError.textContent = '';
+			   const imgPreview = document.getElementById('previewImage');
+
    
                if (file) {
                   
@@ -295,9 +297,17 @@
                    if (file.size > 50 * 1024) { // 파일의 크기가 50kb가 넘는다면
                       $(fileError).text("파일 크기는 50KB를 넘을 수 없습니다.");
                        fileInput.value = ''; // 파일 비워줘
-                       return;
+
                    }
                    else {
+					   const reader = new FileReader();
+					   reader.onload = function() {
+						   imgPreview.src = reader.result;
+						   imgPreview.style.display = 'block';
+					   };
+					   if (file) {
+						   reader.readAsDataURL(file);
+					   }
                       $('#photoModal').modal('hide'); // 제대로들어가면 모달창 닫아도돼~
                    }
                }

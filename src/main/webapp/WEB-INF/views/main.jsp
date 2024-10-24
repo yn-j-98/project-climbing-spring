@@ -43,6 +43,7 @@
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	position:relative;
 }
 
 .mySwiper2, .mySwiper3 {
@@ -103,7 +104,7 @@
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
 					<div
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
-						<a href="StorePage.do" class="d-block">
+						<a href="store.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary"> <i
 									class="fa-solid fa-store"></i>
@@ -111,7 +112,7 @@
 							</button>
 						</a>
 					</div>
-					<a href="StorePage.do" class="mt-2">
+					<a href="store.do" class="mt-2">
 						<h4 class="text-center text-primary">암벽화 상점</h4>
 					</a>
 				</div>
@@ -119,7 +120,7 @@
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
 					<div
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
-						<a href="GymMainPage.do" class="d-block">
+						<a href="gymMain.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary"> <i
 									class="fa-solid fa-chess"></i>
@@ -127,7 +128,7 @@
 							</button>
 						</a>
 					</div>
-					<a href="GymMainPage.do" class="mt-2">
+					<a href="gymMain.do" class="mt-2">
 						<h4 class="text-center text-primary">암벽장 투어</h4>
 					</a>
 				</div>
@@ -135,7 +136,7 @@
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
 					<div
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
-						<a href="CrewListPage.do" class="d-block">
+						<a href="crewList.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary"> <i
 									class="fa-solid fa-crown"></i>
@@ -143,7 +144,7 @@
 							</button>
 						</a>
 					</div>
-					<a href="CrewListPage.do" class="mt-2">
+					<a href="crewList.do" class="mt-2">
 						<h4 class="text-center text-primary">크루 가입</h4>
 					</a>
 				</div>
@@ -151,7 +152,7 @@
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
 					<div
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
-						<a href="LocationPage.do" class="d-block">
+						<a href="location.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary"> <i
 									class="fa-solid fa-comments"></i>
@@ -159,7 +160,7 @@
 							</button>
 						</a>
 					</div>
-					<a href="LocationPage.do" class="mt-2">
+					<a href="location.do" class="mt-2">
 						<h4 class="text-center text-primary">지역별 커뮤니티</h4>
 					</a>
 				</div>
@@ -167,7 +168,7 @@
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
 					<div
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
-						<a href="CrewBattlePage.do" class="d-block">
+						<a href="crewBattle.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary"> <i
 									class="fa-solid fa-fire"></i>
@@ -175,7 +176,7 @@
 							</button>
 						</a>
 					</div>
-					<a href="CrewBattlePage.do" class="mt-2">
+					<a href="crewBattle.do" class="mt-2">
 						<h4 class="text-center text-primary">크루전</h4>
 					</a>
 				</div>
@@ -183,7 +184,7 @@
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
 					<div
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
-						<a href="RankingPage.do" class="d-block">
+						<a href="personalRank.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary"> <i
 									class="fa-solid fa-ranking-star"></i>
@@ -191,7 +192,7 @@
 							</button>
 						</a>
 					</div>
-					<a href="CrewRankingPage.do" class="mt-2">
+					<a href="personalRank.do" class="mt-2">
 						<h4 class="text-center text-primary">전체 랭킹</h4>
 					</a>
 				</div>
@@ -271,10 +272,10 @@
 					</div>
 				</div>
 				<div class="row pb-5 mb-5">
-					<c:forEach var="board" items="${board_datas}">
+					<c:forEach var="board" items="${board_datas}">					
 						<div class="col-6 col-lg-2 pt-5 pt-lg-0 mt-5 mt-lg-0" style="height:260px;">
 							<div class="card card-stats w-100 h-100 rounded-5 p-3 overflow-hidden border border-light-subtle">
-								<h4 class="text-center">${board.board_title}</h4>
+								<h4 class="text-center">${board.board_title}</h4>	
 								<a href="BOARDONEPAGEACTION.do?board_num=${board.board_num}" class="text-dark link-primary">
 									${board.board_content}
 								</a>

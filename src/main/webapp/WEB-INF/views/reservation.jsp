@@ -32,18 +32,16 @@
 					<div class="card-header d-flex justify-content-center">
 						<div class="card-title">예   약</div>
 					</div>
-					<form action="GymReservation.do">
+					<form action="gymReservation.do">
 					<div class="card-body">
-						<input type="hidden" id="gymNum" name="VIEW_RESERVATION_GYM_NUM" value="${model_gym_num}">
+						<input type="hidden" id="gymNum" name="reservation_gym_num" value="${gym_num}">
 						<div class="row">
 							<div class="col-md-2 d-flex align-items-center">
 								<p class="mb-0">아이디</p>
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<input type="text" class="form-control" id="member_id"
-										 value="${MEMBER_ID}" name="VIEW_MEMBER_ID"
-										readonly/>
+									<input type="text" class="form-control" id="member_id" value="${MEMBER_ID}" name="reservation_member_id" readonly/>
 								</div>
 							</div>
 							<div class="col-md-2 d-flex align-items-center">
@@ -51,9 +49,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<input type="text" class="form-control" id="member_name"
-										 value="${MEMBER_NAME}" name="VIEW_MEMBER_NAME"
-										readonly/>
+									<input type="text" class="form-control" id="member_name" value="${member_name}" name="member_name" readonly/>
 								</div>
 							</div>
 							<div class="col-md-2 d-flex align-items-center">
@@ -61,9 +57,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<input type="text" class="form-control" id="member_date"
-										 value="${reservation_date}" name="VIEW_RESERVATION_DATE"
-										readonly/>
+									<input type="text" class="form-control" id="member_date" value="${reservation_date}" name="reservation_date" readonly/>
 								</div>
 							</div>
 							<div class="col-md-2 d-flex align-items-center">
@@ -71,9 +65,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<input type="text" class="form-control" id="member_cnt"
-										 value="${reservation_cnt}명" name="VIEW_MAX_CNT"
-										readonly/>
+									<input type="text" class="form-control" id="member_cnt" value="${reservation_cnt}명" name="reservation_cnt" readonly/>
 								</div>
 							</div>
 							<div class="col-md-2 d-flex align-items-center">
@@ -81,9 +73,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<input type="text" class="form-control" id="member_point"
-										 value="${use_point}" name="VIEW_USE_POINT"
-										readonly/>
+									<input type="text" class="form-control" id="member_point" value="${use_point}" name="user_point VIEW_USE_POINT" readonly/>
 								</div>
 							</div>
 							<div class="col-md-2 d-flex align-items-center">
@@ -91,9 +81,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<input type="text" class="form-control" id="member_money"
-										 value="${reservation_price}" name="VIEW_RESERVATION_PRICE"
-										readonly/>
+									<input type="text" class="form-control" id="member_money" value="${reservation_price}" name="reservation_price" readonly/>
 								</div>
 							</div>
 						</div>
@@ -101,7 +89,7 @@
 					<div class="card-action text-center">
 						<button type="button"
 							class="btn btn-black px-5 mb-3 mb-sm-0 me-0 me-sm-4"
-							onclick="window.location.href='MAINPAGEACTION.do';">취소</button>
+							onclick="window.location.href='main.do';">취소</button>
 						<button type="submit" class="btn btn-primary px-5" id="reservationbtn">예약</button>
 					</div>
 					</form>
