@@ -1,34 +1,34 @@
 //CDN 인포트한 내용중
 //내용 사용할 메서드 설정
 import {
-	AccessibilityHelp,     // 접근성 관련 도움 기능 (예: 키보드 단축키 안내)
-	Autoformat,            // 텍스트 자동으로 포맷팅해주는 기능 (굵게, 기울임 등 자동 처리)
-	AutoImage,             // URL 입력하면 자동으로 이미지 삽입해주는 기능
-	Autosave,              // 작성 중인 내용 자동 저장해주는 기능
-	BlockQuote,            // 인용구 블록을 추가하는 기능
-	Bold,                  // 텍스트 굵게 만드는 기능
-	CloudServices,         // 클라우드 서비스 관련 기능 (파일 업로드 등)
-	Essentials,            // 편집기에 꼭 필요한 기본 기능들 제공 (undo/redo 같은 것들)
-	Heading,               // 제목(heading) 스타일을 추가하고 관리하는 기능
-	ImageBlock,            // 블록형 이미지 삽입 기능
-	ImageInline,           // 인라인 이미지 삽입 기능
-	ImageInsert,           // 이미지 삽입 기능
-	ImageInsertViaUrl,     // URL로 이미지 삽입하는 기능
-	ImageResize,           // 이미지 크기 조절 기능
-	ImageStyle,            // 이미지 스타일 설정 (정렬, 크기 등)
-	ImageTextAlternative,  // 이미지 대체 텍스트(alt text) 추가 기능
-	ImageToolbar,          // 이미지 선택하면 관련 도구를 제공하는 툴바
-	ImageUpload,           // 이미지 업로드 기능
-	Indent,                // 들여쓰기, 내어쓰기 기능
-	IndentBlock,           // 블록 단위로 들여쓰기 기능
-	Italic,                // 텍스트를 기울임체로 만드는 기능
-	Link,                  // 텍스트에 하이퍼링크 추가 기능
-	Paragraph,             // 기본 단락 요소 관리 기능
-	SelectAll,             // 모든 내용 선택 기능
-	SimpleUploadAdapter,   // 간단한 이미지 업로드 어댑터 (서버로 이미지 업로드할 때 사용)
-	TextTransformation,    // 텍스트 자동 변환 기능 (대소문자 변환 등)
-	Underline,             // 텍스트 밑줄 긋는 기능
-	Undo,                  // 실행 취소/다시 실행 기능
+	AccessibilityHelp,
+	Autoformat,
+	AutoImage,
+	Autosave,
+	BlockQuote,
+	Bold,
+	CloudServices,
+	Essentials,
+	Heading,
+	ImageBlock,
+	ImageInline,
+	ImageInsert,
+	ImageInsertViaUrl,
+	ImageResize,
+	ImageStyle,
+	ImageTextAlternative,
+	ImageToolbar,
+	ImageUpload,
+	Indent,
+	IndentBlock,
+	Italic,
+	Link,
+	Paragraph,
+	SelectAll,
+	SimpleUploadAdapter,
+	TextTransformation,
+	Underline,
+	Undo,
 } from 'CKEditor';
 
 //한국어 설정 인포트
@@ -173,7 +173,7 @@ export const editorConfig = {
   // 파일 업로드 설정
   simpleUpload: {
 	//파일을 저장할 서버의 주소를 입력
-    uploadUrl: './ckupload',
+    uploadUrl: '/ckupload.do',
   },
   //초기 값 설정
   initialData: '',
