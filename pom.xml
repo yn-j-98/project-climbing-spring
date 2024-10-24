@@ -105,13 +105,11 @@
             <version>1.4</version>
         </dependency>
         <dependency>
-<<<<<<< HEAD
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>6.1.13</version>
         </dependency>
         <dependency>
-=======
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
             <version>3.3.4</version>
@@ -121,7 +119,6 @@
             <artifactId>aspectjweaver</artifactId>
         </dependency>
         <dependency>
->>>>>>> 393e83346eae4168720488b99b70f85729588ff6
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>6.1.13</version>
@@ -137,19 +134,9 @@
             <version>6.1.13</version>
         </dependency>
         <dependency>
-<<<<<<< HEAD
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
-=======
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>6.1.13</version>
->>>>>>> 393e83346eae4168720488b99b70f85729588ff6
         </dependency>
     </dependencies>
 
