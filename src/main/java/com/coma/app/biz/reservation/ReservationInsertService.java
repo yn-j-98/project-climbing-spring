@@ -19,7 +19,10 @@ public class ReservationInsertService {
         boolean flag=false;
 
         flag=reservationDAO.insert(reservationDTO);
-
+        if(!flag) {
+            System.out.println("com.coma.app.biz.reservation.ReservationInsertService reservationDAO.insert 오류");
+        }
+        memberDTO.setMember_id(reservationDTO.getReservation_member_id());
         flag=memberDAO.updateCurrentPoint(memberDTO);
 
         return flag;
