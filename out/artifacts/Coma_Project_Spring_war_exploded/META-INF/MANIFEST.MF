@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
 Built-By: seonah
-Build-Jdk: Oracle OpenJDK 23
+Build-Jdk: 23.0.1
 Implementation-Title: Coma_Project_Spring
 Implementation-Version: 0.0.1-SNAPSHOT
 Implementation-Vendor-Id: com.coma

@@ -2,8 +2,6 @@ package com.coma.app.biz.battle_record;
 
 import java.util.List;
 
-import com.coma.app.biz.battle.BattleDAO;
-import com.coma.app.biz.battle.BattleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
