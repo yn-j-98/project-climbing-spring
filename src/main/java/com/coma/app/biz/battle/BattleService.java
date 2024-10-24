@@ -5,7 +5,7 @@ public interface BattleService {
 	List<BattleDTO> selectAllActive(BattleDTO battleDTO);
 	List<BattleDTO> selectAllGymBattle(BattleDTO battleDTO);
 	List<BattleDTO> selectAllBattleAllTop4(BattleDTO battleDTO);
-	BattleDTO selectOneSearchMemeberBattle(BattleDTO battleDTO);
+	BattleDTO selectOneSearchMemberBattle(BattleDTO battleDTO);
 	BattleDTO selectOneSearchBattle(BattleDTO battleDTO);
 	BattleDTO selectOneCountActive(BattleDTO battleDTO);
 	boolean insert(BattleDTO battleDTO);

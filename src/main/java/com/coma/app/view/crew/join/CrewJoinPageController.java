@@ -33,7 +33,7 @@ public class CrewJoinPageController{
 	private CrewService crewService;
 
 	@RequestMapping("/CrewListPage.do")
-	public String crewListPage(HttpSession session, Model model, CrewDAO crewDAO, CrewDTO crewDTO) {
+	public String crewListPage(HttpSession session, Model model, CrewDTO crewDTO) {
 		String path = "crewList"; // 마이페이지로
 
 		/*
@@ -84,8 +84,8 @@ public class CrewJoinPageController{
 				System.out.println("CrewListPageAction 72"+crew_datas.get(0).getCrew_num());
 			}
 			
-			crewDTO.setCrew_condition("CREW_ONE_COUNT");//크루 총개수 컨디션
-			CrewDTO crew_Count = crewDAO.selectOne(crewDTO);
+			//crewDTO.setCrew_condition("CREW_ONE_COUNT");//크루 총개수 컨디션
+			CrewDTO crew_Count = crewService.selectOneCount(crewDTO);
 			listNum = crew_Count.getCrew_total();
 			System.out.println("CrewListPageAction 78 "+listNum);
 			

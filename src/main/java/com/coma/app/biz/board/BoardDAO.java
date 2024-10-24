@@ -13,57 +13,57 @@ import org.springframework.stereotype.Repository;
 public class BoardDAO {
 	// 전체 글 출력(ALL) 페이지네이션 윈도우함수 ROW_NUMBER()사용 board_min_num, board_max_num
 	//MySQL은 서브쿼리 별칭 지정이 필수적
-	private final String ALL = "SELECT\r\n"
-			+ "    RN,\r\n"
-			+ "    BOARD_NUM,\r\n"
-			+ "    BOARD_TITLE,\r\n"
-			+ "    BOARD_CONTENT,\r\n"
-			+ "    BOARD_CNT,\r\n"
-			+ "    BOARD_LOCATION,\r\n"
-			+ "    BOARD_WRITER_ID\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        BOARD_NUM, \r\n"
-			+ "        BOARD_TITLE, \r\n"
-			+ "        BOARD_CONTENT, \r\n"
-			+ "        BOARD_CNT, \r\n"
-			+ "        BOARD_LOCATION, \r\n"
-			+ "        BOARD_WRITER_ID,\r\n"
-			+ "        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\r\n"
-			+ "    FROM \r\n"
-			+ "        BOARD\r\n"
-			+ ") AS RANK\r\n"
-			+ "WHERE RN BETWEEN ? AND ?";
+	private final String ALL = "SELECT\n" +
+			"    RN,\n" +
+			"    BOARD_NUM,\n" +
+			"    BOARD_TITLE,\n" +
+			"    BOARD_CONTENT,\n" +
+			"    BOARD_CNT,\n" +
+			"    BOARD_LOCATION,\n" +
+			"    BOARD_WRITER_ID\n" +
+			"FROM (\n" +
+			"    SELECT \n" +
+			"        BOARD_NUM, \n" +
+			"        BOARD_TITLE, \n" +
+			"        BOARD_CONTENT, \n" +
+			"        BOARD_CNT, \n" +
+			"        BOARD_LOCATION, \n" +
+			"        BOARD_WRITER_ID,\n" +
+			"        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\n" +
+			"    FROM \n" +
+			"        BOARD\n" +
+			") AS subquery\n" +
+			"WHERE RN BETWEEN ? AND ?";
 
 	// 최신글6개 검색
 	//ROWNUM 대신 LIMIT 구문 사용
-	private final String ALL_ROWNUM = "SELECT\r\n"
-			+ "    BOARD_NUM,\r\n"
-			+ "    BOARD_TITLE,\r\n"
-			+ "    BOARD_CONTENT,\r\n"
-			+ "    BOARD_CNT,\r\n"
-			+ "    BOARD_LOCATION,\r\n"
-			+ "    BOARD_WRITER_ID\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        B.BOARD_NUM, \r\n"
-			+ "        B.BOARD_TITLE, \r\n"
-			+ "        B.BOARD_CONTENT, \r\n"
-			+ "        B.BOARD_CNT, \r\n"
-			+ "        B.BOARD_LOCATION, \r\n"
-			+ "        B.BOARD_WRITER_ID\r\n"
-			+ "    FROM \r\n"
-			+ "        BOARD B\r\n"
-			+ "    JOIN \r\n"
-			+ "        MEMBER M\r\n"
-			+ "    ON \r\n"
-			+ "        B.BOARD_WRITER_ID = M.MEMBER_ID\r\n"
-			+ "    ORDER BY \r\n"
-			+ "        B.BOARD_NUM DESC\r\n"
-			+ ") AS b\r\n"
-			+ "LIMIT 6";
+	private final String ALL_ROWNUM = "SELECT\n" +
+			"    BOARD_NUM,\n" +
+			"    BOARD_TITLE,\n" +
+			"    BOARD_CONTENT,\n" +
+			"    BOARD_CNT,\n" +
+			"    BOARD_LOCATION,\n" +
+			"    BOARD_WRITER_ID\n" +
+			"FROM (\n" +
+			"    SELECT \n" +
+			"        B.BOARD_NUM, \n" +
+			"        B.BOARD_TITLE, \n" +
+			"        B.BOARD_CONTENT, \n" +
+			"        B.BOARD_CNT, \n" +
+			"        B.BOARD_LOCATION, \n" +
+			"        B.BOARD_WRITER_ID\n" +
+			"    FROM \n" +
+			"        BOARD B\n" +
+			"    JOIN \n" +
+			"        MEMBER M\n" +
+			"    ON \n" +
+			"        B.BOARD_WRITER_ID = M.MEMBER_ID\n" +
+			"    ORDER BY \n" +
+			"        B.BOARD_NUM DESC\n" +
+			") AS b\n" +
+			"LIMIT 6";
 
-	// 전체 글 개수 FIXME TOTAL
+	// 전체 글 개수
 	private final String ONE_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD";
 
 	//ID로 검색한 글 개수 BOARD_WRITER_ID
@@ -117,32 +117,31 @@ public class BoardDAO {
 	//CONCAT 함수 사용
 	//LIMIT <OFFSET>, <ROW_COUNT>
 	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
-	private final String ALL_SEARCH_PATTERN_ID = "SELECT\r\n"
-			+ "    BOARD_PAGENATION.RN,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_NUM,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_TITLE,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_CONTENT,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_CNT,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_LOCATION,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        BOARD_NUM, \r\n"
-			+ "        BOARD_TITLE, \r\n"
-			+ "        BOARD_CONTENT, \r\n"
-			+ "        BOARD_CNT, \r\n"
-			+ "        BOARD_LOCATION, \r\n"
-			+ "        BOARD_WRITER_ID\r\n"
-			+ "    FROM \r\n"
-			+ "        BOARD\r\n"
-			+ ") AS BOARD_PAGENATION\r\n"
-			+ "JOIN\r\n"
-			+ "    MEMBER M\r\n"
-			+ "ON\r\n"
-			+ "    M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "WHERE BOARD_PAGENATION.BOARD_WRITER_ID LIKE CONCAT('%', ?, '%') \r\n"
-			+ "LIMIT ?, ?";
-
+	private final String ALL_SEARCH_PATTERN_ID = "SELECT\n" +
+			"    B.RN,\n" +
+			"    B.BOARD_NUM,\n" +
+			"    B.BOARD_TITLE,\n" +
+			"    B.BOARD_CONTENT,\n" +
+			"    B.BOARD_CNT,\n" +
+			"    B.BOARD_LOCATION,\n" +
+			"    B.BOARD_WRITER_ID\n" +
+			"FROM (\n" +
+			"    SELECT\n" +
+			"        BOARD_NUM,\n" +
+			"        BOARD_TITLE,\n" +
+			"        BOARD_CONTENT,\n" +
+			"        BOARD_CNT,\n" +
+			"        BOARD_LOCATION,\n" +
+			"        BOARD_WRITER_ID,\n" +
+			"        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\n" +
+			"    FROM\n" +
+			"        BOARD\n" +
+			") AS B\n" +
+			"JOIN\n" +
+			"    MEMBER M ON M.MEMBER_ID = B.BOARD_WRITER_ID\n" +
+			"WHERE\n" +
+			"    B.BOARD_WRITER_ID LIKE CONCAT('%', ?, '%')\n" +
+			"LIMIT ?, ?";
 
 
 	//제목으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_TITLE, board_min_num, board_max_num
@@ -206,7 +205,7 @@ public class BoardDAO {
 
 	// 게시글 작성 BOARD_NUM,BOARD_TITLE,BOARD_CONTENT,BOARD_LOCATION,BOARD_WRITER_ID
 	// PK는 AUTO-INCREMENT사용으로 서브쿼리문 사용X
-	private final String INSERT = "INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (?, ?, ?, ?)";
+	private final String INSERT = "INSERT INTO BOARD ( BOARD_TITLE, BOARD_CONTENT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (?, ?, ?, ?)";
 
 	// 게시글 삭제 BOARD_NUM
 	private final String DELETE ="DELETE FROM BOARD WHERE BOARD_NUM = ? AND BOARD_WRITER_ID = ?";

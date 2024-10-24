@@ -50,31 +50,31 @@ public class BattleDAO {
 			+ "				        B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\r\n"
 			+ "				    WHERE\r\n"
 			+ "				        BR.BATTLE_RECORD_MVP_ID IS NULL\r\n"
-			+ "				) ROW_NUM1\r\n"
-			+ "			) ROW_NUM2\r\n"
+			+ "				) AS ROW_NUM1\r\n"
+			+ "			) AS ROW_NUM2\r\n"
 			+ "            \r\n"
 			+ "			WHERE RN LIMIT ?,?";
 
 	//특정 사용자가 참여한 크루전 찾기 BATTLE_RECORD_CREW_NUM
-	private final String SEARCH_MEMBER_BATTLE = "SELECT\r\n"
-			+ "	B.BATTLE_NUM,\r\n"
-			+ "	G.GYM_NAME,\r\n"
-			+ "	B.BATTLE_GAME_DATE,\r\n"
-			+ "	G.GYM_LOCATION,\r\n"
-			+ "	G.GYM_PROFILE\r\n"
-			+ "FROM\r\n"
-			+ "	COMA.BATTLE B\r\n"
-			+ "JOIN\r\n"
-			+ "	COMA.GYM G\r\n"
-			+ "ON\r\n"
-			+ "	B.BATTLE_GYM_NUM = G.GYM_NUM\r\n"
-			+ "JOIN\r\n"
-			+ "	COMA.BATTLE_RECORD BR\r\n"
-			+ "ON\r\n"
-			+ "	BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\r\n"
-			+ "WHERE\r\n"
-			+ "	BR.BATTLE_RECORD_CREW_NUM = ? AND\r\n"
-			+ "	B.BATTLE_GAME_DATE > (SELECT SYSDATE() FROM DUAL)";
+	private final String SEARCH_MEMBER_BATTLE = "SELECT\n"
+			+ "  B.BATTLE_NUM,\n"
+			+ "  G.GYM_NAME,\n"
+			+ "  B.BATTLE_GAME_DATE,\n"
+			+ "  G.GYM_LOCATION,\n"
+			+ "  G.GYM_PROFILE\n"
+			+ "FROM\n"
+			+ "  COMA.BATTLE B\n"
+			+ "JOIN\n"
+			+ "  COMA.GYM G\n"
+			+ "ON\n"
+			+ "  B.BATTLE_GYM_NUM = G.GYM_NUM\n"
+			+ "JOIN\n"
+			+ "  COMA.BATTLE_RECORD BR\n"
+			+ "ON\n"
+			+ "  BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\n"
+			+ "WHERE\n"
+			+ "  BR.BATTLE_RECORD_CREW_NUM = ? AND\n"
+			+ "  B.BATTLE_GAME_DATE > NOW()";
 
 	//활성화 되있는 크루전 총 개수
 	private final String ONE_COUNT_ACTIVE = "SELECT COUNT(DISTINCT B.BATTLE_NUM) AS BATTLE_TOTAL\r\n"
@@ -88,16 +88,16 @@ public class BattleDAO {
 			+ "	BR.BATTLE_RECORD_MVP_ID IS NULL";
 
 	//활성화 되있는 크루전 총 개수
-	private final String ONE_SEARCH_BATTLE = "SELECT\r\n"
-			+ "	BATTLE_NUM\r\n"
-			+ "	BATTLE_GYM_NUM,\r\n"
-			+ "	BATTLE_GAME_DATE\r\n"
-			+ "FROM\r\n"
-			+ "	COMA.BATTLE\r\n"
-			+ "WHERE\r\n"
-			+ "	BATTLE_NUM = ? and\r\n"
-			+ "	(BATTLE_GAME_DATE > (SELECT SYSDATE() FROM DUAL) OR\r\n"
-			+ "	BATTLE_GAME_DATE IS NULL)";
+	private final String ONE_SEARCH_BATTLE = "SELECT\n"
+			+ "  BATTLE_NUM,\n"
+			+ "  BATTLE_GYM_NUM,\n"
+			+ "  BATTLE_GAME_DATE\n"
+			+ "FROM\n"
+			+ "  COMA.BATTLE\n"
+			+ "WHERE\n"
+			+ "  BATTLE_NUM = ? AND\n"
+			+ "  (BATTLE_GAME_DATE > NOW() OR\n"
+			+ "  BATTLE_GAME_DATE IS NULL)";
 
 	//해당 암벽장에서 실행된 크루전 전부 출력 BATTLE_GYM_NUM
 	private final String ALL_GYM_BATTLE = "SELECT\r\n"

@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.coma.app.biz.board.BoardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -42,8 +41,9 @@ public class Crew_boardDAO {
 
 
 	//크루 게시판 글 작성 CREW_BOARD_WRITER_ID, CREW_BOARD_CONTENT, CREW_BOARD_TITLE
-	private final String INSERT = "INSERT INTO CREW_BOARD(CREW_BOARD_NUM, CREW_BOARD_WRITER_ID, CREW_BOARD_CONTENT, CREW_BOARD_TITLE) " +
-			"VALUES ((SELECT IFNULL(MAX(CREW_BOARD_NUM), 0) + 1 FROM CREW_BOARD), ?, ?, ?)";
+	private final String INSERT = "INSERT INTO CREW_BOARD (CREW_BOARD_NUM, CREW_BOARD_WRITER_ID, CREW_BOARD_CONTENT, CREW_BOARD_TITLE)\n" +
+			"    SELECT IFNULL(MAX(CREW_BOARD_NUM), 0) + 1, ?, ?, ? \n" +
+			"    FROM CREW_BOARD";
 
 	//크루 게시판 글 삭제 CREW_NUM
 	private final String DELETE = "DELETE FROM CREW_BOARD WHERE CREW_BOARD_NUM = ?";

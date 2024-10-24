@@ -22,6 +22,16 @@ public class CrewServiceImpl implements CrewService{
 	}
 
 	@Override
+	public CrewDTO selectOneCount(CrewDTO crewDTO) {
+		return this.crewDAO.selectOneCount(crewDTO);
+	}
+
+	@Override
+	public CrewDTO selectOneCountCurretMemberSize(CrewDTO crewDTO) {
+		return this.crewDAO.selectOneCountCurretMemberSize(crewDTO);
+	}
+
+	@Override
 	public boolean insert(CrewDTO crewDTO) {
 		return this.crewDAO.insert(crewDTO);
 	}

@@ -31,7 +31,7 @@ public class LoginController{
 	public String login(Model model, HttpSession session, MemberDTO memberDTO, HttpServletResponse response) {
 
 		//기본으로 넘어가야하는 페이지 와 redirect 여부를 설정
-		String path = "MAINPAGEACTION.do";
+		String path = "redirect:MAINPAGEACTION.do";
 
 //		//로그인 정보가 있는지 확인해주고
 //		String login[] = LoginCheck.Success(request, response);
@@ -40,8 +40,9 @@ public class LoginController{
 
 			//사용자의 아이디와 비밀번호를 model 로 전달하여 확인하고
 		//memberDTO.setModel_member_condition("MEMBER_SEARCH_ID_PASSWORD");
-		memberDTO = memberService.selectOneSearchIdPassword(memberDTO);
 		System.out.println("	[로그] com.coma.app.view.member.LoginController.login() selectOne(): " + memberService.selectOneSearchIdPassword(memberDTO));
+		memberDTO = memberService.selectOneSearchIdPassword(memberDTO);
+		System.out.println("	[memberDTO] : " + memberDTO);
 			//만약 data 가 null 을 반환하면
 			if(memberDTO == null) {
 				System.err.println("(LoginAction.java) data null 로그");

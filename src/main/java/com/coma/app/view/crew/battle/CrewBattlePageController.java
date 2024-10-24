@@ -22,7 +22,7 @@ public class CrewBattlePageController {
    private BattleService battleService;
 
    @RequestMapping("/CrewBattlePage.do")
-   public String crewBattlePage(HttpSession session,Model model, BattleDTO battleDTO, BattleDAO battleDAO) {
+   public String crewBattlePage(HttpSession session,Model model, BattleDTO battleDTO) {
       String path = "crewBattleMain";//크루전 메인 페이지로 이동
       /*
        * 페이지네이션을 하기위해 뷰에게서 page_num을 받아오고
@@ -78,7 +78,7 @@ public class CrewBattlePageController {
 
       battleDTO.setBattle_crew_num(crew_num);//크루pk
       //battleDTO.setBattle_condition("BATTLE_SEARCH_MEMBER_BATTLE");//내 크루전 컨디션
-      battleDTO = battleDAO.selectOneSearchMemberBattle(battleDTO);
+      battleDTO = battleService.selectOneSearchMemberBattle(battleDTO);
       if(battleDTO != null) {
     	  battleDTO.setBattle_gym_profile("https://"+battleDTO.getBattle_gym_profile());
     	  System.out.println("이미지 : "+battleDTO.getBattle_gym_profile());    	  

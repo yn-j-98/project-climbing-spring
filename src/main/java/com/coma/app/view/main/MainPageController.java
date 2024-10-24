@@ -51,15 +51,16 @@ public class MainPageController{
         //크루랭킹부분
         //크루프로필 생각				
         memberDTO.setMember_condition("MEMBER_ALL_TOP10_CREW_RANK");//크루랭킹 10개 컨디션
-        List<MemberDTO> model_crew_rank_datas = memberService.selectAllTop10CrewRank(memberDTO);
-        //model_crew_rank_datas에 담아서 보내주기
+        List<MemberDTO> crew_rank_datas = memberService.selectAllTop10CrewRank(memberDTO);
+        //crew_rank_datas에 담아서 보내주기
                 
         //Member_rank_datas에 담아서 보내기
-        for(MemberDTO data : model_crew_rank_datas) {
+        for(MemberDTO data : crew_rank_datas) {
         	String profilePath = servletContext.getContextPath() + "/crew_img_folder/" + data.getMember_crew_profile();
         	data.setMember_crew_profile(profilePath);
+            System.out.println("crew_rank_data  : " +data);
         }
-        model.addAttribute("model_crew_rank_datas", model_crew_rank_datas);
+        model.addAttribute("crew_rank_datas", crew_rank_datas);
         
         //개인 랭킹 부분
         memberDTO.setMember_condition("MEMBER_ALL_TOP10_RANK");//개인 랭킹 10개 컨디션
