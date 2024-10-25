@@ -16,4 +16,13 @@
 		
 	<context:component-scan base-package="com.coma.app.view"/>
 
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.multipart.support.StandardServletMultipartResolver" id="multipartResolver" />
 </beans>
