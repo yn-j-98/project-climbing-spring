@@ -1,4 +1,4 @@
-package com.coma.app.view.function;
+package com.coma.app.view.member;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
