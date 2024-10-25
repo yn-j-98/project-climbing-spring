@@ -37,7 +37,7 @@ public class MemberDAO {
 	private final String INSERT = "INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION) \r\n"
 			+ "VALUES(?,?,?,?,?)";
 
-	//회원탈퇴
+	//회원탈퇴 // TODO 회원 관리 페이지
 	private final String DELETE = "DELETE FROM MEMBER WHERE MEMBER_ID = ?";
 
 	//회원정보 업데이트 MEMBER_PASSWORD, MEMBER_PROFILE, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
@@ -64,7 +64,7 @@ public class MemberDAO {
 			+ "	MEMBER_CREW_JOIN_DATE = NOW()\r\n"
 			+ "WHERE MEMBER_ID = ?";
 
-	//관리자 권한 변경 MEMBER_ROLE, MEMBER_ID
+	//관리자 권한 변경 MEMBER_ROLE, MEMBER_ID // TODO 회원 관리 페이지
 	private final String UPDATE_ADMIN = "UPDATE MEMBER SET MEMBER_ROLE = ? WHERE MEMBER_ID = ?";
 
 	//관리자가 아닌 신규회원 출력 (기간 7일)
@@ -138,6 +138,40 @@ public class MemberDAO {
 	//사용자 포인트 업데이트 MEMBER_CURRENT_POINT, MEMBER_ID
 	private final String UPDATE_CURRENT_POINT = "UPDATE MEMBER SET MEMBER_CURRENT_POINT = ? WHERE MEMBER_ID = ?";
 
+	//관리자를 제외한 사용자 전체 수 출력 // TODO 관리자 메인 페이지
+	private final String ONE_COUNT_ADMIN = "SELECT COUNT(*) AS MEMBER_TOTAL\n"
+			+ "FROM MEMBER\n"
+			+ "WHERE MEMBER_ROLE = 'F'";
+
+	//월별 가입자 수 출력 // TODO 관리자 메인 페이지
+	private final String ALL_MONTH_COUNT_ADMIN = "SELECT\n"
+			+ "DATE_FORMAT(MEMBER_REGISTRATION_DATE, '%Y-%m') AS MEMBER_RESISTRATION_MONTH,\n"
+			+ "    COUNT(*) AS MEMBER_TOTAL\n"
+			+ "FROM\n"
+			+ "    MEMBER\n"
+			+ "GROUP BY\n"
+			+ "    MEMBER_RESISTRATION_MONTH\n"
+			+ "ORDER BY\n"
+			+ "    MEMBER_RESISTRATION_MONTH";
+
+	// 회원 검색(페이지네이션) // TODO 회원 관리 페이지
+	private final String ALL_SEARCH_ADMIN = "SELECT MEMBER_ID, MEMBER_NAME, MEMBER_REGISTRATION_DATE\n" +
+			"FROM MEMBER\n" +
+			"LIMIT ?,?";
+
+	// 회원 아이디로 검색(페이지네이션) // TODO 회원 관리 페이지
+	private final String ALL_SEARCH_ID_ADMIN = "SELECT MEMBER_ID, MEMBER_NAME, MEMBER_REGISTRATION_DATE\n"
+			+ "FROM MEMBER\n"
+			+ "WHERE MEMBER_ID = ?\n"
+			+ "ORDER BY MEMBER_ID\n"
+			+ "LIMIT ?,?";
+
+	// 회원 가입날짜로 검색(페이지네이션) // TODO 회원 관리 페이지
+	private final String ALL_SEARCH_DATE_ADMIN = "SELECT MEMBER_ID, MEMBER_NAME, MEMBER_REGISTRATION_DATE\n"
+			+ "FROM MEMBER\n"
+			+ "WHERE MEMBER_REGISTRATION_DATE LIKE CONCAT('%', ?, '%')\n"
+			+ "ORDER BY MEMBER_ID\n"
+			+ "LIMIT ?,?";
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
@@ -273,6 +307,20 @@ public class MemberDAO {
 		return data;
 	}
 
+	public MemberDTO selectOneCountAdmin(MemberDTO memberDTO) {
+		System.out.println("com.coma.app.biz.member.selectOneCountAdmin 시작");
+
+		MemberDTO data = null;
+		try {
+			//관리자를 제외한 사용자 전체 수 출력 // TODO 관리자 메인 페이지
+			data = jdbcTemplate.queryForObject(ONE_COUNT_ADMIN, new MemberSearchCountOne());
+		} catch (Exception e) {
+			System.out.println("com.coma.app.biz.member.selectOneCountAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.member.selectOneCountAdmin 성공");
+		return data;
+	}
+
 	public List<MemberDTO> selectAllSearchRank(MemberDTO memberDTO) {
 		System.out.println("com.coma.app.biz.member.selectAllSearchRank 시작");
 
@@ -370,6 +418,65 @@ public class MemberDAO {
 			System.out.println("com.coma.app.biz.member.selectAllSearchCrewMemberName SQL문 실패");
 		}
 		System.out.println("com.coma.app.biz.member.selectAllSearchCrewMemberName 성공");
+		return datas;
+	}
+
+	public List<MemberDTO> selectAllMonthCountAdmin(MemberDTO memberDTO) {
+		System.out.println("com.coma.app.biz.member.selectAllMonthCountAdmin 시작");
+
+		List<MemberDTO> datas = null;
+		try {
+			//월별 가입자 수 출력 // TODO 관리자 메인 페이지
+			datas = jdbcTemplate.query(ALL_MONTH_COUNT_ADMIN, new MemberSelectAllMonthCountAdmin());
+		} catch (Exception e) {
+			System.out.println("com.coma.app.biz.member.selectAllMonthCountAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.member.selectAllMonthCountAdmin 성공");
+		return datas;
+	}
+
+	public List<MemberDTO> selectAllSearchAdmin(MemberDTO memberDTO) {
+		System.out.println("com.coma.app.biz.member.selectAllSearchAdmin 시작");
+
+		List<MemberDTO> datas = null;
+		Object[] args = {memberDTO.getMember_page(),10};
+		try {
+			// 회원 검색(페이지네이션) // TODO 회원 관리 페이지
+			datas = jdbcTemplate.query(ALL_SEARCH_ADMIN, new MemberSelectAllSearchAdmin());
+		} catch (Exception e) {
+			System.out.println("com.coma.app.biz.member.selectAllSearchAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.member.selectAllSearchAdmin 성공");
+		return datas;
+	}
+
+	public List<MemberDTO> selectAllSearchIdAdmin(MemberDTO memberDTO) {
+		System.out.println("com.coma.app.biz.member.selectAllSearchIdAdmin 시작");
+
+		List<MemberDTO> datas = null;
+		Object[] args = {memberDTO.getMember_page(),10};
+		try {
+			// 회원 아이디로 검색(페이지네이션) // TODO 회원 관리 페이지
+			datas = jdbcTemplate.query(ALL_SEARCH_ID_ADMIN, args, new MemberSelectAllSearchAdmin());
+		} catch (Exception e) {
+			System.out.println("com.coma.app.biz.member.selectAllSearchIdAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.member.selectAllSearchIdAdmin 성공");
+		return datas;
+	}
+
+	public List<MemberDTO> selectAllSearchDateAdmin(MemberDTO memberDTO) {
+		System.out.println("com.coma.app.biz.member.selectAllSearchDateAdmin 시작");
+
+		List<MemberDTO> datas = null;
+		Object[] args = {memberDTO.getMember_page(),10};
+		try {
+			// 회원 가입날짜로 검색(페이지네이션) // TODO 회원 관리 페이지
+			datas = jdbcTemplate.query(ALL_SEARCH_DATE_ADMIN, args, new MemberSelectAllSearchAdmin());
+		} catch (Exception e) {
+			System.out.println("com.coma.app.biz.member.selectAllSearchDateAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.member.selectAllSearchDateAdmin 성공");
 		return datas;
 	}
 }
@@ -509,6 +616,48 @@ class MemberSearchCrewRowMapperOne implements RowMapper<MemberDTO> {
 		System.out.print("DB에서 가져온 데이터 {");
 		memberDTO.setMember_crew_num(rs.getInt("MEMBER_CREW_NUM"));
 		System.err.print("member_crew_num = [" + memberDTO.getMember_crew_num() + "]");
+		System.out.println("}");
+		return memberDTO;
+	};
+}
+
+class MemberSearchCountOne implements RowMapper<MemberDTO> {
+
+	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		MemberDTO memberDTO = new MemberDTO();
+		System.out.print("DB에서 가져온 데이터 {");
+		memberDTO.setMember_total(rs.getInt("MEMBER_TOTAL"));
+		System.err.print("member_total = [" + memberDTO.getMember_total() + "]");
+		System.out.println("}");
+		return memberDTO;
+	};
+}
+
+class MemberSelectAllMonthCountAdmin implements RowMapper<MemberDTO> {
+
+	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		MemberDTO memberDTO = new MemberDTO();
+		System.out.print("DB에서 가져온 데이터 {");
+		memberDTO.setMember_reservation_month(rs.getString("MEMBER_RESERVATION_MONTH"));
+		System.err.println("member_reservation_month = [" + memberDTO.getMember_reservation_month() + "]");
+		memberDTO.setMember_total(rs.getInt("MEMBER_TOTAL"));
+		System.err.print("member_total = [" + memberDTO.getMember_total() + "]");
+		System.out.println("}");
+		return memberDTO;
+	};
+}
+
+class MemberSelectAllSearchAdmin implements RowMapper<MemberDTO> {
+
+	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		MemberDTO memberDTO = new MemberDTO();
+		System.out.print("DB에서 가져온 데이터 {");
+		memberDTO.setMember_id(rs.getString("MEMBER_ID"));
+		System.err.println("member_id = [" + memberDTO.getMember_id() + "]");
+		memberDTO.setMember_name(rs.getString("MEMBER_NAME"));
+		System.err.println("member_name = [" + memberDTO.getMember_name() + "]");
+		memberDTO.setMember_registration_date(rs.getDate("MEMBER_REGISTRATION_DATE"));
+		System.err.print("member_registration_date = [" + memberDTO.getMember_registration_date() + "]");
 		System.out.println("}");
 		return memberDTO;
 	};

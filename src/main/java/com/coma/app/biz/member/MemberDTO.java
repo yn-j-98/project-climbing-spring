@@ -28,6 +28,9 @@ MemberDTO {
 	private String member_crew_leader;	//사용자가 속한 크루장 pk
 	private String VIEW_AUTO_LOGIN; // 자동로그인 체크
 	private int VIEW_USE_POINT;
+	private int member_total;	// 사용자 인원 수 // TODO 관리자페이지
+	private String member_reservation_month;	// 사용자가 가입한 년도-월 // TODO 관리자페이지
+	private int member_page;	// 사용자 페이지네이션 // TODO 관리자페이지
 
 	public String getMember_id() {
 		return member_id;
@@ -197,6 +200,30 @@ MemberDTO {
 		this.VIEW_USE_POINT = VIEW_USE_POINT;
 	}
 
+	public int getMember_total() {
+		return member_total;
+	}
+
+	public void setMember_total(int member_total) {
+		this.member_total = member_total;
+	}
+
+	public String getMember_reservation_month() {
+		return member_reservation_month;
+	}
+
+	public void setMember_reservation_month(String member_reservation_month) {
+		this.member_reservation_month = member_reservation_month;
+	}
+
+	public int getMember_page() {
+		return member_page;
+	}
+
+	public void setMember_page(int member_page) {
+		this.member_page = member_page;
+	}
+
 	@Override
 	public String toString() {
 		return "MemberDTO{" +
@@ -221,6 +248,9 @@ MemberDTO {
 				", member_crew_leader='" + member_crew_leader + '\'' +
 				", VIEW_AUTO_LOGIN='" + VIEW_AUTO_LOGIN + '\'' +
 				", VIEW_USE_POINT=" + VIEW_USE_POINT +
+				", member_total=" + member_total +
+				", member_reservation_month='" + member_reservation_month + '\'' +
+				", member_page=" + member_page +
 				'}';
 	}
 }
