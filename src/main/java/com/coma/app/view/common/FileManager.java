@@ -1,36 +1,32 @@
 package com.coma.app.view.common;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.coma.app.view.function.Mkdir_File;
 
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.ServletContext;
 
-@WebListener
-public class FileManager implements ServletContextListener {
+@Component
+public class FileManager {
 
-	public FileManager() {
-	}
+    @Autowired
+    private ServletContext servletContext;
 
-	public void contextInitialized(ServletContextEvent sce) {
-		System.out.println("파일 생성 시작");
-		String[] folders = 
-				//등급 이미지 폴더 , 크루 이미지 폴더 , 사용자 프로필 폴더, 게시글 이미지 
-			{"grade_folder","crew_img_folder","profile_img","board_img"};
+    // 초기화 작업을 위한 메서드
+    @PostConstruct
+    public void init() {
+        // 생성할 폴더 이름들을 배열로 저장 (존재하지 않으면 생성)
+        String[] folders = {"grade_folder", "crew_img_folder", "profile_img", "board_img"};
 
-		for (String data : folders) {
-			// 실제 경로 받아오기
-			String folder_path = sce.getServletContext().getRealPath("/"+data+"/");
-
-			// 폴더 경로 로고
-			System.out.println("폴더 경로: " + folder_path);
-			
-			//만들어둔 폴더생성 함수 사용
-			Mkdir_File.create(folder_path);
-		}
-	}
-
-	public void contextDestroyed(ServletContextEvent sce)  { 
-	}
-
+        // 실제 경로를 구하고 폴더 생성 메서드를 호출
+        for (String folder : folders) {
+            // 각 폴더의 실제 파일 시스템 상의 경로를 가져오기
+            String folderPath = servletContext.getRealPath("/" + folder + "/");
+            
+            // Mkdir_File 클래스의 create 메서드 호출
+            Mkdir_File.create(folderPath);
+        }
+    }
 }

@@ -1,49 +1,52 @@
 package com.coma.app.view.function;
 
+import java.io.File;
 
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
 
+@Component
 public class ProfileUpload {
 
-	public static String upload(HttpServletRequest request) {
-		String filename = null;
-		try {
-			// 파트로 인코딩한 파일 가져옵니다.
-			Part filePart = request.getPart("photoUpload");
-			// 파일 이름 가져옵니다.
-			filename = filePart.getSubmittedFileName();
-			//만약 사용자가 file 업로드 했다면 fileName 을 반환해줍니다.
-			if(!filename.isEmpty()) {
-				// 파일 이름에서 파일 형식 만 가져와 줍니다.
-				//파일 형식은 .으로 시작하기 때문에 마지막 .xxx 를 가져오기 위해
-				//substring 과 lastIndexOf 를 사용했습니다.
-				String fileform = filename.substring(filename.lastIndexOf("."));
+    private final ServletContext servletContext;
 
-				// 업로드 경로 설정(webapp파일에 위치 찾기)
-				//String uploadPath = ""; // 기본 서버에 저장 @MultipartConfig으로 \tmp0\work\Catalina\localhost\내프로젝트(COMA_PROJECT_CONTROLLER)\profile_img 에 저장했음
-				String uploadPath = request.getServletContext().getRealPath("/profile_img/"); // 내프로젝트(COMA_PROJECT_CONTROLLER)\profile_img\ 에 저장했음
+    public ProfileUpload(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 
-				HttpSession session = request.getSession();
-				//사용자 아이디 + 사용자가 올린 파일 형식
-				filename = (String)session.getAttribute("MEMBER_ID") + fileform;
+    public String upload(MultipartFile photoUpload, HttpSession session) {
+        String filename = null;
 
-				// 파일 저장
-				// profile_img 폴더 주소 + 사용자 아이디.사용자가 올린 파일 형식
-				String filePath = uploadPath + filename;
-				filePart.write(filePath);
-			}
-			//만약 file을 업로드 하지 않았다면 null을 반환합니다. fileName을 null로 반환한다.
-			// 로그 : 응답 출력
-			System.out.println("File 이름 로그 " + filename);
+        try {
+            // 파일 이름 가져오기
+            filename = photoUpload.getOriginalFilename();
 
-		} catch (Exception e) {
-			//e.printStackTrace();
-			System.out.println("file upload error");
-			return filename;
-		}
-		return filename;
-	}
+            // 파일이 업로드 되었다면 처리
+            if (filename != null && !filename.isEmpty()) {
+                // 파일 형식 가져오기
+                String fileForm = filename.substring(filename.lastIndexOf("."));
 
+                // 업로드 경로 설정
+                String uploadPath = servletContext.getRealPath("/profile_img/");
+                
+                // 사용자 아이디 + 사용자가 올린 파일 형식
+                filename = (String) session.getAttribute("MEMBER_ID") + fileForm;
+
+                // 파일 저장 경로
+                File file = new File(uploadPath + filename);
+                photoUpload.transferTo(file); // 파일 저장
+            }
+
+            System.out.println("File 이름 로그 " + filename);
+
+        } catch (Exception e) {
+            System.out.println("file upload error");
+            return filename; // 오류 발생 시 파일 이름 반환
+        }
+        
+        return filename; // 성공적으로 업로드한 파일 이름 반환
+    }
 }

@@ -90,15 +90,15 @@ public class MyPageController {
 
 		//사용자가 입력한 글 목록 출력 후 전달 시작
 		//boardDTO.setBoard_writer_id(login); 모델에 mypage에서 쓸 컨디션 추가 부탁해야함
-		boardDTO.setBoard_searchKeyword(member_id);
+		boardDTO.setModel_board_searchKeyword(member_id);
 		//이후 구현 예정
 		System.err.println("MyPageController 로그 페이지 네이션 하드코딩 해둔 상태");
-		boardDTO.setBoard_min_num(0);//페이지 네이션 하드코딩했음
-		boardDTO.setBoard_max_num(300);//페이지 네이션 하드코딩했음
+		boardDTO.setModel_board_min_num(0);//페이지 네이션 하드코딩했음
+		boardDTO.setModel_board_max_num(300);//페이지 네이션 하드코딩했음
 		//사용자가 입력한 글 목록 출력 후 전달 종료
 		//------------------------------------------------------------------
 		// 내 게시글 불러오는 코드 시작
-		boardDTO.setBoard_condition("BOARD_ALL_SEARCH_MATCH_ID");
+		boardDTO.setModel_board_condition("BOARD_ALL_SEARCH_MATCH_ID");
 		List<BoardDTO> boardList = this.boardService.selectAll(boardDTO);
 
 		// 내 게시글 불러오는 코드 종료
@@ -106,7 +106,7 @@ public class MyPageController {
 		//내 예약정보 불러오는 코드 시작	
 		//model에 reservation 테이블 정보를 요청
 		//로그인 정보를 전달하기 위해 DTO에 추가
-		reservationDTO.setReservation_member_id(member_id);
+		reservationDTO.setModel_reservation_member_id(member_id);
 		//요청해서 받을 값 (예약 PK번호 / 예약 암벽장 PK 번호 / 예약 암벽장 이름 / 예약 가격 / 암벽장 예약 날짜)
 		List<ReservationDTO> model_Reservation_Datas = this.reservationService.selectAll(reservationDTO);
 		//내 예약정보 불러오는 코드 종료
@@ -192,8 +192,8 @@ public class MyPageController {
 
 	@LoginCheck
 	@PostMapping("/changeMember.do")
-	public String changeMember(@RequestParam("photoUpload") MultipartFile photoUpload,
-			HttpSession session, MemberDTO memberDTO,
+	public String changeMember(@RequestParam("photoUpload") MultipartFile photoUpload, 
+			HttpSession session, Model model, MemberDTO memberDTO,
 			ProfileUpload profileUpload) {
 
 		String member_id = (String) session.getAttribute("MEMBER_ID");
@@ -215,7 +215,7 @@ public class MyPageController {
 		}
 
 		System.out.println("프로필 이미지 저장 로그: " + memberDTO); // 프로필 이미지 저장 로그
-		System.err.println("filename 로그" + filename);
+		System.err.println("filename 로그" + filename); 
 
 		// 사용자 정보를 DB에 업데이트 요청
 		boolean flag = this.memberService.updateWithoutProfile(memberDTO);
@@ -224,13 +224,13 @@ public class MyPageController {
 			session.setAttribute("CHANGE_CHECK", flag);
 		}
 
-		return "views/myPage";
+		return "views/myPage"; 
 	}
 
 
-	//ChangeMember.do
+	//ChangeMemberPageAction.do
 	@LoginCheck
-	@GetMapping("/changeMember.do")
+	@PostMapping("/changeMember.do")
 	public String changeMember(MemberDTO memberDTO, Model model) {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 		//사용자 아이디를 model에 전달하고
@@ -243,7 +243,7 @@ public class MyPageController {
 		memberDTO.setMember_profile("/profile_img/" + profile);
 		model.addAttribute("data", memberDTO);
 
-		return "views/editMyPage";
+		return "views/editmyPage"; 
 	}
 
 
