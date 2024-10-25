@@ -12,37 +12,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GymDAO {
 	//(페이지 네이션) 암벽장 전체출력
-	private String ALL = "SELECT \r\n"
-			+ "    GYM_NUM, \r\n"
-			+ "    GYM_NAME, \r\n"
-			+ "    GYM_PROFILE, \r\n"
-			+ "    GYM_DESCRIPTION, \r\n"
-			+ "    GYM_LOCATION, \r\n"
-			+ "    GYM_RESERVATION_CNT, \r\n"
-			+ "    GYM_PRICE, \r\n"
-			+ "    BATTLE_NUM, \r\n"
-			+ "    BATTLE_GAME_DATE\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        G.GYM_NUM, \r\n"
-			+ "        G.GYM_NAME, \r\n"
-			+ "        G.GYM_PROFILE, \r\n"
-			+ "        G.GYM_DESCRIPTION, \r\n"
-			+ "        G.GYM_LOCATION, \r\n"
-			+ "        G.GYM_RESERVATION_CNT, \r\n"
-			+ "        G.GYM_PRICE, \r\n"
-			+ "        B.BATTLE_NUM, \r\n"
-			+ "        B.BATTLE_GAME_DATE,\r\n"
-			+ "        ROW_NUMBER() OVER (PARTITION BY G.GYM_NAME ORDER BY G.GYM_NUM) AS RN_G,"  // GYM_NAME별로 순번 부여\r\n
-			+ "        ROW_NUMBER() OVER (ORDER BY G.GYM_NUM) AS ROW_INDEX\r\n"
-			+ "    FROM \r\n"
-			+ "        GYM G\r\n"
-			+ "    LEFT JOIN \r\n"
-			+ "        BATTLE B ON G.GYM_NUM = B.BATTLE_GYM_NUM\r\n"
-			+ ") AS GYM_BATTLE_CTE\r\n"
-			+ "WHERE RN_G = 1\r\n"
-			+ "ORDER BY GYM_NUM\r\n"
-			+ "LIMIT ?, ?";  // ?는 시작 인덱스와 행 수를 위한 자리 표시자입니다.
+	private String ALL = "SELECT \n" +
+			"    G.GYM_NUM, \n" +
+			"    G.GYM_NAME, \n" +
+			"    G.GYM_PROFILE, \n" +
+			"    G.GYM_DESCRIPTION, \n" +
+			"    G.GYM_LOCATION, \n" +
+			"    G.GYM_RESERVATION_CNT, \n" +
+			"    G.GYM_PRICE, \n" +
+			"    B.BATTLE_NUM, \n" +
+			"    B.BATTLE_GAME_DATE\n" +
+			"FROM \n" +
+			"    GYM G\n" +
+			"LEFT JOIN \n" +
+			"    BATTLE B ON G.GYM_NUM = B.BATTLE_GYM_NUM\n" +
+			"ORDER BY \n" +
+			"    GYM_NUM\n" +
+			"LIMIT ?, ?";  // ?는 시작 인덱스와 행 수를 위한 자리 표시자
 
 	//암벽장 총 개수
 	private final String ONE_COUNT = "SELECT COUNT(*) AS GYM_TOTAL FROM GYM";
