@@ -123,28 +123,6 @@
                 </div>
             </div>
             <!-- forEach 시작 TODO 삭제-->
-            <c:set var="datas" value="${[
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'F'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'F'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'F'},
-            {'gym_title': '더클라임 강남', 'gym_location': '강남', 'gym_price': '20000', 'gym_description': '강남에 있는 클라이밍장', 'gym_profile': 'img/moo.png','gym_battle_status':'T'}
-            ]}"/>
-
             <div class="row" id="gymList">
                 <c:forEach var="gym" items="${datas}">
                     <div class="col-md-4 hoverDiv" data-gym-battle-status="${gym.gym_battle_status}"
@@ -176,7 +154,6 @@
                     </div>
                 </c:forEach>
             </div>
-
             <!-- forEach 종료 -->
             <!-- 페이지네이션 -->
             <div id="pageNation" class="row justify-content-center">
