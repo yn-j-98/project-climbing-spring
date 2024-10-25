@@ -13,27 +13,18 @@ import org.springframework.stereotype.Repository;
 public class BoardDAO {
 	// 전체 글 출력(ALL) 페이지네이션 윈도우함수 ROW_NUMBER()사용 board_min_num, board_max_num
 	//MySQL은 서브쿼리 별칭 지정이 필수적
-	private final String ALL = "SELECT\n" +
-			"    RN,\n" +
-			"    BOARD_NUM,\n" +
-			"    BOARD_TITLE,\n" +
-			"    BOARD_CONTENT,\n" +
-			"    BOARD_CNT,\n" +
-			"    BOARD_LOCATION,\n" +
+	private final String ALL = "SELECT \n" +
+			"    BOARD_NUM, \n" +
+			"    BOARD_TITLE, \n" +
+			"    BOARD_CONTENT, \n" +
+			"    BOARD_CNT, \n" +
+			"    BOARD_LOCATION, \n" +
 			"    BOARD_WRITER_ID\n" +
-			"FROM (\n" +
-			"    SELECT \n" +
-			"        BOARD_NUM, \n" +
-			"        BOARD_TITLE, \n" +
-			"        BOARD_CONTENT, \n" +
-			"        BOARD_CNT, \n" +
-			"        BOARD_LOCATION, \n" +
-			"        BOARD_WRITER_ID,\n" +
-			"        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\n" +
-			"    FROM \n" +
-			"        BOARD\n" +
-			") AS subquery\n" +
-			"WHERE RN BETWEEN ? AND ?";
+			"FROM \n" +
+			"    BOARD\n" +
+			"ORDER BY \n" +
+			"    BOARD_NUM DESC\n" +
+			"LIMIT ? , ?";
 
 	// 최신글6개 검색
 	//ROWNUM 대신 LIMIT 구문 사용
@@ -86,62 +77,45 @@ public class BoardDAO {
 	//똑같은 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
 	//LIMIT <OFFSET>, <ROW_COUNT>
 	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
-	private final String ALL_SEARCH_MATCH_ID = "SELECT\r\n"
-			+ "    BOARD_PAGENATION.RN,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_NUM,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_TITLE,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_CONTENT,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_CNT,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_LOCATION,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        BOARD_NUM, \r\n"
-			+ "        BOARD_TITLE, \r\n"
-			+ "        BOARD_CONTENT, \r\n"
-			+ "        BOARD_CNT, \r\n"
-			+ "        BOARD_LOCATION, \r\n"
-			+ "        BOARD_WRITER_ID,\r\n"
-			+ "        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\r\n"
-			+ "    FROM \r\n"
-			+ "        BOARD\r\n"
-			+ ") AS BOARD_PAGENATION\r\n"
-			+ "JOIN\r\n"
-			+ "    MEMBER M\r\n"
-			+ "ON\r\n"
-			+ "    M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "WHERE BOARD_PAGENATION.BOARD_WRITER_ID = ?\r\n"
-			+ "LIMIT ?, ?";
+	private final String ALL_SEARCH_MATCH_ID = "SELECT\n" +
+			"    BOARD.BOARD_NUM,\n" +
+			"    BOARD.BOARD_TITLE,\n" +
+			"    BOARD.BOARD_CONTENT,\n" +
+			"    BOARD.BOARD_CNT,\n" +
+			"    BOARD.BOARD_LOCATION,\n" +
+			"    BOARD.BOARD_WRITER_ID\n" +
+			"FROM\n" +
+			"    BOARD\n" +
+			"JOIN\n" +
+			"    MEMBER M\n" +
+			"ON\n" +
+			"    M.MEMBER_ID = BOARD.BOARD_WRITER_ID\n" +
+			"WHERE\n" +
+			"    BOARD.BOARD_WRITER_ID = ?\n" +
+			"ORDER BY\n" +
+			"    BOARD.BOARD_NUM DESC\n" +
+			"LIMIT ? , ?";
 
 	//비슷한 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
 	//CONCAT 함수 사용
 	//LIMIT <OFFSET>, <ROW_COUNT>
 	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
 	private final String ALL_SEARCH_PATTERN_ID = "SELECT\n" +
-			"    B.RN,\n" +
 			"    B.BOARD_NUM,\n" +
 			"    B.BOARD_TITLE,\n" +
 			"    B.BOARD_CONTENT,\n" +
 			"    B.BOARD_CNT,\n" +
 			"    B.BOARD_LOCATION,\n" +
 			"    B.BOARD_WRITER_ID\n" +
-			"FROM (\n" +
-			"    SELECT\n" +
-			"        BOARD_NUM,\n" +
-			"        BOARD_TITLE,\n" +
-			"        BOARD_CONTENT,\n" +
-			"        BOARD_CNT,\n" +
-			"        BOARD_LOCATION,\n" +
-			"        BOARD_WRITER_ID,\n" +
-			"        ROW_NUMBER() OVER (ORDER BY BOARD_NUM DESC) AS RN\n" +
-			"    FROM\n" +
-			"        BOARD\n" +
-			") AS B\n" +
+			"FROM\n" +
+			"    BOARD B\n" +
 			"JOIN\n" +
 			"    MEMBER M ON M.MEMBER_ID = B.BOARD_WRITER_ID\n" +
 			"WHERE\n" +
 			"    B.BOARD_WRITER_ID LIKE CONCAT('%', ?, '%')\n" +
-			"LIMIT ?, ?";
+			"ORDER BY\n" +
+			"    B.BOARD_NUM DESC\n" +
+			"LIMIT ? , ?";
 
 
 	//제목으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_TITLE, board_min_num, board_max_num

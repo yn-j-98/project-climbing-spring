@@ -28,7 +28,7 @@
                                           com.coma.app.biz.reply,
                                           com.coma.app.biz.reservation"/>
 
-   <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+<!--   <aop:aspectj-autoproxy></aop:aspectj-autoproxy>-->
 
    <bean class="org.apache.commons.dbcp.BasicDataSource" id="ds" destroy-method="close">
       <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
