@@ -15,10 +15,10 @@ $(document).ready(function () {
         //FIXME 크루전 참여 크루 받아올 비동기 ajax 시작
         //TODO url 바꿔야함
         $.ajax({
-            url: 'crewManagement.do',
+            url: 'crewName.do',
             type: 'POST',
             dataType: 'json',
-            data: {gym_num : battle_num_text},
+            data: {battle_num : battle_num_text},
             success: function (datas) {
                 console.log('ajax success log Start');
                 console.log(JSON.stringify(datas));
@@ -50,10 +50,10 @@ $(document).ready(function () {
     winner_crew_select.on('change',function () {
         //TODO url 바꿔야함
         $.ajax({
-            url : '',
+            url : 'mvpMember.do',
             type : 'POST',
             dataType : 'json',
-            data : JSON.stringify({'crew_name':mvp_select.val()}),
+            data : JSON.stringify({crew_name:mvp_select.val()}),
             success : function (datas) {
                 console.log('ajax success log Start');
                 console.log(JSON.stringify(datas));
