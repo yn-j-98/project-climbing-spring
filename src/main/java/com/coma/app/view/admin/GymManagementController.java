@@ -8,7 +8,7 @@ import com.coma.app.biz.reservation.ReservationDTO;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-public class GymAdminController {
+public class GymManagementController {
 
     @GetMapping("/gymManagement.do")
     public String gymManagement() {
