@@ -19,8 +19,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.coma.app.biz.board.BoardDTO;
 import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.product.ProductDTO;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class Crawling2 {
    public static WebDriver driver;
    private String target_url;
