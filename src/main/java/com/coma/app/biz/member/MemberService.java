@@ -10,10 +10,15 @@ public interface MemberService {
 	List<MemberDTO> selectAllTop10Rank(MemberDTO memberDTO);
 	List<MemberDTO> selectAllSearchCrew(MemberDTO memberDTO);
 	List<MemberDTO> selectAllSearchCrewMemberName(MemberDTO memberDTO);
+	List<MemberDTO> selectAllMonthCountAdmin(MemberDTO memberDTO);
+	List<MemberDTO> selectAllSearchAdmin(MemberDTO memberDTO);
+	List<MemberDTO> selectAllSearchIdAdmin(MemberDTO memberDTO);
+	List<MemberDTO> selectAllSearchDateAdmin(MemberDTO memberDTO);
 
 	MemberDTO selectOneSearchId(MemberDTO memberDTO);
 	MemberDTO selectOneSearchIdPassword(MemberDTO memberDTO);
 	MemberDTO selectOneSearchMyCrew(MemberDTO memberDTO);
+	MemberDTO selectOneCountAdmin(MemberDTO memberDTO);
 
 	boolean insert(MemberDTO memberDTO);
 

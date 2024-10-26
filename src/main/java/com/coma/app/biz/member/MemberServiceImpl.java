@@ -12,9 +12,6 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberDAO memberDAO;
 
-	@Autowired
-	private BoardDAO boardDAO;
-
 
 	@Override
 	public List<MemberDTO> selectAllSearchRank(MemberDTO memberDTO) {
@@ -52,6 +49,26 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public List<MemberDTO> selectAllMonthCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectAllMonthCountAdmin(memberDTO);
+	}
+
+	@Override
+	public List<MemberDTO> selectAllSearchAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectAllSearchAdmin(memberDTO);
+	}
+
+	@Override
+	public List<MemberDTO> selectAllSearchIdAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectAllSearchIdAdmin(memberDTO);
+	}
+
+	@Override
+	public List<MemberDTO> selectAllSearchDateAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectAllSearchDateAdmin(memberDTO);
+	}
+
+	@Override
 	public MemberDTO selectOneSearchId(MemberDTO memberDTO) {
 		return this.memberDAO.selectOneSearchId(memberDTO);
 	}
@@ -64,6 +81,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberDTO selectOneSearchMyCrew(MemberDTO memberDTO) {
 		return this.memberDAO.selectOneSearchMyCrew(memberDTO);
+	}
+
+	@Override
+	public MemberDTO selectOneCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectOneCountAdmin(memberDTO);
 	}
 
 	@Override
