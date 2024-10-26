@@ -131,224 +131,224 @@ public class GymController {
 		return "views/gymMain";
 	}
 
-//	@LoginCheck
-//	@PostMapping("/gymReservation.do")
-//	public String gymReservation(GymDTO gymDTO, ReservationDTO reservationDTO, MemberDTO memberDTO, Model model) {
-//		String path = "views/info"; // view에서 알려줄 예정 alert 창 띄우기 위한 JavaScript 페이지
-//		//로그인 정보가 있는지 확인해주고
-//		String member_id = (String) session.getAttribute("MEMBER_ID");
-//
-//		//------------------------------------------------------------
-//		//해당 기능에서 공통으로 사용할 변수 and 객체
-//		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
-//		//FIXME usepoint 확인
-//		int reservation_use_point = reservationDTO.getReservation_use_point();
-//		//예약금액 변수
-//		int reservation_price = 0;
-//		//View에서 이동할 페이지 변수
-//		//TODO 확인 V에서 GYMNUM 확인
-//		String view_path = "redirect:GymInfo.do?gym_num="+reservationDTO.getReservation_gym_num();
-//		//------------------------------------------------------------
-//		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 시작
-//		//(예약일 / 암벽장번호 / login) 정보를 ReservationDTO에 추가합니다.
-//		reservationDTO.setReservation_condition("RESERVATION_ONE_SEARCH");
-//		ReservationDTO reservation_Check = this.reservationService.selectOne(reservationDTO);
-//		//요청 값이 null 이 아니라면 해당 날짜에 이미 예약되어있는 사용자 이므로
-//		//not null == error_message : 해당 날짜에는 이미 예약되어있습니다. (예약 번호 : Reservation PK 값)
-//		//path			 			: 암벽장 페이지
-//		if(reservation_Check != null) {
-//			model.addAttribute("msg", "해당 날짜에는 이미 예약되어있습니다. (예약 번호 : "+reservation_Check.getReservation_num()+")");
-//			model.addAttribute("path", view_path);
-//			return path;
-//		}
-//		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 종료
-//		//------------------------------------------------------------
-//		//예약 정보가 정상문제 없는지 확인하는 로직 시작
-//		//암벽장 번호를 Gym DTO 에 추가해줍니다.
-//		gymDTO.setGym_condition("GYM_ONE"); // TODO 컨디션 추가해야함
-//		//model 에 selectOne으로 암벽장 가격을 가져옵니다.
-//		int gym_price = this.gymService.selectOne(gymDTO).getGym_price();
-//		//사용자가 최대 Point 보다 많이 입력했다면 최대 포인트로 고정합니다.
-//		int max_Point = 5000;
-//		if(reservation_use_point > max_Point) {
-//			//사용자 포인트를 강제로 5000으로 고정합니다.
-//			reservation_use_point = max_Point;
-//		}
-//		//(사용자 아이디)을 MemberDTO에 추가합니다.
-//		memberDTO.setMember_condition("MEMBER_SEARCH_ID");
-//		//사용자의 현재 포인트를 SelectOne으로 요청하고
-//		MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
-//		//해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
-//		int use_Point = member_point.getMember_current_point() - reservation_use_point;
-//		//사용자 남은 포인트 로그
-//		System.out.println("사용자 남은 포인트 : "+use_Point);
-//		//use_Point 값이
-//		//음수 == error_message : 현재 포인트가 부족하여 예약에 실패하였습니다. (현재 포인트 : XX)
-//		//path				   : 암벽장 페이지
-//		if(use_Point < 0) {
-//			model.addAttribute("msg", "포인트가 부족합니다. 포인트를 확인해주세요. \n (현재 포인트 : "+member_point.getMember_current_point()+")");
-//			model.addAttribute("path", view_path);
-//			return path;
-//		}
-//		//사용자 포인트에 문제가 없다면
-//		//DTO 에 남은 사용자 포인트를 추가하고
-//		memberDTO.setMember_condition("MEMBER_UPDATE_CURRENT_POINT");
-//		//member update 로 사용자 포인트를 변경합니다.
-//		boolean flag_point_update = this.memberService.updateCurrentPoint(memberDTO);
-//		if(!flag_point_update) {
-//			//문제가 발생했다는 문구를 띄워 줍니다.
-//			model.addAttribute("msg", "예약 진행중 오류가 발생하였습니다. (사유 : 사용자 포인트 변경오류)");
-//			model.addAttribute("path", view_path);
-//			return path;
-//		}
-//
-//		//예약금액 = 암벽장금액 - 사용 포인트
-//		reservation_price = gym_price - reservation_use_point;
-//
-//		//만약 받아온 금액과 다시 계산된 금액이 다르다면
-//		if(reservationDTO.getReservation_price() != reservation_price) {
-//			System.out.println("(GymController.java) Controller에서 계산된 예약금 로그 : "+reservationDTO.getReservation_price());
-//			System.out.println("(GymController.java) View에서 보내준 예약금 로그 : "+reservation_price);
-//			//문제가 발생했다는 문구를 띄워 줍니다.
-//			model.addAttribute("msg", "예약 불가 (사유 : 금액이 변경됨)");
-//			model.addAttribute("path", view_path);
-//			return path;
-//		}
-//		//예약 정보가 정상문제 없는지 확인하는 로직 종료
-//		//------------------------------------------------------------
-//		//예약 정보 저장 하기 위한 로직 시작
-//		//(암벽장 번호 / 예약일 / 예약금액)을 ReservationDTO에 추가합니다.
-//		//model 에 Reservation 테이블에 Insert 해줍니다.
-//		boolean flag = this.reservationService.insert(reservationDTO);
-//		//저장 여부에 따른 값 전달
-//		//True == error_message  : 예약에 성공했습니다.
-//		if(flag) {
-//			model.addAttribute("msg","예약에 성공했습니다.");
-//		}
-//		else {
-//			model.addAttribute("msg","예약에 실패했습니다.");
-//		}
-//		model.addAttribute("path", view_path);
-//		//예약 정보 저장 하기 위한 로직 종료
-//		//------------------------------------------------------------
-//		return path;
-//	}
-//
+	@LoginCheck
+	@PostMapping("/gymReservation.do")
+	public String gymReservation(GymDTO gymDTO, ReservationDTO reservationDTO, MemberDTO memberDTO, Model model) {
+		String path = "views/info"; // view에서 알려줄 예정 alert 창 띄우기 위한 JavaScript 페이지
+		//로그인 정보가 있는지 확인해주고
+		String member_id = (String) session.getAttribute("MEMBER_ID");
 
-//	@LoginCheck
-//	@PostMapping("/gymReservationInfo.do")
-//	public String gymReservationInfo(Model model,GymDTO gymDTO, MemberDTO memberDTO, ReservationDTO reservationDTO) {
-//
-//		String error_path = "views/info";
-//
-//		String member_id = (String) session.getAttribute("MEMBER_ID");
-//
-//		//FIXME reservation_date M에서
-//		String gym_reservation_date = reservationDTO.getReservation_date();
-//
-//		//------------------------------------------------------------
-//		//해당 기능에서 공통으로 사용할 변수 and 객체
-//		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
-//		int gym_num = gymDTO.getGym_num();
-//		System.err.println("36 예약날짜 ="+gym_reservation_date);
-//		System.err.println("사용포인트 넘어왔니"+memberDTO.getMember_use_point);
-//		int reservation_use_point=0;
-//		if(memberDTO.getMember_use_point!=null) {
-//			reservation_use_point = memberDTO.getMember_use_point;
-//		}
-//		//TODO gym_price Int 변환 확인하기
-//		int gym_price = gymDTO.getGym_price();
-//		//최대 사용 포인트
-//		int max_Point = 5000;
-//		//예약금액 변수
-//		int reservation_price = 0;
-//		//예약 가능 인원
-//		int reservation_cnt = 0;
-//		//사용자 아이디
-//		String member_name = null;
-//		//View에서 이동할 페이지 변수
-//		String view_path = "redirect:GymInfo.do?gym_num="+gymDTO.getGym_num();
-//		model.addAttribute("msg", "예약 되었습니다!");
-//		//------------------------------------------------------------
-//
-//		if(member_id != null) {
-//			System.out.println("member_id 있음");
-//			//------------------------------------------------------------
-//			//사용 포인트 변경하는 로직 시작
-//			//사용자가 최대 포인트 보다 많이 입력했다면
-//			if(reservation_use_point > max_Point) {
-//				//사용자 포인트를 강제로 5000으로 고정합니다.
-//				reservation_use_point = max_Point;
-//			}
-//			//(사용자 아이디)을 MemberDTO에 추가합니다.
-//			memberDTO.setMember_condition("MEMBER_SEARCH_ID");
-//			//TODO 사용자의 현재 포인트를 SelectOne으로 요청하고
-//			MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
-//			//TODO 해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
-//			int use_Point = member_point.getMember_current_point() - reservation_use_point;
-//			//use_Point 값이
-//			//음수 == error_message : 현재 포인트가 부족하여 예약에 실패하였습니다. (현재 포인트 : XX)
-//			//path				   : 암벽장 페이지
-//			if(use_Point < 0) {
-//				model.addAttribute("msg", "포인트가 부족합니다. 포인트를 확인해주세요. \n (현재 포인트 : "+member_point.getMember_current_point()+")");
-//				model.addAttribute("path", view_path);
-//
-//				return error_path;
-//			}
-//			//양수 : 예약금액 = 암벽장금액 - 사용 포인트
-//			else {
-//				reservation_price = gym_price - reservation_use_point;
-//			}
-//			//사용 포인트 변경하는 로직 종료
-//			//------------------------------------------------------------
-//			//예약 가능 인원 수 구하는 로직 시작
-//			//암벽장 번호를 Gym DTO 에 입력하여 암벽장 정보를 요청합니다.
-//			gymDTO.setGym_num(gym_num);
-//			gymDTO.setGym_condition("GYM_ONE");
-//			//해당 암벽장 정보의 예약 최대 인원을 요청합니다.
-//			int reservation_total_cnt = this.gymService.selectOne(gymDTO).getGym_reservation_cnt();
-//			//암벽장 번호와 예약 날짜를 Reservation DTO 에 추가해줍니다.
-//			reservationDTO.setReservation_condition("RESERVATION_ONE_COUNT");//TODO 컨디션 추가해야함
-//			//model 에 selectOne 을 요청하여 현재 예약한 인원을 요청합니다.
-//			int reservation_current_cnt = this.reservationService.selectOne(reservationDTO).getReservation_total();
-//			//예약 인원이 resrvation_cnt = resrvation_total_cnt - resrvation_current_cnt
-//			reservation_cnt = reservation_total_cnt - reservation_current_cnt;
-//			//만약 0보다 작다면
-//			if(reservation_cnt <= 0) {
-//				//error_message : 예약이 불가능한 날짜입니다.
-//				model.addAttribute("msg", "예약인원이 불가능한 날짜입니다.");
-//				//path : 암벽장 페이지
-//				model.addAttribute("path", view_path); //TODO 암벽장 페이지 작성해야함
-//				return error_path;
-//			}
-//			//예약 가능 인원 수 구하는 로직 종료
-//			//------------------------------------------------------------
-//			//사용자 이름 구하는 로직 시작
-//			//사용자 아이디를 Member DTO에 추가합니다.
-//			memberDTO.setMember_condition("MEMBER_SEARCH_ID");
-//			//model 에 selectOne으로 사용자 이름을 요청합니다.
-//			member_name = this.memberService.selectOneSearchId(memberDTO).getMember_name();
-//
-//			//사용자 이름 구하는 로직 종료
-//			//------------------------------------------------------------
-//		}
-//		else {
-//			System.out.println("member_id 없음");
-//			//error_message : 예약이 불가능한 날짜입니다.
-//			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
-//			//path : 암벽장 페이지
-//			model.addAttribute("path", "login.do"); //TODO 암벽장 페이지 작성해야함
-//			return error_path;
-//		}
-//		//FIXME V에서 값 맞는지 확인하기
-//		model.addAttribute("gym_num", gym_num);
-//		model.addAttribute("member_name", member_name);
-//		model.addAttribute("reservation_date", gym_reservation_date);
-//		model.addAttribute("reservation_cnt", reservation_cnt);
-//		model.addAttribute("reservation_price", reservation_price);
-//		model.addAttribute("reservation_use_point", reservation_use_point);
-//		return "views/reservation";
-//	}
+		//------------------------------------------------------------
+		//해당 기능에서 공통으로 사용할 변수 and 객체
+		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
+		//FIXME usepoint 확인
+		int reservation_use_point = reservationDTO.getReservation_use_point();
+		//예약금액 변수
+		int reservation_price = 0;
+		//View에서 이동할 페이지 변수
+		//TODO 확인 V에서 GYMNUM 확인
+		String view_path = "redirect:GymInfo.do?gym_num="+reservationDTO.getReservation_gym_num();
+		//------------------------------------------------------------
+		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 시작
+		//(예약일 / 암벽장번호 / login) 정보를 ReservationDTO에 추가합니다.
+		reservationDTO.setReservation_condition("RESERVATION_ONE_SEARCH");
+		ReservationDTO reservation_Check = this.reservationService.selectOne(reservationDTO);
+		//요청 값이 null 이 아니라면 해당 날짜에 이미 예약되어있는 사용자 이므로
+		//not null == error_message : 해당 날짜에는 이미 예약되어있습니다. (예약 번호 : Reservation PK 값)
+		//path			 			: 암벽장 페이지
+		if(reservation_Check != null) {
+			model.addAttribute("msg", "해당 날짜에는 이미 예약되어있습니다. (예약 번호 : "+reservation_Check.getReservation_num()+")");
+			model.addAttribute("path", view_path);
+			return path;
+		}
+		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 종료
+		//------------------------------------------------------------
+		//예약 정보가 정상문제 없는지 확인하는 로직 시작
+		//암벽장 번호를 Gym DTO 에 추가해줍니다.
+		gymDTO.setGym_condition("GYM_ONE"); // TODO 컨디션 추가해야함
+		//model 에 selectOne으로 암벽장 가격을 가져옵니다.
+		int gym_price = this.gymService.selectOne(gymDTO).getGym_price();
+		//사용자가 최대 Point 보다 많이 입력했다면 최대 포인트로 고정합니다.
+		int max_Point = 5000;
+		if(reservation_use_point > max_Point) {
+			//사용자 포인트를 강제로 5000으로 고정합니다.
+			reservation_use_point = max_Point;
+		}
+		//(사용자 아이디)을 MemberDTO에 추가합니다.
+		memberDTO.setMember_condition("MEMBER_SEARCH_ID");
+		//사용자의 현재 포인트를 SelectOne으로 요청하고
+		MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
+		//해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
+		int use_Point = member_point.getMember_current_point() - reservation_use_point;
+		//사용자 남은 포인트 로그
+		System.out.println("사용자 남은 포인트 : "+use_Point);
+		//use_Point 값이
+		//음수 == error_message : 현재 포인트가 부족하여 예약에 실패하였습니다. (현재 포인트 : XX)
+		//path				   : 암벽장 페이지
+		if(use_Point < 0) {
+			model.addAttribute("msg", "포인트가 부족합니다. 포인트를 확인해주세요. \n (현재 포인트 : "+member_point.getMember_current_point()+")");
+			model.addAttribute("path", view_path);
+			return path;
+		}
+		//사용자 포인트에 문제가 없다면
+		//DTO 에 남은 사용자 포인트를 추가하고
+		memberDTO.setMember_condition("MEMBER_UPDATE_CURRENT_POINT");
+		//member update 로 사용자 포인트를 변경합니다.
+		boolean flag_point_update = this.memberService.updateCurrentPoint(memberDTO);
+		if(!flag_point_update) {
+			//문제가 발생했다는 문구를 띄워 줍니다.
+			model.addAttribute("msg", "예약 진행중 오류가 발생하였습니다. (사유 : 사용자 포인트 변경오류)");
+			model.addAttribute("path", view_path);
+			return path;
+		}
+
+		//예약금액 = 암벽장금액 - 사용 포인트
+		reservation_price = gym_price - reservation_use_point;
+
+		//만약 받아온 금액과 다시 계산된 금액이 다르다면
+		if(reservationDTO.getReservation_price() != reservation_price) {
+			System.out.println("(GymController.java) Controller에서 계산된 예약금 로그 : "+reservationDTO.getReservation_price());
+			System.out.println("(GymController.java) View에서 보내준 예약금 로그 : "+reservation_price);
+			//문제가 발생했다는 문구를 띄워 줍니다.
+			model.addAttribute("msg", "예약 불가 (사유 : 금액이 변경됨)");
+			model.addAttribute("path", view_path);
+			return path;
+		}
+		//예약 정보가 정상문제 없는지 확인하는 로직 종료
+		//------------------------------------------------------------
+		//예약 정보 저장 하기 위한 로직 시작
+		//(암벽장 번호 / 예약일 / 예약금액)을 ReservationDTO에 추가합니다.
+		//model 에 Reservation 테이블에 Insert 해줍니다.
+		boolean flag = this.reservationService.insert(reservationDTO);
+		//저장 여부에 따른 값 전달
+		//True == error_message  : 예약에 성공했습니다.
+		if(flag) {
+			model.addAttribute("msg","예약에 성공했습니다.");
+		}
+		else {
+			model.addAttribute("msg","예약에 실패했습니다.");
+		}
+		model.addAttribute("path", view_path);
+		//예약 정보 저장 하기 위한 로직 종료
+		//------------------------------------------------------------
+		return path;
+	}
+
+
+	@LoginCheck
+	@PostMapping("/gymReservationInfo.do")
+	public String gymReservationInfo(Model model,GymDTO gymDTO, MemberDTO memberDTO, ReservationDTO reservationDTO) {
+
+		String error_path = "views/info";
+
+		String member_id = (String) session.getAttribute("MEMBER_ID");
+
+		//FIXME reservation_date M에서
+		String gym_reservation_date = reservationDTO.getReservation_date();
+
+		//------------------------------------------------------------
+		//해당 기능에서 공통으로 사용할 변수 and 객체
+		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
+		int gym_num = gymDTO.getGym_num();
+		System.err.println("36 예약날짜 ="+gym_reservation_date);
+		System.err.println("사용포인트 넘어왔니"+memberDTO.getMember_use_point);
+		int reservation_use_point=0;
+		if(memberDTO.getMember_use_point!=null) {
+			reservation_use_point = memberDTO.getMember_use_point;
+		}
+		//TODO gym_price Int 변환 확인하기
+		int gym_price = gymDTO.getGym_price();
+		//최대 사용 포인트
+		int max_Point = 5000;
+		//예약금액 변수
+		int reservation_price = 0;
+		//예약 가능 인원
+		int reservation_cnt = 0;
+		//사용자 아이디
+		String member_name = null;
+		//View에서 이동할 페이지 변수
+		String view_path = "redirect:GymInfo.do?gym_num="+gymDTO.getGym_num();
+		model.addAttribute("msg", "예약 되었습니다!");
+		//------------------------------------------------------------
+
+		if(member_id != null) {
+			System.out.println("member_id 있음");
+			//------------------------------------------------------------
+			//사용 포인트 변경하는 로직 시작
+			//사용자가 최대 포인트 보다 많이 입력했다면
+			if(reservation_use_point > max_Point) {
+				//사용자 포인트를 강제로 5000으로 고정합니다.
+				reservation_use_point = max_Point;
+			}
+			//(사용자 아이디)을 MemberDTO에 추가합니다.
+			memberDTO.setMember_condition("MEMBER_SEARCH_ID");
+			//TODO 사용자의 현재 포인트를 SelectOne으로 요청하고
+			MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
+			//TODO 해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
+			int use_Point = member_point.getMember_current_point() - reservation_use_point;
+			//use_Point 값이
+			//음수 == error_message : 현재 포인트가 부족하여 예약에 실패하였습니다. (현재 포인트 : XX)
+			//path				   : 암벽장 페이지
+			if(use_Point < 0) {
+				model.addAttribute("msg", "포인트가 부족합니다. 포인트를 확인해주세요. \n (현재 포인트 : "+member_point.getMember_current_point()+")");
+				model.addAttribute("path", view_path);
+
+				return error_path;
+			}
+			//양수 : 예약금액 = 암벽장금액 - 사용 포인트
+			else {
+				reservation_price = gym_price - reservation_use_point;
+			}
+			//사용 포인트 변경하는 로직 종료
+			//------------------------------------------------------------
+			//예약 가능 인원 수 구하는 로직 시작
+			//암벽장 번호를 Gym DTO 에 입력하여 암벽장 정보를 요청합니다.
+			gymDTO.setGym_num(gym_num);
+			gymDTO.setGym_condition("GYM_ONE");
+			//해당 암벽장 정보의 예약 최대 인원을 요청합니다.
+			int reservation_total_cnt = this.gymService.selectOne(gymDTO).getGym_reservation_cnt();
+			//암벽장 번호와 예약 날짜를 Reservation DTO 에 추가해줍니다.
+			reservationDTO.setReservation_condition("RESERVATION_ONE_COUNT");//TODO 컨디션 추가해야함
+			//model 에 selectOne 을 요청하여 현재 예약한 인원을 요청합니다.
+			int reservation_current_cnt = this.reservationService.selectOne(reservationDTO).getReservation_total();
+			//예약 인원이 resrvation_cnt = resrvation_total_cnt - resrvation_current_cnt
+			reservation_cnt = reservation_total_cnt - reservation_current_cnt;
+			//만약 0보다 작다면
+			if(reservation_cnt <= 0) {
+				//error_message : 예약이 불가능한 날짜입니다.
+				model.addAttribute("msg", "예약인원이 불가능한 날짜입니다.");
+				//path : 암벽장 페이지
+				model.addAttribute("path", view_path); //TODO 암벽장 페이지 작성해야함
+				return error_path;
+			}
+			//예약 가능 인원 수 구하는 로직 종료
+			//------------------------------------------------------------
+			//사용자 이름 구하는 로직 시작
+			//사용자 아이디를 Member DTO에 추가합니다.
+			memberDTO.setMember_condition("MEMBER_SEARCH_ID");
+			//model 에 selectOne으로 사용자 이름을 요청합니다.
+			member_name = this.memberService.selectOneSearchId(memberDTO).getMember_name();
+
+			//사용자 이름 구하는 로직 종료
+			//------------------------------------------------------------
+		}
+		else {
+			System.out.println("member_id 없음");
+			//error_message : 예약이 불가능한 날짜입니다.
+			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
+			//path : 암벽장 페이지
+			model.addAttribute("path", "login.do"); //TODO 암벽장 페이지 작성해야함
+			return error_path;
+		}
+		//FIXME V에서 값 맞는지 확인하기
+		model.addAttribute("gym_num", gym_num);
+		model.addAttribute("member_name", member_name);
+		model.addAttribute("reservation_date", gym_reservation_date);
+		model.addAttribute("reservation_cnt", reservation_cnt);
+		model.addAttribute("reservation_price", reservation_price);
+		model.addAttribute("reservation_use_point", reservation_use_point);
+		return "views/reservation";
+	}
 
 	@LoginCheck
 	@PostMapping("/gymInfo.do")
