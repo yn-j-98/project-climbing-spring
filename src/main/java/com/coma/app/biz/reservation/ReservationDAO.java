@@ -77,6 +77,29 @@ public class ReservationDAO {
 			+ "WHERE\r\n"
 			+ "	R.RESERVATION_MEMBER_ID = ? AND R.RESERVATION_GYM_NUM = ? AND R.RESERVATION_DATE = ?";
 
+	//최근 1년 예약 개수 출력 // TODO 관리자 메인 페이지
+	private final String ONE_COUNT_YEAR_ADMIN = "SELECT COUNT(*) AS RESERVATION_TOTAL\n"
+			+ "FROM RESERVATION\n"
+			+ "WHERE RESERVATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)";
+
+	//월별 예약수 출력 // TODO 관리자 메인 페이지
+	private final String ALL_COUNT_MONTH_ADMIN = "SELECT \n"
+			+ "    DATE_FORMAT(RESERVATION_DATE, '%Y-%m') AS RESERVATION_MONTH,\n"
+			+ "    COUNT(*) AS RESERVATION_TOTAL\n"
+			+ "FROM \n"
+			+ "    RESERVATION\n"
+			+ "GROUP BY \n"
+			+ "    RESERVATION_MONTH\n"
+			+ "ORDER BY \n"
+			+ "    RESERVATION_MONTH";
+
+	//예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
+	private final String ALL_ADMIN = "SELECT R.RESERVATION_MEMBER_ID, G.GYM_NAME, R.RESERVATION_PRICE, R.RESERVATION_DATE\n"
+			+ "FROM RESERVATION R\n"
+			+ "JOIN GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM"
+			+ "ORDER BY r.RESERVATION_DATE DESC\n"
+			+ "LIMIT ? , ?";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
@@ -160,6 +183,21 @@ public class ReservationDAO {
 		return data;
 	}
 
+	public ReservationDTO selectOneCountYearAdmin(ReservationDTO reservationDTO){
+		System.out.println("com.coma.app.biz.reservation.selectOneCountYearAdmin 시작");
+
+		ReservationDTO data=null;
+		try {
+			//최근 1년 예약 개수 출력 // TODO 관리자 메인 페이지
+			data= jdbcTemplate.queryForObject(ONE_COUNT_YEAR_ADMIN, new ReservationCountRowMapperOne());
+		}
+		catch (Exception e) {
+			System.out.println("com.coma.app.biz.reservation.selectOneCountYearAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.reservation.selectOneCountYearAdmin 성공");
+		return data;
+	}
+
 	public List<ReservationDTO> selectAll(ReservationDTO reservationDTO){
 		System.out.println("com.coma.app.biz.reservation.selectAll 시작");
 
@@ -175,6 +213,37 @@ public class ReservationDAO {
 		System.out.println("com.coma.app.biz.reservation.selectAll 성공");
 		return datas;
 	}
+
+	public List<ReservationDTO> selectAllCountMonthAdmin(ReservationDTO reservationDTO){
+		System.out.println("com.coma.app.biz.reservation.selectAllCountMonthAdmin 시작");
+
+		List<ReservationDTO> datas=null;
+		try {
+			//월별 예약수 출력 // TODO 관리자 메인 페이지
+			datas= jdbcTemplate.query(ALL_COUNT_MONTH_ADMIN, new ReservationCountMonthRowMapperAll());
+		}
+		catch (Exception e) {
+			System.out.println("com.coma.app.biz.reservation.selectAllCountMonthAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.reservation.selectAllCountMonthAdmin 성공");
+		return datas;
+	}
+
+	public List<ReservationDTO> selectAllAdmin(ReservationDTO reservationDTO){
+		System.out.println("com.coma.app.biz.reservation.selectAllAdmin 시작");
+
+		List<ReservationDTO> datas=null;
+		Object[] args={reservationDTO.getReservation_min_num(),6};
+		try {
+			//예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
+			datas= jdbcTemplate.query(ALL_ADMIN, args, new ReservationAdminRowMapperAll());
+		}
+		catch (Exception e) {
+			System.out.println("com.coma.app.biz.reservation.selectAllAdmin SQL문 실패");
+		}
+		System.out.println("com.coma.app.biz.reservation.selectAllAdmin 성공");
+		return datas;
+	}
 }
 
 class ReservationCountRowMapperOne implements RowMapper<ReservationDTO> {
@@ -182,6 +251,20 @@ class ReservationCountRowMapperOne implements RowMapper<ReservationDTO> {
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
 		System.out.print("DB에서 가져온 데이터 {");
+		reservationDTO.setReservation_total(rs.getInt("RESERVATION_TOTAL"));
+		System.err.print("reservation_total = ["+reservationDTO.getReservation_total()+"]");
+		System.out.println("}");
+		return reservationDTO;
+	};
+}
+
+class ReservationCountMonthRowMapperAll implements RowMapper<ReservationDTO> {
+
+	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ReservationDTO reservationDTO=new ReservationDTO();
+		System.out.print("DB에서 가져온 데이터 {");
+		reservationDTO.setReservation_month(rs.getString("RESERVATION_MONTH"));
+		System.err.println("reservation_month = ["+reservationDTO.getReservation_month()+"]");
 		reservationDTO.setReservation_total(rs.getInt("RESERVATION_TOTAL"));
 		System.err.print("reservation_total = ["+reservationDTO.getReservation_total()+"]");
 		System.out.println("}");
@@ -226,6 +309,24 @@ class ReservationRowMapperAll implements RowMapper<ReservationDTO> {
 		System.err.println("reservation_price = ["+reservationDTO.getReservation_price()+"]");
 		reservationDTO.setReservation_gym_name(rs.getString("GYM_NAME"));
 		System.err.println("reservation_name = ["+reservationDTO.getReservation_gym_name()+"]");
+		System.out.println("}");
+		return reservationDTO;
+	};
+}
+
+class ReservationAdminRowMapperAll implements RowMapper<ReservationDTO> {
+
+	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ReservationDTO reservationDTO=new ReservationDTO();
+		System.out.print("DB에서 가져온 데이터 {");
+		reservationDTO.setReservation_member_id(rs.getString("RESERVATION_MEMBER_ID"));
+		System.err.println("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
+		reservationDTO.setReservation_gym_name(rs.getString("GYM_NAME"));
+		System.err.println("reservation_name = ["+reservationDTO.getReservation_gym_name()+"]");
+		reservationDTO.setReservation_price(rs.getInt("RESERVATION_PRICE"));
+		System.err.println("reservation_price = ["+reservationDTO.getReservation_price()+"]");
+		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
+		System.err.print("reservation_date = ["+reservationDTO.getReservation_date()+"]");
 		System.out.println("}");
 		return reservationDTO;
 	};

@@ -8,6 +8,7 @@ public class GymDTO {
 	private String gym_location;        // 암벽장의 위치
 	private int gym_reservation_cnt; // 예약 가능 개수
 	private int gym_price;           // 이용 가격
+	private String gym_admin_battle_verified; // 관리자 승인 여부
 	
 	//DTO에만 존재하는 데이터
 	private String gym_condition;        // 개발자 데이터 검색
@@ -72,6 +73,14 @@ public class GymDTO {
 
 	public void setGym_price(int gym_price) {
 		this.gym_price = gym_price;
+	}
+
+	public String getGym_admin_battle_verified() {
+		return gym_admin_battle_verified;
+	}
+
+	public void setGym_admin_battle_verified(String gym_admin_battle_verified) {
+		this.gym_admin_battle_verified = gym_admin_battle_verified;
 	}
 
 	public String getGym_condition() {
@@ -139,7 +148,8 @@ public class GymDTO {
 				", gym_description='" + gym_description + '\'' +
 				", gym_location='" + gym_location + '\'' +
 				", gym_reservation_cnt=" + gym_reservation_cnt +
-				", gym_price='" + gym_price + '\'' +
+				", gym_price=" + gym_price +
+				", gym_admin_battle_verified='" + gym_admin_battle_verified + '\'' +
 				", gym_condition='" + gym_condition + '\'' +
 				", page=" + page +
 				", gym_max_num=" + gym_max_num +

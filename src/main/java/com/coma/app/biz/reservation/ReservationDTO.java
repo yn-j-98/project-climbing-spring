@@ -16,7 +16,8 @@ public class ReservationDTO {
 	private String reservation_gym_name;        // 예약 암벽장 이름
 	private int reservation_max_num;      // 페이지네이션 데이터
 	private int reservation_min_num;      // 페이지네이션 데이터
-	private String reservation_condition; // 개발자 데이터 검색 
+	private String reservation_condition; // 개발자 데이터 검색
+	private String reservation_month;	// 예약한 년도-월 // TODO 관리자 페이지
 
 	public int getReservation_num() {
 		return reservation_num;
@@ -114,6 +115,14 @@ public class ReservationDTO {
 		this.reservation_condition = reservation_condition;
 	}
 
+	public String getReservation_month() {
+		return reservation_month;
+	}
+
+	public void setReservation_month(String reservation_month) {
+		this.reservation_month = reservation_month;
+	}
+
 	@Override
 	public String toString() {
 		return "ReservationDTO{" +
@@ -129,6 +138,7 @@ public class ReservationDTO {
 				", reservation_max_num=" + reservation_max_num +
 				", reservation_min_num=" + reservation_min_num +
 				", reservation_condition='" + reservation_condition + '\'' +
+				", reservation_month='" + reservation_month + '\'' +
 				'}';
 	}
 }
