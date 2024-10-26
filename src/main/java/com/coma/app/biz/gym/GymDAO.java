@@ -30,7 +30,7 @@ public class GymDAO {
 			"    GYM_NUM\n" +
 			"LIMIT ?, ?";  // ?는 시작 인덱스와 행 수를 위한 자리 표시자
 
-	//암벽장 총 개수
+	//암벽장 총 개수 // TODO 관리자 메인 페이지
 	private final String ONE_COUNT = "SELECT COUNT(*) AS GYM_TOTAL FROM GYM";
 	
 	//암벽장 PK로 검색 GYM_NUM
@@ -57,8 +57,29 @@ public class GymDAO {
 	private final String UPDATE_RESERVATION_CNT = "UPDATE GYM SET GYM_RESERVATION_CNT = ? WHERE GYM_NUM = ?";
 	
 	//암벽장 등록 GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION
-	private final String INSERT = "INSERT INTO GYM (GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION) " 
+	private final String INSERT = "INSERT INTO GYM (GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION) "
 			+ "VALUES (?, ?, ?, ?)";
+
+	//지역별 암벽장 개수 출력 // TODO 관리자 메인 페이지
+	private final String ALL_LOCATION_COUNT_ADMIN = "SELECT \n"
+			+ "    SUBSTRING_INDEX(GYM_LOCATION, ' ', 1) AS GYM_LOCATION_COUNT,\n"
+			+ "    COUNT(*) AS GYM_TOTAL\n"
+			+ "FROM \n"
+			+ "    GYM\n"
+			+ "GROUP BY \n"
+			+ "    GYM_LOCATION_COUNT\n"
+			+ "ORDER BY \n"
+			+ "    GYM_LOCATION_COUNT";
+
+	//암벽장 관리 리스트 출력(페이지네이션) // TODO 암벽장 관리 페이지
+	private final String ALL_ADMIN = "SELECT GYM_PROFILE, GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_ADMIN_BATTLE_VERIFIED\n"
+			+ "FROM gym\n"
+			+ "ORDER BY GYM_NUM DESC\n"
+			+ "LIMIT ?, ?";
+
+	//암벽장 추가 GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE // TODO 암벽장 관리 페이지
+	private final String INSERT_ADMIN = "INSERT INTO GYM (GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE)\n"
+			+ "VALUES (?, ?, ?, ?, ?)";
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
@@ -72,6 +93,18 @@ public class GymDAO {
 			return false;
 		}
 		System.out.println("com.coma.app.biz.gym.insert 성공");
+		return true;
+	}
+
+	public boolean insertAdmin(GymDTO gymDTO) {
+		System.out.println("com.coma.app.biz.gym.insertAdmin 시작");
+		//암벽장 추가 GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE // TODO 암벽장 관리 페이지
+		int result=jdbcTemplate.update(INSERT_ADMIN,gymDTO.getGym_name(),gymDTO.getGym_location(),gymDTO.getGym_price(),gymDTO.getGym_description(),gymDTO.getGym_profile());
+		if(result<=0) {
+			System.out.println("com.coma.app.biz.gym.insertAdmin SQL문 실패");
+			return false;
+		}
+		System.out.println("com.coma.app.biz.gym.insertAdmin 성공");
 		return true;
 	}
 
@@ -121,7 +154,6 @@ public class GymDAO {
 		return data;
 	}
 
-
 	public List<GymDTO> selectAll(GymDTO gymDTO){
 		System.out.println("com.coma.app.biz.gym.selectAll 시작");
 
@@ -129,6 +161,25 @@ public class GymDAO {
 		//(페이지 네이션) 암벽장 전체출력
 		List<GymDTO> datas=jdbcTemplate.query(ALL,args,new GymSelectRowMapperOneAll());
 		System.out.println("com.coma.app.biz.gym.selectAll 성공");
+		return datas;
+	}
+
+	public List<GymDTO> selectAllLocationCountAdmin(GymDTO gymDTO){
+		System.out.println("com.coma.app.biz.gym.selectAllLocationCountAdmin 시작");
+
+		//지역별 암벽장 개수 출력 // TODO 관리자 메인 페이지
+		List<GymDTO> datas=jdbcTemplate.query(ALL_LOCATION_COUNT_ADMIN,new GymCountRowMapper());
+		System.out.println("com.coma.app.biz.gym.selectAllLocationCountAdmin 성공");
+		return datas;
+	}
+
+	public List<GymDTO> selectAllAdmin(GymDTO gymDTO){
+		System.out.println("com.coma.app.biz.gym.selectAllAdmin 시작");
+
+		Object[] args= {gymDTO.getGym_min_num(),10};
+		//암벽장 관리 리스트 출력(페이지네이션) // TODO 암벽장 관리 페이지
+		List<GymDTO> datas=jdbcTemplate.query(ALL_ADMIN,args,new GymAdminMapperAll());
+		System.out.println("com.coma.app.biz.gym.selectAllAdmin 성공");
 		return datas;
 	}
 }
@@ -168,6 +219,28 @@ class GymCountRowMapper implements RowMapper<GymDTO> {
 		System.out.print("GymCountRowMapper DB에서 가져온 데이터 {");
 		gymDTO.setGym_total(rs.getInt("GYM_TOTAL"));
 		System.err.print("gym_total = ["+gymDTO.getGym_total()+"]");
+		System.out.println("}");
+		return gymDTO;
+	};
+}
+
+class GymAdminMapperAll implements RowMapper<GymDTO> {
+
+	public GymDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		GymDTO gymDTO=new GymDTO();
+		System.out.print("GymCountRowMapper DB에서 가져온 데이터 {");
+		gymDTO.setGym_profile(rs.getString("GYM_PROFILE"));
+		System.err.println("gym_profile = ["+gymDTO.getGym_profile()+"]");
+		gymDTO.setGym_name(rs.getString("GYM_NAME"));
+		System.err.println("gym_name = ["+gymDTO.getGym_name()+"]");
+		gymDTO.setGym_location(rs.getString("GYM_LOCATION"));
+		System.err.println("gym_location = ["+gymDTO.getGym_location()+"]");
+		gymDTO.setGym_price(rs.getInt("GYM_PRICE"));
+		System.err.println("gym_price = ["+gymDTO.getGym_price()+"]");
+		gymDTO.setGym_description(rs.getString("GYM_DESCRIPTION"));
+		System.err.println("gym_description = ["+gymDTO.getGym_description()+"]");
+		gymDTO.setGym_admin_battle_verified(rs.getString("GYM_ADMIN_BATTLE_VERIFIED"));
+		System.err.print("gym_admin_battle_verified = ["+gymDTO.getGym_admin_battle_verified()+"]"); // TODO GYM_VERIFIED 추가
 		System.out.println("}");
 		return gymDTO;
 	};
