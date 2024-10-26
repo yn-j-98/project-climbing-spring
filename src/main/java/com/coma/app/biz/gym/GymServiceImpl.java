@@ -10,10 +10,20 @@ public class GymServiceImpl implements GymService {
 	
 	@Autowired
 	private GymDAO gymDAO;
-	
+
 	@Override
 	public List<GymDTO> selectAll(GymDTO gymDTO) {
 		return this.gymDAO.selectAll(gymDTO);
+	}
+
+	@Override
+	public List<GymDTO> selectAllLocationCountAdmin(GymDTO gymDTO) {
+		return this.gymDAO.selectAllLocationCountAdmin(gymDTO);
+	}
+
+	@Override
+	public List<GymDTO> selectAllAdmin(GymDTO gymDTO) {
+		return this.gymDAO.selectAllAdmin(gymDTO);
 	}
 
 	@Override
@@ -22,8 +32,18 @@ public class GymServiceImpl implements GymService {
 	}
 
 	@Override
+	public GymDTO selectOneCount(GymDTO gymDTO) {
+		return this.gymDAO.selectOneCount(gymDTO);
+	}
+
+	@Override
 	public boolean insert(GymDTO gymDTO) {
 		return this.gymDAO.insert(gymDTO);
+	}
+
+	@Override
+	public boolean insertAdmin(GymDTO gymDTO) {
+		return this.gymDAO.insertAdmin(gymDTO);
 	}
 
 	@Override
@@ -35,5 +55,4 @@ public class GymServiceImpl implements GymService {
 	public boolean delete(GymDTO gymDTO) {
 		return this.gymDAO.delete(gymDTO);
 	}
-
 }

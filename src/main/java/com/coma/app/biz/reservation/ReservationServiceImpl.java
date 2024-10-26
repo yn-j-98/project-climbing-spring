@@ -10,15 +10,40 @@ public class ReservationServiceImpl implements ReservationService{
 
 	@Autowired
 	ReservationDAO reservationDAO;
-	
+
 	@Override
 	public List<ReservationDTO> selectAll(ReservationDTO reservationDTO) {
 		return this.reservationDAO.selectAll(reservationDTO);
 	}
 
 	@Override
+	public List<ReservationDTO> selectAllCountMonthAdmin(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectAllCountMonthAdmin(reservationDTO);
+	}
+
+	@Override
+	public List<ReservationDTO> selectAllAdmin(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectAllAdmin(reservationDTO);
+	}
+
+	@Override
 	public ReservationDTO selectOne(ReservationDTO reservationDTO) {
 		return this.reservationDAO.selectOne(reservationDTO);
+	}
+
+	@Override
+	public ReservationDTO selectOneCount(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectOneCount(reservationDTO);
+	}
+
+	@Override
+	public ReservationDTO selectOneReservation(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectOneReservation(reservationDTO);
+	}
+
+	@Override
+	public ReservationDTO selectOneCountYearAdmin(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectOneCountYearAdmin(reservationDTO);
 	}
 
 	@Override
@@ -35,4 +60,7 @@ public class ReservationServiceImpl implements ReservationService{
 	public boolean delete(ReservationDTO reservationDTO) {
 		return this.reservationDAO.delete(reservationDTO);
 	}
+
+	
+
 }
