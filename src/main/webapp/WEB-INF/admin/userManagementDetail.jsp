@@ -40,7 +40,7 @@
           <h1 class="text-center"> ${data.member_name}님 회원 변경 </h1>
         </div>
         <div class="card-body p-3">
-          <form action="#" method="POST"><%--TODO action명 변경해야함--%>
+          <form action="userManagementDetail.do" method="POST">
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <div class="form-floating">
@@ -105,7 +105,7 @@
                   </div>
                   <div class="col-md-2 mt-auto">
                     <div class="row w-100 justify-content-end">
-                      <button type="button" onclick='window.location.href = "userManagement.jsp"' class="btn btn-primary col-md-5 m-1">취소</button>
+                      <button type="button" onclick='window.location.href = "userManagement.do"' class="btn btn-primary col-md-5 m-1">취소</button>
                       <button type="submit" class="btn btn-primary col-md-5 m-1">등록</button>
                     </div>
                   </div>

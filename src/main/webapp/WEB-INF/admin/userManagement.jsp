@@ -76,10 +76,9 @@
     <div class="d-flex justify-content-between align-items-center">
       <div class="col-md-2 ms-auto">
         <select class="form-select form-control" id="member-select" name="search_keyword">
-          <option value="NUM" selected>회원 번호</option>
-          <option value="MEMBERNAME" >회원 이름</option>
-          <option value="MEMBERID" >회원 아이디</option>
-          <option value="DATE" >가입 날짜</option>
+          <option value="MEMBERNAME" ${search_keyword == 'MEMBERNAME'?'selected':''}>회원 이름</option>
+          <option value="MEMBERID" ${search_keyword == 'MEMBERID'?'selected':''}>회원 아이디</option>
+          <option value="DATE" ${search_keyword == 'DATE'?'selected':''}>가입 날짜</option>
         </select>
       </div>
       <div class="col-md-7">
@@ -115,7 +114,7 @@
             <c:forEach items="${data}" var="member" varStatus="status">
               <tr class="member-table-tr">
                 <th scope="row" class="member-num" id="member_num">${status.count}</th>
-                <td><a class="submenu text-dark col-md-1 member-id" href="userManagementDetail.jsp">${data.member_id}</a></td>
+                <td><a class="submenu text-dark col-md-1 member-id" href="userManagementDetail.do">${data.member_id}</a></td>
                 <td>${data.member_name}</td>
                 <td>${data.member_registration_date}</td>
                 <td><button class="btn btn-danger member_delete">삭제</button></td>

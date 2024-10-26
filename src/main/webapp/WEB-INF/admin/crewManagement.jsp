@@ -30,7 +30,7 @@
 
 </head>
 <body class="user-select-none">
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 
 <div class="main-panel p-2 overflow-x-hidden">
   <div class="nav-toggle position-absolute top-0 start-0">
@@ -44,16 +44,15 @@
   </div>
 
   <!-- FIXME 검색 코드 시작 -->
-  <!--TODO action 명 변경해야함-->
-  <form action="" method="GET" class="row mb-3" id="member-search-form">
+  <form action="crewManagement.do" method="GET" class="row mb-3" id="member-search-form">
     <div class="row mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <div class="col-md-2 ms-auto">
           <select class="form-select form-control" id="member-select" name="search_keyword">
-            <option value="NUM" selected>크루전 번호</option>
-            <option value="MEMBERNAME" >암벽장 이름</option>
-            <option value="MEMBERID" >경기 날짜</option>
-            <option value="DATE" >크루전 생성일</option>
+            <option value="NUM" ${search_keyword = 'NUM' ? 'selected' : ''}>크루전 번호</option>
+            <option value="MEMBERNAME" ${search_keyword = 'MEMBERNAME' ? 'selected' : ''}>암벽장 이름</option>
+            <option value="MEMBERID" ${search_keyword = 'MEMBERID' ? 'selected' : ''}>경기 날짜</option>
+            <option value="DATE" ${search_keyword = 'DATE' ? 'selected' : ''}>크루전 생성일</option>
           </select>
         </div>
         <div class="col-md-7">
@@ -89,7 +88,7 @@
           <c:forEach items="${datas}" var="data">
             <tr class="battle-table-tr">
               <th scope="row" class="battle_num">${data.battle_num}</th>
-              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.jsp?battle_num=${data.battle_num}">${data.gym_name}</a></td>
+              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.do?battle_num=${data.battle_num}">${data.gym_name}</a></td>
               <td class="battle_game_date">${data.battle_game_date}</td>
               <td class="battle_registration_date">${data.battle_registration_date}</td>
               <input type="hidden" class="battle_isGame" value="${isGame}"/>
@@ -120,8 +119,7 @@
 </div>
 
 <!-- FIXME modal 코드 시작-->
-<!-- TODO action 명 변경 해야함 -->
-<form action="" method="POST" id="modal-form">
+<form action="crewManagement.do" method="POST" id="modal-form">
   <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="gym-modal-title" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content rounded-4">
