@@ -11,6 +11,36 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class BoardDAO {
+
+	/* 관리자 페이지 쿼리문 */
+
+	//todo
+	// 메인페이지 - selectOne
+	// 게시판 전체 게시물수 게산되어서 나오기
+	private final String ONE_BOARD_TOTAL = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD";
+
+	//todo
+	// 메인 페이지 - selectAll
+	// 게시판 최신글 5개 제목과 내용 나오기
+	private final String All_RECENT_BOARD5 = "SELECT BOARD_TITLE,BOARD_CONTENT FROM BOARD ORDER BY BOARD_NUM DESC LIMIT 5";
+
+	//todo
+	// 게시판 관리 페이지 - selectAll
+	// SelectBox 전체로 검색가능
+	private final String ALL_SEARCH_BOARD = "SELECT BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID\n" +
+			"FROM BOARD\n" +
+			"WHERE BOARD_TITLE LIKE '%키워드%'\n" +
+			"   OR BOARD_CONTENT LIKE '%키워드%'\n" +
+			"   OR BOARD_LOCATION LIKE '%키워드%'\n" +
+			"   OR BOARD_WRITER_ID LIKE '%키워드%'";
+
+	//todo
+	// 게시판 관리 페이지 - delete
+	// delete 버튼 클릭 시 게시판 삭제
+	private final String DELETE_SELECTED_BOARD = "DELETE B, R FROM BOARD B LEFT JOIN REPLY R ON B.BOARD_NUM = R.BOARD_ID WHERE B.BOARD_ID = ?";
+
+	/* 사용자 페이지 쿼리문 */
+
 	// 전체 글 출력(ALL) 페이지네이션 윈도우함수 ROW_NUMBER()사용 board_min_num, board_max_num
 	//MySQL은 서브쿼리 별칭 지정이 필수적
 	private final String ALL = "SELECT \n" +
