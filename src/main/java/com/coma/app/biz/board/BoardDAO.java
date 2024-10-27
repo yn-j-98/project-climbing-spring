@@ -264,6 +264,10 @@ public class BoardDAO {
 		return true;
 	}
 
+	public boolean deleteSelectedBoard(BoardDTO boardDTO) {
+
+	}
+
 	//게시글 PK 검색 BOARD_NUM
 	public BoardDTO selectOne(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOne 시작");
@@ -372,7 +376,8 @@ public class BoardDAO {
 		return result;
 	}
 
-
+	// 게시판 관리 페이지 - selectAll
+	// SelectBox 전체로 검색가능
 	public List<BoardDTO> selectAllSearchBoard(BoardDTO boardDTO) {
 		List<BoardDTO> result = null;
 		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'")};
@@ -903,6 +908,43 @@ class BoardRowMapperAllRecentBoard5 implements RowMapper<BoardDTO>{
 	}
 }
 
+class BoardRowMapperAllSearchBoard implements RowMapper<BoardDTO>{
+	@Override
+	public BoardDTO mapRow(ResultSet rs, int i) throws SQLException {
+		BoardDTO boardDTO = new BoardDTO();
+		try{
+			boardDTO.setBoard_title(rs.getString("BOARD_TITLE"));
+		} catch (SQLException e) {
+			System.err.println("Board_title = null");
+			boardDTO.setBoard_title(null);
+		}
+		try{
+			boardDTO.setBoard_content(rs.getString("BOARD_CONTENT"));
+		}catch (SQLException e) {
+			System.err.println("Board_content = null");
+			boardDTO.setBoard_content(null);
+		}
+		try{
+			boardDTO.setBoard_cnt(rs.getInt("BOARD_CNT"));
+		} catch (SQLException e) {
+			System.err.println("Board_cnt = 0");
+			boardDTO.setBoard_cnt(0);
+		}
+		try{
+			boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
+		} catch (SQLException e) {
+			System.err.println("Board_location = null");
+			boardDTO.setBoard_location(null);
+		}
+		try{
+			boardDTO.setBoard_writer_id(rs.getString("BOARD_WRITER_ID"));
+		}catch (SQLException e) {
+			System.err.println("Board_writer_id = null");
+			boardDTO.setBoard_writer_id(null);
+		}
+		return boardDTO;
+	}
+}
 
 
 
