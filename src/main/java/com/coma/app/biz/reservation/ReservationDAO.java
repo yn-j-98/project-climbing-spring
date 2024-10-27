@@ -104,56 +104,40 @@ public class ReservationDAO {
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
 	public boolean insert(ReservationDTO reservationDTO) {
-		System.out.println("com.coma.app.biz.reservation.insert 시작");
-
 		//예약 등록 RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE
 		int result=jdbcTemplate.update(INSERT,reservationDTO.getReservation_gym_num(), reservationDTO.getReservation_date(), reservationDTO.getReservation_member_id(), reservationDTO.getReservation_price());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.reservation.insert SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.reservation.insert 성공");
 		return true;
 	}
 
-	public boolean update(ReservationDTO reservationDTO) {
-		System.out.println("com.coma.app.biz.reservation.update 시작"); // TODO 여기없는 CRUD
+	public boolean update(ReservationDTO reservationDTO) { // TODO 여기없는 CRUD
 		return false;
 	}
 
 	public boolean delete(ReservationDTO reservationDTO) {
-		System.out.println("com.coma.app.biz.reservation.delete 시작");
-
 		//예약 취소 RESERVATION_NUM
 		int result=jdbcTemplate.update(DELETE, reservationDTO.getReservation_num());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.reservation.delete SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.reservation.delete 성공");
 		return true;
 	}
 
 	public ReservationDTO selectOne(ReservationDTO reservationDTO){
-		System.out.println("com.coma.app.biz.reservation.selectOne 시작");
-
 		ReservationDTO data=null;
 		Object[] args={reservationDTO.getReservation_num()};
-
 		try {
 			//PK로 예약 정보 찾기 RESERVATION_NUM
 			data=jdbcTemplate.queryForObject(ONE, args, new ReservationSelectRowMapperOne());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reservation.selectOne 실패");
 		}
-		System.out.println("com.coma.app.biz.reservation.selectOne 성공");
 		return data;
 	}
 
 	public ReservationDTO selectOneCount(ReservationDTO reservationDTO){
-		System.out.println("com.coma.app.biz.reservation.selectOneCount 시작");
-
 		ReservationDTO data=null;
 		Object[] args={reservationDTO.getReservation_gym_num(), reservationDTO.getReservation_date()};
 		try {
@@ -161,15 +145,11 @@ public class ReservationDAO {
 			data= jdbcTemplate.queryForObject(ONE_COUNT, args, new ReservationCountRowMapperOne());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reservation.selectOneCount SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reservation.selectOneCount 성공");
 		return data;
 	}
 
 	public ReservationDTO selectOneReservation(ReservationDTO reservationDTO){
-		System.out.println("com.coma.app.biz.reservation.selectOneReservation 시작");
-
 		ReservationDTO data=null;
 		Object[] args={reservationDTO.getReservation_member_id(), reservationDTO.getReservation_gym_num(), reservationDTO.getReservation_date()};
 		try {
@@ -177,30 +157,22 @@ public class ReservationDAO {
 			data= jdbcTemplate.queryForObject(ONE_RESERVATION, args, new ReservationSelectRowMapperOne());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reservation.selectOneReservation SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reservation.selectOneReservation 성공");
 		return data;
 	}
 
 	public ReservationDTO selectOneCountYearAdmin(ReservationDTO reservationDTO){
-		System.out.println("com.coma.app.biz.reservation.selectOneCountYearAdmin 시작");
-
 		ReservationDTO data=null;
 		try {
 			//최근 1년 예약 개수 출력 // TODO 관리자 메인 페이지
 			data= jdbcTemplate.queryForObject(ONE_COUNT_YEAR_ADMIN, new ReservationCountRowMapperOne());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reservation.selectOneCountYearAdmin SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reservation.selectOneCountYearAdmin 성공");
 		return data;
 	}
 
 	public List<ReservationDTO> selectAll(ReservationDTO reservationDTO){
-		System.out.println("com.coma.app.biz.reservation.selectAll 시작");
-
 		List<ReservationDTO> datas=null;
 		Object[] args={reservationDTO.getReservation_member_id()};
 		try {
@@ -208,40 +180,30 @@ public class ReservationDAO {
 			datas= jdbcTemplate.query(ALL, args, new ReservationRowMapperAll());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reservation.selectAll SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reservation.selectAll 성공");
 		return datas;
 	}
 
 	public List<ReservationDTO> selectAllCountMonthAdmin(ReservationDTO reservationDTO){
-		System.out.println("com.coma.app.biz.reservation.selectAllCountMonthAdmin 시작");
-
 		List<ReservationDTO> datas=null;
 		try {
 			//월별 예약수 출력 // TODO 관리자 메인 페이지
 			datas= jdbcTemplate.query(ALL_COUNT_MONTH_ADMIN, new ReservationCountMonthRowMapperAll());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reservation.selectAllCountMonthAdmin SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reservation.selectAllCountMonthAdmin 성공");
 		return datas;
 	}
 
 	public List<ReservationDTO> selectAllAdmin(ReservationDTO reservationDTO){
-		System.out.println("com.coma.app.biz.reservation.selectAllAdmin 시작");
-
 		List<ReservationDTO> datas=null;
-		Object[] args={reservationDTO.getReservation_min_num(),6};
+		Object[] args={reservationDTO.getPage(),6};
 		try {
 			//예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
 			datas= jdbcTemplate.query(ALL_ADMIN, args, new ReservationAdminRowMapperAll());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reservation.selectAllAdmin SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reservation.selectAllAdmin 성공");
 		return datas;
 	}
 }
@@ -251,8 +213,8 @@ class ReservationCountRowMapperOne implements RowMapper<ReservationDTO> {
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
 		System.out.print("DB에서 가져온 데이터 {");
-		reservationDTO.setReservation_total(rs.getInt("RESERVATION_TOTAL"));
-		System.err.print("reservation_total = ["+reservationDTO.getReservation_total()+"]");
+		reservationDTO.setTotal(rs.getInt("RESERVATION_TOTAL"));
+		System.err.print("reservation_total = ["+reservationDTO.getTotal()+"]");
 		System.out.println("}");
 		return reservationDTO;
 	};
@@ -265,8 +227,8 @@ class ReservationCountMonthRowMapperAll implements RowMapper<ReservationDTO> {
 		System.out.print("DB에서 가져온 데이터 {");
 		reservationDTO.setReservation_month(rs.getString("RESERVATION_MONTH"));
 		System.err.println("reservation_month = ["+reservationDTO.getReservation_month()+"]");
-		reservationDTO.setReservation_total(rs.getInt("RESERVATION_TOTAL"));
-		System.err.print("reservation_total = ["+reservationDTO.getReservation_total()+"]");
+		reservationDTO.setTotal(rs.getInt("RESERVATION_TOTAL"));
+		System.err.print("reservation_total = ["+reservationDTO.getTotal()+"]");
 		System.out.println("}");
 		return reservationDTO;
 	};
