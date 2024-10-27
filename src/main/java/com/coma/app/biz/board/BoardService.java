@@ -15,6 +15,7 @@ public interface BoardService {
 	BoardDTO selectOneSearchIdCount(BoardDTO boardDTO);
 	BoardDTO selectOneSearchTitleCount(BoardDTO boardDTO);
 	BoardDTO selectOneSearchNameCount(BoardDTO boardDTO);
+	BoardDTO selectOneBoardTotal(BoardDTO boardDTO);
 	boolean insert(BoardDTO boardDTO);
 	boolean updateContentTitle(BoardDTO boardDTO);
 	boolean updateCnt(BoardDTO boardDTO);

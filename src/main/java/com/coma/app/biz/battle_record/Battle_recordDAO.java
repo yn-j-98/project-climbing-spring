@@ -209,7 +209,7 @@ public class Battle_recordDAO{
 			result =  jdbcTemplate.queryForObject(ONE_BATTLE, args, new BattleRecordRowMapperOneBattle());
 
 		}catch(Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.battle_record.selectOneBattle 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.battle_record.selectOneBattle 실패 : ONE_BATTLE = " + ONE_BATTLE);
 			e.printStackTrace();
 		}
 		return result;
@@ -222,7 +222,7 @@ public class Battle_recordDAO{
 		try{
 			result = jdbcTemplate.queryForObject(ONE_BATTLE_RECORD, args, new BattleRecordRowMapperOneBattleRecord());
 		}catch(Exception e){
-			System.err.println("	[에러]com.coma.app.biz.battle_record.selectOneBattleRecord 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.battle_record.selectOneBattleRecord 실패 : ONE_BATTLE_RECORD =" + ONE_BATTLE_RECORD);
 			e.printStackTrace();
 		}
 		return result;
@@ -236,7 +236,7 @@ public class Battle_recordDAO{
 		try{
 			result = jdbcTemplate.queryForObject(ONE_COUNT_CREW, args, new BattleRecordRowMapperOneCountCrew());
 		}catch(Exception e){
-			System.err.println("	[에러]com.coma.app.biz.battle_record.selectOneCountCrew 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.battle_record.selectOneCountCrew 실패 : ONE_COUNT_CREW =" + ONE_COUNT_CREW);
 			e.printStackTrace();
 		}
 		return result;
@@ -250,7 +250,7 @@ public class Battle_recordDAO{
 		try{
 			result = jdbcTemplate.query(ALL_WINNER, args, new BattleRecordRowMapperAllWinner());
 		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllWinner 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllWinner 실패 : ALL_WINNER = " + ALL_WINNER);
 			e.printStackTrace();
 		}
 		return result;
@@ -264,7 +264,7 @@ public class Battle_recordDAO{
 		try{
 			result = jdbcTemplate.query(ALL_PARTICIPANT_CREW, args, new BattleRecordRowMapperAllParticipantCrew());
 		}catch(Exception e){
-			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllParticipantCrew 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllParticipantCrew 실패 : ALL_PARTICIPANT_CREW = " + ALL_PARTICIPANT_CREW);
 			e.printStackTrace();
 		}
 		return result;
@@ -278,7 +278,7 @@ public class Battle_recordDAO{
 		try{
 			result = jdbcTemplate.query(ALL_PARTICIPANT_BATTLE, args, new BattleRecordRowMapperAllParticipantBattle());
 		}catch(Exception e){
-			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllParticipantBattle 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllParticipantBattle 실패 : ALL_PARTICIPANT_BATTLE = " + ALL_PARTICIPANT_BATTLE);
 			e.printStackTrace();
 		}
 		return result;
@@ -292,7 +292,7 @@ public class Battle_recordDAO{
 		try {
 			result = jdbcTemplate.query(ALL_WINNER_PARTICIPANT_GYM, args, new BattleRecordRowMapperAllWinnerParticipantGym());
 		}catch(Exception e){
-			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllWinnerParticipantGym 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.battle_record.selectAllWinnerParticipantGym 실패 : ALL_WINNER_PARTICIPANT_GYM = " + ALL_WINNER_PARTICIPANT_GYM);
 			e.printStackTrace();
 		}
 		return result;
