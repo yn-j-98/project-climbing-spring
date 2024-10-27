@@ -150,7 +150,7 @@
 				<div class="col-md-10 d-flex justify-content-center">
 					<nav aria-label="Page navigation">
 						<input type="hidden" id="totalCount" value="${total}">
-						<input type="hidden" id="currentPage" value="${Page}">
+						<input type="hidden" id="currentPage" value="${page}">
 						<ul id="pagination" class="pagination justify-content-center">
 
 						</ul>
