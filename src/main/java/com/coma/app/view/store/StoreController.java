@@ -59,7 +59,5 @@ public class StoreController {
 			model.addAttribute("ProductDatas", ProductDatas); // 해당 페이지의 상품 목록
 		}
 		return "views/store";
-
-		return "views/store";
 	}
 }

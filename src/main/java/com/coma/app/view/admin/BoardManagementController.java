@@ -40,7 +40,7 @@ public class BoardManagementController {
         //-----------------------------------------------------------------------------
 
         // 페이지네이션
-        int page = BoardDTO.getPage();
+        int page = BoardDTO.getPage(); 
         int size = 10; // 한 페이지에 표시할 게시글 수
         if (page <= 0) { // 페이지가 0일 때 (npe방지)
             page = 1;
