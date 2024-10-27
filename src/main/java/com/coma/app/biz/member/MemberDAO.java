@@ -378,10 +378,10 @@ public class MemberDAO {
 
 	public List<MemberDTO> selectAllSearchAdmin(MemberDTO memberDTO) {
 		List<MemberDTO> datas = null;
-		Object[] args = {memberDTO.getPage(),10};
+		Object[] args = {memberDTO.getMember_min_num(),10};
 		try {
 			// 회원 검색(페이지네이션) // TODO 회원 관리 페이지
-			datas = jdbcTemplate.query(ALL_SEARCH_ADMIN, new MemberSelectAllSearchAdmin());
+			datas = jdbcTemplate.query(ALL_SEARCH_ADMIN, args, new MemberSelectAllSearchAdmin());
 		}
 		catch (Exception e) {
 		}
@@ -390,7 +390,7 @@ public class MemberDAO {
 
 	public List<MemberDTO> selectAllSearchIdAdmin(MemberDTO memberDTO) {
 		List<MemberDTO> datas = null;
-		Object[] args = {memberDTO.getPage(),10};
+		Object[] args = {memberDTO.getMember_search_content(),memberDTO.getMember_min_num(),10};
 		try {
 			// 회원 아이디로 검색(페이지네이션) // TODO 회원 관리 페이지
 			datas = jdbcTemplate.query(ALL_SEARCH_ID_ADMIN, args, new MemberSelectAllSearchAdmin());
@@ -402,7 +402,7 @@ public class MemberDAO {
 
 	public List<MemberDTO> selectAllSearchDateAdmin(MemberDTO memberDTO) {
 		List<MemberDTO> datas = null;
-		Object[] args = {memberDTO.getPage(),10};
+		Object[] args = {memberDTO.getMember_search_content(),memberDTO.getMember_min_num(),10};
 		try {
 			// 회원 가입날짜로 검색(페이지네이션) // TODO 회원 관리 페이지
 			datas = jdbcTemplate.query(ALL_SEARCH_DATE_ADMIN, args, new MemberSelectAllSearchAdmin());
