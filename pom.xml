@@ -162,7 +162,12 @@
             <artifactId>activation</artifactId>
             <version>1.1.1</version> <!-- JAF -->
         </dependency>
-
+        <!--롬복 라이브러리 추가-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
 
 
