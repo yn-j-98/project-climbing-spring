@@ -58,7 +58,7 @@
 
 </head>
 <body class="user-select-none">
-<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
 
 <div class="main-panel p-2 overflow-x-hidden">
   <div class="nav-toggle position-absolute top-0 start-0">

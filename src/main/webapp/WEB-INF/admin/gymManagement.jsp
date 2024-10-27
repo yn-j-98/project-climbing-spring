@@ -22,8 +22,7 @@
     <link rel="stylesheet" href="assets/css/kaiadmin.css"/>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <!--페이지네이션 외부 스크립트-->
-    <script src="../../js/pagination.js"></script>
-
+    <script src="js/pagenation.js"></script>
     <!-- sweetAlert JS FILE -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
@@ -80,7 +79,7 @@
     </style>
 </head>
 <body>
-<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
 <div class="main-panel flex-grow-1 p-4">
     <div class="nav-toggle position-absolute top-0 start-0">
         <button class="sidenav-toggler btn btn-icon btn-round btn-white h-100 w-25">
@@ -105,8 +104,8 @@
                         <%--TODO 컨디션 안쓴다면 ID 변경--%>
                         <select class="form-select" id="search_keyword">
                             <option  ${gym_search_keyword == "ALL" ? "selected":''} value="ALL">전체</option>
-                            <option ${gym_search_keyword == "adminCertified" ? "selected":''} value="adminCertifiedC">승인</option>
-                            <option ${gym_search_keyword == "adminUnCertified" ? "selected":''} value="adminUnCertified">비승인</option>
+                            <option ${gym_search_keyword == "adminCertified" ? "selected":''} value="adminCertifiedC">등록</option>
+                            <option ${gym_search_keyword == "adminUnCertified" ? "selected":''} value="adminUnCertified">비등록</option>
                         </select>
                         <label for="search_keyword">검색할 목록</label>
                     </div>
