@@ -29,7 +29,7 @@ public class LoginController {
 
 	@LoginCheck
 	@PostMapping("/login.do") // 로그인 처리
-	public String login(Model model, MemberDTO memberDTO,HttpServletResponse response, HttpServletRequest request, HttpSession session) {
+	public String login(MemberDTO memberDTO,HttpServletResponse response, HttpServletRequest request, HttpSession session) {
 		// 로그인 정보가 있는지 확인
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 
