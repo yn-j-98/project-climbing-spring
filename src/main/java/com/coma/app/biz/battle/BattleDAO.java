@@ -12,6 +12,85 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BattleDAO {
 
+	//todo
+	// 메인페이지 - selectOne
+	// 활성화되어 있는 크루전 count(*)
+	private final String ONE_COUNT_ACTIVE_BATTLE = "SELECT COUNT(*) AS BATTLE_TOTAL\n" +
+			"FROM battle\n" +
+			"WHERE BATTLE_STATUS = 'T'";
+
+	//todo
+	// 크루전 관리 페이지 - selectAll
+	// selectBox 크루전 번호로 검색
+	private final String All_SEARCH_BATTLE_NUM = "SELECT\n" +
+			"  BATTLE_NUM,\n" +
+			"  BATTLE_GYM_NUM,\n" +
+			"  BATTLE_GAME_DATE\n" +
+			"  BATTLE_REGISTRATION_DATE\n" +
+			"  BATTLE_STATUS\n" +
+			"FROM\n" +
+			"  BATTLE\n" +
+			"WHERE\n" +
+			"  BATTLE_NUM = ?";
+
+	//todo
+	// 크루전 관리 페이지 - selectAll
+	// selectBox 암벽장 이름으로 검색
+	private final String All_SEARCH_BATTLE_NAME = "SELECT\n" +
+			"  BATTLE.BATTLE_NUM,\n" +
+			"  BATTLE.BATTLE_GYM_NUM,\n" +
+			"  BATTLE.BATTLE_GAME_DATE,\n" +
+			"  BATTLE.BATTLE_REGISTRATION_DATE,\n" +
+			"  BATTLE.BATTLE_STATUS\n" +
+			"FROM\n" +
+			"  BATTLE\n" +
+			"  JOIN GYM ON BATTLE.BATTLE_GYM_NUM = GYM.GYM_NUM\n" +
+			"WHERE\n" +
+			"  GYM.GYM_NAME LIKE CONCAT('%', ? ,'%')";
+
+	//todo
+	// 크루전 관리 페이지 - selectAll
+	// selctBox 크루전 진행 날짜
+
+	//todo
+	// 크루전 관리 페이지 - selectAll
+	// 크루전 전체 목록 출력
+	private final String All_BATTLE = "SELECT\n" +
+			"  BATTLE_NUM,\n" +
+			"  BATTLE_GYM_NUM,\n" +
+			"  BATTLE_REGISTRATION_DATE,\n" +
+			"  BATTLE_GAME_DATE,\n" +
+			"  BATTLE_STATUS\n" +
+			"FROM\n" +
+			"  BATTLE";
+
+	//todo
+	// 크루전 정보 등록 모달 - selectAll
+	// 승리 크루 크루명 전체 출력
+	private final String All_WIN_BATTLE = "SELECT\n" +
+			"  C.CREW_NAME\n" +
+			"FROM\n" +
+			"  BATTLE_RECORD BR\n" +
+			"  JOIN CREW C ON BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\n" +
+			"WHERE\n" +
+			"  BR.BATTLE_RECORD_IS_WINNER = 'T'";
+
+	//todo
+	// 크루전 정보 등록 모달 - selectAll
+	// 선택된 크루명의 크루 멤버 목록 전체 출력
+	private final String All_CREW_MEMBER_NAME = "SELECT\n" +
+			"  M.MEMBER_NAME\n" +
+			"FROM\n" +
+			"  BATTLE_RECORD BR\n" +
+			"  JOIN CREW C ON BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\n" +
+			"  JOIN MEMBER M ON M.MEMBER_CREW_NUM = C.CREW_NUM\n" +
+			"WHERE\n" +
+			"  BR.BATTLE_RECORD_IS_WINNER = 'T'";
+
+	//todo
+	// 크루전 정보 등록 모달 - insert
+	// 모달
+
 	//(페이지네이션)활성화 되있는 크루전 전체 출력 내림차순 model_battle_min_num, model_battle_max_num
 	private final String ALL_ACTIVE = "SELECT \r\n"
 			+ "				BATTLE_NUM,\r\n"
