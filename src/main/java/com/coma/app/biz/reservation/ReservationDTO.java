@@ -18,10 +18,11 @@ public class ReservationDTO {
 	//DTO에만 존재하는 데이터 
 	private int reservation_cnt;          // 예약인원
 	private int reservation_point_status; // Y,N 개인 포인트 차감 사용여부 
-	private int reservation_total;        // 예약 개수
+	private int total;        // 예약 개수
+	private int reservation_use_point;	// 예약 때 사용한 포인트
 	private String reservation_gym_name;        // 예약 암벽장 이름
 	private String reservation_month;	// 예약한 년도-월 // TODO 관리자 페이지
-	private String reservation_page;	// 페이지네이션
+	private String page;	// 페이지네이션
 	private String reservation_search_keyword;	// 예약 검색 목록
 	private String reservation_search_content;	// 예약 검색 내용
 

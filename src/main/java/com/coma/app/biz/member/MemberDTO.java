@@ -30,10 +30,10 @@ public class MemberDTO {
 	private String member_crew_profile;	//사용자가 속한 크루 이미지 url
 	private String member_crew_leader;	//사용자가 속한 크루장 pk
 	private String VIEW_AUTO_LOGIN; // 자동로그인 체크
-	private int VIEW_USE_POINT;
-	private int member_total;	// 사용자 인원 수 // TODO 관리자페이지
+	private int member_use_point;	// 사용자가 사용한 포인트
+	private int total;	// 사용자 인원 수 // TODO 관리자페이지
 	private String member_reservation_month;	// 사용자가 가입한 년도-월 // TODO 관리자페이지
-	private int member_page;	// 사용자 페이지네이션
+	private int page;	// 사용자 페이지네이션
 	private int member_search_keyword;	// 사용자 검색 목록
 	private int member_search_content;	// 사용자 검색 내용
 }

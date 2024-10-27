@@ -23,30 +23,23 @@ public class GradeDAO {
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
 	public boolean insert(GradeDTO gradeDTO) {
-		System.out.println("com.coma.app.biz.grade.insert 시작");
 		//데이터 추가 GRADE_PROFILE, GRADE_NAME, GRADE_MIN_POINT, GRADE_MAX_POINT
 		int result=jdbcTemplate.update(INSERT,gradeDTO.getGrade_profile(),gradeDTO.getGrade_name(),gradeDTO.getGrade_min_point(),gradeDTO.getGrade_max_point());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.grade.insert SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.grade.insert 성공");
 		return true;
 	}
 
 	public boolean update(GradeDTO gradeDTO) { // TODO 없는 CRUD
-		System.out.println("com.coma.app.biz.grade.update 시작");
 		return false;
 	}
 
 	public boolean delete(GradeDTO gradeDTO) { // TODO 없는 CRUD
-		System.out.println("com.coma.app.biz.grade.delete 시작");
 		return false;
 	}
 
 	public GradeDTO selectOne(GradeDTO gradeDTO){
-		System.out.println("com.coma.app.biz.grade.selectOne 시작");
-
 		GradeDTO data= null;
 		Object[] args = {gradeDTO.getGrade_num()};
 		try {
@@ -54,24 +47,18 @@ public class GradeDAO {
 			data= jdbcTemplate.queryForObject(ONE,args,new GradeRowMapper());
 		}
 		catch(Exception e) {
-			System.out.println("com.coma.app.biz.grade.selectOne SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.grade.selectOne 성공");
 		return data;
 	}
 
 	public List<GradeDTO> selectAll(GradeDTO gradeDTO){
-		System.out.println("com.coma.app.biz.grade.selectAll 시작");
-
 		List<GradeDTO> datas = null;
 		try {
 			//max_point기준으로 내림차순 정렬해서 출력
 			datas = jdbcTemplate.query(ALL_DESC, new GradeRowMapper());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.grade.selectAll SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.grade.selectAll 성공");
 		return datas;
 	}
 }

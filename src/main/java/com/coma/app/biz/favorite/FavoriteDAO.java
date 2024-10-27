@@ -22,36 +22,28 @@ public class FavoriteDAO {
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
 	public boolean insert(FavoriteDTO favoriteDTO) {
-		System.out.println("com.coma.app.biz.favorite.insert 시작");
 		//좋아요 추가 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
 		int result=jdbcTemplate.update(INSERT, favoriteDTO.getFavorite_member_id(), favoriteDTO.getFavorite_gym_num());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.favorite.insert SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.favorite.insert 성공");
 		return true;
 	}
 
 	public boolean update(FavoriteDTO favoriteDTO) { // TODO 없는 CRUD
-		System.out.println("com.coma.app.biz.favorite.update 시작");
 		return false;
 	}
 
 	public boolean delete(FavoriteDTO favoriteDTO) {
-		System.err.println("com.coma.app.biz.favorite.delete 시작");
 		//좋아요 삭제 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
 		int result=jdbcTemplate.update(DELETE, favoriteDTO.getFavorite_member_id(), favoriteDTO.getFavorite_gym_num());
 		if(result<=0) {
-			System.err.println("com.coma.app.biz.favorite.delete SQL문 실패");
 			return false;
 		}
-		System.err.println("com.coma.app.biz.favorite.delete 성공");
 		return true;
 	}
 
 	public FavoriteDTO selectOne(FavoriteDTO favoriteDTO){
-		System.out.println("com.coma.app.biz.favorite.selectOne 시작");
 		//좋아요 불러오기 FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
 		FavoriteDTO data = null;
 		Object[] args = { favoriteDTO.getFavorite_member_id(), favoriteDTO.getFavorite_gym_num() };
@@ -59,16 +51,12 @@ public class FavoriteDAO {
 			data= jdbcTemplate.queryForObject(ONE,args,new FavoriteRowMapper());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.favorite.selectOne SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.favorite.selectOne 성공");
 		return data;
 	}
 
 	public List<FavoriteDTO> selectAll(FavoriteDTO favoriteDTO){ // TODO 없는 CRUD
-		System.out.println("favorite.FavoriteDAO.selectAll 시작");
 		List<FavoriteDTO> datas = null;
-
 		return datas;
 	}
 }
