@@ -49,7 +49,7 @@
    </bean>
 
    <!-- LoginCheck 빈 정의 -->
-   <bean id="LoginCheck" class="com.coma.app.view.member.LoginCheck" />
+   <bean id="LoginCheck"/>
 
    <!-- logincheck 주입 -->
    <bean id="LoginAspect" class="com.coma.app.view.member.LoginAspect">

@@ -35,9 +35,6 @@ public class RankingController {
 	public String crewRank(MemberDTO memberDTO, GradeDTO gradeDTO, Model model) {
 		//크루 랭킹을 model에 요청 point 순으로 selectAll 예정
 		//랭킹 페이지가 두개 이기 때문에 model에 condition 값 전달
-		
-		//TODO 컨디션값 받아서 수정해야함
-		memberDTO.setMember_condition("MEMBER_ALL_CREW_RANK");
 
 		//요청 값 : 전체 point / 등급 이미지 / 크루 이름 / 크루장 / 크루원명
 		List<MemberDTO> member_datas = this.memberService.selectAllCrewRank(memberDTO);
@@ -78,7 +75,6 @@ public class RankingController {
 		//개인 랭킹을 model에 요청 point 요청 순으로 selectAll 예정 
 		//랭킹 페이지가 두개 이기 때문에 model에 condition 값 조정 후 진행
 
-		memberDTO.setMember_condition("MEMBER_SEARCH_RANK");
 
 		//요청 값 : 전체 point / 등급 이미지 / 사용자 이름
 		List<MemberDTO> member_datas = this.memberService.selectAllSearchRank(memberDTO);
