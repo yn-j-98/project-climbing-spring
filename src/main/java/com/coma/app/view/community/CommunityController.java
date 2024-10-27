@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -23,52 +24,27 @@ public class CommunityController{
     private BoardService boardService;
 
 
-    @RequestMapping(value="/community.do", method=RequestMethod.GET)
+    @GetMapping(value="/community.do")
     public String community(HttpServletRequest request, HttpServletResponse response, BoardDTO boardDTO, Model model) {
-//        ActionForward forward = new ActionForward();
-//        String path = "communityRegions.jsp"; // 전체 글 페이지로 이동
-//        boolean flagRedirect = false; // 포워드 방식 사용 여부 설정 (false = forward 방식)
 
         String search_Keyword = boardDTO.getBoard_searchKeyword(); // 검색 키워드
 
 //        System.out.println("(CommunityPageAction.java 로그) 검색 키워드 : "+condition);
 
-//        String keyword = request.getParameter("VIEW_BOARD_KEYWORD"); // 검색 내용
-//        System.out.println("(CommunityPageAction.java 로그) 검색 내용 : "+keyword);
-//
-//        int pageNum = 1; // 페이지 번호 초기화
-        // 페이지네이션 부분
-//        if(request.getParameter("page") != null) {
-//            pageNum = Integer.parseInt(request.getParameter("page")); // 페이지 번호가 있을 경우 변환하여 저장
-//        }
+        System.out.println("(Community 로그) 검색 내용 : "+search_Keyword);
+
         int pageNum = boardDTO.getPage();//요거 필요
         int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
         int minBoard = 1; // 최소 게시글 수 초기화
 
         minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
         int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
+        if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
+            pageNum = 1;
+        }
 
 
-        System.out.println("(CommunityPageAction.java 로그) 현재 페이지 번호 : "+pageNum);
-//        int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
-//        int minBoard = 1; // 최소 게시글 수 초기화
-//        int maxBoard = 1; // 최대 게시글 수 초기화
-//
-//        // 페이지 번호에 따라 최소 및 최대 게시글 수 설정
-//        if(pageNum <= 1) {
-//            // 페이지 번호가 1 이하일 경우
-//            minBoard = 1; // 최소 게시글 번호를 1로 설정
-//            maxBoard = minBoard * boardSize; // 최대 게시글 번호 계산
-//        }
-//        else {
-//            // 페이지 번호가 2 이상일 경우
-//            minBoard = ((pageNum - 1) * boardSize) + 1; // 최소 게시글 번호 계산
-//            maxBoard = pageNum * boardSize; // 최대 게시글 번호 계산
-//        }
-//
-//        int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
-//        BoardDTO boardDTO = new BoardDTO(); // 게시글 DTO 객체 생성
-//        BoardDAO boardDAO = new BoardDAO(); // 게시글 DAO 객체 생성
+        System.out.println("(Community로그) 현재 페이지 번호 : "+pageNum);
 
         // 검색 조건과 키워드가 있는지 확인
 
@@ -80,15 +56,15 @@ public class CommunityController{
                 // 아이디로 검색했을 때
 //                boardDTO.setBoard_condition("BOARD_ALL_SEARCH_PATTERN_ID"); // 아이디검색 컨디션
 
-//                System.out.println("(CommunityPageAction.java 로그) SEARCH_ID model로 전달항 boardDTO : "+boardDTO);//로그
+                System.out.println("(Community 로그) SEARCH_ID model로 전달할 boardDTO : "+boardDTO);//로그
                 List<BoardDTO> boardList = boardService.selectAllSearchPatternId(boardDTO);
 //                boardDTO.setBoard_condition("BOARD_ONE_SEARCH_ID_COUNT");
-//                System.out.println("(CommunityPageAction.java 로그) SEARCH_ID model로 전달항 boardCount : "+boardCount);//로그
 
                 BoardDTO boardCount = boardService.selectOneSearchIdCount(boardDTO);//
                 listNum = boardCount.getBoard_total();//게시글의 전체 개수
+                System.out.println("(Community'' 로그) SEARCH_ID model로 전달할 boardCount : "+boardCount);//로그
 
-                System.out.println("(CommunityPageAction.java 로그) 전체 페이지 개수 (아이디 검색) : "+listNum);//로그
+                System.out.println("(Community 로그) 전체 페이지 개수 (아이디 검색) : "+listNum);//로그
 
                 model.addAttribute("BOARD", boardList);
 
@@ -119,21 +95,19 @@ public class CommunityController{
                 // 글 제목으로 검색했을 때
 //                boardDTO.setBoard_condition("BOARD_ALL_SEARCH_TITLE"); // 제목 검색 컨디션
 //                boardDTO.setModel_board_searchKeyword(keyword); // 검색 키워드 설정
-//                boardDTO.setModel_board_location("");
                 System.out.println("(CommunityPageAction.java 로그) SEARCH_ID model로 전달항 boardDTO : "+boardDTO);//로그
                 List<BoardDTO> boardList = boardService.selectAllSearchTitle(boardDTO);
 
-//                BoardDTO boardCount = new BoardDTO();
+
 //                boardDTO.setBoard_condition("BOARD_ONE_SEARCH_TITLE_COUNT");
 //                boardCount.setModel_board_searchKeyword(keyword);
-//                boardCount.setModel_board_location("");
-//                System.out.println("(CommunityPageAction.java 로그) SEARCH_ID model로 전달항 boardCount : "+boardCount);//로그
 
                 BoardDTO boardCount = boardService.selectOneSearchTitleCount(boardDTO);
+                System.out.println("(CommunityPageAction.java 로그) SEARCH_ID model로 전달항 boardCount : "+boardCount);//로그
+
                 listNum = boardCount.getBoard_total();
                 System.out.println("(CommunityPageAction.java 로그) 전체 페이지 개수 (제목 검색)"+listNum);//로그
                 model.addAttribute("BOARD", boardList);
-//                model.addAttribute("BOARD", boardList);
 
 
             }
@@ -143,7 +117,6 @@ public class CommunityController{
             // 검색 조건이 없는 경우 전체 검색
 //            boardDTO.setBoard_condition("BOARD_ALL"); // 전체 게시글 조회 컨디션
             List<BoardDTO>  boardList=boardService.selectAll(boardDTO);
-//            BoardDTO boardCount = new BoardDTO();
 //            boardDTO.setBoard_condition("BOARD_ONE_COUNT");
             BoardDTO boardCount = boardService.selectOneCount(boardDTO);
             listNum = boardCount.getBoard_total();
@@ -154,26 +127,22 @@ public class CommunityController{
 
 
 //        model.addAttribute("BOARD", boardList);
-        model.addAttribute("totalCount", listNum);
-        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("total", listNum);
+        model.addAttribute("Page", pageNum);
 
 
 
         return "views/communityRegions"; // 설정된 페이지로 이동
     }
 
-    @RequestMapping(value="/local.do", method=RequestMethod.GET)
+    @GetMapping("/local.do")
     public String local(Model model, BoardDTO boardDTO) {
-//		ActionForward forward = new ActionForward();
-//		String path = "localCommunity.jsp"; // 지역글 검색 페이지로 이동
-//		boolean flagRedirect = false; // 포워드 방식 사용 여부 설정 (false = forward 방식)
 
-        // 뷰에서 전달받는 지역 값 (SEOUL, GYEONGGI, INCHEON, CHUNGNAM)
 //        String Location = request.getParameter("VIEW_BOARD_LIST");
         String Location = boardDTO.getBoard_location(); // 검색 키워드
 
 
-        System.err.println("(LocationPageAction.java 로그) View에서 보내준 지역 : "+Location);
+        System.err.println("(Location 로그) View에서 보내준 지역 : "+Location);
 
         // 검색 키워드 (제목 검색)
 //        String keyword = request.getParameter("VIEW_BOARD_KEYWORD");
@@ -212,33 +181,35 @@ public class CommunityController{
         int pageNum = boardDTO.getPage();//요거 필요
         int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
         int minBoard = 1; // 최소 게시글 수 초기화
+        if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
+            pageNum = 1;
+        }
 
         minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
         int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
 
-        System.err.println("(LocationPageAction.java 로그) 시작 글 번호 : " + minBoard);
+        System.err.println("(Location로그) 시작 글 번호 : " + minBoard);
 //        System.err.println("(LocationPageAction.java 로그) 끝 글 번호 : " + maxBoard);
 
 //        int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
-//        BoardDTO boardDTO = new BoardDTO(); // 게시글 DTO 객체 생성
-//        BoardDAO boardDAO = new BoardDAO(); // 게시글 DAO 객체 생성
+
 
 //        boardDTO.setModel_board_location(location);
 //        boardDTO.setModel_board_searchKeyword(keyword);
         boardDTO.setBoard_min_num(minBoard);
-//        boardDTO.setModel_board_max_num(maxBoard);
+
 
 //        boardDTO.setBoard_condition("BOARD_ALL_SEARCH_TITLE");
-        System.err.println("(LocationPageAction.java 로그) Model로 넘어가는 BoardDTO : " + boardDTO);
+        System.err.println("(Location 로그) Model로 넘어가는 BoardDTO : " + boardDTO);
         List<BoardDTO> datas = boardService.selectAllSearchTitle(boardDTO);
-        System.err.println("(LocationPageAction.java 로그) Model에서 넘어온 Location_Board_datas : " + datas);
+        System.err.println("(Location 로그) Model에서 넘어온 Location_Board_datas : " + datas);
 
-//        BoardDTO boardCount = new BoardDTO();
 //        boardCount.setModel_board_location(location);
 //        boardCount.setModel_board_searchKeyword(keyword);
 //        boardDTO.setBoard_condition("BOARD_ONE_SEARCH_TITLE_COUNT");
-//        System.err.println("(LocationPageAction.java 로그) Model에서 넘어가는 boardCount : " + boardCount);
         BoardDTO boardCount = boardService.selectOneSearchTitleCount(boardDTO);
+        System.err.println("(Location  selectOneSearchTitleCount : " + boardCount);
+
         listNum = boardCount.getBoard_total();
 
 
@@ -246,8 +217,8 @@ public class CommunityController{
 //        request.setAttribute("totalCount", listNum);
 //        request.setAttribute("BOARD",datas);
 
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalCount", listNum);
+        model.addAttribute("Page", pageNum);
+        model.addAttribute("total", listNum);
         model.addAttribute("BOARD",datas);
 
 //        forward.setPath(path);

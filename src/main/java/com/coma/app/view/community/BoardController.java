@@ -1,15 +1,20 @@
 package com.coma.app.view.community;
 
 import java.io.UnsupportedEncodingException;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -19,7 +24,6 @@ import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reply.ReplyDTO;
 import com.coma.app.biz.reply.ReplyService;
 import com.coma.app.view.function.CKEditorDeleteFile;
-import com.coma.app.view.function.LoginCheck;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +31,8 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BoardController {
-
+    @Autowired
+    private ServletContext servletContext;
     @Autowired
     private BoardService boardService;
     @Autowired
@@ -35,42 +40,45 @@ public class BoardController {
     @Autowired
     private MemberService memberService;
 
-    @RequestMapping(value="/boardDelete.do", method=RequestMethod.POST)
-    public String boardDelete(HttpServletRequest request, HttpServletResponse response, BoardDTO boardDTO) {
+
+    @LoginCheck
+    @PostMapping( "/boardDelete.do")
+    public String boardDelete(HttpSession session, BoardDTO boardDTO) {
         //기본으로 넘어가야하는 페이지 와 redirect 여부를 설정
 //		ActionForward forward = new ActionForward();
 //		String path = "MYPAGEPAGEACTION.do";
 //		boolean flagRedirect = false;
 
         //로그인 정보가 있는지 확인해주고
-        String login[] = LoginCheck.Success(request, response);
+//        String login[] = LoginCheck.Success(request, response);
         //사용자 아이디
-        String member_id = login[0];
+        String member_id = (String) session.getAttribute("MEMBER_ID");
 
         //만약 로그인 정보가 없다면
-        if(member_id == null) {
-            //LoginPageAction 페이지로 전달해줍니다.
-//			path = "LOGINPAGEACTION.do";
-            //리다이렉트 방식으로 보내줍니다.
-//			flagRedirect = true;
-            return "redirect:Login.do";
-        }
-        else {
-            //사용자가 선택한 글번호를 받아서
+//        if(member_id == null) {
+//            //LoginPageAction 페이지로 전달해줍니다.
+////			path = "LOGINPAGEACTION.do";
+//            //리다이렉트 방식으로 보내줍니다.
+////			flagRedirect = true;
+//            return "redirect:Login.do";
+//        }
+//        else {
+        //사용자가 선택한 글번호를 받아서
 //			data.setboard_num(Integer.parseInt(request.getParameter("board_num")));
-//			data.setboard_writer_id(member_id);
-            //model 에 전달해 글을 삭제하고
-            boolean flag = boardService.delete(boardDTO);
+        boardDTO.setBoard_writer_id(member_id);
+        //model 에 전달해 글을 삭제하고
+        boolean flag = boardService.delete(boardDTO);
 
-        }
+//        }
 
 //		forward.setPath(path);
 //		forward.setRedirect(flagRedirect);
         return "redirect:myPage.do";
     }
 
-    @RequestMapping(value="/boardInsert.do", method=RequestMethod.POST)
-    public String boardInsert(HttpServletRequest request, HttpServletResponse response, Model model, BoardDTO boardDTO) {
+    @LoginCheck
+    @PostMapping("/boardInsert.do")
+    public String boardInsert(HttpSession session, Model model, BoardDTO boardDTO) {
 
         //기본으로 넘어가야하는 페이지 와 redirect 여부를 설정
 //		ActionForward forward = new ActionForward();
@@ -78,61 +86,64 @@ public class BoardController {
 //		boolean flagRedirect = false;//포워드 방식으로
 
         //로그인 정보가 있는지 확인해주고
-        String login[] = LoginCheck.Success(request, response);
-        String member_id = login[0];//세션에 있는 사용자의 아이디
+//        String login[] = LoginCheck.Success(request, response);
 
-        System.out.println("로그인 확인: " + login);//로그인 확인 로그
+        // HttpSession session = request.getSession();
+
+        String member_id = (String) session.getAttribute("MEMBER_ID");
+
+        System.out.println("로그인 확인: " + member_id);//로그인 확인 로그
         //만약 로그인 정보가 없다면
-        if(member_id == null) {
+        if (member_id == null) {
             //로그인 페이지로 전달해줍니다.
 //			request.setAttribute("msg", "글 작성은 로그인 후 사용 가능합니다.");
 //			request.setAttribute("path", "LOGINPAGEACTION.do");
-            model.addAttribute("title",  "로그인을 해주세요.");
+            model.addAttribute("title", "로그인을 해주세요.");
 
-            model.addAttribute("msg",  "글 작성은 로그인 후 사용 가능합니다.");
+            model.addAttribute("msg", "글 작성은 로그인 후 사용 가능합니다.");
             model.addAttribute("path", "LoginPage");
 
 
-        }
-        else {
+        } else {
             // 요청에서 게시글 제목과 내용을 가져옴
 //			String boardTitle = request.getParameter("VIEW_TITLE");
-            String boardContent = request.getParameter("content");
+            //  String boardContent = request.getParameter("content"); ckeditor 주석처리
 //			String boardLocation = request.getParameter("board_location");
 
             //------------------------------------------------------------------------
             //CKEditor 제거된 이미지 제거하는 로직
             //UTF-8 형식으로 보내주니 UTF-8 로 인코딩 해주고
-            try {
-                request.setCharacterEncoding("UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                System.out.println("인코딩 실패");
-            }
+//            try {
+//                request.setCharacterEncoding("UTF-8");
+//            } catch (UnsupportedEncodingException e) {
+//                System.out.println("인코딩 실패");
+//            }
+            //ckeditor 주석처리
             //세션을 불러와서
-            HttpSession session = request.getSession();
+//            HttpSession session = request.getSession();
             //세션에 저장되어 있는 폴더 개수를 가져옵니다. 삼항연산자로 만약 세션값이 null이 아니라면 정수형으로 변경하여 가져오도록합니다.
-            int folder_session = (session.getAttribute("FOLDER_NUM") != null) ? (Integer)session.getAttribute("FOLDER_NUM"):0;
+            //   int folder_session = (session.getAttribute("FOLDER_NUM") != null) ? (Integer) session.getAttribute("FOLDER_NUM") : 0;
 
             //View에서 보내준 내용 확인합니다.
 //			System.out.println(boardContent);
             //세션에 있는 값이 0보다 크다면 이미지 폴더가 생성된 것으로 if문 실행
-            if(folder_session > 0) {
-                //폴더를 명시해줍니다.
-                String folder = "/board_img/"+member_id+"/"+folder_session;
-
-                //명시된 폴더를 추가해주고 내 서버의 폴더주소를 불러옵니다.
-                String uploadPath = request.getServletContext().getRealPath(folder);
-
-                System.out.println("BoardInsertAction.java 확인용 로그 : "+uploadPath);
-
-                //넘어온 이미지와 서버에 저장된 이미지를 체크하여
-                //없는 이미지는 삭제해줍니다.
-                CKEditorDeleteFile.imgDelete(boardContent, uploadPath);
-            }
+//            if (folder_session > 0) {
+//                //폴더를 명시해줍니다.
+//                String folder = "/board_img/" + member_id + "/" + folder_session;
+//
+//                //명시된 폴더를 추가해주고 내 서버의 폴더주소를 불러옵니다.
+//                String uploadPath = servletContext.getRealPath(folder);
+//
+//                System.out.println("BoardInsert : " + uploadPath);
+//
+//                //넘어온 이미지와 서버에 저장된 이미지를 체크하여
+//                //없는 이미지는 삭제해줍니다.
+//                CKEditorDeleteFile.imgDelete(boardContent, uploadPath);
+//            } //ckeditor 주석처ㅣ
             //------------------------------------------------------------------------
 
 //			System.out.println("게시글 제목: " + boardTitle);//제목 로그
-            System.out.println("게시글 내용: " + boardContent);//내용 로그
+            //System.out.println("게시글 내용: " + boardContent);//내용 로그
             System.out.println("게시글 작성자: " + member_id);//작성자 로그
 
 
@@ -142,7 +153,7 @@ public class BoardController {
 //			boardDTO.setboard_content(boardContent);
 //
 //			boardDTO.setboard_location(Location(boardLocation));
-//			boardDTO.setboard_writer_id(member_id);
+            boardDTO.setBoard_writer_id(member_id);
 
             // 게시글을 데이터베이스에 저장
 //			BoardDAO boardDAO = new BoardDAO();
@@ -154,7 +165,7 @@ public class BoardController {
 
             model.addAttribute("msg", "글 작성이 완료되었습니다");
             model.addAttribute("path", "Community.do");
-            model.addAttribute("FOLDER_NUM",null);
+            model.addAttribute("FOLDER_NUM", null);
 
             boolean flag = boardService.insert(boardDTO);//글 insert
             if (!flag) {
@@ -166,7 +177,7 @@ public class BoardController {
 
                 model.addAttribute("msg", "글이 작성이 실패했습니다");
                 model.addAttribute("path", "insertBoard.do");
-                model.addAttribute("FOLDER_NUM", folder_session);
+                //               model.addAttribute("FOLDER_NUM", folder_session);
 
             }
         }
@@ -177,21 +188,21 @@ public class BoardController {
 
     }
 
-
-    @RequestMapping(value="/boardInsert.do", method=RequestMethod.GET)
-    public String boardInsert(HttpServletRequest request, HttpServletResponse response) {
+    @LoginCheck
+    @GetMapping("/boardInsert.do")
+    public String boardInsert(HttpSession session) {
 
 //		ActionForward forward = new ActionForward();
 //		String path = "editing.jsp";//글작성페이지
 //		boolean flagRedirect = false;//네비게이션 바 때문에 로그인정보 필요
 
         //로그인 정보가 있는지 확인해주고
-        String login[] = LoginCheck.Success(request, response);
-        String member_id = login[0];
+        //   String login[] = LoginCheck.Success(request, response);
+        String member_id = (String)session.getAttribute("MEMBER_ID");
 
-        System.out.println("InsertBoard 로그인 정보 로그 : "+member_id);
+        System.out.println("InsertBoard 로그인 정보 로그 : " + member_id);
         //만약 로그인 정보가 없다면
-        if(member_id == null) {
+        if (member_id == null) {
             //로그인 페이지로 넘어간다
 //			path = "LOGINPAGEACTION.do";
             return "redirect:login.do";
@@ -206,16 +217,18 @@ public class BoardController {
 
     }
 
-    @RequestMapping(value="/boardUpdate.do", method=RequestMethod.POST)
-    public String boardUpdate(HttpServletRequest request, HttpServletResponse response, Model model, BoardDTO boardDTO ) {
+    @LoginCheck
+    @PostMapping(value = "/boardUpdate.do")
+    public String boardUpdate(HttpRequest request,HttpSession session, Model model, BoardDTO boardDTO) {
         // 기본으로 넘어가야하는 페이지와 redirect 여부를 설정
 //		ActionForward forward = new ActionForward();
 //		String path = "MYPAGEPAGEACTION.do"; // 마이페이지로
 //		boolean flagRedirect = false; // 포워드 방식
 
         // 로그인 정보가 있는지 확인
-        String login[] = LoginCheck.Success(request, response);
-        String member_id = login[0]; // 세션에 있는 사용자의 아이디
+        //  String login[] = LoginCheck.Success(request, response);
+
+        String member_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
         System.out.println("로그인 확인: " + member_id);
 
         // 만약 로그인 정보가 없다면
@@ -240,15 +253,11 @@ public class BoardController {
             //------------------------------------------------------------------------
             //CKEditor 제거된 이미지 제거하는 로직
             //UTF-8 형식으로 보내주니 UTF-8 로 인코딩 해주고
-            try {
-                request.setCharacterEncoding("UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                System.out.println("인코딩 실패");
-            }
+
             //세션을 불러와서
-            HttpSession session = request.getSession();
+            // HttpSession session = request.getSession();
             //세션에 저장되어 있는 폴더 개수를 가져옵니다. 삼항연산자로 만약 세션값이 null이 아니라면 정수형으로 변경하여 가져오도록합니다.
-            int folder_session = (session.getAttribute("UPDATE_FOLDER_NUM") != null) ? (Integer)session.getAttribute("UPDATE_FOLDER_NUM"):0;
+            int folder_session = (session.getAttribute("UPDATE_FOLDER_NUM") != null) ? (Integer) session.getAttribute("UPDATE_FOLDER_NUM") : 0;
 
             //View에서 보내준 내용 확인합니다.
 //			System.out.println(board_content);
@@ -258,13 +267,12 @@ public class BoardController {
                 String folder = "/board_img/"+member_id+"/"+folder_session;
 
                 //명시된 폴더를 추가해주고 내 서버의 폴더주소를 불러옵니다.
-                String uploadPath = request.getServletContext().getRealPath(folder);
+                String uploadPath = servletContext.getRealPath(folder);
 
-                System.out.println("BoardInsertAction.java 확인용 로그 : "+uploadPath);
+                System.out.println("boardInsert 확인용 로그 : "+uploadPath);
 
                 //넘어온 이미지와 서버에 저장된 이미지를 체크하여
                 //없는 이미지는 삭제해줍니다.
-//				CKEditorDeleteFile.imgDelete(board_content, uploadPath);
                 CKEditorDeleteFile.imgDelete(boardDTO.getBoard_content(), uploadPath);
             }
             //------------------------------------------------------------------------
@@ -276,7 +284,7 @@ public class BoardController {
 //			boardDTO.setboard_content(board_content);
 //			boardDTO.setboard_location(Location(board_location));
 //			boardDTO.setboard_title(board_title);
-
+            boardDTO.setBoard_location(location(boardDTO.getBoard_location()));
 //            boardDTO.setBoard_condition("BOARD_UPDATE_CONTENT_TITLE"); // 글 수정 컨디션
             boolean updateFlag = boardService.updateContentTitle(boardDTO); // 업데이트
 
@@ -286,30 +294,30 @@ public class BoardController {
 
 //		forward.setPath(path);
 //		forward.setRedirect(flagRedirect);
-        return "views/MyPage";
+        return "views/myPage";
     }
     /* 뷰에서 전달받은 지역 값을 실제 지역명으로 변환하는 함수
      */
-
-    @RequestMapping(value="/boardUpdate.do", method=RequestMethod.GET)
-    public String boardUpdatePage(HttpServletRequest request, HttpServletResponse response, Model model, BoardDTO boardDTO) {
+    @LoginCheck
+    @PostMapping("/boardUpdate.do")
+    public String boardUpdatePage(HttpSession session, Model model, BoardDTO boardDTO) {
         //기본으로 넘어가야하는 페이지 와 redirect 여부를 설정
 //		ActionForward forward = new ActionForward();
 //		String path = "updateEditing.jsp";
 //		boolean flagRedirect = false;
 
         //로그인 정보가 있는지 확인해주고
-        String login[] = LoginCheck.Success(request, response);
+//        String login[] = LoginCheck.Success(request, response);
         //사용자 아이디
-        String member_id = login[0];
+
+        String member_id = (String) session.getAttribute("MEMBER_ID");
 
         //만약 로그인 정보가 없다면
-        if(member_id == null) {
+        if (member_id == null) {
             //LoginPageAction 페이지로 전달해줍니다.
 //			path = "LOGINPAGEACTION.do";
             return "redirect:login.do";
-        }
-        else {
+        } else {
 //			BoardDAO boardDAO = new BoardDAO();
 //			BoardDTO data = new BoardDTO();
             //사용자가 선택한 글번호를 받아서
@@ -320,7 +328,7 @@ public class BoardController {
             boardDTO = boardService.selectOneWriterId(boardDTO);
 
             //만약 데이터가 null 이라면 mypage.do 로 전달
-            if(boardDTO == null) {
+            if (boardDTO == null) {
 //				path="info.jsp";
 //				request.setAttribute("path", "MYPAGEPAGEACTION.do");
 //				request.setAttribute("msg", "없는 게시글입니다.");
@@ -328,12 +336,10 @@ public class BoardController {
 
                 model.addAttribute("path", "Mypage");
                 model.addAttribute("msg", "없는 게시글입니다.");
-                return "info";
+                return "views/info";
 
 
-
-            }
-            else {
+            } else {
                 //해당 글 내용을 view 로 전달해줍니다.
 //				request.setAttribute("BOARD_NUM", data.getboard_num());
 //				request.setAttribute("BOARD_TITLE", data.getboard_title());
@@ -345,16 +351,15 @@ public class BoardController {
                 model.addAttribute("BOARD_LOCATION", location(boardDTO.getBoard_location()));
 
 
-
                 String content = boardDTO.getBoard_content();
-                request.setAttribute("BOARD_CONTENT", content);
+                // request.setAttribute("BOARD_CONTENT", content);
+                model.addAttribute("BOARD_CONTENT", content);
 
-
-                HttpSession session = request.getSession();
+                // HttpSession session = request.getSession();
                 try {
                     //글 내용에서 img 태그가 있다면 해당 이미지 폴더의 번호만 가져오는 로직
-                    content = content.substring(content.lastIndexOf("img")+3).split("/")[2];
-                    System.out.println("BoardUpdatePageAction.java content 로그 : "+content);
+                    content = content.substring(content.lastIndexOf("img") + 3).split("/")[2];
+                    System.out.println("BoardUpdatePageAction.java content 로그 : " + content);
                     session.setAttribute("UPDATE_FOLDER_NUM", Integer.parseInt(content));
                 } catch (Exception e) {
                     session.setAttribute("UPDATE_FOLDER_NUM", 0);
@@ -370,9 +375,8 @@ public class BoardController {
         return "views/updateEditing";
     }
 
-    @RequestMapping(value="/content.do", method=RequestMethod.GET)
-    public String content(HttpServletRequest request, HttpServletResponse response,
-                          Model model, BoardDTO boardDTO, ReplyDTO replyDTO, MemberDTO memberDTO, ServletContext servletContext) {
+    @GetMapping("/content.do")
+    public String content(Model model, BoardDTO boardDTO, ReplyDTO replyDTO, MemberDTO memberDTO, ServletContext servletContext) {
         // 글 하나 선택 페이지
 //		ActionForward forward = new ActionForward();
 //		String path = "post.jsp"; // 선택한 글 하나 보는 페이지

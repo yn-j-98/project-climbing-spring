@@ -3,16 +3,19 @@ package com.coma.app.view.crew.battle;
 
 
 import com.coma.app.biz.battle.BattleService;
+import com.coma.app.view.annotation.LoginCheck;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
-import com.coma.app.view.function.LoginCheck;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,9 +35,9 @@ public class CrewBattleController {
    @Autowired
    private BattleService battleService;
 
-
-   @RequestMapping(value="/crewBattleDetail.do", method=RequestMethod.POST)
-   public String crewBattle(HttpServletRequest request, HttpServletResponse response, Model model, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO) {
+   @LoginCheck
+   @GetMapping("/crewBattleDetail.do")
+   public String crewBattle(HttpSession session, Model model, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO) {
       //		ActionForward forward = new ActionForward();
       //		String path = "crewBattleContent.jsp";
       //		boolean flagRedirect = false;
@@ -55,11 +58,11 @@ public class CrewBattleController {
 
       // 로그인,크루 정보가 있는지 확인
 
-      String login[] = LoginCheck.Success(request, response);
+//        String login[] = LoginCheck.Success(request, response);
       //사용자 아이디
-      String member_id = login[0];
+      String member_id = (String) session.getAttribute("MEMBER_ID");
       //사용자 크루 정보
-      int crew_num = Integer.parseInt(login[1]);
+      int crew_num = (Integer) session.getAttribute("CREW_NUM");
 
 //		int view_battle_num = Integer.parseInt(request.getParameter("view_battle_num"));
 //		System.out.println("CrewBattleOnePageAction view_battle_num = "+view_battle_num);
@@ -89,7 +92,7 @@ public class CrewBattleController {
       boolean flag = false; //크루전 종료 여부
 
       for(Battle_recordDTO data : battle_record_datas) {
-         System.out.println("61 "+data);
+         System.out.println("crewBattleDetail.battle_record_datas ["+data+"]");
          if(data.getBattle_record_is_winner().equals("T")) {
             flag = true;
          }
@@ -121,8 +124,8 @@ public class CrewBattleController {
 
    //이름 바꿀수도
    //그럴수도
-   @RequestMapping(value="/crewBattle.do", method=RequestMethod.POST)
-   public String crewBattle(HttpServletRequest request, HttpServletResponse response, Model model, BattleDTO battleDTO) {
+   @GetMapping("/crewBattle.do")
+   public String crewBattle(HttpSession session, Model model, BattleDTO battleDTO) {
 //	      ActionForward forward = new ActionForward();
 //	      String path = "crewBattleMain.jsp";//크루전 메인 페이지로 이동
 //	      boolean flagRediect = false;//로그인정보나 크루정보
@@ -150,13 +153,13 @@ public class CrewBattleController {
        */
 
       // 로그인 정보 보내주기 네비게이션 바 때문에
-      String login[] = LoginCheck.Success(request, response);
-      String member_id = login[0];
+//        String login[] = LoginCheck.Success(request, response);
+      String member_id = (String) session.getAttribute("MEMBER_ID");
       //선택한 크루 정보
       int crew_num = 0;
       if(member_id!=null) {
-         System.err.println("CrewBattlePageAction crew_num = "+login[1]);
-         crew_num = Integer.parseInt(login[1]);
+         System.err.println("CrewBattlePageAction crew_num = "+crew_num);
+         crew_num = (Integer) session.getAttribute("CREW_NUM");
       }
 
 //	      int pageNum = 1; // 페이지 번호 초기화
@@ -186,6 +189,10 @@ public class CrewBattleController {
       int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
       int minBoard = 1; // 최소 게시글 수 초기화
 
+      if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
+         pageNum = 1;
+      }
+
       minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
       int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
 
@@ -214,12 +221,12 @@ public class CrewBattleController {
 //        battleDTO.setBattle_condition("BATTLE_ALL_ACTIVE");//전체 크루전 목록 컨디션
       List<BattleDTO> battle_datas = battleService.selectAllActive(battleDTO);
 
-//	      if(battle_datas != null) {
-//	    	  for(BattleDTO data : battle_datas) {
-//	    		  System.out.println("이미지 : "+data.getBattle_gym_profile());
-//	    		  data.setModel_battle_gym_profile("https://"+data.getModel_battle_gym_profile());
-//	    	  }
-//	      }
+      if(battle_datas != null) {
+         for(BattleDTO data : battle_datas) {
+            System.out.println("이미지 : "+data.getBattle_gym_profile());
+            data.setBattle_gym_profile("https://"+data.getBattle_gym_profile());
+         }
+      }
 
 
 //	      BattleDTO battle_count = new BattleDTO();
@@ -232,8 +239,8 @@ public class CrewBattleController {
 
 
       model.addAttribute("my_battle", battleDTO);//내크루전(암벽장, 주소, 날짜, 번호)
-      model.addAttribute("currentPage", pageNum);//전체 게시글 총수
-      model.addAttribute("battle_total", listNum);//현재페이지번호
+      model.addAttribute("Page", pageNum);//전체 게시글 총수
+      model.addAttribute("total", listNum);//현재페이지번호
       model.addAttribute("battle_datas", battle_datas);//크루전목록
 
 
