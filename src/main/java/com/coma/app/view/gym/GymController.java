@@ -40,23 +40,13 @@ public class GymController {
 	@Autowired
 	private ServletContext servletContext;
 
-	//------------페이지이동----------------
-	@GetMapping("/gymMain.do")
-	public String gymMain() {
-		return "views/gymMain";
-	}
 	@GetMapping("/gymReservation.do")
 	public String gymReservation() {
 		return "views/reservation";
 	}
-	@GetMapping("/gymInfo.do")
-	public String gymInfo() {
-		return "views/gymInformation";
-	}
-	//------------------------------------
 
 
-	@PostMapping("/gymMain.do")
+	@GetMapping("/gymMain.do")
 	public String gymMain(GymDTO gymDTO, Model model) {
 		//boolean flag_Redirect = false; // 값을 전달해야하게 때문에 forward 방식으로 전달해야한다.
 		//---------------------------------------------------------------------------
@@ -325,7 +315,7 @@ public class GymController {
 	}
 
 	@LoginCheck
-	@PostMapping("/gymInfo.do")
+	@GetMapping("/gymInfo.do")
 	public String gymInfo(Model model, GymDTO gymDTO, Battle_recordDTO battle_recordDTO, MemberDTO memberDTO, FavoriteDTO favoriteDTO) {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 		//---------------------------------------------------------------------------

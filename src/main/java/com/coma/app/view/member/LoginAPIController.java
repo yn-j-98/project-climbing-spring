@@ -26,7 +26,6 @@ public class LoginAPIController {
       
 
         // 해당 사용자의 아이디가 있는지 확인
-        memberDTO.setMember_condition("MEMBER_SEARCH_ID");
         memberDTO.setMember_id(api_id);
         memberDTO = this.memberService.selectOneSearchId(memberDTO);
 

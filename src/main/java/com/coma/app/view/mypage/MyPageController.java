@@ -121,30 +121,12 @@ public class MyPageController {
 	}
 	//-------------------------------
 
-	//MypagePageAction
-	@LoginCheck
-	@PostMapping("/myPage.do")
-	public String myPage(MemberDTO memberDTO, BoardDTO boardDTO,ReservationDTO reservationDTO, Model model) {
-
-
-
-		return "views/myPage";
-	}
-
 
 	// DeleteMemberAction
 	@LoginCheck
 	@PostMapping("/deleteMember.do")
 	public String deleteMember(MemberDTO memberDTO, Model model) {
-		//기본으로 넘어가야하는 페이지 와 redirect 여부를 설정
 		String path = "views/info";
-		//로그인 정보가 있는지 확인해주고
-		// 예시로 로그인한 사용자 정보를 가져와서 모델에 추가
-		String member_id = (String) session.getAttribute("MEMBER_ID");
-
-		//사용자 아이디를 DTO에 등록
-		memberDTO.setMember_id(member_id);
-		System.out.println("MyPageController deleteMember 로그 : "+member_id);
 
 		//탈퇴전 사용자의 프로필이미지를 가져오기 위해 아이디 하나 검색하는 컨디션을 추가합니다.
 		//탈퇴전 사용자의 프로필이미지를 가져와 줍니다.

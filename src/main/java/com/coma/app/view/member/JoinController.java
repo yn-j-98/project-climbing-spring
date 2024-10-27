@@ -43,6 +43,7 @@ public class JoinController {
 		}
 		else {
 			boolean flag = this.memberService.insert(memberDTO);
+			model.addAttribute("title", "회원 가입");
 			if(flag) {
 				System.err.println("회원가입 성공 로그");
 				model.addAttribute("msg", "회원가입 성공!");

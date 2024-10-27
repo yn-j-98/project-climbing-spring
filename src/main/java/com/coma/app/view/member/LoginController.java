@@ -28,7 +28,7 @@ public class LoginController {
 	}
 
 	@LoginCheck
-	@PostMapping("/login.do") // 로그인 처리 (LoginAction) FIXME Action 주석은 이전 중프라 팀 이해를위해 남김. 종단 시 삭제하기
+	@PostMapping("/login.do") // 로그인 처리
 	public String login(Model model, MemberDTO memberDTO,HttpServletResponse response, HttpServletRequest request, HttpSession session) {
 		// 로그인 정보가 있는지 확인
 		String member_id = (String) session.getAttribute("MEMBER_ID");
@@ -42,6 +42,8 @@ public class LoginController {
 				setCookies(memberDTO, response, request); // 쿠키 설정 메서드 호출
 			} 
 		}
+
+
 		return "redirect:login.do";
 	}
 
