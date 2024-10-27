@@ -81,7 +81,6 @@ public class UserManagementController {
     // 회원 관리 리스트
     @PostMapping("/userManagement.do")
     public String userManagementList(Model model, MemberDTO memberDTO) {
-        // !★!★!★!★!★!★!★!★ TODO Impl (컨디션값) 참고하기!★!★!★!★!★!★!★!★!★!★!★!★
         //		회원 탈퇴 MEMBER DELETE
         boolean flag = this.memberService.delete(memberDTO);
         model.addAttribute("title","회원 탈퇴");

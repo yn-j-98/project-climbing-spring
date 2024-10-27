@@ -95,7 +95,7 @@ public class GymController {
 		model.addAttribute("gym_datas", gym_datas);
 		//암벽장 전체 개수를 View로 전달
 		//FIXME V에서 앞에 model 빼야지 작동함
-		model.addAttribute("total", gym_total.getGym_total());
+		model.addAttribute("total", gym_total.getTotal());
 		//암벽장 페이지 페이지 번호를 전달.
 		model.addAttribute("page", page);
 		//json 형식 데이터 전송
@@ -219,11 +219,16 @@ public class GymController {
 		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
 		int gym_num = gymDTO.getGym_num();
 		System.err.println("36 예약날짜 ="+gym_reservation_date);
-		System.err.println("사용포인트 넘어왔니"+memberDTO.getMember_use_point);
-		int reservation_use_point=0;
-		if(memberDTO.getMember_use_point!=null) {
-			reservation_use_point = memberDTO.getMember_use_point;
-		}
+//		System.err.println("사용포인트 넘어왔니"+memberDTO.getMember_use_point);
+//		int reservation_use_point=0;
+//		if(memberDTO.getMember_use_point!=null) {
+//			reservation_use_point = memberDTO.getMember_use_point;
+//		}
+		System.err.println("사용포인트 넘어왔니"+reservationDTO.getReservation_use_point());
+		int reservation_use_point=reservationDTO.getReservation_use_point();
+//		if(memberDTO.getMember_use_point!=null) {
+//			reservation_use_point = memberDTO.getMember_use_point;
+//		}
 		//TODO gym_price Int 변환 확인하기
 		int gym_price = gymDTO.getGym_price();
 		//최대 사용 포인트
@@ -275,7 +280,7 @@ public class GymController {
 			int reservation_total_cnt = this.gymService.selectOne(gymDTO).getGym_reservation_cnt();
 			//암벽장 번호와 예약 날짜를 Reservation DTO 에 추가해줍니다.
 			//model 에 selectOne 을 요청하여 현재 예약한 인원을 요청합니다.
-			int reservation_current_cnt = this.reservationService.selectOneCount(reservationDTO).getReservation_total();
+			int reservation_current_cnt = this.reservationService.selectOneCount(reservationDTO).getTotal();
 			//예약 인원이 resrvation_cnt = resrvation_total_cnt - resrvation_current_cnt
 			reservation_cnt = reservation_total_cnt - reservation_current_cnt;
 			//만약 0보다 작다면

@@ -123,7 +123,7 @@ public class CrewDAO {
 	public List<CrewDTO> selectAll(CrewDTO crewDTO){
 		System.out.println("crew.CrewDAO.selectAll 시작");
 		List<CrewDTO> result = null;
-		Object[] args = {crewDTO.getCrew_min_num(),crewDTO.getCrew_max_num()};
+		Object[] args = {crewDTO.getCrew_min_num()};
 		try {
 			result = jdbcTemplate.query(ALL, args, new CrewRowMapperAll());
 		} catch (Exception e) {

@@ -396,16 +396,15 @@ public class BoardDAO {
 		return result;
 	}
 
-
 	//똑같은 ID로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID, board_min_num, board_max_num
-	//LIMIT절 사용으로 pstmt 수정
+	//FIXME LIMIT절 사용으로 pstmt 수정
 	public List<BoardDTO> selectAllSearchMatchId(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_page(), offset};
+		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
 		try {
-			result = jdbcTemplate.query(ALL_SEARCH_MATCH_ID, args, new BoardRowMapperAllSearchMatchId());
+			result = jdbcTemplate.query(ALL_SEARCH_MATCH_ID, args, new boardRowMapperAllSearchMatchId());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 실패 " + e.getMessage());
 			e.printStackTrace();
@@ -468,7 +467,7 @@ public class BoardDAO {
 		int offset = 10; //페이지네이션 시작위치
 		Object[] args = {boardDTO.getBoard_page(), offset};
 		try {
-			result = jdbcTemplate.query(ALL, args, new BoardRowMapperAll());
+			result = jdbcTemplate.query(ALL, args, new boardRowMapperAll());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAll 실패 " + e.getMessage());
 			e.printStackTrace();
@@ -482,7 +481,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllRownum 시작");
 		List<BoardDTO> result = null;
 		try {
-			result = jdbcTemplate.query(ALL_ROWNUM, new BoardRowMapperAllRownum());
+			result = jdbcTemplate.query(ALL_ROWNUM, new boardRowMapperAllRownum());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAllRownum 실패 " + e.getMessage());
 			e.printStackTrace();

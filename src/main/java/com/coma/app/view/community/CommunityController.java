@@ -27,7 +27,7 @@ public class CommunityController{
     @GetMapping(value="/community.do")
     public String community(HttpServletRequest request, HttpServletResponse response, BoardDTO boardDTO, Model model) {
 
-        String search_Keyword = boardDTO.getBoard_searchKeyword(); // 검색 키워드
+        String search_Keyword = boardDTO.getBoard_search_keyword(); // 검색 키워드
 
 //        System.out.println("(CommunityPageAction.java 로그) 검색 키워드 : "+condition);
 
