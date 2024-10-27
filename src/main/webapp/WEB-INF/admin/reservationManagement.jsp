@@ -29,7 +29,10 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/kaiadmin.css"/>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="js/pagenation.js"></script>
+
+    <!--페이지네이션 외부 스크립트-->
+    <script src="../../js/pagination.js"></script>
+
     <!-- Fonts and icons -->
     <script src="assets/js/plugin/webfont/webfont.min.js"></script>
     <script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
@@ -45,7 +48,7 @@
 
 </head>
 <body>
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 <div class="main-panel flex-grow-1 p-4">
     <div class="nav-toggle position-absolute top-0 start-0">
         <button class="sidenav-toggler btn btn-icon btn-round btn-white h-100 w-25">
@@ -113,7 +116,6 @@
                                             </p>
                                             <p class="card-text">
                                                 <strong>실제 결제 금액:</strong> ${reservation.reservation_price}원
-                                                    <%--TODO 이 값들 다 조정필요--%>
                                             </p>
                                             <div class="text-end">
                                                 <button type="button" class="btn btn-danger"
@@ -134,7 +136,7 @@
                     <div class="row pt-5">
                         <div class="col-md-12 d-flex justify-content-center ">
                             <nav aria-label="Page navigation">
-                                <input type="hidden" id="totalCount" value="${tatal}"
+                                <input type="hidden" id="totalCount" value="${total}"
                                        data-search-contents= ${reservation_search_content}><%--FIXME--%>
                                 <input type="hidden" id="currentPage" value="${page}">
                                 <ul id="pagination" class="pagination justify-content-center align-items-center">

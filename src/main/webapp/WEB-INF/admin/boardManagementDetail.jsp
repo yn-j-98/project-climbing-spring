@@ -27,36 +27,36 @@
     </style>
 </head>
 <body>
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 <!-- container start -->
 <div class="container">
     <div class="page-inner">
         <div class="row py-3">
             <div class="col-12">
-                <h1 class="text-center">${board_title}</h1>
+                <h1 class="text-center">${BOARD.board_title}</h1>
             </div>
         </div>
         <div class="row border-bottom border-dark pb-3">
             <div class="col-md-1 d-flex justify-content-end align-items-center">
                 <div class="avatar avatar-sm">
-                    <img src="${board_writer_profile}" alt="profile"
+                    <img src="${member_profile}" alt="profile"
                          class="avatar-img rounded-circle"/>
                 </div>
             </div>
             <div class="col-md-11 d-flex align-items-center">
-                <p class="mb-0">작성자: ${board_writer_id}</p>
+                <p class="mb-0">작성자: ${BOARD.board_writer_id}</p>
             </div>
         </div>
         <div class="row py-5">
             <div class="col-12 d-flex justify-content-center">
                 <div class="w-75">
-                    <p class="text-start">${board_content}</p>
+                    <p class="text-start">${BOARD.board_content}</p>
                 </div>
             </div>
         </div>
         <div class="row border-top border-dark py-3">
             <form action="reply.do" method="POST">
-                <input type="hidden" name="board_id" value="${board_num}"/>
+                <input type="hidden" name="board_id" value="${BOARD.board_num}"/>
                 <div class="row">
                     <div class="col-11">
                         <div class="form-group">
@@ -82,7 +82,7 @@
             </div>
             <div class="col-1">
                 <button class="btn btn-icon btn-clean me-0" type="button" id="deleteButton"
-                        data-reply-num="${reply.reply_num}" data-board-num="${board_num}">
+                        data-reply-num="${reply.reply_num}" data-board-num="${BOARD.board_num}">
                     삭제
                 </button>
             </div>
