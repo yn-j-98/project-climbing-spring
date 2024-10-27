@@ -77,6 +77,23 @@ public class GymDAO {
 			+ "ORDER BY GYM_NUM DESC\n"
 			+ "LIMIT ?, ?";
 
+	// 승인,비승인된 암벽장 중 이름 검색 // TODO 암벽장 관리 페이지
+	private final String ALL_ADMIN_VERIFIED = "SELECT \n" +
+			"    GYM_PROFILE,\n" +
+			"    GYM_NAME,\n" +
+			"    GYM_LOCATION,\n" +
+			"    GYM_PRICE,\n" +
+			"    GYM_DESCRIPTION,\n" +
+			"    GYM_ADMIN_BATTLE_VERIFIED\n" +
+			"FROM \n" +
+			"    gym\n" +
+			"WHERE \n" +
+			"    GYM_ADMIN_BATTLE_VERIFIED = ?\n" +
+			"    AND GYM_NAME LIKE CONCAT('%', ?, '%')\n" +
+			"ORDER BY \n" +
+			"    GYM_NUM DESC\n" +
+			"LIMIT ?, ?";
+
 	//암벽장 추가 GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE // TODO 암벽장 관리 페이지
 	private final String INSERT_ADMIN = "INSERT INTO GYM (GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE)\n"
 			+ "VALUES (?, ?, ?, ?, ?)";
@@ -85,48 +102,37 @@ public class GymDAO {
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
 	public boolean insert(GymDTO gymDTO) {
-		System.out.println("com.coma.app.biz.gym.insert 시작");
 		//암벽장 등록 GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION
 		int result=jdbcTemplate.update(INSERT,gymDTO.getGym_name(),gymDTO.getGym_profile(),gymDTO.getGym_description(),gymDTO.getGym_location());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.gym.insert SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.gym.insert 성공");
 		return true;
 	}
 
 	public boolean insertAdmin(GymDTO gymDTO) {
-		System.out.println("com.coma.app.biz.gym.insertAdmin 시작");
 		//암벽장 추가 GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE // TODO 암벽장 관리 페이지
 		int result=jdbcTemplate.update(INSERT_ADMIN,gymDTO.getGym_name(),gymDTO.getGym_location(),gymDTO.getGym_price(),gymDTO.getGym_description(),gymDTO.getGym_profile());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.gym.insertAdmin SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.gym.insertAdmin 성공");
 		return true;
 	}
 
 	public boolean update(GymDTO gymDTO) {
-		System.out.println("com.coma.app.biz.gym.update 시작");
 		//예약가능 개수 업데이트 GYM_RESERVATION_CNT, GYM_NUM
 		int result=jdbcTemplate.update(UPDATE_RESERVATION_CNT, gymDTO.getGym_reservation_cnt(),gymDTO.getGym_num());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.gym.update SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.gym.update 성공");
 		return true;
 	}
 
 	public boolean delete(GymDTO gymDTO) { // TODO 여기없는 CRUD
-		System.err.println("com.coma.app.biz.gym.delete 시작");
 		return false;
 	}
 
 	public GymDTO selectOne(GymDTO gymDTO){
-		System.out.println("com.coma.app.biz.gym.selectOne 시작");
 		GymDTO data=null;
 		Object[] args= {gymDTO.getGym_num()};
 		try {
@@ -134,52 +140,51 @@ public class GymDAO {
 			data= jdbcTemplate.queryForObject(ONE, new GymSelectRowMapperOneAll());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.gym.selectOne SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.gym.selectOne 성공");
 		return data;
 	}
 
 	public GymDTO selectOneCount(GymDTO gymDTO){
-		System.out.println("com.coma.app.biz.gym.selectOneCount 시작");
 		GymDTO data=null;
 		try {
 			//암벽장 총 개수
 			data= jdbcTemplate.queryForObject(ONE_COUNT, new GymCountRowMapper());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.gym.selectOneCount SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.gym.selectOneCount 성공");
 		return data;
 	}
 
 	public List<GymDTO> selectAll(GymDTO gymDTO){
-		System.out.println("com.coma.app.biz.gym.selectAll 시작");
 
-		Object[] args= {gymDTO.getPage(),6};
+		Object[] args= {gymDTO.getGym_min_num(),6};
 		//(페이지 네이션) 암벽장 전체출력
-		List<GymDTO> datas=jdbcTemplate.query(ALL,args,new GymSelectRowMapperOneAll());
-		System.out.println("com.coma.app.biz.gym.selectAll 성공");
+		List<GymDTO> datas=null;
+		datas=jdbcTemplate.query(ALL,args,new GymSelectRowMapperOneAll());
 		return datas;
 	}
 
 	public List<GymDTO> selectAllLocationCountAdmin(GymDTO gymDTO){
-		System.out.println("com.coma.app.biz.gym.selectAllLocationCountAdmin 시작");
 
 		//지역별 암벽장 개수 출력 // TODO 관리자 메인 페이지
-		List<GymDTO> datas=jdbcTemplate.query(ALL_LOCATION_COUNT_ADMIN,new GymCountRowMapper());
-		System.out.println("com.coma.app.biz.gym.selectAllLocationCountAdmin 성공");
+		List<GymDTO> datas=null;
+		datas=jdbcTemplate.query(ALL_LOCATION_COUNT_ADMIN,new GymCountRowMapper());
 		return datas;
 	}
 
 	public List<GymDTO> selectAllAdmin(GymDTO gymDTO){
-		System.out.println("com.coma.app.biz.gym.selectAllAdmin 시작");
-
-		Object[] args= {gymDTO.getPage(),10};
+		Object[] args= {gymDTO.getGym_min_num(),10};
 		//암벽장 관리 리스트 출력(페이지네이션) // TODO 암벽장 관리 페이지
-		List<GymDTO> datas=jdbcTemplate.query(ALL_ADMIN,args,new GymAdminMapperAll());
-		System.out.println("com.coma.app.biz.gym.selectAllAdmin 성공");
+		List<GymDTO> datas=null;
+		datas=jdbcTemplate.query(ALL_ADMIN,args,new GymAdminMapperAll());
+		return datas;
+	}
+
+	public List<GymDTO> selectAllAdminVerified(GymDTO gymDTO){
+		Object[] args= {gymDTO.getGym_admin_battle_verified(),gymDTO.getGym_search_content(),gymDTO.getGym_min_num(),10};
+		// 승인,비승인된 암벽장 중 이름 검색 // TODO 암벽장 관리 페이지
+		List<GymDTO> datas=null;
+		datas=jdbcTemplate.query(ALL_ADMIN_VERIFIED,args,new GymAdminMapperAll());
 		return datas;
 	}
 }

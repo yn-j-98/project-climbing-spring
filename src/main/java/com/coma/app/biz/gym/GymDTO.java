@@ -24,4 +24,5 @@ public class GymDTO {
 	private int gym_battle_num;		//현재 암벽장의 크루전 pk
 	private String gym_battle_game_date;	//현재 암벽장의 크루전 게임날짜
 	private int total;		//암벽장 총 개수
+	private int gym_min_num;	// 페이지 네이션 시작 PK
 }

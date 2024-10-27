@@ -3,6 +3,8 @@ package com.coma.app.view.main;
 
 import java.util.List;
 
+import com.coma.app.view.annotation.LoginCheck;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +15,6 @@ import com.coma.app.biz.board.BoardDTO;
 import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
-import com.coma.app.view.function.LoginCheck;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,17 +30,22 @@ public class MainPageController{
     private Battle_recordService battleService;
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private HttpSession session;
 
+    @LoginCheck
     @RequestMapping(value="/main.do", method= RequestMethod.POST)
     public String main(HttpServletRequest request, HttpServletResponse response,
                        Model model, BattleDTO battleDTO, MemberDTO memberDTO, BoardDTO boardDTO) {
         //	ActionForward forward = new ActionForward();
         //	String path = "main.jsp"; // 메인 페이지로 이동
         //    boolean flagRedirect = false; // 포워드 방식 사용 여부 설정 (false = forward 방식)
+        // 예시로 로그인한 사용자 정보를 가져와서 모델에 추가
+        String member_id = (String) session.getAttribute("MEMBER_ID");
 
+
+        System.out.println("MyPage 로그인 정보 로그 : "+member_id);
         // 로그인 정보 보내주기 네비게이션 바 때문에
-        String login[] = LoginCheck.Success(request, response);
-        System.out.println("log : 로그인 성공 " + login[0] );
         //크루전 정보 부분
 
 //		battleDTO.setBattle_condition("BATTLE_ALL_TOP4");//크루전 정보4개 컨디션

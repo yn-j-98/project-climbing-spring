@@ -16,5 +16,6 @@ public class ProductDTO {
 	private int product_discount_price; //상품 할인된 가격
 	private String product_link; //상품 링크
 
-	private int page;
+	private int page;	// 사용자 페이지네이션
+	private int product_min_num;	// 페이지 네이션 시작 PK
 }
