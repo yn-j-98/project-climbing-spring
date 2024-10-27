@@ -48,13 +48,6 @@
       <property name="dataSource" ref="ds"/>
    </bean>
 
-   <!-- LoginCheck 빈 정의 -->
-   <bean id="LoginCheck"/>
-
-   <!-- logincheck 주입 -->
-   <bean id="LoginAspect" class="com.coma.app.view.member.LoginAspect">
-      <constructor-arg ref="LoginCheck" />
-   </bean>
 
    <tx:advice transaction-manager="txManager" id="txAdviceDelete">
       <tx:attributes>

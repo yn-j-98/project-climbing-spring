@@ -8,7 +8,7 @@
 //import java.util.Arrays;
 //import java.util.Random;
 //
-//import com.coma.app.view.function.LoginCheck;
+//import com.coma.app.view.annotation.LoginCheck;
 //import com.coma.app.view.function.Mkdir_File;
 //
 //import jakarta.servlet.ServletException;
@@ -20,6 +20,7 @@
 //import jakarta.servlet.http.HttpSession;
 //import jakarta.servlet.http.Part;
 //
+//@LoginCheck
 //@WebServlet("/ckupload")
 //@MultipartConfig
 //public class CKEditor_Upload extends HttpServlet {

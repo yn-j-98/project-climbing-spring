@@ -19,6 +19,7 @@ public class CrewDTO {
 	//DTO에만 존재하는 데이터 
 	private int crew_total;  //현재 크루 개수
 	private int crew_current_member_size; //크루의 현재 인원수
+	private int crew_min_num;
 
-	private int crew_page; //크루의 현재 인원수
+	private int page; //크루의 현재 인원수
 }

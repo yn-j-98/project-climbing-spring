@@ -24,6 +24,7 @@ public class BattleDTO {
 	private int battle_total;			       // 전체 게시글 총수
 	private String battle_search_keyword;      // 크루전 검색목록
 	private String battle_content;      // 크루전 검색내용
+	private int battle_min_num;
 
-	private int battle_page;  		     // 페이지네이션 데이터
+	private int page;  		     // 페이지네이션 데이터
 }

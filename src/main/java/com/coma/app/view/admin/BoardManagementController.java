@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+import static com.coma.app.biz.board.BoardDTO.*;
+
 @Controller
 public class BoardManagementController {
 
@@ -40,7 +42,7 @@ public class BoardManagementController {
         //-----------------------------------------------------------------------------
 
         // 페이지네이션
-        int page = BoardDTO.getPage(); 
+        int page = boardDTO.getPage();
         int size = 10; // 한 페이지에 표시할 게시글 수
         if (page <= 0) { // 페이지가 0일 때 (npe방지)
             page = 1;
@@ -49,11 +51,11 @@ public class BoardManagementController {
 
         System.out.println("min = " + min_num);
 
-        BoardDTO.setBoard_min_num(min_num);
+        boardDTO.setBoard_min_num(min_num);
 
         System.out.println("page = " + page);
 
-        BoardDTO.setPage(page);
+        boardDTO.setPage(page);
 
         //-----------------------------------------------------------------------------
 
