@@ -53,7 +53,7 @@ public class SampleListener implements ServletContextListener {
 		// 암벽장 크롤링 부분
 		GymDTO gymDTO = new GymDTO();
 		GymDTO data2 = gymDAO.selectOneCount(gymDTO);
-		if (data2.getGym_total() <= 0) {
+		if (data2.getTotal() <= 0) {
 			System.out.println("com.coma.app.biz.common.SampleListener.makeSampleGym 크롤링 시작");
 			ArrayList<GymDTO> crawling_gym_datas = crawling.makeSampleGym();
 			for (GymDTO gym_data : crawling_gym_datas) {

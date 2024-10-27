@@ -299,7 +299,6 @@ public class CrewController{
 				return "redirect:crewList.do";
 			} else {
 				// 크루 정보 가져오기
-				crewDTO.setCrew_condition("CREW_ONE");
 				crewDTO = crewService.selectOne(crewDTO);
 
 				if (crewDTO != null) {

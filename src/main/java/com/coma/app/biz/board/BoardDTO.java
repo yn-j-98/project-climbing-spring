@@ -19,7 +19,8 @@ public class BoardDTO {
 	private int board_total;   //전체 커뮤니티 게시글 총 개수
 	private String board_search_keyword;    // 전체 게시글 검색 목록
 	private String board_search_content;       // 전체 게시글 검색 내용
+	private int board_min_num;
 
-	private int board_page; //페이지네이션 데이터
-	
+	private int page; //페이지네이션 데이터
+
 }

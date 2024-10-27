@@ -61,15 +61,15 @@ public class MainManagementService {
     }
 
     private int getMemberTotal(MemberDTO memberDTO) {
-        return memberDAO.selectOneCountAdmin(memberDTO).getMember_total();
+        return memberDAO.selectOneCountAdmin(memberDTO).getTotal();
     }
 
     private int getGymTotal(GymDTO gymDTO) {
-        return gymDAO.selectOneCount(gymDTO).getGym_total();
+        return gymDAO.selectOneCount(gymDTO).getTotal();
     }
 
     private int getReservationTotal(ReservationDTO reservationDTO) {
-        return reservationDAO.selectOneCount(reservationDTO).getReservation_total();
+        return reservationDAO.selectOneCount(reservationDTO).getTotal();
     }
 
     private int getBoardTotal(BoardDTO boardDTO) {
