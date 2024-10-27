@@ -48,9 +48,8 @@ public class CrewBattleApplicationController {
 			//암벽장에 크루전을 신청하는 사용자가 크루장인지 확인 로직 시작
 			//(사용자 아이디 / 크루 번호) 를 Crew DTO에 추가합니다.
 			crewDTO.setCrew_num(crew_check);
-			crewDTO.setCrew_condition("CREW_ONE");
 			//Crew selectOne으로 해당 사용자가 크루장인지 확인합니다.
-			CrewDTO crew_leader = this.crewService.selectOne(crewDTO);		
+			CrewDTO crew_leader = this.crewService.selectOne(crewDTO);
 			boolean flag_crew_leader = false;
 			if(crew_leader!=null) {
 				if(crew_leader.getCrew_leader().equals(member_id)){
@@ -73,7 +72,6 @@ public class CrewBattleApplicationController {
 			//------------------------------------------------------------
 			//크루전 개최 되어있는지 확인하기 위한 로직 시작
 			//(크루전 번호) 을 Battle DTO에 추가합니다.
-			battleDTO.setBattle_condition("ONE_SEARCH_BATTLE");//TODO 컨디션 추가해야함
 			//Battle selectOne으로 해당 크루전이 개최되어 있는지 확인합니다.
 			BattleDTO battle_data = this.battleService.selectOneSearchBattle(battleDTO);
 			boolean flag = false;
@@ -106,7 +104,6 @@ public class CrewBattleApplicationController {
 			//크루전 등록 로직 시작
 			//(크루전 번호 / 크루 번호) 를 Battle_record DTO에 추가합니다.
 			battle_recordDTO.setBattle_record_crew_num(crew_check);
-			battle_recordDTO.setBattle_record_condition("BATTLE_RECORD_ONE_BATTLE_RECORD");
 
 			//크루전 등록 여부 확인을 위해 selectOne 해서 비교한다.
 			Battle_recordDTO battle_record_data=this.battle_recordService.selectOneBattleRecord(battle_recordDTO);

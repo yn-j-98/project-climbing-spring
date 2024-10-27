@@ -16,8 +16,7 @@ import jakarta.servlet.http.HttpSession;
 @Component
 public class LoginAspect {
 
-    public LoginAspect(LoginCheck loginCheck) {
-    }
+
 
     @Around("@annotation(com.coma.app.view.annotation.LoginCheck)") // @LoginCheck 어노테이션이 붙은 메서드에 적용
     public Object checkLogin(ProceedingJoinPoint joinPoint) throws Throwable {

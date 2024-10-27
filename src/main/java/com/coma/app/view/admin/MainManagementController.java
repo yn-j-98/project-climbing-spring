@@ -34,21 +34,9 @@ public class MainManagementController{
     @Autowired
     private BattleService battleService;
 
-
-    // 페이지 이동
-
-    @GetMapping("/mainManagement.do")
-    public String mainManagement() {
-        return "admin/main";
-    }
-
-
-//--
-
-
     // 관리자 메인
     @LoginCheck
-    @PostMapping("/mainManagement.do")
+    @GetMapping("/mainManagement.do")
     public String mainManagement(Model model, HttpSession session, MemberDTO memberDTO,
                                  GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) {
         // 세션에서 관리자 ID 가져오기
@@ -59,37 +47,32 @@ public class MainManagementController{
 
         // !★!★!★!★!★!★!★!★ TODO Impl (컨디션값) 참고하기!★!★!★!★!★!★!★!★!★!★!★!★
         //		사용자- 관리자  count*
-		int total_member = memberService.selectOneCountAdmin(memberDTO);
+		MemberDTO total_member = this.memberService.selectOneCountAdmin(memberDTO);
         //		암벽장 count*
-		int total_gym = gymService.selectOneTotal(gymDTO);
+		GymDTO total_gym = this.gymService.selectOneCount(gymDTO);
         //		예약 수 count*
-		int total_reservation = reservationService.selectOneTotal(reservationDTO);
+		ReservationDTO total_reservation = this.reservationService.selectOneCountYearAdmin(reservationDTO);
         //		게시판 수 count(*)
-		int total_board = boardService.selectOneTotal(boardDTO);
+		BoardDTO total_board = this.boardService.selectOneCount(boardDTO);
         //		크루전 수 c*
-		int total_battle = battleService.selectOneTotal(battleDTO);
+		BattleDTO total_battle = this.battleService.selectOneCountActive(battleDTO);
 
         //		월별 가입자 수 count(꺾은선그래프)
-		List <MemberDTO> monthly_join_datas = memberService.selectAllMonthCountAdmin(memberDTO);
+		List <MemberDTO> monthly_join_datas = this.memberService.selectAllMonthCountAdmin(memberDTO);
         //		월별 예약 수 count (막대그래프)
-		List <ReservationDTO> monthly_reservation_datas = reservationService.selectOneMonthlyReservation(reservationDTO);
+		List <ReservationDTO> monthly_reservation_datas = this.reservationService.selectAllCountMonthAdmin(reservationDTO);
         //		지역별 암벽장 수 count(동그라미)
-		List <GymDTO> region_gym_datas = gymService.selectAllLocationCountAdmin(gymDTO);
+		List <GymDTO> region_gym_datas = this.gymService.selectAllLocationCountAdmin(gymDTO);
 
 
         //		최신글 5개  제목 + 내용만 대시보드
-		List<BoardDTO> board_datas = boardService.selectAllNew5(boardDTO);
+		List<BoardDTO> board_datas = this.boardService.selectAllBoardAllTop5(boardDTO);
         //		최신 크루전 5개 (개최일 빠른순 == 내림차순) 개최일, 암벽장 이름, 참여 크루
-		List<BattleDTO> battle_datas = battleService.selectBattleAllNew5(battleDTO);
+		List<BattleDTO> battle_datas = this.battleService.selectAllBattleAllTop5(battleDTO);
 
 
         // 모델에 데이터를 추가
         // TODO V와 값 통일시키기
-        // TODO MAP 사용하기
-        // 맵을 가장 상단에서 메모리 할당한다
-        // 서비스로 데이터를 받아올때마다
-        // 그 맵에다가 DATA를 PUT를 한다
-        // 가장 하단에서 MAP을 MODEL에 담아서 V에게 전송합니다
         model.addAttribute("total_member", total_member);
         model.addAttribute("total_gym", total_gym);
         model.addAttribute("total_reservation", total_reservation);
