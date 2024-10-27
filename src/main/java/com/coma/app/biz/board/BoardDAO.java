@@ -265,7 +265,13 @@ public class BoardDAO {
 	}
 
 	public boolean deleteSelectedBoard(BoardDTO boardDTO) {
-
+		System.out.println("board.BoardDAO.deleteSelectedBoard 시작");
+		int result = jdbcTemplate.update(DELETE_SELECTED_BOARD,boardDTO.getBoard_num());
+		if(result <= 0){
+			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.deleteSelectedBoard sql 실패 : UPDATE = " + DELETE_SELECTED_BOARD);
+			return false;
+		}
+		return true;
 	}
 
 	//게시글 PK 검색 BOARD_NUM
