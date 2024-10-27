@@ -97,8 +97,40 @@ public class ReservationDAO {
 	private final String ALL_ADMIN = "SELECT R.RESERVATION_MEMBER_ID, G.GYM_NAME, R.RESERVATION_PRICE, R.RESERVATION_DATE\n"
 			+ "FROM RESERVATION R\n"
 			+ "JOIN GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM"
-			+ "ORDER BY r.RESERVATION_DATE DESC\n"
+			+ "ORDER BY R.RESERVATION_DATE DESC\n"
 			+ "LIMIT ? , ?";
+
+	//암벽장 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
+	private final String ALL_ADMIN_SEARCH_GYM_NAME = "SELECT \n"
+			+ "    R.RESERVATION_MEMBER_ID, \n"
+			+ "    G.GYM_NAME, \n"
+			+ "    R.RESERVATION_PRICE, \n"
+			+ "    R.RESERVATION_DATE\n"
+			+ "FROM \n"
+			+ "    RESERVATION R\n"
+			+ "JOIN \n"
+			+ "    GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM\n"
+			+ "WHERE \n"
+			+ "    G.GYM_NAME LIKE CONCAT('%', ?, '%')\n"
+			+ "ORDER BY \n"
+			+ "    R.RESERVATION_DATE DESC\n"
+			+ "LIMIT ?, ?";
+
+	//예약자 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
+	private final String ALL_ADMIN_SEARCH_MEMBER_ID = "SELECT \n"
+			+ "    R.RESERVATION_MEMBER_ID, \n"
+			+ "    G.GYM_NAME, \n"
+			+ "    R.RESERVATION_PRICE, \n"
+			+ "    R.RESERVATION_DATE\n"
+			+ "FROM \n"
+			+ "    RESERVATION R\n"
+			+ "JOIN \n"
+			+ "    GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM\n"
+			+ "WHERE \n"
+			+ "    R.RESERVATION_MEMBER_ID = ?\n"
+			+ "ORDER BY \n"
+			+ "    R.RESERVATION_DATE DESC\n"
+			+ "LIMIT ?, ?";
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
@@ -197,7 +229,7 @@ public class ReservationDAO {
 
 	public List<ReservationDTO> selectAllAdmin(ReservationDTO reservationDTO){
 		List<ReservationDTO> datas=null;
-		Object[] args={reservationDTO.getPage(),6};
+		Object[] args={reservationDTO.getReservation_min_num(),6};
 		try {
 			//예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
 			datas= jdbcTemplate.query(ALL_ADMIN, args, new ReservationAdminRowMapperAll());
@@ -206,6 +238,31 @@ public class ReservationDAO {
 		}
 		return datas;
 	}
+
+	public List<ReservationDTO> selectAllAdminSearchGymName(ReservationDTO reservationDTO){
+		List<ReservationDTO> datas=null;
+		Object[] args={reservationDTO.getReservation_search_content(),reservationDTO.getReservation_min_num(),6};
+		try {
+			//암벽장 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
+			datas= jdbcTemplate.query(ALL_ADMIN_SEARCH_GYM_NAME, args, new ReservationAdminRowMapperAll());
+		}
+		catch (Exception e) {
+		}
+		return datas;
+	}
+
+	public List<ReservationDTO> selectAllAdminSearchMemberId(ReservationDTO reservationDTO){
+		List<ReservationDTO> datas=null;
+		Object[] args={reservationDTO.getReservation_search_content(),reservationDTO.getReservation_min_num(),6};
+		try {
+			//예약자 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
+			datas= jdbcTemplate.query(ALL_ADMIN_SEARCH_MEMBER_ID, args, new ReservationAdminRowMapperAll());
+		}
+		catch (Exception e) {
+		}
+		return datas;
+	}
+
 }
 
 class ReservationCountRowMapperOne implements RowMapper<ReservationDTO> {

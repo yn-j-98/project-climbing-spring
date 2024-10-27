@@ -25,5 +25,6 @@ public class ReservationDTO {
 	private String page;	// 페이지네이션
 	private String reservation_search_keyword;	// 예약 검색 목록
 	private String reservation_search_content;	// 예약 검색 내용
+	private int reservation_min_num;	// 페이지 네이션 시작 PK
 
 }
