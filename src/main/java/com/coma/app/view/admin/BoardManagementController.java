@@ -2,40 +2,114 @@ package com.coma.app.view.admin;
 
 import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.board.BoardDTO;
+import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reservation.ReservationDTO;
+import com.coma.app.view.annotation.LoginCheck;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-public class BoardAdminController {
+import java.util.List;
 
+public class BoardManagementController {
+
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private BoardService boardService;
+
+    @LoginCheck
     @GetMapping("/boardManagement.do")
-    public String boardManagement() {
+    public String boardManagement(HttpSession session, Model model, MemberDTO memberDTO, BoardDTO boardDTO) {
+
+        // 세션에서 관리자 ID 가져오기
+        String member_id = (String) session.getAttribute("MEMBER_ID");
+
+        //-----------------------------------------------------------------------------
+
+        // 페이지네이션
+        int page = boardDTO.getPage();
+        int size = 10; // 한 페이지에 표시할 게시글 수
+        if (page <= 0) { // 페이지가 0일 때 (npe방지)
+            page = 1;
+        }
+        int min_num = (page - 1) * size;
+
+        System.out.println("min = " + min_num);
+
+        boardDTO.setBoard_min_num(min_num);
+        //-----------------------------------------------------------------------------
+
+        List<BoardDTO> datas = boardService.selectAll(boardDTO);
+        model.addAttribute("datas", datas);
+
+
+
         return "admin/boardManagement";
     }
 
+
+
+    // 게시판 관리
+    @PostMapping("/boardManagement.do")
+    public String boardManagement(@RequestParam(value = "boardId", required = false) List<String> boardId,Model model, MemberDTO memberDTO, BoardDTO boardDTO) {
+        boolean flag = true;
+
+        if (boardId != null) {
+            for (String data : boardId) {
+                BoardDTO deleteBoardDTO = new BoardDTO();
+                deleteBoardDTO.setBoardId(data);
+                boolean deleteSuccess = this.boardService.delete(deleteBoardDTO);
+
+                if (!deleteSuccess) {
+                    flag = false;
+                    break;
+                }
+            }
+        } else {
+            flag = false;
+        }
+
+        model.addAttribute("title", "글 삭제");
+
+        if (flag) {
+            model.addAttribute("msg", "선택된 글 삭제 성공!");
+        } else {
+            model.addAttribute("msg", "글 삭제 실패..");
+        }
+
+        model.addAttribute("path", "boardManagement.do");
+//        boolean flag = this.boardService.delete(boardDTO);
+//        model.addAttribute("title", "글 삭제");
+//        if(flag){
+//            model.addAttribute("msg","글 삭제 성공!");
+//        }
+//        else{
+//            model.addAttribute("msg","글 삭제 실패..");
+//
+//        }
+//        model.addAttribute("path", "boardManagement.do");
+//        //		selectbox 지역
+//
+//		/*
+//		DELETE  BOARD ID ..
+//
+//		 */
+//
+//
+//        //TODO 일괄삭제기능도 포함
+//        //		이건 트랜잭션
+
+        return "views/info";
+    }
     @GetMapping("/boardManagementDetail.do")
     public String boardManagementDetail() {
         return "admin/boardManagementDetail";
     }
-
-    // 게시판 관리
-    public String boardManagement(Model model, MemberDTO memberDTO, GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) {
-
-
-        //		selectbox 지역
-
-		/*
-		DELETE  BOARD ID ..
-
-		 */
-
-
-        //TODO 일괄삭제기능도 포함
-        //		이건 트랜잭션
-
-        return null;
-    }
-
 }

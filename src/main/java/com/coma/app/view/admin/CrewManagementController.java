@@ -3,7 +3,7 @@ package com.coma.app.view.admin;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-public class CrewAdminController {
+public class CrewManagementController {
 
     @GetMapping("/crewManagement.do")
     public String crewManagement() {
@@ -40,6 +40,8 @@ public class CrewAdminController {
         return null;
     }
 
+
+    // 비동기
     public String crewBattleManagementModal(Model model) {
 
         //		크루전 진행한 전체 크루 사람 selectall

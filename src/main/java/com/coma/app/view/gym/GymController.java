@@ -71,21 +71,17 @@ public class GymController {
 
 		int gym_size = 5; // 한 페이지에 표시할 게시글 수 설정
 		int min_gym = 1; // 최소 게시글 수 초기화
-		int max_gym = 1; // 최대 게시글 수 초기화
 
 		// 페이지 번호에 따라 최소 및 최대 게시글 수 설정
 		if(page <= 1) {
 			// 페이지 번호가 1 이하일 경우
-			min_gym = 1; // 최소 게시글 번호를 1로 설정
-			max_gym = min_gym * gym_size; // 최대 게시글 번호 계산
+			min_gym = 0; // 최소 게시글 번호를 0으로 설정
 		}
 		else {
 			// 페이지 번호가 2 이상일 경우
 			min_gym = ((page - 1) * gym_size) + 1; // 최소 게시글 번호 계산
-			max_gym = page * gym_size; // 최대 게시글 번호 계산
 		}
 		//페이지네이션 값과 condition 값을 DTO에 추가하여 (6개출력)
-		gymDTO.setGym_max_num(max_gym);
 		gymDTO.setGym_min_num(min_gym);
 		gymDTO.setGym_condition("GYM_ONE_COUNT"); //컨디션 추가해야함
 
@@ -93,10 +89,8 @@ public class GymController {
 		GymDTO gym_total = this.gymService.selectOne(gymDTO);
 
 		System.out.println("min_gym"+min_gym);
-		System.out.println("max_gym"+max_gym);
 		// 페이지네이션 에 표시할 min_gym ~ max_gym까지 를 설정
 		gymDTO.setGym_min_num(min_gym);
-		gymDTO.setGym_max_num(max_gym);
 		//암벽장 리스트를 model에 요청 selectAll
 		//암벽장 테이블에서 받을 값(암벽장 번호 / 암벽장 이름 / 암벽장 주소)
 		List<GymDTO> gym_datas = this.gymService.selectAll(gymDTO);
@@ -147,7 +141,7 @@ public class GymController {
 		int reservation_price = 0;
 		//View에서 이동할 페이지 변수
 		//TODO 확인 V에서 GYMNUM 확인
-		String view_path = "redirect:GymInfo.do?gym_num="+reservationDTO.getReservation_gym_num();
+		String view_path = "gymInfo.do?gym_num="+reservationDTO.getReservation_gym_num();
 		//------------------------------------------------------------
 		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 시작
 		//(예약일 / 암벽장번호 / login) 정보를 ReservationDTO에 추가합니다.
@@ -267,7 +261,7 @@ public class GymController {
 		//사용자 아이디
 		String member_name = null;
 		//View에서 이동할 페이지 변수
-		String view_path = "redirect:GymInfo.do?gym_num="+gymDTO.getGym_num();
+		String view_path = "gymInfo.do?gym_num="+gymDTO.getGym_num();
 		model.addAttribute("msg", "예약 되었습니다!");
 		//------------------------------------------------------------
 
