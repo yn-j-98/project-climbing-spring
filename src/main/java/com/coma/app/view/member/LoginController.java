@@ -34,7 +34,6 @@ public class LoginController {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 
 		if (member_id == null) {
-			memberDTO.setMember_condition("MEMBER_SEARCH_ID_PASSWORD"); // 사용자의 아이디와 비밀번호를 확인
 			memberDTO = this.memberService.selectOneSearchIdPassword(memberDTO);
 			if (memberDTO != null) {
 				// 로그인 성공 시 세션에 회원 정보 저장				

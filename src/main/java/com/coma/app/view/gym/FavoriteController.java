@@ -34,7 +34,6 @@ public class FavoriteController {
 		//------------------------------------------------------------
 		//좋아요 여부를 확인하는 로직 시작
 		//TODO (암벽장 번호 / 사용자 아이디) Favorite DTO에 값을 추가해줍니다.
-		favoriteDTO.setFavorite_condition("ONE");
 		favoriteDTO.setFavorite_gym_num(favorite_gym_num);
 		favoriteDTO.setFavorite_member_id(member_id);
 

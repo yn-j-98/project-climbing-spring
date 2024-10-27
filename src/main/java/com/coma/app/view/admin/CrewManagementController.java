@@ -2,6 +2,7 @@ package com.coma.app.view.admin;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 public class CrewManagementController {
 
@@ -18,6 +19,7 @@ public class CrewManagementController {
 
 
     // 크루전 관리
+    @PostMapping("/crewBattleManagement.do")
     public String crewBattleManagement(Model model) {
 		/*
 		selectbox
@@ -42,7 +44,8 @@ public class CrewManagementController {
 
 
     // 비동기
-    public String crewBattleManagementModal(Model model) {
+    @PostMapping("/crewBattleManagementDetail.do")
+    public String crewBattleManagementDetail(Model model) {
 
         //		크루전 진행한 전체 크루 사람 selectall
         //

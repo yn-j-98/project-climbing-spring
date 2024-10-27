@@ -39,24 +39,24 @@ public class UserManagementController {
         if (page <= 0) { // 페이지가 0일 때 (npe방지)
             page = 1;
         }
-        page = (page - 1) * size;
+        int min_num = (page - 1) * size;
 
-        System.out.println("page = " + page);
+        System.out.println("min_num = " + min_num);
 
-        memberDTO.setPage(page);
+        memberDTO.setMember_min_num(min_num);
 //		필터검색 ACTION
 //		회원이름, 회원 아이디, 가입날짜
         List<MemberDTO> search_datas = null;
 
 
-        String search_keyword = memberDTO.getMember_searchKeyword();
+        String search_keyword = memberDTO.getMember_search_keyword();
 
         if (search_keyword.equals("member_id")) {
             search_datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
 
-            // TODO 삭제해야되는가?
-        } else if (search_keyword.equals("member_name")) {
-            search_datas = this.memberService.selectAllSearchAdmin(memberDTO);
+//            // TODO 삭제해야되는가?
+//        } else if (search_keyword.equals("member_name")) {
+//            search_datas = this.memberService.selectAllSearchNameAdmin(memberDTO);
 
         } else if (search_keyword.equals("member_join_date")) {
             search_datas = this.memberService.selectAllSearchDateAdmin(memberDTO);

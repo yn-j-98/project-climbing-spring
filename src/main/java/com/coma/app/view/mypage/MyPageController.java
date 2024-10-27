@@ -23,7 +23,6 @@ import com.coma.app.view.function.ProfileUpload;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
 
-//1022 완
 @Controller
 public class MyPageController {
 
@@ -39,20 +38,10 @@ public class MyPageController {
 	private HttpSession session;
 
 	//----------페이지이동--------------
-	@GetMapping("/myPage.do")
-	public String myPage() {
-		return "views/myPage";
-	}
-	@GetMapping("/editMyPage.do")
-	public String editMyPage() {
-		return "views/editMyPage";
-	}
-	//-------------------------------
-
-	//MypagePageAction
 	@LoginCheck
-	@PostMapping("/myPage.do")
+	@GetMapping("/myPage.do")
 	public String myPage(MemberDTO memberDTO, BoardDTO boardDTO,ReservationDTO reservationDTO, Model model) {
+
 		// 로그인된 사용자의 마이 페이지 처리
 
 		// 예시로 로그인한 사용자 정보를 가져와서 모델에 추가
@@ -64,7 +53,6 @@ public class MyPageController {
 		//내 정보 불러오는 코드 시작
 		//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
 		memberDTO.setMember_id(member_id);
-		memberDTO.setMember_condition("MEMBER_SEARCH_ID");
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
 
 		//회원가입할때 무언가 문제가 발생하여 이미지가 설정되지 못했다면
@@ -80,46 +68,65 @@ public class MyPageController {
 		//관리자 권한이 있다면 신규 등록한 아이디 출력 시작
 		if(memberDTO.getMember_role().equals("T")) {
 			//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
-			memberDTO.setMember_condition("MEMBER_ALL_NEW");
 			List<MemberDTO> member_list = this.memberService.selectAllNew(memberDTO);
 			//FIXME VIEW 값 확인
 			model.addAttribute("member_list", member_list);
 		}
 		//관리자 권한이 있다면 신규 등록한 아이디 출력 종료
 		//------------------------------------------------------------------
+		int page = memberDTO.getPage();
+		int size = 10; // 한 페이지에 표시할 게시글 수
+		if (page <= 0) { // 페이지가 0일 때 (npe방지)
+			page = 1;
+		}
+		int min_num = (page - 1) * size;
 
+		System.out.println("min = " + min_num);
+
+		memberDTO.setMember_min_num(min_num);
 		//사용자가 입력한 글 목록 출력 후 전달 시작
 		//boardDTO.setBoard_writer_id(login); 모델에 mypage에서 쓸 컨디션 추가 부탁해야함
-		boardDTO.setBoard_searchKeyword(member_id);
+		boardDTO.setBoard_search_keyword(member_id);
 		//이후 구현 예정
-		System.err.println("MyPageController 로그 페이지 네이션 하드코딩 해둔 상태");
-		boardDTO.setBoard_min_num(0);//페이지 네이션 하드코딩했음
-		boardDTO.setBoard_max_num(300);//페이지 네이션 하드코딩했음
 		//사용자가 입력한 글 목록 출력 후 전달 종료
 		//------------------------------------------------------------------
 		// 내 게시글 불러오는 코드 시작
-		boardDTO.setBoard_condition("BOARD_ALL_SEARCH_MATCH_ID");
-		List<BoardDTO> boardList = this.boardService.selectAll(boardDTO);
+		List<BoardDTO> boardList = this.boardService.selectAllSearchMatchId(boardDTO);
 
 		// 내 게시글 불러오는 코드 종료
 		//------------------------------------------------------------------
-		//내 예약정보 불러오는 코드 시작	
+		//내 예약정보 불러오는 코드 시작
 		//model에 reservation 테이블 정보를 요청
 		//로그인 정보를 전달하기 위해 DTO에 추가
 		reservationDTO.setReservation_member_id(member_id);
 		//요청해서 받을 값 (예약 PK번호 / 예약 암벽장 PK 번호 / 예약 암벽장 이름 / 예약 가격 / 암벽장 예약 날짜)
-		List<ReservationDTO> model_Reservation_Datas = this.reservationService.selectAll(reservationDTO);
+		List<ReservationDTO> reservation_datas = this.reservationService.selectAll(reservationDTO);
 		//내 예약정보 불러오는 코드 종료
 		//------------------------------------------------------------------
-		//사용자 정보를 MEMBERDATA에 담아서 View로 전달			
+		//사용자 정보를 MEMBERDATA에 담아서 View로 전달
 		//내 게시글 정보를 BOARD에 담아서 View로 전달
 		//내 예약 정보를 model_reservation_datas 에 담아서 View로 전달
 
-		
+
 		model.addAttribute("MEMBERDATA", memberDTO);
 		model.addAttribute("BOARD", boardList);
 		//FIXME V에서 앞에 model 빼야지 작동함
-		model.addAttribute("reservation_datas", model_Reservation_Datas);
+		model.addAttribute("reservation_datas", reservation_datas);
+
+		return "views/myPage";
+	}
+	@GetMapping("/editMyPage.do")
+	public String editMyPage() {
+		return "views/editMyPage";
+	}
+	//-------------------------------
+
+	//MypagePageAction
+	@LoginCheck
+	@PostMapping("/myPage.do")
+	public String myPage(MemberDTO memberDTO, BoardDTO boardDTO,ReservationDTO reservationDTO, Model model) {
+
+
 
 		return "views/myPage";
 	}
@@ -140,11 +147,11 @@ public class MyPageController {
 		System.out.println("MyPageController deleteMember 로그 : "+member_id);
 
 		//탈퇴전 사용자의 프로필이미지를 가져오기 위해 아이디 하나 검색하는 컨디션을 추가합니다.
-		memberDTO.setMember_condition("MEMBER_SEARCH_ID");
 		//탈퇴전 사용자의 프로필이미지를 가져와 줍니다.
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
 		//delete 를 성공하지 못했다면 Mypage로 보냅니다.
 		boolean flag = this.memberService.delete(memberDTO);
+		model.addAttribute("title", "회원 탈퇴");
 		if(flag) {//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.
 
 			//탈퇴전 사용자의 프로필이미지를 변수에 추가해줍니다.
@@ -182,6 +189,8 @@ public class MyPageController {
 	@PostMapping("/deleteRerservation.do")
 	public String deleteReservation(ReservationDTO reservationDTO, Model model) {	
 		boolean flag =  this.reservationService.delete(reservationDTO);
+
+		model.addAttribute("title", "예약 취소");
 		model.addAttribute("msg", "예약 취소 완료");
 		if (!flag) {
 			model.addAttribute("msg","예약 취소 실패");
@@ -201,6 +210,8 @@ public class MyPageController {
 		// 바꿀 사용자 아이디를 입력해줍니다.
 		memberDTO.setMember_id(member_id);
 
+		boolean flag = false;
+
 		// 프로필 이미지 업로드 처리
 		String filename = profileUpload.upload(photoUpload, session); // profileUpload 주입된 인스턴스 사용
 
@@ -208,17 +219,17 @@ public class MyPageController {
 		if (!filename.isEmpty()) {
 			System.out.println("uploadfile not null 로그 : " + filename);
 			memberDTO.setMember_profile(filename); // 저장한 프로필 이미지로 변경합니다.
-			memberDTO.setMember_condition("MEMBER_UPDATE_ALL");
+			flag = this.memberService.updateAll(memberDTO);
 		} else {
 			System.out.println("uploadfile null 로그");
-			memberDTO.setMember_condition("MEMBER_UPDATE_WITHOUT_PROFILE");
+			flag = this.memberService.updateWithoutProfile(memberDTO);
+
 		}
 
 		System.out.println("프로필 이미지 저장 로그: " + memberDTO); // 프로필 이미지 저장 로그
 		System.err.println("filename 로그" + filename);
 
 		// 사용자 정보를 DB에 업데이트 요청
-		boolean flag = this.memberService.updateWithoutProfile(memberDTO);
 
 		if (!flag) {
 			session.setAttribute("CHANGE_CHECK", flag);
@@ -235,7 +246,6 @@ public class MyPageController {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 		//사용자 아이디를 model에 전달하고
 		memberDTO.setMember_id(member_id);
-		memberDTO.setMember_condition("MEMBER_SEARCH_ID");
 		//전달해준 사용자 정보를 받아와 줍니다.
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
 

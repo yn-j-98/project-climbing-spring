@@ -67,15 +67,15 @@ public class GymController {
 		//페이지 네이션을 위한 페이지 개수를 구하는 로직을 구현
 
 		int page = gymDTO.getPage();
-		int size = 5; // 한 페이지에 표시할 게시글 수
+		int size = 10; // 한 페이지에 표시할 게시글 수
 		if (page <= 0) { // 페이지가 0일 때 (npe방지)
 			page = 1;
 		}
-		page = (page - 1) * size;
+		int min_num = (page - 1) * size;
 
-		System.out.println("page = " + page);
+		System.out.println("min = " + min_num);
 
-		gymDTO.setPage(page);
+		gymDTO.setGym_min_num(min_num);
 
 		//암벽장 총 개수를 요청 selectOne
 		GymDTO gym_total = this.gymService.selectOne(gymDTO);
@@ -104,6 +104,7 @@ public class GymController {
 		//암벽장 리스트를 View로 전달
 		model.addAttribute("gym_datas", gym_datas);
 		//암벽장 전체 개수를 View로 전달
+		//FIXME V에서 앞에 model 빼야지 작동함
 		model.addAttribute("total", gym_total.getGym_total());
 		//암벽장 페이지 페이지 번호를 전달.
 		model.addAttribute("page", page);

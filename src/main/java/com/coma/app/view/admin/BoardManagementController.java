@@ -7,6 +7,7 @@ import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reply.ReplyDTO;
+import com.coma.app.biz.reply.ReplyServiceImpl;
 import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +27,8 @@ public class BoardManagementController {
     private MemberService memberService;
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private ReplyServiceImpl replyService;
 
     @LoginCheck
     @GetMapping("/boardManagement.do")
@@ -37,16 +40,20 @@ public class BoardManagementController {
         //-----------------------------------------------------------------------------
 
         // 페이지네이션
-        int page = memberDTO.getPage();
+        int page = BoardDTO.getPage();
         int size = 10; // 한 페이지에 표시할 게시글 수
         if (page <= 0) { // 페이지가 0일 때 (npe방지)
             page = 1;
         }
-        page = (page - 1) * size;
+        int min_num = (page - 1) * size;
+
+        System.out.println("min = " + min_num);
+
+        BoardDTO.setBoard_min_num(min_num);
 
         System.out.println("page = " + page);
 
-        memberDTO.setPage(page);
+        BoardDTO.setPage(page);
 
         //-----------------------------------------------------------------------------
 
@@ -64,6 +71,7 @@ public class BoardManagementController {
         boolean flag = true;
 
         if (board_num_list != null) {
+            // TODO 아마도 수정 필요 ..
             for (String data : board_num_list) {
                 BoardDTO deleteBoardDTO = new BoardDTO();
                 deleteBoardDTO.setBoard_num(Integer.parseInt(data));
@@ -97,11 +105,29 @@ public class BoardManagementController {
     @GetMapping("/boardManagementDetail.do")
     public String boardManagementDetail(ReplyDTO replyDTO, BoardDTO boardDTO, Model model) {
 
-        List<BoardDTO> datas = boardService.selectAll(boardDTO);
-        model.addAttribute("datas", datas);
+        List<BoardDTO> board_datas = boardService.selectAll(boardDTO);
+        model.addAttribute("board_datas", board_datas);
+        List<ReplyDTO> reply_datas = replyService.selectAll(replyDTO);
+        model.addAttribute("reply_datas", reply_datas);
 
         return "admin/boardManagementDetail";
     }
-    @PostMapping
-    public String
+
+    @PostMapping("/boardManagementDetail.do")
+    public String boardManagementDetail(Model model, MemberDTO memberDTO, BoardDTO boardDTO, ReplyDTO replyDTO) {
+
+        boolean flag = false;
+        flag = this.replyService.delete(replyDTO);
+        model.addAttribute("title", "댓글 삭제");
+        if (flag) {
+            model.addAttribute("msg", "댓글 삭제 성공!");
+        }
+        else{
+            model.addAttribute("msg","댓글 삭제 실패..");
+        }
+        model.addAttribute("path", "boardManagementDetail.do");
+
+
+        return "views/info";
+    }
 }
