@@ -17,19 +17,6 @@
 <link rel="stylesheet" href="assets/css/plugins.min.css" />
 <link rel="stylesheet" href="assets/css/kaiadmin.css" />
 
-<style>
-.input-success {
-	border-color: #28a745;
-	background-color: #e9fbe9;
-}
-
-.input-error {
-	border-color: #dc3545;
-	background-color: #fbe9e9;
-}
-
-</style>
-
 </head>
 <body>
 

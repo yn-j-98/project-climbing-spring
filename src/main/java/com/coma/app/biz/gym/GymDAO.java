@@ -157,7 +157,7 @@ public class GymDAO {
 	public List<GymDTO> selectAll(GymDTO gymDTO){
 		System.out.println("com.coma.app.biz.gym.selectAll 시작");
 
-		Object[] args= {gymDTO.getGym_min_num(),6};
+		Object[] args= {gymDTO.getPage(),6};
 		//(페이지 네이션) 암벽장 전체출력
 		List<GymDTO> datas=jdbcTemplate.query(ALL,args,new GymSelectRowMapperOneAll());
 		System.out.println("com.coma.app.biz.gym.selectAll 성공");
@@ -176,7 +176,7 @@ public class GymDAO {
 	public List<GymDTO> selectAllAdmin(GymDTO gymDTO){
 		System.out.println("com.coma.app.biz.gym.selectAllAdmin 시작");
 
-		Object[] args= {gymDTO.getGym_min_num(),10};
+		Object[] args= {gymDTO.getPage(),10};
 		//암벽장 관리 리스트 출력(페이지네이션) // TODO 암벽장 관리 페이지
 		List<GymDTO> datas=jdbcTemplate.query(ALL_ADMIN,args,new GymAdminMapperAll());
 		System.out.println("com.coma.app.biz.gym.selectAllAdmin 성공");
@@ -217,8 +217,8 @@ class GymCountRowMapper implements RowMapper<GymDTO> {
 	public GymDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		GymDTO gymDTO=new GymDTO();
 		System.out.print("GymCountRowMapper DB에서 가져온 데이터 {");
-		gymDTO.setGym_total(rs.getInt("GYM_TOTAL"));
-		System.err.print("gym_total = ["+gymDTO.getGym_total()+"]");
+		gymDTO.setTotal(rs.getInt("GYM_TOTAL"));
+		System.err.print("gym_total = ["+gymDTO.getTotal()+"]");
 		System.out.println("}");
 		return gymDTO;
 	};

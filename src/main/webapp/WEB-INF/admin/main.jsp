@@ -59,7 +59,7 @@
   <div class="row text-center" id="board-div">
     <div class="col-md-12 d-flex justify-content-between align-items-center">
       <h2 class="ms-auto">최신글 5개 </h2>
-      <div class="badge badge-info ms-auto"><a href="#" > 더보기 <span class="btn-label"><i class="fas fa-plus"></i></span></a></div>
+      <div class="badge badge-info ms-auto"><a href="boardManagement.do" > 더보기 <span class="btn-label"><i class="fas fa-plus"></i></span></a></div>
     </div>
     <div class="accordion" id="board-accordion">
 
@@ -97,7 +97,7 @@
   <div class="row text-center" id="gym-div">
     <div class="col-md-12 d-flex justify-content-between align-items-center">
       <h2 class="ms-auto">최근경기 5개 </h2>
-      <div class="badge badge-info ms-auto"><a href="#">더보기 <span class="btn-label"><i class="fas fa-plus"></i></span></a></div>
+      <div class="badge badge-info ms-auto"><a href="crewManagement.do">더보기 <span class="btn-label"><i class="fas fa-plus"></i></span></a></div>
     </div>
     <div class="accordion" id="gym-accordion">
 

@@ -43,44 +43,33 @@ public class ReplyDAO {
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
 	public boolean insert(ReplyDTO replyDTO) {
-		System.out.println("com.coma.app.biz.reply.insert 시작");
 		//댓글작성 REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID
 		int result=jdbcTemplate.update(INSERT,replyDTO.getReply_content(),replyDTO.getReply_board_num(),replyDTO.getReply_writer_id());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.reply.insert SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.reply.insert 성공");
 		return true;
 	}
 
 	public boolean update(ReplyDTO replyDTO) {
-		System.out.println("com.coma.app.biz.reply.update 시작");
 		//댓글 내용 수정 REPLY_CONTENT, REPLY_NUM
 		int result=jdbcTemplate.update(UPDATE,replyDTO.getReply_content(),replyDTO.getReply_num());
 		if(result<=0) {
-			System.out.println("com.coma.app.biz.reply.update SQL문 실패");
 			return false;
 		}
-		System.out.println("com.coma.app.biz.reply.update 성공");
 		return true;
 	}
 
 	public boolean delete(ReplyDTO replyDTO) {
-		System.err.println("com.coma.app.biz.reply.delete 시작");
 		//댓글 삭제 REPLY_NUM
 		int result=jdbcTemplate.update(DELETE,replyDTO.getReply_num());
 		if(result<=0) {
-			System.err.println("com.coma.app.biz.reply.delete SQL문 실패");
 			return false;
 		}
-		System.err.println("com.coma.app.biz.reply.delete 성공");
 		return true;
 	}
 
 	public ReplyDTO selectOne(ReplyDTO replyDTO){
-		System.out.println("com.coma.app.biz.reply.selectOne 시작");
-
 		ReplyDTO data = null;
 		Object[] args = {replyDTO.getReply_num()};
 		try {
@@ -88,15 +77,11 @@ public class ReplyDAO {
 			data= jdbcTemplate.queryForObject(SELECTONE,args,new ReplySelectRowMapper());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reply.selectOne SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reply.selectOne 성공");
 		return data;
 	}
 
 	public List<ReplyDTO> selectAll(ReplyDTO replyDTO){
-		System.out.println("com.coma.app.biz.reply.selectAll 시작");
-
 		List<ReplyDTO> datas=null;
 		Object[] args = {replyDTO.getReply_board_num()};
 		try {
@@ -104,9 +89,7 @@ public class ReplyDAO {
 			datas= jdbcTemplate.query(SELECTALL,args,new ReplySelectRowMapper());
 		}
 		catch (Exception e) {
-			System.out.println("com.coma.app.biz.reply.selectAll SQL문 실패");
 		}
-		System.out.println("com.coma.app.biz.reply.selectAll 성공");
 		return datas;
 	}
 }

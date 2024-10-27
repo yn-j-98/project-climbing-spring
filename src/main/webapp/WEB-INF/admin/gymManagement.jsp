@@ -103,9 +103,9 @@
                     <div class="form-floating">
                         <%--TODO 컨디션 안쓴다면 ID 변경--%>
                         <select class="form-select" id="search_keyword">
-                            <option  ${search_keyword == "ALL" ? "selected":''} value="ALL">전체</option>
-                            <option ${search_keyword == "adminCertified" ? "selected":''} value="adminCertifiedC">등록</option>
-                            <option ${search_keyword == "adminUnCertified" ? "selected":''} value="adminUnCertified">비등록</option>
+                            <option  ${gym_search_keyword == "ALL" ? "selected":''} value="ALL">전체</option>
+                            <option ${gym_search_keyword == "adminCertified" ? "selected":''} value="adminCertifiedC">등록</option>
+                            <option ${gym_search_keyword == "adminUnCertified" ? "selected":''} value="adminUnCertified">비등록</option>
                         </select>
                         <label for="search_keyword">검색할 목록</label>
                     </div>
@@ -159,7 +159,7 @@
             <div id="pageNation" class="row justify-content-center">
                 <div class="row pt-5">
                     <div class="col-md-12 d-flex justify-content-center ">
-                        <nav aria-label="Page navigation" data-search-contents="${search_content}">
+                        <nav aria-label="Page navigation" data-search-contents="${gym_search_content}">
                             <input type="hidden" id="totalCount" value="${total}">
                             <input type="hidden" id="currentPage" value="${page}">
                             <ul id="pagination" class="pagination justify-content-center align-items-center"></ul>
@@ -360,8 +360,8 @@
             method: 'POST',
             style: 'display: none;'
         });
-        form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: search_keyword}));
-        form.append($('<input/>', {type: 'hidden', name: 'search_content', value: search_content}));
+        form.append($('<input/>', {type: 'hidden', name: 'gym_search_keyword', value: search_keyword}));
+        form.append($('<input/>', {type: 'hidden', name: 'gym_search_content', value: search_content}));
         // 문서에 form 추가
         $('body').append(form);
         form.submit();

@@ -71,19 +71,19 @@
                         <div class="col-md-3 ">
                             <div class="form-floating">
                                 <%--TODO 컨디션 안쓴다면 ID 변경--%>
-                                <select class="form-select" id="search_keyword">
-                                    <option ${search_keywoard == "BOARD_NUM" ? "selected":''} value="BOARD_NUM">게시글 번호</option>
-                                    <option ${search_keywoard == "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
-                                    <option ${search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
+                                <select class="form-select" id="board_search_keyword">
+                                    <option ${board_search_keywoard == "BOARD_NUM" ? "selected":''} value="BOARD_NUM">게시글 번호</option>
+                                    <option ${board_search_keywoard == "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
+                                    <option ${board_search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
                                 </select>
-                                <label for="search_keyword">검색할 목록</label>
+                                <label for="board_search_keyword">검색할 목록</label>
                             </div>
                         </div>
                         <div class="col-md-9">
                             <div class="form-floating">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" aria-label="검색어 입력" placeholder="검색어 입력"
-                                           aria-describedby="search" id="search_content">
+                                           aria-describedby="search" id="board_search_content">
                                     <%--TODO 키워드 안쓴다면 ID 변경--%>
                                     <button class="btn btn-outline-secondary" type="button" id="search">검색
                                     </button>
@@ -118,7 +118,7 @@
                                 <!--데이터 목록-->
                                 <tbody id="boardList">
                                 <c:forEach var="board" items="${datas}">
-                                    <tr class="align-middle" data-board-num="1">
+                                    <tr class="align-middle board-detail" data-board-num="${board.board_num}">
                                         <td>
                                             <div class="form-check text-start">
                                                 <input class="form-check-input" type="checkbox" value="">
@@ -143,7 +143,7 @@
     <div id="pageNation" class="row justify-content-center">
         <div class="row pt-5">
             <div class="col-md-12 d-flex justify-content-center ">
-                <nav aria-label="Page navigation" data-search-contents="${search_content}">
+                <nav aria-label="Page navigation" data-search-contents="${board_search_content}">
                     <input type="hidden" id="totalCount" value="${total}"> <%--FIXME--%>
                     <input type="hidden" id="currentPage" value="${page}">
                     <ul id="pagination" class="pagination justify-content-center align-items-center">
@@ -185,7 +185,7 @@
                             var boardNum = $(this).data("boardNum");
                             console.log("boardNum =[" + boardNum + "]");
                             //TODO 배열 요청 자체적으로 배열로 만들어서 넘긴다 = 같은이름이기 때문에
-                            form.append($('<input/>', {type: 'hidden', name: 'gym_num_list', value: boardNum}));
+                            form.append($('<input/>', {type: 'hidden', name: 'board_num_list', value: boardNum}));
                         });
 
                         console.log("폼 HTML = [" + form.html() + "]"); // 폼 내부의 HTML 내용 출력
@@ -209,8 +209,25 @@
                 method: 'POST',
                 style: 'display: none;'
             });
-            form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: search_keyword}));
-            form.append($('<input/>', {type: 'hidden', name: 'search_content', value: search_content}));
+            form.append($('<input/>', {type: 'hidden', name: 'board_search_keyword', value: board_search_keyword}));
+            form.append($('<input/>', {type: 'hidden', name: 'board_search_content', value: board_search_content}));
+            // 문서에 form 추가
+            $('body').append(form);
+            form.submit();
+        });
+
+        //글 내용 클릭시 상세페이지로 이동
+        $('.board-detail').click(function () {
+            let boardNum = $(this).data('boardNum');
+            console.log("boardNum = [" + boardNum + "]");
+
+            var form = $('<form/>', {
+                //TODO .do 입력
+                action: '컨트롤러가 지정해준 값.do',
+                method: 'POST',
+                style: 'display: none;'
+            });
+            form.append($('<input/>', {type: 'hidden', name: 'board_num', value: boardNum}));
             // 문서에 form 추가
             $('body').append(form);
             form.submit();
