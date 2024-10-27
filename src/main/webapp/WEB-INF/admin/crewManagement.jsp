@@ -48,15 +48,15 @@
     <div class="row mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <div class="col-md-2 ms-auto">
-          <select class="form-select form-control" id="member-select" name="search_keyword">
-            <option value="NUM" ${search_keyword = 'NUM' ? 'selected' : ''}>크루전 번호</option>
-            <option value="MEMBERNAME" ${search_keyword = 'MEMBERNAME' ? 'selected' : ''}>암벽장 이름</option>
-            <option value="MEMBERID" ${search_keyword = 'MEMBERID' ? 'selected' : ''}>경기 날짜</option>
-            <option value="DATE" ${search_keyword = 'DATE' ? 'selected' : ''}>크루전 생성일</option>
+          <select class="form-select form-control" id="member-select" name="crew_search_keyword">
+            <option value="NUM" ${crew_search_keyword = 'NUM' ? 'selected' : ''}>크루전 번호</option>
+            <option value="MEMBERNAME" ${crew_search_keyword = 'MEMBERNAME' ? 'selected' : ''}>암벽장 이름</option>
+            <option value="MEMBERID" ${crew_search_keyword = 'MEMBERID' ? 'selected' : ''}>경기 날짜</option>
+            <option value="DATE" ${crew_search_keyword = 'DATE' ? 'selected' : ''}>크루전 생성일</option>
           </select>
         </div>
         <div class="col-md-7">
-          <input type="text" class="form-control" name="search_content" placeholder="검색어를 입력해주세요">
+          <input type="text" class="form-control" name="crew_search_content" placeholder="검색어를 입력해주세요">
         </div>
         <div class="me-auto">
           <button class="btn btn-primary btn-border" type="submit">검색</button>

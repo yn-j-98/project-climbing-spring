@@ -54,7 +54,7 @@
 					<div class="row">
 						<div class="col-md-3 col-lg-3">
 							<div class="form-group">
-								<select name="search_Keyword"
+								<select name="board_search_keyword"
 										class="form-select form-control-lg">
 									<option value="SEARCH_TITLE">글 제목</option>
 									<option value="SEARCH_WRITER">작성자</option>
@@ -66,7 +66,7 @@
 						<div class="col-md-6 col-lg-7">
 							<div class="form-group">
 								<div class="input-icon">
-									<input name="search_content" type="text" class="form-control"
+									<input name="board_search_content" type="text" class="form-control"
 										   placeholder="검색어를 입력해주세요" /> <span class="input-icon-addon">
 											<button type="submit" class="btn">
 												<i class="fa fa-search"></i>

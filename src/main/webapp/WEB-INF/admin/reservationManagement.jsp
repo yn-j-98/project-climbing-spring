@@ -71,8 +71,8 @@
                                 <div class="form-floating">
                                     <%--TODO 컨디션 안쓴다면 ID 변경--%>
                                     <select class="form-select" id="search_keyword">
-                                        <option ${search_keyword == "RESERVATION_MEMBER_ID" ? "selected":''} value="RESERVATION_MEMBER_ID">예약자</option>
-                                        <option ${search_keyword == "RESERVATION_GYM_NUM" ? "selected":''} value="RESERVATION_GYM_NUM">암벽장</option>
+                                        <option ${reservation_search_keyword == "RESERVATION_MEMBER_ID" ? "selected":''} value="RESERVATION_MEMBER_ID">예약자</option>
+                                        <option ${reservation_search_keyword == "RESERVATION_GYM_NUM" ? "selected":''} value="RESERVATION_GYM_NUM">암벽장</option>
                                     </select>
                                     <label for="search_keyword">검색할 목록</label>
                                 </div>
@@ -112,7 +112,7 @@
                                                 <strong>예약자명:</strong> ${reservation.reservation_member_name}
                                             </p>
                                             <p class="card-text">
-                                                <strong>실제 결제 금액:</strong> ${reservation.몰라 이건 }원
+                                                <strong>실제 결제 금액:</strong> ${reservation.reservation_price}원
                                                     <%--TODO 이 값들 다 조정필요--%>
                                             </p>
                                             <div class="text-end">
@@ -135,7 +135,7 @@
                         <div class="col-md-12 d-flex justify-content-center ">
                             <nav aria-label="Page navigation">
                                 <input type="hidden" id="totalCount" value="${tatal}"
-                                       data-search-contents= ${search_content}><%--FIXME--%>
+                                       data-search-contents= ${reservation_search_content}><%--FIXME--%>
                                 <input type="hidden" id="currentPage" value="${page}">
                                 <ul id="pagination" class="pagination justify-content-center align-items-center">
 
@@ -190,8 +190,8 @@
                 method: 'POST',
                 style: 'display: none;'
             });
-            form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: search_keyword}));
-            form.append($('<input/>', {type: 'hidden', name: 'search_content', value: search_content}));
+            form.append($('<input/>', {type: 'hidden', name: 'reservation_search_keyword', value: search_keyword}));
+            form.append($('<input/>', {type: 'hidden', name: 'reservation_search_content', value: search_content}));
             // 문서에 form 추가
             $('body').append(form);
             form.submit();
