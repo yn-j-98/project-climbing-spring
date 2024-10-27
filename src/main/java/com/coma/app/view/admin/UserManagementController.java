@@ -39,11 +39,11 @@ public class UserManagementController {
         if (page <= 0) { // 페이지가 0일 때 (npe방지)
             page = 1;
         }
-        int min_num = (page - 1) * size;
+        page = (page - 1) * size;
 
-        System.out.println("min = " + min_num);
+        System.out.println("page = " + page);
 
-        memberDTO.setMember_min_num(min_num);
+        memberDTO.setPage(page);
 //		필터검색 ACTION
 //		회원이름, 회원 아이디, 가입날짜
         List<MemberDTO> search_datas = null;

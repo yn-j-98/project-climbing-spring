@@ -65,32 +65,21 @@ public class GymController {
 		//---------------------------------------------------------------------------
 		//페이지 네이션을 위해 암벽장 전체 개수를 요청 selectOne
 		//페이지 네이션을 위한 페이지 개수를 구하는 로직을 구현
-		int page = 1; // page_num 초기 변수 지정
 
-		page = gymDTO.getPage();         
-
-		int gym_size = 5; // 한 페이지에 표시할 게시글 수 설정
-		int min_gym = 1; // 최소 게시글 수 초기화
-
-		// 페이지 번호에 따라 최소 및 최대 게시글 수 설정
-		if(page <= 1) {
-			// 페이지 번호가 1 이하일 경우
-			min_gym = 0; // 최소 게시글 번호를 0으로 설정
+		int page = gymDTO.getPage();
+		int size = 5; // 한 페이지에 표시할 게시글 수
+		if (page <= 0) { // 페이지가 0일 때 (npe방지)
+			page = 1;
 		}
-		else {
-			// 페이지 번호가 2 이상일 경우
-			min_gym = ((page - 1) * gym_size) + 1; // 최소 게시글 번호 계산
-		}
-		//페이지네이션 값과 condition 값을 DTO에 추가하여 (6개출력)
-		gymDTO.setGym_min_num(min_gym);
-		gymDTO.setGym_condition("GYM_ONE_COUNT"); //컨디션 추가해야함
+		page = (page - 1) * size;
+
+		System.out.println("page = " + page);
+
+		gymDTO.setPage(page);
 
 		//암벽장 총 개수를 요청 selectOne
 		GymDTO gym_total = this.gymService.selectOne(gymDTO);
 
-		System.out.println("min_gym"+min_gym);
-		// 페이지네이션 에 표시할 min_gym ~ max_gym까지 를 설정
-		gymDTO.setGym_min_num(min_gym);
 		//암벽장 리스트를 model에 요청 selectAll
 		//암벽장 테이블에서 받을 값(암벽장 번호 / 암벽장 이름 / 암벽장 주소)
 		List<GymDTO> gym_datas = this.gymService.selectAll(gymDTO);
@@ -113,10 +102,8 @@ public class GymController {
 		System.out.println(json);
 		//------------------------------------------------------------
 		//암벽장 리스트를 View로 전달
-		//FIXME V에서 앞에 model 빼야지 작동함 
 		model.addAttribute("gym_datas", gym_datas);
 		//암벽장 전체 개수를 View로 전달
-		//FIXME V에서 앞에 model 빼야지 작동함
 		model.addAttribute("total", gym_total.getGym_total());
 		//암벽장 페이지 페이지 번호를 전달.
 		model.addAttribute("page", page);
@@ -145,7 +132,6 @@ public class GymController {
 		//------------------------------------------------------------
 		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 시작
 		//(예약일 / 암벽장번호 / login) 정보를 ReservationDTO에 추가합니다.
-		reservationDTO.setReservation_condition("RESERVATION_ONE_SEARCH");
 		ReservationDTO reservation_Check = this.reservationService.selectOne(reservationDTO);
 		//요청 값이 null 이 아니라면 해당 날짜에 이미 예약되어있는 사용자 이므로
 		//not null == error_message : 해당 날짜에는 이미 예약되어있습니다. (예약 번호 : Reservation PK 값)
@@ -159,7 +145,6 @@ public class GymController {
 		//------------------------------------------------------------
 		//예약 정보가 정상문제 없는지 확인하는 로직 시작
 		//암벽장 번호를 Gym DTO 에 추가해줍니다.
-		gymDTO.setGym_condition("GYM_ONE"); // TODO 컨디션 추가해야함
 		//model 에 selectOne으로 암벽장 가격을 가져옵니다.
 		int gym_price = this.gymService.selectOne(gymDTO).getGym_price();
 		//사용자가 최대 Point 보다 많이 입력했다면 최대 포인트로 고정합니다.
@@ -169,7 +154,6 @@ public class GymController {
 			reservation_use_point = max_Point;
 		}
 		//(사용자 아이디)을 MemberDTO에 추가합니다.
-		memberDTO.setMember_condition("MEMBER_SEARCH_ID");
 		//사용자의 현재 포인트를 SelectOne으로 요청하고
 		MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
 		//해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
@@ -186,7 +170,6 @@ public class GymController {
 		}
 		//사용자 포인트에 문제가 없다면
 		//DTO 에 남은 사용자 포인트를 추가하고
-		memberDTO.setMember_condition("MEMBER_UPDATE_CURRENT_POINT");
 		//member update 로 사용자 포인트를 변경합니다.
 		boolean flag_point_update = this.memberService.updateCurrentPoint(memberDTO);
 		if(!flag_point_update) {
@@ -275,7 +258,6 @@ public class GymController {
 				reservation_use_point = max_Point;
 			}
 			//(사용자 아이디)을 MemberDTO에 추가합니다.
-			memberDTO.setMember_condition("MEMBER_SEARCH_ID");
 			//TODO 사용자의 현재 포인트를 SelectOne으로 요청하고
 			MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
 			//TODO 해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
@@ -298,13 +280,11 @@ public class GymController {
 			//예약 가능 인원 수 구하는 로직 시작
 			//암벽장 번호를 Gym DTO 에 입력하여 암벽장 정보를 요청합니다.
 			gymDTO.setGym_num(gym_num);
-			gymDTO.setGym_condition("GYM_ONE");
 			//해당 암벽장 정보의 예약 최대 인원을 요청합니다.
 			int reservation_total_cnt = this.gymService.selectOne(gymDTO).getGym_reservation_cnt();
 			//암벽장 번호와 예약 날짜를 Reservation DTO 에 추가해줍니다.
-			reservationDTO.setReservation_condition("RESERVATION_ONE_COUNT");//TODO 컨디션 추가해야함
 			//model 에 selectOne 을 요청하여 현재 예약한 인원을 요청합니다.
-			int reservation_current_cnt = this.reservationService.selectOne(reservationDTO).getReservation_total();
+			int reservation_current_cnt = this.reservationService.selectOneCount(reservationDTO).getReservation_total();
 			//예약 인원이 resrvation_cnt = resrvation_total_cnt - resrvation_current_cnt
 			reservation_cnt = reservation_total_cnt - reservation_current_cnt;
 			//만약 0보다 작다면
@@ -319,7 +299,6 @@ public class GymController {
 			//------------------------------------------------------------
 			//사용자 이름 구하는 로직 시작
 			//사용자 아이디를 Member DTO에 추가합니다.
-			memberDTO.setMember_condition("MEMBER_SEARCH_ID");
 			//model 에 selectOne으로 사용자 이름을 요청합니다.
 			member_name = this.memberService.selectOneSearchId(memberDTO).getMember_name();
 
@@ -368,7 +347,6 @@ public class GymController {
 		//암벽장 정보 로직 시작
 		//View에서 전달해준 암벽장 번호를 gym DTO에 저장하고
 		System.out.println("암벽장 PK : "+ gym_num);
-		gymDTO.setGym_condition("GYM_ONE");//TODO 컨디션값 입력해야함
 		//gym selectOne으로 Model에 암벽장정보를 요청합니다.
 		//데이터 : 암벽장 번호 / 암벽장 이름 / 암벽장 사진 / 암벽장 설명 / 암벽장 주소 / 암벽장 가격
 		GymDTO data = this.gymService.selectOne(gymDTO);
@@ -382,7 +360,6 @@ public class GymController {
 		//---------------------------------------------------------------------------
 		//해당 암벽장에서 승리한 크루 목록 로직 시작
 		//View에서 전달해준 암벽장 번호를 battle_record DTO에 저장하고
-		battle_recordDTO.setBattle_record_condition("BATTLE_RECORD_ALL_WINNER_PARTICIPANT_GYM");//TODO 컨디션 추가해야함 selectAll 필요함
 		battle_recordDTO.setBattle_record_gym_num(gym_num);
 		//battle_record selectAll으로 Model에 해당 암벽장에서 승리한 크루 목록을 요청하고
 		//데이터 : 승리크루 이름 / 승리크루 사진 / 승리크루 경기날짜 / MVP 이름
@@ -394,7 +371,6 @@ public class GymController {
 		//---------------------------------------------------------------------------
 		//해당 암벽장에 등록되어 있는 크루전 정보 로직 시작
 		// View에서 전달해준 암벽장 번호를 DTO에 저장하고
-		gymDTO.setGym_condition("GYM_ONE"); //TODO 컨디션 추가해야함
 		gymDTO.setGym_num(gym_num);
 		// Battle selectOne으로 Model에 해당 암벽장에서 크루전 정보 요청
 		//데이터 : 크루전 번호 / 크루전 날짜
@@ -408,7 +384,6 @@ public class GymController {
 			//사용자 포인트 요청 로직 시작
 			//사용자 아이디를 Member DTO에 저장하고
 
-			memberDTO.setMember_condition("MEMBER_SEARCH_ID");//TODO 컨디션 추가해야함
 			//Member selectOne으로 Model에 해당 사용자의 사용가능 포인트요청
 			MemberDTO member_data = this.memberService.selectOneSearchId(memberDTO);
 			int member_current_point = 0 ;
