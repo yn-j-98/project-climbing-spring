@@ -51,13 +51,13 @@
 
    <aop:aspectj-autoproxy/>
 
-   <!-- LoginCheckImpl 빈 등록  -->
+<!--   &lt;!&ndash; LoginCheckImpl 빈 등록  &ndash;&gt;
    <bean id="loginCheckImpl" class="com.coma.app.view.annotation.LoginCheckImpl"/>
 
-   <!-- LoginAspect 빈 등록  -->
+   &lt;!&ndash; LoginAspect 빈 등록  &ndash;&gt;
    <bean id="loginAspect" class="com.coma.app.view.member.LoginAspect">
       <constructor-arg ref="loginCheckImpl"/>
-   </bean>
+   </bean>-->
 
    <tx:advice transaction-manager="txManager" id="txAdviceDelete">
       <tx:attributes>
