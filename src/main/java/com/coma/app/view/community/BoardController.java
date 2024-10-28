@@ -1,33 +1,24 @@
 package com.coma.app.view.community;
 
-import java.io.UnsupportedEncodingException;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.coma.app.biz.board.BoardDTO;
+import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberService;
+import com.coma.app.biz.reply.ReplyDTO;
+import com.coma.app.biz.reply.ReplyService;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.coma.app.biz.board.BoardDTO;
-import com.coma.app.biz.board.BoardService;
-import com.coma.app.biz.member.MemberService;
-import com.coma.app.biz.reply.ReplyDTO;
-import com.coma.app.biz.reply.ReplyService;
-import com.coma.app.view.function.CKEditorDeleteFile;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.net.http.HttpRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class BoardController {
@@ -129,7 +120,7 @@ public class BoardController {
     }
 
     @LoginCheck
-    @PostMapping(value = "/boardUpdate.do")
+    @GetMapping(value = "/boardUpdate.do")
     public String boardUpdate(HttpRequest request, HttpSession session, Model model, BoardDTO boardDTO) {
 
 
@@ -185,7 +176,7 @@ public class BoardController {
 
             //만약 데이터가 null 이라면 mypage.do 로 전달
             if (boardDTO == null) {
-                ;
+
                 model.addAttribute("title", "죄송합니다");
 
                 model.addAttribute("path", "Mypage");

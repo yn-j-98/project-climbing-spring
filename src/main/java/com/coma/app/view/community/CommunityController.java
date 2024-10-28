@@ -44,86 +44,76 @@ public class CommunityController{
 
         // 검색 조건과 키워드가 있는지 확인
 
-
+        List<BoardDTO> boardList = null;
+        // 검색 조건과 키워드가 있는지 확인
         if(search_Keyword != null) {
             // 글 검색 부분
-
             if(search_Keyword.equals("SEARCH_ID")) {
                 // 아이디로 검색했을 때
-//                boardDTO.setBoard_condition("BOARD_ALL_SEARCH_PATTERN_ID"); // 아이디검색 컨디션
+//                boardDTO.setSearch_content("BOARD_ONE_SEARCH_ID_COUNT");
+               log.info("community.boardCount : ["+boardDTO+"]");//로그
 
-                System.out.println("CommunityCotroller.community.boardDTO : ["+boardDTO+"]");//로그
-                List<BoardDTO> boardList = boardService.selectAllSearchPatternId(boardDTO);
-//                boardDTO.setBoard_condition("BOARD_ONE_SEARCH_ID_COUNT");
+                listNum = this.boardService.selectOne(boardDTO).getTotal();//게시글의 전체 개수
+                log.info("community.listNum: ["+listNum+"]");//로그
 
-                BoardDTO boardCount = boardService.selectOneSearchIdCount(boardDTO);//
-                listNum = boardCount.getTotal();//게시글의 전체 개수
-                log.info("community.boardCount : ["+boardCount+"]");//로그
+                //boardDTO.setBoard_condition("BOARD_ALL_SEARCH_PATTERN_ID"); // 아이디검색 컨디션
+                // 게시글 목록 조회
+                boardList = this.boardService.selectAllSearchPatternId(boardDTO); // 설정된 조건으로 게시글 목록 조회
 
-                log.info("CommunityController.community.listNum : ["+listNum+"]");//로그
-
-                model.addAttribute("BOARD", boardList);
-
-
-
+                // selectOne 메소드를 호출하여 검색 조건에 맞는 게시글 수를 가져옴
+                log.info(" community.boardDTO : ["+boardDTO+"]");//로그
             }
             else if(search_Keyword.equals("SEARCH_WRITER")) {
                 // 작성자로 검색했을 때
-//                boardDTO.setBoard_condition("BOARD_ALL_SEARCH_NAME"); // 작성자 검색 컨디션
-//                boardDTO.setModel_board_searchKeyword(keyword); // 검색 키워드 설정
-                List<BoardDTO> boardList = this.boardService.selectAllSearchName(boardDTO);
-                log.info("community.boardDTO : ["+boardDTO+"]");//로그
-
 
 //                boardDTO.setBoard_condition("BOARD_ONE_SEARCH_NAME_COUNT");
-//                BoardDTO.setModel_board_searchKeyword(keyword);
-                BoardDTO boardCount = this.boardService.selectOneSearchNameCount(boardDTO);
-                log.info("community.boardCount : ["+boardCount+"]");//로그
+                log.info("(community.boardCount : ["+boardDTO+"]");//로그
 
-
-                listNum = boardCount.getTotal();
+                listNum = this.boardService.selectOne(boardDTO).getTotal();
                 log.info("community.listNum : ["+listNum+"]");//로그
 
-                model.addAttribute("BOARD", boardList);
+                //boardDTO.setBoard_condition("BOARD_ALL_SEARCH_NAME"); // 작성자 검색 컨디션
+                // 게시글 목록 조회
+                boardList = this.boardService.selectAllSearchName(boardDTO); // 설정된 조건으로 게시글 목록 조회
 
+                log.info("community.boardDTO : ["+boardDTO+"]");//로그
             }
             else if(search_Keyword.equals("SEARCH_TITLE")) {
                 // 글 제목으로 검색했을 때
-//                boardDTO.setBoard_condition("BOARD_ALL_SEARCH_TITLE"); // 제목 검색 컨디션
+//                boardDTO.setSearch_content("BOARD_ONE_SEARCH_TITLE_COUNT");
+               // log.info("community.boardDTO : ["+boardDTO+ "]");//로그
+
+                listNum = this.boardService.selectOne(boardDTO).getTotal();
+                log.info("community.listNum : ["+listNum+"]");//로그
+
+                //boardDTO.setBoard_condition("BOARD_ALL_SEARCH_TITLE"); // 제목 검색 컨디션
+                // 게시글 목록 조회
+                boardList = this.boardService.selectAllSearchTitle(boardDTO); // 설정된 조건으로 게시글 목록 조회
 
                 log.info("community.boardDTO : ["+boardDTO+"]");//로그
-                List<BoardDTO> boardList = this.boardService.selectAllSearchTitle(boardDTO);
-
-
-//                boardDTO.setBoard_condition("BOARD_ONE_SEARCH_TITLE_COUNT");
-
-                BoardDTO boardCount = this.boardService.selectOneSearchTitleCount(boardDTO);
-                log.info("community.boardCount : ["+boardCount+"]");//로그
-
-                listNum = boardCount.getTotal();
-                log.info("community,listNum"+listNum);//로그
-                model.addAttribute("BOARD", boardList);
-
-
             }
         }
         //검색어가 없다면 BOARD_ALL
         else {
             // 검색 조건이 없는 경우 전체 검색
-//            boardDTO.setBoard_condition("BOARD_ALL"); // 전체 게시글 조회 컨디션
-            List<BoardDTO>  boardList=this.boardService.selectAll(boardDTO);
 //            boardDTO.setBoard_condition("BOARD_ONE_COUNT");
-            BoardDTO boardCount = this.boardService.selectOneCount(boardDTO);
-            listNum = boardCount.getTotal();
+            listNum = this.boardService.selectOneCount(boardDTO).getTotal();
             log.info("community.listNum : ["+listNum+"]");
-            model.addAttribute("BOARD", boardList);
+
+            //boardDTO.setBoard_condition("BOARD_ALL"); // 전체 게시글 조회 컨디션
+            // 게시글 목록 조회
+            boardList = this.boardService.selectAll(boardDTO); // 설정된 조건으로 게시글 목록 조회
         }
+
+        // 게시글을 페이지 단위로 잘라서 조회해야 함
+        // boardDTO에 minPage와 maxPage 값을 설정하여 조회 범위를 지정해야 함
+
         boardDTO.setBoard_min_num(minBoard);
 
 
-//        model.addAttribute("BOARD", boardList);
-        model.addAttribute("total", listNum);
-        model.addAttribute("Page", pageNum);
+        model.addAttribute("BOARD", boardList); // 조회된 게시글 목록을 요청 객체에 저장
+        model.addAttribute("total", listNum); // 전체 글 개수
+        model.addAttribute("page", pageNum); // 현재 페이지 번호
 
 
 
