@@ -38,8 +38,6 @@ public class MainManagementController{
     @GetMapping("/mainManagement.do")
     public String mainManagement(Model model, HttpSession session, MemberDTO memberDTO,
                                  GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) {
-        // 세션에서 관리자 ID 가져오기
-        String member_id = (String) session.getAttribute("MEMBER_ID");
 
         // 차트js
         // 통계 데이터 가져오기

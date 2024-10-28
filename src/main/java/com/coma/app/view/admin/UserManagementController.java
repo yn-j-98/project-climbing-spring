@@ -1,13 +1,9 @@
 package com.coma.app.view.admin;
 
-import com.coma.app.biz.battle.BattleDTO;
-import com.coma.app.biz.board.BoardDTO;
-import com.coma.app.biz.gym.GymDTO;
+
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
-import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.view.annotation.LoginCheck;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,10 +21,10 @@ public class UserManagementController {
 
     @LoginCheck
     @GetMapping("/userManagement.do")
-    public String userManagement(HttpSession session, Model model, MemberDTO memberDTO) {
+    public String userManagement(Model model, MemberDTO memberDTO) {
 
         // 세션에서 관리자 ID 가져오기
-        String member_id = (String) session.getAttribute("MEMBER_ID");
+//        String member_id = (String) session.getAttribute("MEMBER_ID");
 
         //-----------------------------------------------------------------------------
         // !★!★!★!★!★!★!★!★ TODO Impl (컨디션값) 참고하기!★!★!★!★!★!★!★!★!★!★!★!★
@@ -102,7 +98,7 @@ public class UserManagementController {
 
     // 회원 관리 -개인 상세 ( 모달 )
     @PostMapping("/userManagementDetail.do")
-    public String userManagementDetail(Model model, MemberDTO memberDTO, GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) {
+    public String userManagementDetail(Model model, MemberDTO memberDTO) {
 
         // 회원관리 insert
         boolean flag = this.memberService.insert(memberDTO);

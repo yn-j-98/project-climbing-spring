@@ -62,7 +62,6 @@ public class CrewBattleApplicationController {
 			//false 가 나오면 오류를 반환해줍니다.
 			if(!flag_crew_leader) {
 				System.out.println("CrewBattleApplicationController.java flag_crew_leader false 로그");
-				//flag_crew_leader = false : error_message 크루전은 크루장만 개최하실 수 있습니다.
 				model.addAttribute("msg", "크루전은 크루장만 개최하실 수 있습니다.");
 				model.addAttribute("path", error_path);
 					
@@ -102,13 +101,11 @@ public class CrewBattleApplicationController {
 			//크루전 개최 되어있는지 확인하기 위한 로직 종료
 			//------------------------------------------------------------
 			//크루전 등록 로직 시작
-			//(크루전 번호 / 크루 번호) 를 Battle_record DTO에 추가합니다.
 			battle_recordDTO.setBattle_record_crew_num(crew_check);
 
 			//크루전 등록 여부 확인을 위해 selectOne 해서 비교한다.
 			Battle_recordDTO battle_record_data=this.battle_recordService.selectOneBattleRecord(battle_recordDTO);
 			if(battle_record_data!=null) {
-				//false: error_message 크루전을 이미 등록했습니다. (사유 : 크루전 등록 중복)
 				model.addAttribute("msg", "크루전을 이미 등록했습니다. (사유 : 크루전 등록 중복)");
 				model.addAttribute("path", error_path);
 					
@@ -116,11 +113,9 @@ public class CrewBattleApplicationController {
 			}
 			//model 의 Battle_record 에 Insert 해줍니다.
 			boolean flag_battle_record = this.battle_recordService.insert(battle_recordDTO);
-			//True : error_message 크루전 등록에 성공하였습니다.
 			if(flag_battle_record) {
 				error_message = "크루전 등록에 성공하였습니다.";
 			}
-			//false: error_message 크루전 등록에 실패하였습니다.
 			else {
 				error_message = "크루전 등록에 실패하였습니다.";
 
@@ -132,9 +127,7 @@ public class CrewBattleApplicationController {
 			error_message = "로그인 후 이용 가능합니다.";
 			System.out.println("로그인 여부 로그 메시지 : " + error_message);
 		}
-		System.out.println("CrewBattleApplicationAction.java 최종 error_message 로그 : " + error_message);
 		model.addAttribute("msg", error_message);
-		System.out.println("CrewBattleApplicationAction.java 최종 error_page 로그 : " + error_path);
 		model.addAttribute("path", error_path);
 		return path;
 	}

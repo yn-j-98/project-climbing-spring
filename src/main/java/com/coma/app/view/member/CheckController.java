@@ -18,17 +18,17 @@ public class CheckController {
 	public @ResponseBody String checkId(MemberDTO memberDTO) {
 		System.out.println("CheckController checkId 비동기 처리 로그");
 		
-		boolean flag = false; 
 		//model 에 사용자 ID를 넘겨 값이 있는 지 확인 후
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
-		
+
+		String result = "false";
 		//값이 없으면 true 를 반환 합니다.		
-		if(memberDTO == null) {
-			flag = true;
+		if(memberDTO != null) {
+			result	 = "true";
 		}
 		
 		// view 로 값을 전달 합니다.
-		return String.valueOf(flag);
+		return result;
 	}
 	
 	@PostMapping("/checkPassword.do")
