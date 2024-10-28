@@ -337,7 +337,7 @@ class BattleRecordRowMapperOneBattleRecord implements RowMapper<Battle_recordDTO
 		System.out.println("com.coma.app.biz.battle_record.selectOneBattleRecord 검색 성공");
 		Battle_recordDTO data = new Battle_recordDTO();
 		try {
-			data.setBattle_record_battle_num(rs.getInt("BATTLE_RECORD_BATTLE_NUM"));
+			data.setBattle_record_battle_num(rs.getInt("BATTLE_NUM"));
 		} catch (SQLException e) {
 			System.err.println("battle_record_battle_num = null");
 			data.setBattle_record_battle_num(0);
@@ -357,6 +357,7 @@ class BattleRecordRowMapperOneBattleRecord implements RowMapper<Battle_recordDTO
 		return data;
 	}
 }
+
 class BattleRecordRowMapperOneCountCrew implements RowMapper<Battle_recordDTO>{
 	@Override
 	public Battle_recordDTO mapRow(ResultSet rs, int i) throws SQLException {
@@ -369,10 +370,10 @@ class BattleRecordRowMapperOneCountCrew implements RowMapper<Battle_recordDTO>{
 			data.setBattle_record_battle_num(0);
 		}
 		try {
-			data.setBattle_record_crew_num(rs.getInt("BATTLE_RECORD_CREW_NUM"));
+			data.setBattle_record_total(rs.getInt("BATTLE_CREW_TOTAL"));
 		} catch (SQLException e) {
-			System.err.println("battle_record_crew_num = null");
-			data.setBattle_record_crew_num(0);
+			System.err.println("attle_record_tota = 0");
+			data.setBattle_record_total(0);
 		}
 		return data;
 	}
@@ -434,6 +435,7 @@ class BattleRecordRowMapperAllWinner implements RowMapper<Battle_recordDTO> {
 		return data;
 	}
 }
+
 class BattleRecordRowMapperAllParticipantCrew implements RowMapper<Battle_recordDTO> {
 	@Override
 	public Battle_recordDTO mapRow(ResultSet rs, int i) throws SQLException {
@@ -484,6 +486,7 @@ class BattleRecordRowMapperAllParticipantCrew implements RowMapper<Battle_record
 		return data;
 	}
 }
+
 class BattleRecordRowMapperAllParticipantBattle implements RowMapper<Battle_recordDTO> {
 	@Override
 	public Battle_recordDTO mapRow(ResultSet rs, int i) throws SQLException {
@@ -522,16 +525,17 @@ class BattleRecordRowMapperAllParticipantBattle implements RowMapper<Battle_reco
 		return data;
 	}
 }
+
 class BattleRecordRowMapperAllWinnerParticipantGym implements RowMapper<Battle_recordDTO> {
 	@Override
 	public Battle_recordDTO mapRow(ResultSet rs, int i) throws SQLException {
 		System.out.println("com.coma.app.biz.battle_record.selectAllWinnerParticipantGym 검색 성공");
 		Battle_recordDTO data = new Battle_recordDTO();
 		try {
-			data.setBattle_record_crew_num(rs.getInt("BATTLE_RECORD_CREW_NUM"));
+			data.setBattle_record_crew_name(rs.getString("CREW_NUM"));
 		} catch (SQLException e) {
-			System.err.println("battle_record_crew_num = null");
-			data.setBattle_record_crew_num(0);
+			System.err.println("Battle_record_crew_name = null");
+			data.setBattle_record_crew_name(null);
 		}
 		try {
 			data.setBattle_record_game_date(rs.getString("BATTLE_GAME_DATE"));

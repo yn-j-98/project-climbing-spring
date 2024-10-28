@@ -174,30 +174,22 @@ public class BoardDAO {
 	//이름으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID 재사용 BOARD_WRITER_ID, board_min_num, board_max_num
 	//LIMIT <OFFSET>, <ROW_COUNT>
 	//BOARD_WRITER_ID, board_min_num, 10(10개씩 출력한다 가정할때 10입력)
-	private final String ALL_SEARCH_NAME = "SELECT\r\n"
-			+ "    BOARD_PAGENATION.BOARD_NUM,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_TITLE,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_CONTENT,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_CNT,\r\n"
-			+ "    BOARD_PAGENATION.BOARD_LOCATION,\r\n"
-			+ "    M.MEMBER_NAME AS BOARD_WRITER_ID\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        BOARD_NUM, \r\n"
-			+ "        BOARD_TITLE, \r\n"
-			+ "        BOARD_CONTENT, \r\n"
-			+ "        BOARD_CNT, \r\n"
-			+ "        BOARD_LOCATION, \r\n"
-			+ "        BOARD_WRITER_ID\r\n"
-			+ "    FROM \r\n"
-			+ "        BOARD\r\n"
-			+ ") AS BOARD_PAGENATION\r\n"
-			+ "JOIN\r\n"
-			+ "    MEMBER M\r\n"
-			+ "ON\r\n"
-			+ "    M.MEMBER_ID = BOARD_PAGENATION.BOARD_WRITER_ID\r\n"
-			+ "WHERE M.MEMBER_NAME LIKE CONCAT('%', ?, '%') \r\n"
-			+ "LIMIT ?, ?";
+	private final String ALL_SEARCH_NAME = "SELECT \n" +
+			"    B.BOARD_NUM,\n" +
+			"    B.BOARD_TITLE,\n" +
+			"    B.BOARD_CONTENT,\n" +
+			"    B.BOARD_CNT,\n" +
+			"    B.BOARD_LOCATION,\n" +
+			"    M.MEMBER_NAME AS BOARD_WRITER_ID\n" +
+			"FROM \n" +
+			"    BOARD B\n" +
+			"JOIN \n" +
+			"    MEMBER M\n" +
+			"ON \n" +
+			"    M.MEMBER_ID = B.BOARD_WRITER_ID\n" +
+			"WHERE \n" +
+			"    M.MEMBER_NAME LIKE CONCAT('%', ?, '%')\n" +
+			"LIMIT ?, ?";
 
 
 	// 게시글 작성 BOARD_NUM,BOARD_TITLE,BOARD_CONTENT,BOARD_LOCATION,BOARD_WRITER_ID

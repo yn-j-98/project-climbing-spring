@@ -16,29 +16,19 @@ public class CrewDAO {
 	private final String ONE = "SELECT CREW_NUM,CREW_NAME,CREW_DESCRIPTION,CREW_MAX_MEMBER_SIZE,CREW_LEADER,CREW_BATTLE_STATUS,CREW_PROFILE FROM CREW WHERE CREW_NUM = ?";
 
 	//(페이지네이션) 크루 전체 목록 Crew_min_num, Crew_max_num
-	private final String ALL = "SELECT\r\n"
-			+ "	RN,\r\n"
-			+ "	CREW_NUM,\r\n"
-			+ "    CREW_NAME,\r\n"
-			+ "    CREW_DESCRIPTION,\r\n"
-			+ "    CREW_MAX_MEMBER_SIZE,\r\n"
-			+ "    CREW_LEADER,\r\n"
-			+ "    CREW_BATTLE_STATUS,\r\n"
-			+ "    CREW_PROFILE\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        CREW_NUM,\r\n"
-			+ "    	   CREW_NAME,\r\n"
-			+ "    	CREW_DESCRIPTION,\r\n"
-			+ "    	CREW_MAX_MEMBER_SIZE,\r\n"
-			+ "    	CREW_LEADER,\r\n"
-			+ "    	CREW_BATTLE_STATUS,\r\n"
-			+ "    	CREW_PROFILE,\r\n"
-			+ "        ROW_NUMBER() OVER (ORDER BY CREW_NUM) AS RN\r\n"
-			+ "    FROM \r\n"
-			+ "       	CREW\r\n"
-			+ ")AS subquery\r\n"
-			+ "WHERE RN BETWEEN ? AND ?";
+	private final String ALL = "SELECT \n" +
+			"    CREW_NUM,\n" +
+			"    CREW_NAME,\n" +
+			"    CREW_DESCRIPTION,\n" +
+			"    CREW_MAX_MEMBER_SIZE,\n" +
+			"    CREW_LEADER,\n" +
+			"    CREW_BATTLE_STATUS,\n" +
+			"    CREW_PROFILE\n" +
+			"FROM \n" +
+			"    CREW\n" +
+			"ORDER BY \n" +
+			"    CREW_NUM DESC\n" +
+			"LIMIT ?, ?";
 
 	//크루 총 개수
 	private final String ONE_COUNT = "SELECT COUNT(*) AS CREW_TOTAL FROM CREW";
