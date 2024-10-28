@@ -243,10 +243,10 @@ class CrewRowMapperOneCount implements RowMapper<CrewDTO> {
 		System.out.println("com.coma.app.biz.crew.selectOneCount 검색 성공");
 		CrewDTO crewDTO = new CrewDTO();
 		try{
-			crewDTO.setCrew_total(resultSet.getInt("CREW_TOTAL"));
+			crewDTO.setTotal(resultSet.getInt("CREW_TOTAL"));
 		}catch(Exception e){
 			System.err.println("Crew_total = 0");
-			crewDTO.setCrew_total(0);
+			crewDTO.setTotal(0);
 		}
 		return crewDTO;
 	}

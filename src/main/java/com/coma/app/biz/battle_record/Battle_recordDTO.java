@@ -16,7 +16,7 @@ public class Battle_recordDTO {
 
 	//DTO에만 있는 데이터
 	private int battle_record_gym_num;	//암벽장 번호
-	private int battle_record_total;            // 전체 게시글 총수
+	private int total;            // 전체 게시글 총수
 	private String battle_record_gym_name;		//크루전 암벽장 이름
 	private String battle_record_gym_location;	//크루전 암벽장 지역
 	private String battle_record_game_date;	//크루전 날짜
