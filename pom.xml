@@ -175,7 +175,12 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-
+        <!-- FTP FILE UPLOAD Apache Commons Net -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.10.0</version>
+        </dependency>
 
 
     </dependencies>
