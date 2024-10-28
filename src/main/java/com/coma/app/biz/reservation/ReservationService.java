@@ -6,6 +6,8 @@ public interface ReservationService {
 	List<ReservationDTO> selectAll(ReservationDTO reservationDTO);
 	List<ReservationDTO> selectAllCountMonthAdmin(ReservationDTO reservationDTO);
 	List<ReservationDTO> selectAllAdmin(ReservationDTO reservationDTO);
+	List<ReservationDTO> selectAllAdminSearchGymName(ReservationDTO reservationDTO);
+	List<ReservationDTO> selectAllAdminSearchMemberId(ReservationDTO reservationDTO);
 
 	ReservationDTO selectOne(ReservationDTO reservationDTO);
 	ReservationDTO selectOneCount(ReservationDTO reservationDTO);

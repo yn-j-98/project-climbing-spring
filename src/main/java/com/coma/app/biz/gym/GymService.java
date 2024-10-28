@@ -7,6 +7,7 @@ public interface GymService {
 	List<GymDTO> selectAll(GymDTO gymDTO);
 	List<GymDTO> selectAllLocationCountAdmin(GymDTO gymDTO);
 	List<GymDTO> selectAllAdmin(GymDTO gymDTO);
+	List<GymDTO> selectAllAdminVerified(GymDTO gymDTO);
 
 	GymDTO selectOne(GymDTO gymDTO);
 	GymDTO selectOneCount(GymDTO gymDTO);
