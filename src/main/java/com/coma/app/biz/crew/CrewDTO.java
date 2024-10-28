@@ -17,7 +17,7 @@ public class CrewDTO {
 	private String crew_profile; 		//크루 이미지 url
 	
 	//DTO에만 존재하는 데이터 
-	private int crew_total;  //현재 크루 개수
+	private int total;  //현재 크루 개수
 	private int crew_current_member_size; //크루의 현재 인원수
 	private int crew_min_num;
 

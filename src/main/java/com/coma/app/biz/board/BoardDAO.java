@@ -319,7 +319,7 @@ public class BoardDAO {
 	public BoardDTO selectOneSearchIdCount(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchIdCount 시작");
 		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'")};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'")};
 		try {
 			result = jdbcTemplate.queryForObject(ONE_SEARCH_ID_COUNT, args, new BoardRowMapperOneSearchIdCount());
 		} catch (Exception e) {
@@ -347,7 +347,7 @@ public class BoardDAO {
 	public BoardDTO selectOneSearchNameCount(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 시작");
 		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'")};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'")};
 		try {
 			result = jdbcTemplate.queryForObject(ONE_SEARCH_NAME_COUNT, args, new BoardRowMapperOneSearchNameCount());
 		} catch (Exception e) {
@@ -386,7 +386,7 @@ public class BoardDAO {
 	// SelectBox 전체로 검색가능
 	public List<BoardDTO> selectAllSearchBoard(BoardDTO boardDTO) {
 		List<BoardDTO> result = null;
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'")};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'")};
 		try{
 			result = jdbcTemplate.query(ALL_SEARCH_BOARD, args, new BoardRowMapperAllSearchBoard());
 		} catch (Exception e) {
@@ -402,7 +402,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_MATCH_ID, args, new BoardRowMapperAllSearchMatchId());
 		} catch (Exception e) {
@@ -417,7 +417,7 @@ public class BoardDAO {
 	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchPatternId 시작");
 		List<BoardDTO> result = null;
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getPage(), 10};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getPage(), 10};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_PATTERN_ID, args, new BoardRowMapperAllSearchPatternId());
 		} catch (Exception e) {
@@ -433,7 +433,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchTitle 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_search_content().replace("'", "\'"), boardDTO.getPage(), offset};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getSearch_content().replace("'", "\'"), boardDTO.getPage(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_TITLE, args, new BoardRowMapperAllSearchTitle());
 		} catch (Exception e) {
@@ -449,7 +449,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectallsearchName 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getPage(), offset};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getPage(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_NAME, args, new BoardRowMapperAllSearchName());
 		} catch (Exception e) {
@@ -582,10 +582,10 @@ class BoardRowMapperOneCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -595,10 +595,10 @@ class BoardRowMapperOneSearchIdCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -608,10 +608,10 @@ class BoardRowMapperOneSearchTitleCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -621,10 +621,10 @@ class BoardRowMapperOneSearchNameCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -635,10 +635,10 @@ class BoardRowMapperOneBoardTotal implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(rs.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(rs.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
