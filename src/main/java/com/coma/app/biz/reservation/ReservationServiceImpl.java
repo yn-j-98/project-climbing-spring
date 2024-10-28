@@ -25,6 +25,14 @@ public class ReservationServiceImpl implements ReservationService{
 	public List<ReservationDTO> selectAllAdmin(ReservationDTO reservationDTO) {
 		return this.reservationDAO.selectAllAdmin(reservationDTO);
 	}
+	@Override
+	public List<ReservationDTO> selectAllAdminSearchGymName(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectAllAdminSearchGymName(reservationDTO);
+	}
+	@Override
+	public List<ReservationDTO> selectAllAdminSearchMemberId(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectAllAdminSearchMemberId(reservationDTO);
+	}
 
 	@Override
 	public ReservationDTO selectOne(ReservationDTO reservationDTO) {

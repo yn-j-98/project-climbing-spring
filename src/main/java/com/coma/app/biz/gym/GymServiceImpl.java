@@ -20,6 +20,10 @@ public class GymServiceImpl implements GymService {
 	public List<GymDTO> selectAllLocationCountAdmin(GymDTO gymDTO) {
 		return this.gymDAO.selectAllLocationCountAdmin(gymDTO);
 	}
+	@Override
+	public List<GymDTO> selectAllAdminVerified(GymDTO gymDTO) {
+		return this.gymDAO.selectAllAdminVerified(gymDTO);
+	}
 
 	@Override
 	public List<GymDTO> selectAllAdmin(GymDTO gymDTO) {
