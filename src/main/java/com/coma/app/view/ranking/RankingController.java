@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.coma.app.biz.grade.GradeDTO;
 import com.coma.app.biz.grade.GradeService;
@@ -23,15 +22,6 @@ public class RankingController {
 	private GradeService gradeService;
 	
 	@GetMapping("/crewRank.do")
-	public String crewRank() {
-		return "views/crewRank";
-	}
-	@GetMapping("/personalRank.do")
-	public String personalRank() {
-		return "views/personalRank";
-	}
-	
-	@PostMapping("/crewRank.do")
 	public String crewRank(MemberDTO memberDTO, GradeDTO gradeDTO, Model model) {
 		//크루 랭킹을 model에 요청 point 순으로 selectAll 예정
 		//랭킹 페이지가 두개 이기 때문에 model에 condition 값 전달
@@ -70,7 +60,7 @@ public class RankingController {
 		return "views/crewRank";
 	}
 	
-	@PostMapping("/personalRank.do")
+	@GetMapping("/personalRank.do")
 	public String personalRank(MemberDTO memberDTO, GradeDTO gradeDTO, Model model) {
 		//개인 랭킹을 model에 요청 point 요청 순으로 selectAll 예정 
 		//랭킹 페이지가 두개 이기 때문에 model에 condition 값 조정 후 진행
