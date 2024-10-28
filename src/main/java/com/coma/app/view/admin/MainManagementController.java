@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -39,8 +38,6 @@ public class MainManagementController{
     @GetMapping("/mainManagement.do")
     public String mainManagement(Model model, HttpSession session, MemberDTO memberDTO,
                                  GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) {
-        // 세션에서 관리자 ID 가져오기
-        String member_id = (String) session.getAttribute("MEMBER_ID");
 
         // 차트js
         // 통계 데이터 가져오기
@@ -65,10 +62,11 @@ public class MainManagementController{
 		List <GymDTO> region_gym_datas = this.gymService.selectAllLocationCountAdmin(gymDTO);
 
 
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO MODEL이 끝나면 주석풀기
         //		최신글 5개  제목 + 내용만 대시보드
-		List<BoardDTO> board_datas = this.boardService.selectAllBoardAllTop5(boardDTO);
+//		List<BoardDTO> board_datas = this.boardService.selectAllBoardAllTop5(boardDTO);
         //		최신 크루전 5개 (개최일 빠른순 == 내림차순) 개최일, 암벽장 이름, 참여 크루
-		List<BattleDTO> battle_datas = this.battleService.selectAllBattleAllTop5(battleDTO);
+//		List<BattleDTO> battle_datas = this.battleService.selectAllBattleAllTop5(battleDTO);
 
 
         // 모델에 데이터를 추가
@@ -81,8 +79,9 @@ public class MainManagementController{
         model.addAttribute("monthly_join_datas", monthly_join_datas);
         model.addAttribute("monthly_reservation_datas", monthly_reservation_datas);
         model.addAttribute("region_gym_datas", region_gym_datas);
-        model.addAttribute("board_datas", board_datas);
-        model.addAttribute("battle_datas", battle_datas);
+        //TODO MODEL이 끝나면 주석풀기
+//        model.addAttribute("board_datas", board_datas);
+//        model.addAttribute("battle_datas", battle_datas);
 
         //
 

@@ -103,7 +103,7 @@ public class MainPageController{
 
 //        boardDTO.setBoard_condition("BOARD_ALL_ROWNUM");//글 6개 컨디션
 
-        List<BoardDTO> board_datas = boardService.selectAllRownum(boardDTO);
+        List<BoardDTO> board_datas = boardService.selectAllRowNum(boardDTO);
 
         model.addAttribute("board_datas", board_datas);
         //model_board_datas에 담아서 보내기

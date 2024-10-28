@@ -8,13 +8,16 @@ public interface BoardService {
 	List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO);
 	List<BoardDTO> selectAllSearchTitle(BoardDTO boardDTO);
 	List<BoardDTO> selectAllSearchName(BoardDTO boardDTO);
-	List<BoardDTO> selectAllRownum(BoardDTO boardDTO);
+	List<BoardDTO> selectAllRowNum(BoardDTO boardDTO);
+	List<BoardDTO> selectAllRecentBoard5(BoardDTO boardDTO);
+	List<BoardDTO> selectAllSearchBoard(BoardDTO boardDTO);
 	BoardDTO selectOne(BoardDTO boardDTO);
 	BoardDTO selectOneWriterId(BoardDTO boardDTO);
 	BoardDTO selectOneCount(BoardDTO boardDTO);
 	BoardDTO selectOneSearchIdCount(BoardDTO boardDTO);
 	BoardDTO selectOneSearchTitleCount(BoardDTO boardDTO);
 	BoardDTO selectOneSearchNameCount(BoardDTO boardDTO);
+	BoardDTO selectOneBoardTotal(BoardDTO boardDTO);
 	boolean insert(BoardDTO boardDTO);
 	boolean updateContentTitle(BoardDTO boardDTO);
 	boolean updateCnt(BoardDTO boardDTO);

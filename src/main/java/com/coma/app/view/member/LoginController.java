@@ -1,5 +1,6 @@
 package com.coma.app.view.member;
 
+import com.coma.app.view.annotation.LoginCheckImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,7 +51,7 @@ public class LoginController {
 	@LoginCheck
 	@PostMapping("/logout.do")// 로그아웃 처리 
 	public String logout(HttpServletResponse response, HttpServletRequest request) {
-		LoginAspect.logout(request, response);
+		LoginCheckImpl.logout(request, response);
 		return "redirect:main.do"; 
 	}
 

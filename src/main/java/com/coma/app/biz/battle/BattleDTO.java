@@ -14,6 +14,7 @@ public class BattleDTO {
 	//FIXME SQL DATE형식이라 String으로 변환하여 줄것
 	private String battle_game_date; 		    // 크루전의 실제 게임하는 날짜
 	//FIXME SQL DATE형식이라 String으로 변환하여 줄것
+	private String battle_status; // 크루전 활성화 상태 여부 (T,F)
 
 	//DTO에만 존재하는 데이터
 	private String battle_gym_name;	//크루전 참여크루 이름
@@ -24,6 +25,9 @@ public class BattleDTO {
 	private int battle_total;			       // 전체 게시글 총수
 	private String battle_search_keyword;      // 크루전 검색목록
 	private String battle_content;      // 크루전 검색내용
+	private String battle_crew_name; //승리 크루 크루명
+	private String battle_member_name;  //선택된 크루명의 크루 멤버 이름
+	private int battle_min_num;
 
-	private int battle_page;  		     // 페이지네이션 데이터
+	private int page;  		     // 페이지네이션 데이터
 }

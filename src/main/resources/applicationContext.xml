@@ -29,9 +29,10 @@
                                           com.coma.app.biz.member,
                                           com.coma.app.biz.product,
                                           com.coma.app.biz.reply,
-                                          com.coma.app.biz.reservation"/>
+                                          com.coma.app.biz.reservation,
+                                          com.coma.app.view.annotation"/>
 
-<!--   <aop:aspectj-autoproxy></aop:aspectj-autoproxy>-->
+
 
    <bean class="org.apache.commons.dbcp.BasicDataSource" id="ds" destroy-method="close">
       <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
@@ -48,12 +49,14 @@
       <property name="dataSource" ref="ds"/>
    </bean>
 
-   <!-- LoginCheck 빈 정의 -->
-   <bean id="LoginCheck"/>
+   <aop:aspectj-autoproxy/>
 
-   <!-- logincheck 주입 -->
-   <bean id="LoginAspect" class="com.coma.app.view.member.LoginAspect">
-      <constructor-arg ref="LoginCheck" />
+   <!-- LoginCheckImpl 빈 등록  -->
+   <bean id="loginCheckImpl" class="com.coma.app.view.annotation.LoginCheckImpl"/>
+
+   <!-- LoginAspect 빈 등록  -->
+   <bean id="loginAspect" class="com.coma.app.view.member.LoginAspect">
+      <constructor-arg ref="loginCheckImpl"/>
    </bean>
 
    <tx:advice transaction-manager="txManager" id="txAdviceDelete">
