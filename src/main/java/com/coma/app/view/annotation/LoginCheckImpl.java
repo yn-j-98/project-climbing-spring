@@ -4,8 +4,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component

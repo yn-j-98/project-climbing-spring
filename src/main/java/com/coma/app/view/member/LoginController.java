@@ -45,14 +45,14 @@ public class LoginController {
 		}
 
 
-		return "redirect:login.do";
+		return "views/login";
 	}
 
 	@LoginCheck
-	@PostMapping("/logout.do")// 로그아웃 처리 
+	@GetMapping("/logout.do")// 로그아웃 처리
 	public String logout(HttpServletResponse response, HttpServletRequest request) {
 		LoginCheckImpl.logout(request, response);
-		return "redirect:main.do"; 
+		return "redirect:main.do";
 	}
 
 	// 쿠키 설정 메서드
