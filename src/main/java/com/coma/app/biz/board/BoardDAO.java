@@ -404,7 +404,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchTitle 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_search_content().replace("'", "\'"), boardDTO.getPage(), offset};
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getSearch_content().replace("'", "\'"), boardDTO.getPage(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_TITLE, args, new BoardRowMapperAllSearchTitle());
 		} catch (Exception e) {
@@ -553,10 +553,10 @@ class BoardRowMapperOneCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -566,10 +566,10 @@ class BoardRowMapperOneSearchIdCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -579,10 +579,10 @@ class BoardRowMapperOneSearchTitleCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -592,10 +592,10 @@ class BoardRowMapperOneSearchNameCount implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(resultSet.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(resultSet.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}
@@ -606,10 +606,10 @@ class BoardRowMapperOneBoardTotal implements RowMapper<BoardDTO>{
 	public BoardDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		BoardDTO boardDTO = new BoardDTO();
 		try{
-			boardDTO.setBoard_total(rs.getInt("BOARD_TOTAL"));
+			boardDTO.setTotal(rs.getInt("BOARD_TOTAL"));
 		}catch (SQLException e) {
 			System.err.println("Board_total = null");
-			boardDTO.setBoard_total(0);
+			boardDTO.setTotal(0);
 		}
 		return boardDTO;
 	}

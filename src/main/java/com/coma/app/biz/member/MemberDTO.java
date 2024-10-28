@@ -34,7 +34,7 @@ public class MemberDTO {
 	private int total;	// 사용자 인원 수 // TODO 관리자페이지
 	private String member_reservation_month;	// 사용자가 가입한 년도-월 // TODO 관리자페이지
 	private int page;	// 사용자 페이지네이션
-	private String member_search_keyword;	// 사용자 검색 목록
-	private String member_search_content;	// 사용자 검색 내용
+	private String search_keyword;	// 사용자 검색 목록
+	private String search_content;	// 사용자 검색 내용
 	private int member_min_num;	// 페이지 네이션 시작 PK
 }

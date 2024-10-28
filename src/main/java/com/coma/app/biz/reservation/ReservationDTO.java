@@ -23,8 +23,8 @@ public class ReservationDTO {
 	private String reservation_gym_name;        // 예약 암벽장 이름
 	private String reservation_month;	// 예약한 년도-월 // TODO 관리자 페이지
 	private String page;	// 페이지네이션
-	private String reservation_search_keyword;	// 예약 검색 목록
-	private String reservation_search_content;	// 예약 검색 내용
+	private String search_keyword;	// 예약 검색 목록
+	private String search_content;	// 예약 검색 내용
 	private int reservation_min_num;	// 페이지 네이션 시작 PK
 
 }

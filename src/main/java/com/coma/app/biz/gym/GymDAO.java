@@ -181,7 +181,7 @@ public class GymDAO {
 	}
 
 	public List<GymDTO> selectAllAdminVerified(GymDTO gymDTO){
-		Object[] args= {gymDTO.getGym_admin_battle_verified(),gymDTO.getGym_search_content(),gymDTO.getGym_min_num(),10};
+		Object[] args= {gymDTO.getGym_admin_battle_verified(),gymDTO.getSearch_content(),gymDTO.getGym_min_num(),10};
 		// 승인,비승인된 암벽장 중 이름 검색 // TODO 암벽장 관리 페이지
 		List<GymDTO> datas=null;
 		datas=jdbcTemplate.query(ALL_ADMIN_VERIFIED,args,new GymAdminMapperAll());
