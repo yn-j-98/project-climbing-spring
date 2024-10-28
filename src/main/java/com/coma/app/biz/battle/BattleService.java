@@ -15,6 +15,7 @@ public interface BattleService {
 	BattleDTO selectOneCountActive(BattleDTO battleDTO);
 	BattleDTO selectOneCountActiveBattle(BattleDTO battleDTO);
 	boolean insert(BattleDTO battleDTO);
+	boolean InsertBattleModal(BattleDTO battleDTO);
 	boolean update(BattleDTO battleDTO);
 	boolean delete(BattleDTO battleDTO);
 }
