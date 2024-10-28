@@ -17,19 +17,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardDTO> selectAllSearchMatchId(BoardDTO boardDTO) {
-		return this.boardDAO.selectAllSearchMatchId(boardDTO);
-	}
+	public List<BoardDTO> selectAllSearchMatchId(BoardDTO boardDTO) {return this.boardDAO.selectAllSearchMatchId(boardDTO);}
 
 	@Override
-	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {
-		return this.boardDAO.selectAllSearchPatternId(boardDTO);
-	}
+	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {return this.boardDAO.selectAllSearchPatternId(boardDTO);}
 
 	@Override
-	public List<BoardDTO> selectAllSearchTitle(BoardDTO boardDTO) {
-		return this.boardDAO.selectAllSearchTitle(boardDTO);
-	}
+	public List<BoardDTO> selectAllSearchTitle(BoardDTO boardDTO) {return this.boardDAO.selectAllSearchTitle(boardDTO);}
 
 	@Override
 	public List<BoardDTO> selectAllSearchName(BoardDTO boardDTO) {
@@ -37,9 +31,15 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardDTO> selectAllRownum(BoardDTO boardDTO) {
-		return this.boardDAO.selectAllRownum(boardDTO);
+	public List<BoardDTO> selectAllRowNum(BoardDTO boardDTO) {
+		return this.boardDAO.selectAllRowNum(boardDTO);
 	}
+
+	@Override
+	public List<BoardDTO> selectAllRecentBoard5(BoardDTO boardDTO) {return this.boardDAO.selectAllRecentBoard5(boardDTO);}
+
+	@Override
+	public List<BoardDTO> selectAllSearchBoard(BoardDTO boardDTO) {return this.boardDAO.selectAllSearchBoard(boardDTO);}
 
 	@Override
 	public BoardDTO selectOne(BoardDTO boardDTO) {
@@ -62,14 +62,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public BoardDTO selectOneSearchTitleCount(BoardDTO boardDTO) {
-		return this.boardDAO.selectOneSearchTitleCount(boardDTO);
-	}
+	public BoardDTO selectOneSearchTitleCount(BoardDTO boardDTO) {return this.boardDAO.selectOneSearchTitleCount(boardDTO);}
 
 	@Override
-	public BoardDTO selectOneSearchNameCount(BoardDTO boardDTO) {
-		return this.boardDAO.selectOneSearchNameCount(boardDTO);
-	}
+	public BoardDTO selectOneSearchNameCount(BoardDTO boardDTO) {return this.boardDAO.selectOneSearchNameCount(boardDTO);}
+
+	@Override
+	public BoardDTO selectOneBoardTotal(BoardDTO boardDTO) {return this.boardDAO.selectOneBoardTotal(boardDTO);}
 
 	@Override
 	public boolean insert(BoardDTO boardDTO) {

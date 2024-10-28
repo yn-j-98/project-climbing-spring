@@ -404,7 +404,7 @@ public class BoardDAO {
 		int offset = 10; //페이지네이션 시작위치
 		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
 		try {
-			result = jdbcTemplate.query(ALL_SEARCH_MATCH_ID, args, new boardRowMapperAllSearchMatchId());
+			result = jdbcTemplate.query(ALL_SEARCH_MATCH_ID, args, new BoardRowMapperAllSearchMatchId());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 실패 " + e.getMessage());
 			e.printStackTrace();
@@ -417,7 +417,7 @@ public class BoardDAO {
 	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchPatternId 시작");
 		List<BoardDTO> result = null;
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_page(), 10};
+		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getPage(), 10};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_PATTERN_ID, args, new BoardRowMapperAllSearchPatternId());
 		} catch (Exception e) {
@@ -433,7 +433,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchTitle 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_search_content().replace("'", "\'"), boardDTO.getBoard_page(), offset};
+		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_search_content().replace("'", "\'"), boardDTO.getPage(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_TITLE, args, new BoardRowMapperAllSearchTitle());
 		} catch (Exception e) {
@@ -449,7 +449,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectallsearchName 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getBoard_page(), offset};
+		Object[] args = {boardDTO.getBoard_search_keyword().replace("'", "\'"), boardDTO.getPage(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_NAME, args, new BoardRowMapperAllSearchName());
 		} catch (Exception e) {
@@ -465,9 +465,9 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAll 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_page(), offset};
+		Object[] args = {boardDTO.getPage(), offset};
 		try {
-			result = jdbcTemplate.query(ALL, args, new boardRowMapperAll());
+			result = jdbcTemplate.query(ALL, args, new BoardRowMapperAll());
 		} catch (Exception e) {
 			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAll 실패 " + e.getMessage());
 			e.printStackTrace();
@@ -477,13 +477,13 @@ public class BoardDAO {
 
 	// 최신글6개 검색
 	//ROWNUM 대신 LIMIT 구문 사용
-	public List<BoardDTO> selectAllRownum(BoardDTO boardDTO) {
-		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllRownum 시작");
+	public List<BoardDTO> selectAllRowNum(BoardDTO boardDTO) {
+		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllRowNum 시작");
 		List<BoardDTO> result = null;
 		try {
-			result = jdbcTemplate.query(ALL_ROWNUM, new boardRowMapperAllRownum());
+			result = jdbcTemplate.query(ALL_ROWNUM, new BoardRowMapperAllRownum());
 		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAllRownum 실패 " + e.getMessage());
+			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAllRowNum 실패 " + e.getMessage());
 			e.printStackTrace();
 		}
 		return result;
@@ -678,7 +678,7 @@ class BoardRowMapperAllSearchMatchId implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 class BoardRowMapperAllSearchPatternId implements RowMapper<BoardDTO>{
@@ -715,7 +715,7 @@ class BoardRowMapperAllSearchPatternId implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 
@@ -759,7 +759,7 @@ class BoardRowMapperAllSearchTitle implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 class BoardRowMapperAll implements RowMapper<BoardDTO>{
@@ -802,7 +802,7 @@ class BoardRowMapperAll implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 
@@ -846,7 +846,7 @@ class BoardRowMapperAllSearchName implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 class BoardRowMapperAllRownum implements RowMapper<BoardDTO>{
@@ -889,7 +889,7 @@ class BoardRowMapperAllRownum implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 
