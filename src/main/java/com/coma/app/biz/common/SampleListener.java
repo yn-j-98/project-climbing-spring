@@ -82,16 +82,6 @@ public class SampleListener {
                 gymService.insert(gym_data);
             }
         }
-		// 암벽장 크롤링 부분
-		GymDTO gymDTO = new GymDTO();
-		GymDTO data2 = gymDAO.selectOneCount(gymDTO);
-		if (data2.getTotal() <= 0) {
-			System.out.println("com.coma.app.biz.common.SampleListener.makeSampleGym 크롤링 시작");
-			ArrayList<GymDTO> crawling_gym_datas = crawling.makeSampleGym();
-			for (GymDTO gym_data : crawling_gym_datas) {
-				gymDAO.insert(gym_data);
-			}
-		}
 
         // 어플리케이션단위로 보내려면 ServletContextEvent 사용해서 전달해야 한다
         servletContext.setAttribute("product_datas", product_datas);
