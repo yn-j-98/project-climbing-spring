@@ -1,31 +1,23 @@
 package com.coma.app.view.crew.common;
 
 
-import java.util.List;
-
+import com.coma.app.biz.battle_record.Battle_recordDTO;
+import com.coma.app.biz.battle_record.Battle_recordService;
+import com.coma.app.biz.crew.CrewDTO;
+import com.coma.app.biz.crew.CrewService;
+import com.coma.app.biz.crew_board.Crew_boardService;
+import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberService;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.coma.app.biz.battle_record.Battle_recordDTO;
-import com.coma.app.biz.battle_record.Battle_recordService;
-import com.coma.app.biz.crew.CrewDTO;
-import com.coma.app.biz.crew.CrewService;
-import com.coma.app.biz.crew_board.Crew_boardDTO;
-import com.coma.app.biz.crew_board.Crew_boardService;
-import com.coma.app.biz.member.MemberDTO;
-import com.coma.app.biz.member.MemberService;
-
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.util.List;
 
 
 
@@ -51,7 +43,7 @@ public class CrewController{
 	@GetMapping("/crewList.do")
 
 
-	public String crewList(HttpServletRequest request, HttpServletResponse response, Model model, CrewDTO crewDTO) {
+	public String crewList(Model model, CrewDTO crewDTO) {
 
 
 		/*
@@ -149,7 +141,7 @@ public class CrewController{
 
 
 //            battle_recordDTO.setBattle_record_condition("BATTLE_RECORD_ALL_WINNER");//승리목록 컨디션
-		List<Battle_recordDTO> battle_record_datas = battle_recordService.selectAllWinner(battle_recordDTO);
+		List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllWinner(battle_recordDTO);
 
 
 		model.addAttribute("CREW", crewDTO);
@@ -184,7 +176,14 @@ public class CrewController{
 				model.addAttribute("path", "crewList.do");
 			} else {
 				// 크루 번호 파라미터 확인
-				crew_num = memberDTO.getMember_crew_num();
+				int view_crew_num = memberDTO.getMember_crew_num();
+
+				if (view_crew_num <= 0) {
+					model.addAttribute("msg", "잘못된 요청입니다.");
+					model.addAttribute("path", "crewList.do");
+
+					return "views/info";
+				}
 
 
 				// 크루 가입 처리
@@ -193,7 +192,7 @@ public class CrewController{
 				memberDTO.setMember_crew_num(crew_num);
 //                    memberDTO.setMember_condition("MEMBER_UPDATE_CREW");
 
-				boolean flag = memberService.updateCrew(memberDTO);
+				boolean flag = this.memberService.updateCrew(memberDTO);
 
 				if (flag) {
 					// 업데이트 성공 시 세션 갱신
@@ -274,81 +273,83 @@ public class CrewController{
 		return "views/myCrewPage";
 	}
 
-	@LoginCheck
-	@RequestMapping(value="/crewCommunity.do", method=RequestMethod.POST)
-	public String crewCommunity(HttpSession session, Model model, Crew_boardDTO crew_boardDTO) {
 
-
-		// 로그인 체크
-		String member_id = (String) session.getAttribute("MEMBER_ID") ; // 사용자 아이디
-
-		if (member_id == null) {
-			// 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-
-			return "redirect:login.do";
-		} else {
-			// 사용자 크루 정보
-			int crew_num = (Integer) session.getAttribute("CREW_NUM");
-
-			if (crew_num <= 0) {
-				// 크루가 없는 경우 크루 목록 페이지로 리다이렉트
-
-				return "redirect:crewList.do";
-			} else {
-				int pageNum = 1; // 페이지 번호 초기화
+	//크루커뮤니티 주석처리
+//	@LoginCheck
+//	@RequestMapping(value="/crewCommunity.do", method=RequestMethod.POST)
+//	public String crewCommunity(HttpSession session, Model model, Crew_boardDTO crew_boardDTO) {
 //
-
-				pageNum = crew_boardDTO.getPage();//요거 필요
-				int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
-				int minBoard = 1; // 최소 게시글 수 초기화
-
-				minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
-				int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
-				if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
-					pageNum = 1;
-				}
-
-
-				crew_boardDTO.setCrew_board_min_num(minBoard);
-
-				//줄바꿈 처리
-				String br_content = "";
-				// 게시글 목록 가져오기
-//                crew_boardDTO.setCrew_board_condition("CREW_BOARD_ALL_CREW_BOARD");
-
-				List<Crew_boardDTO> crew_board_datas = this.crew_boardService.selectAllCrewBoard(crew_boardDTO);
-				for(int i=0;i<crew_board_datas.size();i++) {
-					System.out.println(crew_board_datas.get(i));
-					br_content = crew_board_datas.get(i).getCrew_board_content();
-					br_content = br_content.replace("\n", "<br>");
-					System.err.println("줄바꿈 적용 내용 = "+br_content);
-					crew_board_datas.get(i).setCrew_board_content(br_content);
-				}
-//				 프로필 이미지 URL 설정
-
-
-				// 총 게시글 수 확인
-
-				crew_boardDTO.setCrew_board_writer_id(member_id);
-
-//                crew_boardDTO.setCrew_board_condition("CREW_BOARD_ONE_COUNT");
-				Crew_boardDTO crew_board_count = this.crew_boardService.selectOneCount(crew_boardDTO);
-				listNum = crew_board_count.getTotal();
-
-
-
-				model.addAttribute("crew_board_datas", crew_board_datas);
-				model.addAttribute("total", listNum);
-				model.addAttribute("page", pageNum);
-
-				System.out.println("crewController.crewCommunity.total = "+listNum);
-				System.out.println("crewController.crewCommunity.page = "+pageNum);
-			}
-		}
-
-
-		return "views/crewCommunity";
-	}
+//
+//		// 로그인 체크
+//		String member_id = (String) session.getAttribute("MEMBER_ID") ; // 사용자 아이디
+//
+//		if (member_id == null) {
+//			// 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+//
+//			return "redirect:login.do";
+//		} else {
+//			// 사용자 크루 정보
+//			int crew_num = (Integer) session.getAttribute("CREW_NUM");
+//
+//			if (crew_num <= 0) {
+//				// 크루가 없는 경우 크루 목록 페이지로 리다이렉트
+//
+//				return "redirect:crewList.do";
+//			} else {
+//				int pageNum = 1; // 페이지 번호 초기화
+////
+//
+//				pageNum = crew_boardDTO.getPage();//요거 필요
+//				int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
+//				int minBoard = 1; // 최소 게시글 수 초기화
+//
+//				minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
+//				int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
+//				if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
+//					pageNum = 1;
+//				}
+//
+//
+//				crew_boardDTO.setCrew_board_min_num(minBoard);
+//
+//				//줄바꿈 처리
+//				String br_content = "";
+//				// 게시글 목록 가져오기
+////                crew_boardDTO.setCrew_board_condition("CREW_BOARD_ALL_CREW_BOARD");
+//
+//				List<Crew_boardDTO> crew_board_datas = this.crew_boardService.selectAllCrewBoard(crew_boardDTO);
+//				for(int i=0;i<crew_board_datas.size();i++) {
+//					System.out.println(crew_board_datas.get(i));
+//					br_content = crew_board_datas.get(i).getCrew_board_content();
+//					br_content = br_content.replace("\n", "<br>");
+//					System.err.println("줄바꿈 적용 내용 = "+br_content);
+//					crew_board_datas.get(i).setCrew_board_content(br_content);
+//				}
+////				 프로필 이미지 URL 설정
+//
+//
+//				// 총 게시글 수 확인
+//
+//				crew_boardDTO.setCrew_board_writer_id(member_id);
+//
+////                crew_boardDTO.setCrew_board_condition("CREW_BOARD_ONE_COUNT");
+//				Crew_boardDTO crew_board_count = this.crew_boardService.selectOneCount(crew_boardDTO);
+//				listNum = crew_board_count.getTotal();
+//
+//
+//
+//				model.addAttribute("crew_board_datas", crew_board_datas);
+//				model.addAttribute("total", listNum);
+//				model.addAttribute("page", pageNum);
+//
+//				System.out.println("crewController.crewCommunity.total = "+listNum);
+//				System.out.println("crewController.crewCommunity.page = "+pageNum);
+//			}
+//		}
+//
+//
+//		return "views/crewCommunity";
+//	}
 
 
 }

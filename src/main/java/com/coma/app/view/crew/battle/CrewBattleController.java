@@ -1,24 +1,16 @@
 package com.coma.app.view.crew.battle;
 
 
-
+import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.battle.BattleService;
+import com.coma.app.biz.battle_record.Battle_recordDTO;
+import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.coma.app.biz.battle.BattleDTO;
-import com.coma.app.biz.battle_record.Battle_recordDTO;
-import com.coma.app.biz.battle_record.Battle_recordService;
-
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 
@@ -37,7 +29,7 @@ public class CrewBattleController {
 
    @LoginCheck
    @GetMapping("/crewBattleDetail.do")
-   public String crewBattle(HttpSession session, Model model, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO) {
+   public String crewBattle(Model model, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO) {
 
 
       /*
@@ -54,16 +46,11 @@ public class CrewBattleController {
        * 컨디션은 BATTLE_RECORD_ALL_PARTICIPANT_CREW
        */
 
-      //사용자 아이디
-      String member_id = (String) session.getAttribute("MEMBER_ID");
 
-
-      //사용자 크루 정보
-      int crew_num = (Integer) session.getAttribute("CREW_NUM");
-
-      //view_battle_num필요
+      //view_battle_num
 
       //크루전 내용
+
       //		battle_recordDTO.setModel_battle_record_condition("BATTLE_RECORD_ONE_BATTLE");//크루전 내용 컨디션
       battle_recordDTO = this.battle_recordService.selectOneBattle(battle_recordDTO);
       System.out.println("CrewBattleController.battle_recordDTO ["+battle_recordDTO+"]");
@@ -102,8 +89,6 @@ public class CrewBattleController {
       return "crewBattleContent";
    }
 
-   //이름 바꿀수도
-   //그럴수도
    @GetMapping("/crewBattle.do")
    public String crewBattle(HttpSession session, Model model, BattleDTO battleDTO) {
 
