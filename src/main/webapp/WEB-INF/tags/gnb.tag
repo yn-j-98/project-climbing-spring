@@ -24,7 +24,7 @@
 					<li class="nav-item p-3"><a class="nav-link" href="login.do">로그인</a></li>
 				</c:if>
 				<c:if test="${not empty member_id}">
-					<li class="nav-item p-3"><a class="nav-link" href="mypage.do">마이페이지</a></li>
+					<li class="nav-item p-3"><a class="nav-link" href="myPage.do">마이페이지</a></li>
 					<li class="nav-item p-3"><a class="nav-link" href="logout.do">로그아웃</a></li>
 				</c:if>
 			</ul>
@@ -36,7 +36,7 @@
 	<div class="main-header-logo">
 		<!-- Logo Header -->
 		<div class="logo-header" data-background-color="dark">
-			<a href="MAINPAGEACTION.do" class="logo"> <img
+			<a href="main.do" class="logo"> <img
 					src="images/logo.png" alt="navbar brand"
 					class="navbar-brand" height="50" />
 			</a>
@@ -59,7 +59,7 @@
 		<div class="container-fluid justify-content-between">
 			<nav
 					class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-				<a class="navbar-brand" href="MAINPAGEACTION.do">
+				<a class="navbar-brand" href="main.do">
 					<img src="./images/logo.png" alt="navbar brand" class="navbar-brand" height="80" />
 				</a>
 				<ul class="navbar-nav">
@@ -78,7 +78,7 @@
 				</c:if>
 				<c:if test="${not empty member_id}">
 					<li class="nav-item">
-						<a class="nav-link" href="mypage.do"> 마이페이지 </a>
+						<a class="nav-link" href="myPage.do"> 마이페이지 </a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="logout.do"> logout </a>

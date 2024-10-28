@@ -139,15 +139,9 @@
   $(document).ready(function() {
     //----------------------------------------------------------------------
     // json 형식으로 데이터를 저장
-    const card_data = [
-      {title: "사용자", text: "1294"},
-      {title: "암벽장", text: "20"},
-      {title: "예약", text: "30"},
-      {title: "게시판", text: "576"},
-      {title: "크루전", text: "51"},
-    ];
+    const card_data = ${total_data};// TODO Controller 에서 알려주면 코드 수정 예정
 
-    //상당 Html 코드 생성 함수 TODO 내용 변경할 DTO 생기면 변경해야함
+    //상당 Html 코드 생성 함수
     function bootstrap_card_html(card) {
       return '<div class="col-sm-6 col-md-2">' +
               '<div class="card card-stats card-round">' +
@@ -188,54 +182,30 @@
   }
 </script>
 <script>
-//TODO Chart_Data 바꾸면됨
   //----------------------------
   //가입자 chart 데이터
-  const member_Chart_Data = [
-    {tile: '월', text: '10'},
-    {tile: '화', text: '15'},
-    {tile: '수', text: '100'},
-    {tile: '목', text: '7'},
-    {tile: '금', text: '4'},
-    {tile: '토', text: '1'},
-    {tile: '일', text: '5'},
-  ];
+  const member_Chart_Data = ${monthly_join_datas};
   //가입자 데이터 제목
-  const member_Chart_Data_title = member_Chart_Data.map(data => data.tile);
+  const member_Chart_Data_title = member_Chart_Data.map(({member_reservation_month})=> member_reservation_month);
   //가입자 데이터 내용
-  const member_Chart_Data_text = member_Chart_Data.map(data => data.text);
+  const member_Chart_Data_text = member_Chart_Data.map(({total}) => total);
   //----------------------------
   //----------------------------
   //예약자 chart 데이터
-  const registration_Chart_Data = [
-    {tile: '월', text: '10'},
-    {tile: '화', text: '15'},
-    {tile: '수', text: '100'},
-    {tile: '목', text: '7'},
-    {tile: '금', text: '4'},
-    {tile: '토', text: '1'},
-    {tile: '일', text: '5'},
-  ];
+  const registration_Chart_Data = ${monthly_reservation_datas};
   //예약자 데이터 제목
-  const registration_Chart_Data_title = registration_Chart_Data.map(data => data.tile);
+  const registration_Chart_Data_title = registration_Chart_Data.map(({reservation_month}) => reservation_month);
   //예약자 데이터 내용
-  const registration_Chart_Data_text = registration_Chart_Data.map(data => data.text);
+  const registration_Chart_Data_text = registration_Chart_Data.map(({total}) => total);
   //----------------------------
   //----------------------------
   //암벽장 chart 데이터
-  const gym_Chart_Data = [
-    {tile: '월', text: '10'},
-    {tile: '화', text: '15'},
-    {tile: '수', text: '100'},
-    {tile: '목', text: '7'},
-    {tile: '금', text: '4'},
-    {tile: '토', text: '1'},
-    {tile: '일', text: '5'},
-  ];
+  const gym_Chart_Data = ${region_gym_datas}
+}
   //암벽장 데이터 제목
-  const gym_Chart_Data_title = member_Chart_Data.map(data => data.tile);
+  // const gym_Chart_Data_title = member_Chart_Data.map(({Total}) => data.tile);
   //암벽장 데이터 내용
-  const gym_Chart_Data_text = member_Chart_Data.map(data => data.text);
+  const gym_Chart_Data_text = member_Chart_Data.map(({total}) => total);
   //----------------------------
 
 </script>
