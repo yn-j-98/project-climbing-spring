@@ -113,7 +113,9 @@ public class CrewDAO {
 	public List<CrewDTO> selectAll(CrewDTO crewDTO){
 		System.out.println("crew.CrewDAO.selectAll 시작");
 		List<CrewDTO> result = null;
-		Object[] args = {crewDTO.getCrew_min_num()};
+		int minNum = crewDTO.getCrew_min_num(); // 페이지에서 시작 인덱스
+		int offset = minNum;
+		Object[] args = {offset,10};
 		try {
 			result = jdbcTemplate.query(ALL, args, new CrewRowMapperAll());
 		} catch (Exception e) {
@@ -260,12 +262,6 @@ class CrewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
 			crewDTO.setCrew_name(null);
 		}
 		try{
-			crewDTO.setCrew_description(resultSet.getString("CREW_DESCRIPTION"));
-		}catch(Exception e){
-			System.err.println("setCrew_description = null");
-			crewDTO.setCrew_description(null);
-		}
-		try{
 			crewDTO.setCrew_max_member_size(resultSet.getInt("CREW_MAX_MEMBER_SIZE"));
 		}catch(Exception e){
 			System.err.println("setCrew_max_member_size = 0");
@@ -288,6 +284,12 @@ class CrewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
 		}catch (Exception e){
 			System.err.println("setCrew_profile = null");
 			crewDTO.setCrew_profile(null);
+		}
+		try{
+			crewDTO.setCrew_current_member_size(resultSet.getInt("CREW_CURRENT_MEMBER_SIZE"));
+		}catch (Exception e){
+			System.err.println("Crew_current_member_size = 0");
+			crewDTO.setCrew_current_member_size(0);
 		}
 		return crewDTO;
 	}
