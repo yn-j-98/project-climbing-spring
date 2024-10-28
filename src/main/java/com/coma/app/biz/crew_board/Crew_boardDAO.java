@@ -164,10 +164,10 @@ class crewBoardRowMapperOneCount implements RowMapper<Crew_boardDTO> {
 		System.out.println("com.coma.app.biz.crew_board.selectOneCount 검색 성공");
 		Crew_boardDTO crew_boardDTO = new Crew_boardDTO();
 		try{
-			crew_boardDTO.setCrew_board_total(resultSet.getInt("CREW_BOARD_TOTAL"));
+			crew_boardDTO.setTotal(resultSet.getInt("CREW_BOARD_TOTAL"));
 		}catch (Exception e){
 			System.err.println("Crew_board_total = null");
-			crew_boardDTO.setCrew_board_total(0);
+			crew_boardDTO.setTotal(0);
 		}
 		return crew_boardDTO;
 	}

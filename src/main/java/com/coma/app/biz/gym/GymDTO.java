@@ -18,8 +18,8 @@ public class GymDTO {
 	private String gym_admin_battle_verified; // 관리자 승인 여부
 	
 	//DTO에만 존재하는 데이터
-	private String gym_search_keyword;        // 암벽장 검색 목록
-	private String gym_search_content;        // 암벽장 검색 내용
+	private String search_keyword;        // 암벽장 검색 목록
+	private String search_content;        // 암벽장 검색 내용
 	private int page;				//페이지 네이션
 	private int gym_battle_num;		//현재 암벽장의 크루전 pk
 	private String gym_battle_game_date;	//현재 암벽장의 크루전 게임날짜

@@ -241,7 +241,7 @@ public class ReservationDAO {
 
 	public List<ReservationDTO> selectAllAdminSearchGymName(ReservationDTO reservationDTO){
 		List<ReservationDTO> datas=null;
-		Object[] args={reservationDTO.getReservation_search_content(),reservationDTO.getReservation_min_num(),6};
+		Object[] args={reservationDTO.getSearch_content(),reservationDTO.getReservation_min_num(),6};
 		try {
 			//암벽장 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
 			datas= jdbcTemplate.query(ALL_ADMIN_SEARCH_GYM_NAME, args, new ReservationAdminRowMapperAll());
@@ -253,7 +253,7 @@ public class ReservationDAO {
 
 	public List<ReservationDTO> selectAllAdminSearchMemberId(ReservationDTO reservationDTO){
 		List<ReservationDTO> datas=null;
-		Object[] args={reservationDTO.getReservation_search_content(),reservationDTO.getReservation_min_num(),6};
+		Object[] args={reservationDTO.getSearch_content(),reservationDTO.getReservation_min_num(),6};
 		try {
 			//예약자 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
 			datas= jdbcTemplate.query(ALL_ADMIN_SEARCH_MEMBER_ID, args, new ReservationAdminRowMapperAll());

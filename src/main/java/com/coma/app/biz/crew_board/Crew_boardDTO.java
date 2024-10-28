@@ -18,6 +18,6 @@ public class Crew_boardDTO {
 	private String crew_board_writer_name;		//사용자 이름
 	private int crew_board_min_num;
 	private int crew_board_cnt;
-	private int crew_board_total;
+	private int total;
 	private int page;
 }
