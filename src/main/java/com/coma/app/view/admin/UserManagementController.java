@@ -45,7 +45,7 @@ public class UserManagementController {
         List<MemberDTO> search_datas = null;
 
 
-        String search_keyword = memberDTO.getMember_search_keyword();
+        String search_keyword = memberDTO.getSearch_keyword();
 
         if (search_keyword.equals("member_id")) {
             search_datas = this.memberService.selectAllSearchIdAdmin(memberDTO);

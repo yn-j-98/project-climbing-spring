@@ -51,9 +51,9 @@ public class BoardManagementController {
         if (board_num_list != null) {
             // TODO 아마도 수정 필요 ..
             for (String data : board_num_list) {
-                BoardDTO deleteBoardDTO = new BoardDTO();
-                deleteBoardDTO.setBoard_num(Integer.parseInt(data));
-                boolean deleteSuccess = this.boardService.delete(deleteBoardDTO);
+
+                boardDTO.setBoard_num(Integer.parseInt(data));
+                boolean deleteSuccess = this.boardService.delete(boardDTO);
                 if (!deleteSuccess) {
                     flag = false;
                     break;

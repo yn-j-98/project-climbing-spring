@@ -22,7 +22,7 @@ public class FavoriteController {
 
 	@LoginCheck
 	@PostMapping("/gymFavorite.do")
-	public @ResponseBody String gymFavorite(FavoriteDTO favoriteDTO, Model model) {
+	public @ResponseBody String gymFavorite(FavoriteDTO favoriteDTO) {
 
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 
