@@ -26,7 +26,7 @@ public class LoginAspect {
 
     // @Around 어드바이스는 @LoginCheck 어노테이션이 붙은 메서드를 가로채서 로그인 체크를 수행
     @Around("@annotation(com.coma.app.view.annotation.LoginCheck)")
-    public Object checkLogin(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object checkLogin(ProceedingJoinPoint pjp) throws Throwable {
         // 현재 요청과 응답 객체를 가져옴
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         // 세션에 저장된 사용자 아이디를 가져오기 위해 가져옴
@@ -40,6 +40,6 @@ public class LoginAspect {
         loginCheckImpl.checkLogin(request, response, session);
 
         // 로그인된 경우 원래 메서드를 실행
-        return joinPoint.proceed();
+        return pjp.proceed();
     }
 }

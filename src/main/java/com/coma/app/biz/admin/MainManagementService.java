@@ -73,10 +73,10 @@ public class MainManagementService {
     }
 
     private int getBoardTotal(BoardDTO boardDTO) {
-        return boardDAO.selectOneCount(boardDTO).getBoard_total();
+        return boardDAO.selectOneCount(boardDTO).getTotal();
     }
 
     private int getBattleTotal(BattleDTO battleDTO) {
-        return battleDAO.selectOneCountActive(battleDTO).getBattle_total();
+        return battleDAO.selectOneCountActive(battleDTO).getTotal();
     }
 }

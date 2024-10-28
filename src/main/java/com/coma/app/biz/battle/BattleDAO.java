@@ -511,10 +511,10 @@ class BattleRowMapperOneCountActiveBattle implements RowMapper<BattleDTO> {
 		System.out.println("com.coma.app.biz.battle.BattleRowMapperAllActive 검색 성공");
 		BattleDTO battleDTO = new BattleDTO();
 		try	{
-			battleDTO.setBattle_total(rs.getInt("BATTLE_TOTAL"));
+			battleDTO.setTotal(rs.getInt("BATTLE_TOTAL"));
 		} catch (Exception e) {
 			System.err.println("Battle_total = 0");
-			battleDTO.setBattle_total(0);
+			battleDTO.setTotal(0);
 		}
 		return battleDTO;
 	}
