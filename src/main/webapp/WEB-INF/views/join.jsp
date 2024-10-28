@@ -404,11 +404,12 @@
 				var phoneCheckField = document.getElementById('phone_check'); // 인증번호 input창
 		        var errorCheck = document.getElementById('errorCheck'); // small 태그
 				$.ajax({
-					type : "POST",
-					url : "smscheck", // 서버에서 이메일 중복 검사를 처리하는 URL
-					data : { // POST로 보낼때에는 data로 보낸다~!
-						member_phoneNumber : phoneCheck
-					},
+					type: "POST",
+					url: "smscheck.do",
+					contentType: "application/json", // JSON 형식으로 전송
+					data: JSON.stringify({
+						member_phone: phoneCheck
+					}),
 					dataType : "text",
 					success : function(data) { // data받는데 성공한 함수
 						$("#check_num").click(function() { // 인증 버튼 눌렀을 때 함수

@@ -28,64 +28,52 @@ public class ReplyController {
     public String Reply(HttpSession session, Model model, ReplyDTO replyDTO) {
         // 댓글 달기
 //		int reply_board_num = Integer.parseInt(request.getParameter("board_id")); // 댓글 작성할 게시글 번호
-//
-//		// 기본으로 넘어가야하는 페이지와 redirect 여부를 설정
-//		ActionForward forward = new ActionForward();
-//		String path = "info.jsp";
-        // 글 하나 보는 페이지로 돌아오기 위해 해당 댓글의 글번호를 get 방식으로 전달
-//		boolean flagRedirect = false; // 리다이렉트 방식 사용
 
         String info_path = "redirect:content.do?board_num=" + replyDTO.getReply_board_num();
 
 
 
         // 로그인 정보가 있는지 확인
-//        String login[] = LoginCheck.Success(request, response);
-        String member_id = (String) session.getAttribute("MEMBER_ID");
-        System.out.println("로그인 확인: " + member_id);
+
+        String memeber_id = (String) session.getAttribute("MEMBER_ID");
+        System.out.println("로그인 확인: " + memeber_id);
 
         // 만약 로그인 정보가 없다면
-        if (member_id == null) {
+        if (memeber_id == null) {
             // 로그인 페이지로 전달
-//			request.setAttribute("msg", "댓글 작성은 로그인 후 사용 가능합니다.");
-//			request.setAttribute("path", "LOGINPAGEACTION.do");
+
             model.addAttribute("title", "로그인을 해주세요");
             model.addAttribute("msg", "댓글 작성은 로그인 후 사용 가능합니다.");
             model.addAttribute("path", "login.do");
         }
         else {
             // 댓글 작성
-//			String reply_content = request.getParameter("reply_content");
-//			String reply_writer_id = memeber_id; // 세션에 있는 사용자의 아이디
+
+            String reply_writer_id = memeber_id; // 세션에 있는 사용자의 아이디
 //
-//			System.out.println("댓글 작성자 ID: " + reply_writer_id);
-//			System.out.println("댓글 내용: " + reply_content);
-//			System.out.println("댓글 작성할 게시글 번호: " + reply_board_num);
+            System.out.println("댓글 작성자 ID: " + reply_writer_id);
 
-//			ReplyDTO replyDTO = new ReplyDTO();
-//			ReplyDAO replyDAO = new ReplyDAO();
-//			replyDTO.setModel_reply_board_num(reply_board_num); // 해당 댓글의 글 번호
-//			replyDTO.setModel_reply_content(reply_content); // 댓글 내용
-//			replyDTO.setModel_reply_writer_id(reply_writer_id); // 댓글 작성자
 
-            boolean insertResult = replyService.insert(replyDTO); // 댓글 삽입
+
+            replyDTO.setReply_writer_id(reply_writer_id); // 댓글 작성자
+
+            boolean insertResult = this.replyService.insert(replyDTO); // 댓글 삽입
 
             if(!insertResult) {
-//				request.setAttribute("msg", "댓글 작성을 성공하였습니다.");
+
                 model.addAttribute("title", "실패");
                 model.addAttribute("msg", "댓글 작성을 실패하였습니다.");
             }
             else {
-//				request.setAttribute("msg", "댓글 작성을 성공하였습니다.");
+
                 model.addAttribute("title", "성공");
                 model.addAttribute("msg", "댓글 작성을 성공하였습니다.");
             }
-//			request.setAttribute("path", info_path);
+
             model.addAttribute("path", info_path);
         }
 
-//		forward.setPath(path);
-//		forward.setRedirect(flagRedirect);
+
         return "views/info";
     }
 
@@ -93,64 +81,32 @@ public class ReplyController {
     @LoginCheck
     @PostMapping("/replyDelete.do")
     public String boardDelete(HttpSession session, Model model, BoardDTO boardDTO, ReplyDTO replyDTO) {
-//    int board_num = Integer.parseInt(request.getParameter("board_num")); // 댓글이 속한 게시글 번호
-//    ActionForward forward = new ActionForward();
-//    String path = "info.jsp";
-//    // 댓글 삭제 후 해당 글 하나 보는 페이지로 돌아오기 위해 글의 번호를 get 방식으로 전달
-//    boolean flagRedirect = false; // 리다이렉트 방식 사용
 
         String info_path = "redirct:content.do?board_num=" + boardDTO.getBoard_num();
 
-        // 로그인 정보가 있는지 확인
-//        String login[] = LoginCheck.Success(request, response);
-//        System.out.println("로그인 확인: " + login[0]);
 
-        // 만약 로그인 정보가 없다면
-//        if (login[0] == null) {
-//            // 로그인 페이지로 전달
-////        request.setAttribute("msg", "댓글 삭제는 로그인 후 사용 가능합니다.");
-////        request.setAttribute("path", "LOGINPAGEACTION.do");
-//
-//            model.addAttribute("title", "로그인을 해주세요");
-//            model.addAttribute("msg", "댓글 삭제는 로그인 후 사용 가능합니다.");
-//            model.addAttribute("path", "login.do");
-//        }
-//        else {
         // 댓글 삭제
-
-//        int reply_num = Integer.parseInt(request.getParameter("replyId")); // 댓글 PK
         String reply_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
 
-//        System.out.println("댓글 번호: " + reply_num);
         System.out.println("사용자 ID: " + reply_id);
 
-//        ReplyDTO replyDTO = new ReplyDTO();
-//        ReplyDAO replyDAO = new ReplyDAO();
 
         replyDTO.setReply_writer_id(reply_id); // 사용자 아이디
-//        replyDTO.setReply_num(reply_num); // 댓글 번호
 
-        boolean deleteReply = replyService.delete(replyDTO); // 댓글 삭제
+        boolean deleteReply = this.replyService.delete(replyDTO); // 댓글 삭제
 
         if(deleteReply) {
-//            request.setAttribute("msg", "댓글 삭제를 성공하였습니다.");
-            model.addAttribute("title", "로그인을 해주세요");
-
             model.addAttribute("msg", "댓글 삭제를 성공하였습니다.");
         }
         else {
-            // 로그인 페이지로 전달
-//            request.setAttribute("msg", "댓글 삭제를 실패하였습니다.");
-            model.addAttribute("title", "성공");
 
-            model.addAttribute("msg", "댓글 삭제를 성공하였습니다.");
+            model.addAttribute("msg", "댓글 삭제를 실패했습니다.");
+            model.addAttribute("path", "login.do");
+
         }
-//        request.setAttribute("msg", "댓글 삭제를 성공하였습니다.");
-        model.addAttribute("msg", "댓글 삭제를 성공하였습니다.");
-//        }
+        model.addAttribute("path", info_path);
 
-//    forward.setPath(path);
-//    forward.setRedirect(flagRedirect);
+
         return "views/info";
 
     }
@@ -158,65 +114,29 @@ public class ReplyController {
     @LoginCheck
     @PostMapping("/replyUpdate.do")
     public String replyUpdate(HttpSession session, Model model, BoardDTO boardDTO, ReplyDTO replyDTO) {
-//    int board_num = Integer.parseInt(request.getParameter("board_id")); // 되돌아갈 글 번호
-//    ActionForward forward = new ActionForward();
-//    String path = "info.jsp";
 //    // 댓글 수정 후 해당 글 보는 페이지로 이동하기 위해 글 번호를 get 방식으로 전달
-//    boolean flagRedirect = false; // 리다이렉트 방식 사용
+
 
         String info_path = "redirct:content.do?board_num=" + boardDTO.getBoard_num();
-
-        // 로그인 정보가 있는지 확인
-//        String login[] = LoginCheck.Success(request, response);
-//        System.out.println("로그인 확인: " + login[0]);
-
-        // 만약 로그인 정보가 없다면
-//        if (login[0] == null) {
-//            // 로그인 페이지로 전달
-////        request.setAttribute("msg", "댓글 수정은 로그인 후 사용 가능합니다.");
-////        request.setAttribute("path", "LOGINPAGEACTION.do");
-//            model.addAttribute("title", "로그인을 해주세요");
-//
-//            model.addAttribute("msg", "댓글 수정은 로그인 후 사용 가능합니다.");
-//            model.addAttribute("path", "login.do");
-//        }
-//        else {
         // 댓글 업데이트 가능
         String reply_writer_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
-//        String reply_content = request.getParameter("reply_content"); // 댓글 내용
-//        int reply_num = Integer.parseInt(request.getParameter("reply_id")); // 댓글 번호
-//
-//        System.out.println("댓글 번호: " + reply_num);
+
+
         System.out.println("사용자 ID: " + reply_writer_id);
-//        System.out.println("댓글 수정 내용: " + reply_content);
 
-//        ReplyDTO replyDTO = new ReplyDTO();
-//        ReplyDAO replyDAO = new ReplyDAO();
 
-//        replyDTO.setModel_reply_num(reply_num); // 댓글 번호6
-//        replyDTO.setModel_reply_content(reply_content); // 댓글 내용
-
-        boolean updateResult = replyService.update(replyDTO); // 업데이트
+        boolean updateResult = this.replyService.update(replyDTO); // 업데이트
 
         if(updateResult) {
-//            request.setAttribute("msg", "댓글 수정을 성공하였습니다.");
-
-
             model.addAttribute("msg", "댓글 수정을 성공하였습니다.");
         }
         else {
-            // 로그인 페이지로 전달
-//            request.setAttribute("msg", "댓글 수정을 실패하였습니다.");
-
 
             model.addAttribute("msg", "댓글 수정을 실패하였습니다.");
         }
-//        request.setAttribute("path", info_path);
-        model.addAttribute("path", info_path);
-//        }
 
-//    forward.setPath(path);
-//    forward.setRedirect(flagRedirect);
+        model.addAttribute("path", info_path);
+
         return "views/info";
     }
 
