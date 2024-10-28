@@ -31,9 +31,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<BoardDTO> selectAllRowNum(BoardDTO boardDTO) {
-		return this.boardDAO.selectAllRowNum(boardDTO);
-	}
+	public List<BoardDTO> selectAllRowNum(BoardDTO boardDTO) {return this.boardDAO.selectAllRowNum(boardDTO);}
 
 	@Override
 	public List<BoardDTO> selectAllRecentBoard5(BoardDTO boardDTO) {return this.boardDAO.selectAllRecentBoard5(boardDTO);}
@@ -42,9 +40,7 @@ public class BoardServiceImpl implements BoardService{
 	public List<BoardDTO> selectAllSearchBoard(BoardDTO boardDTO) {return this.boardDAO.selectAllSearchBoard(boardDTO);}
 
 	@Override
-	public BoardDTO selectOne(BoardDTO boardDTO) {
-		return this.boardDAO.selectOne(boardDTO);
-	}
+	public BoardDTO selectOne(BoardDTO boardDTO) {return this.boardDAO.selectOne(boardDTO);}
 
 	@Override
 	public BoardDTO selectOneWriterId(BoardDTO boardDTO) {
@@ -76,9 +72,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public boolean updateContentTitle(BoardDTO boardDTO) {
-		return this.boardDAO.updateContentTitle(boardDTO);
-	}
+	public boolean updateContentTitle(BoardDTO boardDTO) {return this.boardDAO.updateContentTitle(boardDTO);}
 
 	@Override
 	public boolean updateCnt(BoardDTO boardDTO) {
@@ -89,4 +83,7 @@ public class BoardServiceImpl implements BoardService{
 	public boolean delete(BoardDTO boardDTO) {
 		return this.boardDAO.delete(boardDTO);
 	}
+
+	@Override
+	public boolean deleteSelectedBoard(BoardDTO boardDTO) {return this.boardDAO.deleteSelectedBoard(boardDTO);}
 }

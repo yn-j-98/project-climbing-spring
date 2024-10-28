@@ -675,12 +675,6 @@ class BoardRowMapperAllSearchPatternId implements RowMapper<BoardDTO>{
 			boardDTO.setBoard_content(null);
 		}
 		try{
-			boardDTO.setBoard_cnt(rs.getInt("BOARD_CNT"));
-		} catch (SQLException e) {
-			System.err.println("Board_cnt = 0");
-			boardDTO.setBoard_cnt(0);
-		}
-		try{
 			boardDTO.setBoard_location(rs.getString("BOARD_LOCATION"));
 		}catch (SQLException e) {
 			System.err.println("Board_location = null");

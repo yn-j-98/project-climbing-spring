@@ -370,10 +370,10 @@ class BattleRecordRowMapperOneCountCrew implements RowMapper<Battle_recordDTO>{
 			data.setBattle_record_battle_num(0);
 		}
 		try {
-			data.setBattle_record_total(rs.getInt("BATTLE_CREW_TOTAL"));
+			data.setTotal(rs.getInt("BATTLE_CREW_TOTAL"));
 		} catch (SQLException e) {
 			System.err.println("attle_record_tota = 0");
-			data.setBattle_record_total(0);
+			data.setTotal(0);
 		}
 		return data;
 	}

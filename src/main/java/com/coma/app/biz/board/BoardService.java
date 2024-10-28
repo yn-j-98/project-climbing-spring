@@ -22,4 +22,5 @@ public interface BoardService {
 	boolean updateContentTitle(BoardDTO boardDTO);
 	boolean updateCnt(BoardDTO boardDTO);
 	boolean delete(BoardDTO boardDTO);
+	boolean deleteSelectedBoard(BoardDTO boardDTO);
 }
