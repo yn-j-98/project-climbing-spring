@@ -102,46 +102,28 @@ public class BattleDAO {
 	/* 사용자 페이지 쿼리문 */
 
 	//(페이지네이션)활성화 되있는 크루전 전체 출력 내림차순 model_battle_min_num, model_battle_max_num
-	private final String ALL_ACTIVE = "SELECT \r\n"
-			+ "				BATTLE_NUM,\r\n"
-			+ "				BATTLE_GYM_NAME,\r\n"
-			+ "				BATTLE_REGISTRATION_DATE,\r\n"
-			+ "				GYM_LOCATION,\r\n"
-			+ "				BATTLE_GAME_DATE,\r\n"
-			+ "				GYM_PROFILE\r\n"
-			+ "			FROM (\r\n"
-			+ "				SELECT \r\n"
-			+ "				    BATTLE_NUM,\r\n"
-			+ "				    GYM_NAME AS BATTLE_GYM_NAME,\r\n"
-			+ "				    BATTLE_REGISTRATION_DATE,\r\n"
-			+ "				    GYM_LOCATION,\r\n"
-			+ "				    BATTLE_GAME_DATE,\r\n"
-			+ "				    GYM_PROFILE,\r\n"
-			+ "				    ROW_NUMBER() OVER (ORDER BY BATTLE_NUM DESC) AS RN\r\n"
-			+ "				FROM (\r\n"
-			+ "				    SELECT DISTINCT\r\n"
-			+ "				        BATTLE_NUM,\r\n"
-			+ "				        GYM_NAME,\r\n"
-			+ "				        BATTLE_REGISTRATION_DATE,\r\n"
-			+ "				        GYM_LOCATION,\r\n"
-			+ "				        BATTLE_GAME_DATE,\r\n"
-			+ "				        GYM_PROFILE\r\n"
-			+ "				    FROM \r\n"
-			+ "				        COMA.BATTLE B\r\n"
-			+ "				    JOIN \r\n"
-			+ "				        COMA.GYM G\r\n"
-			+ "				    ON \r\n"
-			+ "				        B.BATTLE_GYM_NUM = G.GYM_NUM\r\n"
-			+ "				    JOIN\r\n"
-			+ "				        COMA.BATTLE_RECORD BR\r\n"
-			+ "				    ON\r\n"
-			+ "				        B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\r\n"
-			+ "				    WHERE\r\n"
-			+ "				        BR.BATTLE_RECORD_MVP_ID IS NULL\r\n"
-			+ "				) AS ROW_NUM1\r\n"
-			+ "			) AS ROW_NUM2\r\n"
-			+ "            \r\n"
-			+ "			WHERE RN LIMIT ?,?";
+	private final String ALL_ACTIVE = "SELECT \n" +
+			"    B.BATTLE_NUM,\n" +
+			"    G.GYM_NAME AS BATTLE_GYM_NAME,\n" +
+			"    B.BATTLE_REGISTRATION_DATE,\n" +
+			"    G.GYM_LOCATION,\n" +
+			"    B.BATTLE_GAME_DATE,\n" +
+			"    G.GYM_PROFILE\n" +
+			"FROM \n" +
+			"    COMA.BATTLE B\n" +
+			"JOIN \n" +
+			"    COMA.GYM G\n" +
+			"ON \n" +
+			"    B.BATTLE_GYM_NUM = G.GYM_NUM\n" +
+			"JOIN\n" +
+			"    COMA.BATTLE_RECORD BR\n" +
+			"ON\n" +
+			"    B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\n" +
+			"WHERE\n" +
+			"    BR.BATTLE_RECORD_MVP_ID IS NULL\n" +
+			"ORDER BY \n" +
+			"    B.BATTLE_NUM DESC\n" +
+			"LIMIT ?, ?";
 
 	//특정 사용자가 참여한 크루전 찾기 BATTLE_RECORD_CREW_NUM
 	private final String SEARCH_MEMBER_BATTLE = "SELECT\n"
@@ -205,23 +187,16 @@ public class BattleDAO {
 	private final String INSERT = "INSERT INTO COMA.BATTLE(BATTLE_GYM_NUM,BATTLE_GAME_DATE) VALUES (?,?)";
 
 	//크루전 최신 4개만 출력
-	private final String ALL_TOP4 = "SELECT \n" +
-			"    B.BATTLE_NUM,\n" +
-			"    B.BATTLE_GYM_NUM,\n" +
-			"    B.BATTLE_REGISTRATION_DATE,\n" +
-			"    B.BATTLE_GAME_DATE\n" +
-			"FROM (\n" +
-			"    SELECT \n" +
-			"        B.BATTLE_NUM,\n" +
-			"        B.BATTLE_GYM_NUM,\n" +
-			"        B.BATTLE_REGISTRATION_DATE,\n" +
-			"        B.BATTLE_GAME_DATE\n" +
-			"    FROM \n" +
-			"        BATTLE B\n" +
-			"    ORDER BY \n" +
-			"        B.BATTLE_NUM DESC\n" +
-			"    LIMIT 4\n" +
-			") AS B";
+	private final String ALL_TOP4 = "SELECT\n" +
+			"    BATTLE_NUM,\n" +
+			"    BATTLE_GYM_NUM,\n" +
+			"    BATTLE_REGISTRATION_DATE,\n" +
+			"    BATTLE_GAME_DATE\n" +
+			"FROM\n" +
+			"    BATTLE\n" +
+			"ORDER BY\n" +
+			"    BATTLE_NUM DESC\n" +
+			"LIMIT 4;";
 
 	//게임날짜 업데이트 BATTLE_GAME_DATE, BATTLE_NUM
 	private final String UPDATE = "UPDATE BATTLE SET BATTLE_GAME_DATE = ? WHERE BATTLE_NUM = ?";
@@ -519,6 +494,7 @@ class BattleRowMapperOneCountActiveBattle implements RowMapper<BattleDTO> {
 		return battleDTO;
 	}
 }
+
 class BattleRowMapperAllActive implements RowMapper<BattleDTO> {
 	@Override
 	public BattleDTO mapRow(ResultSet rs, int i) throws SQLException {
@@ -531,10 +507,10 @@ class BattleRowMapperAllActive implements RowMapper<BattleDTO> {
 			battleDTO.setBattle_num(0);
 		}
 		try {
-			battleDTO.setBattle_gym_num(rs.getInt("BATTLE_GYM_NUM"));
+			battleDTO.setBattle_gym_name(rs.getString("BATTLE_GYM_NAME"));
 		} catch (SQLException e) {
-			System.err.println("Battle_gym_num = 0");
-			battleDTO.setBattle_gym_num(0);
+			System.err.println("Battle_gym_name = null");
+			battleDTO.setBattle_gym_name(null);
 		}
 		try {
 			battleDTO.setBattle_registration_date(rs.getString("BATTLE_REGISTRATION_DATE"));
@@ -621,6 +597,7 @@ class BattleRowMapperAllBattleAllTop4 implements RowMapper<BattleDTO> {
 		return battleDTO;
 	}
 }
+
 class BattleRowMapperAllSearchBattleNum implements RowMapper<BattleDTO> {
 	@Override
 	public BattleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -633,6 +610,12 @@ class BattleRowMapperAllSearchBattleNum implements RowMapper<BattleDTO> {
 			battleDTO.setBattle_num(0);
 		}
 		try{
+			battleDTO.setBattle_gym_num(rs.getInt("BATTLE_GYM_NUM"));
+		}catch (Exception e){
+			System.err.println("Battle_gym_num = 0");
+			battleDTO.setBattle_gym_num(0);
+		}
+		try{
 			battleDTO.setBattle_game_date(rs.getString("BATTLE_GAME_DATE"));
 		}catch (Exception e){
 			System.err.println("Battle_game_date = null");
@@ -653,6 +636,7 @@ class BattleRowMapperAllSearchBattleNum implements RowMapper<BattleDTO> {
 		return battleDTO;
 	}
 }
+
 class BattleRowMapperAllSearchBattleName implements RowMapper<BattleDTO> {
 	@Override
 	public BattleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -665,6 +649,12 @@ class BattleRowMapperAllSearchBattleName implements RowMapper<BattleDTO> {
 			battleDTO.setBattle_num(0);
 		}
 		try{
+			battleDTO.setBattle_gym_num(rs.getInt("BATTLE_GYM_NUM"));
+		}catch (Exception e){
+			System.err.println("Battle_gym_num = 0");
+			battleDTO.setBattle_gym_num(0);
+		}
+		try{
 			battleDTO.setBattle_game_date(rs.getString("BATTLE_GAME_DATE"));
 		}catch (Exception e){
 			System.err.println("Battle_game_date = null");
@@ -685,6 +675,7 @@ class BattleRowMapperAllSearchBattleName implements RowMapper<BattleDTO> {
 		return battleDTO;
 	}
 }
+
 class BattleRowMapperAllBattle implements RowMapper<BattleDTO> {
 	@Override
 	public BattleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -695,6 +686,12 @@ class BattleRowMapperAllBattle implements RowMapper<BattleDTO> {
 		}catch (Exception e){
 			System.err.println("Battle_num = 0");
 			battleDTO.setBattle_num(0);
+		}
+		try{
+			battleDTO.setBattle_gym_num(rs.getInt("BATTLE_GYM_NUM"));
+		}catch (Exception e){
+			System.err.println("Battle_gym_num = 0");
+			battleDTO.setBattle_gym_num(0);
 		}
 		try{
 			battleDTO.setBattle_game_date(rs.getString("BATTLE_GAME_DATE"));

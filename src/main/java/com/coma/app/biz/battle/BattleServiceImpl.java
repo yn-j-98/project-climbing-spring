@@ -53,9 +53,10 @@ public class BattleServiceImpl implements BattleService{
 	}
 
 	@Override
-	public boolean update(BattleDTO battleDTO) {
-		return this.battleDAO.update(battleDTO);
-	}
+	public boolean InsertBattleModal(BattleDTO battleDTO) {return this.battleDAO.InsertBattleModal(battleDTO);}
+
+	@Override
+	public boolean update(BattleDTO battleDTO) {return this.battleDAO.update(battleDTO);}
 
 	@Override
 	public boolean delete(BattleDTO battleDTO) {

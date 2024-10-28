@@ -16,29 +16,19 @@ public class CrewDAO {
 	private final String ONE = "SELECT CREW_NUM,CREW_NAME,CREW_DESCRIPTION,CREW_MAX_MEMBER_SIZE,CREW_LEADER,CREW_BATTLE_STATUS,CREW_PROFILE FROM CREW WHERE CREW_NUM = ?";
 
 	//(페이지네이션) 크루 전체 목록 Crew_min_num, Crew_max_num
-	private final String ALL = "SELECT\r\n"
-			+ "	RN,\r\n"
-			+ "	CREW_NUM,\r\n"
-			+ "    CREW_NAME,\r\n"
-			+ "    CREW_DESCRIPTION,\r\n"
-			+ "    CREW_MAX_MEMBER_SIZE,\r\n"
-			+ "    CREW_LEADER,\r\n"
-			+ "    CREW_BATTLE_STATUS,\r\n"
-			+ "    CREW_PROFILE\r\n"
-			+ "FROM (\r\n"
-			+ "    SELECT \r\n"
-			+ "        CREW_NUM,\r\n"
-			+ "    	   CREW_NAME,\r\n"
-			+ "    	CREW_DESCRIPTION,\r\n"
-			+ "    	CREW_MAX_MEMBER_SIZE,\r\n"
-			+ "    	CREW_LEADER,\r\n"
-			+ "    	CREW_BATTLE_STATUS,\r\n"
-			+ "    	CREW_PROFILE,\r\n"
-			+ "        ROW_NUMBER() OVER (ORDER BY CREW_NUM) AS RN\r\n"
-			+ "    FROM \r\n"
-			+ "       	CREW\r\n"
-			+ ")AS subquery\r\n"
-			+ "WHERE RN BETWEEN ? AND ?";
+	private final String ALL = "SELECT \n" +
+			"    CREW_NUM,\n" +
+			"    CREW_NAME,\n" +
+			"    CREW_DESCRIPTION,\n" +
+			"    CREW_MAX_MEMBER_SIZE,\n" +
+			"    CREW_LEADER,\n" +
+			"    CREW_BATTLE_STATUS,\n" +
+			"    CREW_PROFILE\n" +
+			"FROM \n" +
+			"    CREW\n" +
+			"ORDER BY \n" +
+			"    CREW_NUM DESC\n" +
+			"LIMIT ?, ?";
 
 	//크루 총 개수
 	private final String ONE_COUNT = "SELECT COUNT(*) AS CREW_TOTAL FROM CREW";
@@ -123,7 +113,9 @@ public class CrewDAO {
 	public List<CrewDTO> selectAll(CrewDTO crewDTO){
 		System.out.println("crew.CrewDAO.selectAll 시작");
 		List<CrewDTO> result = null;
-		Object[] args = {crewDTO.getCrew_min_num()};
+		int minNum = crewDTO.getCrew_min_num(); // 페이지에서 시작 인덱스
+		int offset = minNum;
+		Object[] args = {offset,10};
 		try {
 			result = jdbcTemplate.query(ALL, args, new CrewRowMapperAll());
 		} catch (Exception e) {
@@ -270,12 +262,6 @@ class CrewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
 			crewDTO.setCrew_name(null);
 		}
 		try{
-			crewDTO.setCrew_description(resultSet.getString("CREW_DESCRIPTION"));
-		}catch(Exception e){
-			System.err.println("setCrew_description = null");
-			crewDTO.setCrew_description(null);
-		}
-		try{
 			crewDTO.setCrew_max_member_size(resultSet.getInt("CREW_MAX_MEMBER_SIZE"));
 		}catch(Exception e){
 			System.err.println("setCrew_max_member_size = 0");
@@ -298,6 +284,12 @@ class CrewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
 		}catch (Exception e){
 			System.err.println("setCrew_profile = null");
 			crewDTO.setCrew_profile(null);
+		}
+		try{
+			crewDTO.setCrew_current_member_size(resultSet.getInt("CREW_CURRENT_MEMBER_SIZE"));
+		}catch (Exception e){
+			System.err.println("Crew_current_member_size = 0");
+			crewDTO.setCrew_current_member_size(0);
 		}
 		return crewDTO;
 	}
