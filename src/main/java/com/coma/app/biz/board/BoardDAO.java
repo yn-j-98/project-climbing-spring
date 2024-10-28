@@ -678,7 +678,7 @@ class BoardRowMapperAllSearchMatchId implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 class BoardRowMapperAllSearchPatternId implements RowMapper<BoardDTO>{
@@ -715,7 +715,7 @@ class BoardRowMapperAllSearchPatternId implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 
@@ -759,7 +759,7 @@ class BoardRowMapperAllSearchTitle implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 class BoardRowMapperAll implements RowMapper<BoardDTO>{
@@ -802,7 +802,7 @@ class BoardRowMapperAll implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 
@@ -846,7 +846,7 @@ class BoardRowMapperAllSearchName implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 class BoardRowMapperAllRownum implements RowMapper<BoardDTO>{
@@ -889,7 +889,7 @@ class BoardRowMapperAllRownum implements RowMapper<BoardDTO>{
 			System.err.println("Board_writer_id = null");
 			boardDTO.setBoard_writer_id(null);
 		}
-		return null;
+		return boardDTO;
 	}
 }
 
