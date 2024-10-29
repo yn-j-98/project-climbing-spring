@@ -34,11 +34,12 @@ public class CommunityController{
         int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
         int minBoard = 1; // 최소 게시글 수 초기화
 
-        minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
-        int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
         if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
             pageNum = 1;
         }
+        minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
+        int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
+
 
         log.info("community.pageNum: ["+pageNum+"]");
 
@@ -124,12 +125,10 @@ public class CommunityController{
     public String local(Model model, BoardDTO boardDTO) {
 
         String Location = boardDTO.getBoard_location(); // 지역검색
-
-
-        log.info("location.Location : ["+Location+"]");
-
+//        String title = boardDTO.getBoard_title();
         // 지역명 맵핑
         String location = Location(Location);
+        log.info("location.Location : ["+Location+"]");
 
         int pageNum = boardDTO.getPage();//요거 필요
         int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
@@ -137,15 +136,17 @@ public class CommunityController{
         if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
             pageNum = 1;
         }
-
         minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
         int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
 
+
+
+        log.info("location.pageNum : ["+pageNum+"]");
         log.info("location.minBoard : [" + minBoard+"]");
 
         boardDTO.setBoard_min_num(minBoard);
-
-
+       boardDTO.setSearch_keyword(location);
+//        boardDTO.setBoard_title(title);
 //        boardDTO.setBoard_condition("BOARD_ALL_SEARCH_TITLE");
         log.info("location.boardDTO : [" + boardDTO+"]");
         List<BoardDTO> datas = this.boardService.selectAllSearchTitle(boardDTO);
@@ -158,12 +159,12 @@ public class CommunityController{
         listNum = boardCount.getTotal();
 
 
-        model.addAttribute("Page", pageNum);
+        model.addAttribute("page", pageNum);
         model.addAttribute("total", listNum);
         model.addAttribute("BOARD",datas);
 
 
-        return "views/communityRegions";
+        return "views/localCommunity";
     }
     /* 뷰에서 전달받은 지역 값을 실제 지역명으로 변환하는 함수
      */
