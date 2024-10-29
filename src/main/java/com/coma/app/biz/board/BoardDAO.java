@@ -392,7 +392,7 @@ public class BoardDAO {
 	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchPatternId 시작");
 		List<BoardDTO> result = null;
-		Object[] args = {boardDTO.getBoard_writer_id().replace("'", "\'"), boardDTO.getPage(), 10};
+		Object[] args = {boardDTO.getBoard_content().replace("'", "\'"), boardDTO.getBoard_min_num(), 10};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_PATTERN_ID, args, new BoardRowMapperAllSearchPatternId());
 		} catch (Exception e) {
