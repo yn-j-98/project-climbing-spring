@@ -8,18 +8,18 @@ $(document).ready(function () {
         $('#dropdownButton').text(selectedText);
         // 드롭다운 값 변경 시 URL에 반영하고 페이지네이션 업데이트
         console.log("pagenation.js Dropdown = [" + selectedText + "]");
-        updateURLParam('searchKeyword', selectedText);
+        updateURLParam('search_keyword', selectedText);
         renderpagination();
     });
 
     // 검색어 입력 필드 변경 이벤트 처리
-    $('#searchKeyword').change(function() {
-        var searchKeyword = $("#searchKeyword").val();
-        var searchContents = $("#searchContents").val();
-        console.log("19 pagenation.js searchKeyword [" + searchKeyword + "]");
-        console.log("20 pagenation.js searchContents [" + searchContents + "]");
-        updateURLParam('searchKeyword', searchKeyword);
-        updateURLParam('searchContents', searchContents);
+    $('#search_keyword').change(function() {
+        var search_keyword = $("#search_keyword").val();
+        var search_content = $("#search_content").val();
+        console.log("19 pagenation.js search_keyword [" + search_keyword + "]");
+        console.log("20 pagenation.js search_content [" + search_content + "]");
+        updateURLParam('search_keyword', search_keyword);
+        updateURLParam('search_content', search_content);
         renderpagination();
     });
 });
@@ -49,10 +49,10 @@ function renderpagination() {
     }
     console.log("pagenation.js currentPage = [" + currentPage + "]");
 
-    var searchKeyword = new URLSearchParams(window.location.search).get('searchKeyword') || '';
-    var searchContents = new URLSearchParams(window.location.search).get('searchContents') || '';
-    console.log("53pagenation.js search_Keyword = [" + searchKeyword + "]");
-    console.log("54pagenation.js search_Contents = [" + searchContents + "]");
+    var search_keyword = new URLSearchParams(window.location.search).get('search_keyword') || '';
+    var search_content = new URLSearchParams(window.location.search).get('search_content') || '';
+    console.log("53pagenation.js search_Keyword = [" + search_keyword + "]");
+    console.log("54pagenation.js search_Contents = [" + search_content + "]");
 
     $("#pagination").empty();
     if (_totalCount <= 10) return;

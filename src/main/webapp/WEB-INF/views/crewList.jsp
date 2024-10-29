@@ -46,14 +46,14 @@
 						</a>
 						<h3 class="px-5 m-0">/</h3>
 						<a href="CrewBattlePage.do"
-						   class="text-dark text-decoration-none link-primary">
+						   class="text-dark text-decoration-underline link-primary">
 							<p class="fs-4 m-0">
 								<b>크루전 개최</b>
 						</p>
 						</a>
 						<h3 class="px-5 m-0">/</h3>
 						<a href="crewList.do"
-						   class="text-dark text-decoration-underline  link-primary">
+						   class="text-dark text-decoration-none link-primary">
 							<h3 class="m-0">크루 가입</h3>
 						</a>
 					</div>
