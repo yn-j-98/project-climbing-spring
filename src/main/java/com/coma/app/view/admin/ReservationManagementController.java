@@ -16,7 +16,6 @@ public class ReservationManagementController {
     @Autowired
     private ReservationService reservationService;
 
-
     @GetMapping("/reservationManagement.do")
     public String reservationManagement() {
         return "admin/reservationManagement";
@@ -47,9 +46,14 @@ public class ReservationManagementController {
 
         listNum = reservationDTO.getTotal();
 
-        //=========페이지네이션==============
+        //=============페이지네이션=================
 
         List<ReservationDTO> datas = this.reservationService.selectAll(reservationDTO);
+        // 예약자명
+        //      예약한 암벽장 이름
+        //      결제한 금액
+        //      예약한 날짜
+
         model.addAttribute("datas", datas);
         model.addAttribute("total", listNum);
         model.addAttribute("page", pageNum);
