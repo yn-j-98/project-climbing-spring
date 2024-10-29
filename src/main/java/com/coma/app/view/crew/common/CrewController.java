@@ -58,15 +58,15 @@ public class CrewController{
 		 *
 		 */
 
-		int pageNum = crewDTO.getPage();//요거 필요
-		int boardSize = 5; // 한 페이지에 표시할 게시글 수 설정
-		int minBoard = 1; // 최소 게시글 수 초기화
+		int pageNum = crewDTO.getPage();
+		System.out.printf("pageNum = ["+pageNum+"]");
+		int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
+		int minBoard = 0; // 최소 게시글 수 초기화
 
-		if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
-			pageNum = 1;
+		if (pageNum > 1) { // 페이지가 0일 때 (npe방지)
+			minBoard = ((pageNum - 1) * boardSize);
 		}
 
-		minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
 		int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
 
 
