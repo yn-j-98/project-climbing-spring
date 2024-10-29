@@ -75,14 +75,14 @@
   <div class="row mb-3">
     <div class="d-flex justify-content-between align-items-center">
       <div class="col-md-2 ms-auto">
-        <select class="form-select form-control" id="member-select" name="search_keyword">
+        <select class="form-select form-control" id="search_keyword" name="search_keyword">
           <option value="MEMBERNAME" ${member_search_keyword == 'MEMBERNAME'?'selected':''}>회원 이름</option>
           <option value="MEMBERID" ${member_search_keyword == 'MEMBERID'?'selected':''}>회원 아이디</option>
           <option value="DATE" ${member_search_keyword == 'DATE'?'selected':''}>가입 날짜</option>
         </select>
       </div>
       <div class="col-md-7">
-        <input type="text" class="form-control" name="member_search_content" placeholder="검색어를 입력해주세요">
+        <input type="text" class="form-control" id="search_content" name="search_content" placeholder="검색어를 입력해주세요">
       </div>
       <div class="me-auto">
         <button class="btn btn-primary btn-border" type="button">검색</button>

@@ -193,7 +193,7 @@
                            <input type="number" name="VIEW_USE_POINT" max="${gym_member_current_point}" step="1" value="0"> pt
                         </c:if>
                         <c:if test="${gym_member_current_point >= 5000}">
-                           <input type="number" name="VIEW_USE_POINT" max="5000" step="1" value="0"> pt
+                           <input type="number" name="VIEW_USE_POINT" max="5000" min="0" step="1" value="0"> pt
                         </c:if>
                      </div>
                      <div class="form-group">
