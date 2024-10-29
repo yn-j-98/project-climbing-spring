@@ -64,7 +64,7 @@ public class BoardDAO {
 			"    MEMBER M ON B.BOARD_WRITER_ID = M.MEMBER_ID\n" +
 			"ORDER BY\n" +
 			"    B.BOARD_NUM DESC\n" +
-			"LIMIT 6;";
+			"LIMIT 6";
 
 	// 전체 글 개수
 	private final String ONE_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD";
@@ -147,7 +147,7 @@ public class BoardDAO {
 			"WHERE\n" +
 			"    B.BOARD_LOCATION LIKE CONCAT('%', ?, '%') \n" +
 			"    AND B.BOARD_TITLE LIKE CONCAT('%', ?, '%')\n" +
-			"LIMIT ?, ?;";
+			"LIMIT ?, ?";
 
 
 	//이름으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID 재사용 BOARD_WRITER_ID, board_min_num, board_max_num
@@ -404,7 +404,7 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchTitle 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getSearch_content().replace("'", "\'"), boardDTO.getPage(), offset};
+		Object[] args = {boardDTO.getBoard_location().replace("'", "\'"), boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getPage(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_TITLE, args, new BoardRowMapperAllSearchTitle());
 		} catch (Exception e) {
