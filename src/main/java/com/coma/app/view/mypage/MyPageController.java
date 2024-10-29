@@ -85,8 +85,8 @@ public class MyPageController {
 
 		memberDTO.setMember_min_num(min_num);
 		//사용자가 입력한 글 목록 출력 후 전달 시작
-//		boardDTO.setBoard_writer_id(login); 모델에 mypage에서 쓸 컨디션 추가 부탁해야함
-		boardDTO.setSearch_keyword(member_id);
+		boardDTO.setBoard_writer_id(member_id);
+		//boardDTO.setSearch_keyword(member_id);
 		//이후 구현 예정
 		//사용자가 입력한 글 목록 출력 후 전달 종료
 		//------------------------------------------------------------------
