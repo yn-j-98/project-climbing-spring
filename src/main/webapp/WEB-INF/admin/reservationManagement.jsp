@@ -70,18 +70,18 @@
                             <div class="col-md-3 ">
                                 <div class="form-floating">
                                     <%--TODO 컨디션 안쓴다면 ID 변경--%>
-                                    <select class="form-select" id="search_keyword">
+                                    <select class="form-select" id="searchKeyword">
                                         <option ${reservation_search_keyword == "RESERVATION_MEMBER_ID" ? "selected":''} value="RESERVATION_MEMBER_ID">예약자</option>
                                         <option ${reservation_search_keyword == "RESERVATION_GYM_NUM" ? "selected":''} value="RESERVATION_GYM_NUM">암벽장</option>
                                     </select>
-                                    <label for="search_keyword">검색할 목록</label>
+                                    <label for="searchKeyword">검색할 목록</label>
                                 </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="form-floating">
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" aria-label="검색어 입력" placeholder="검색어 입력"
-                                               aria-describedby="search" id="search_content">
+                                               aria-describedby="search" id="searchContent">
                                         <%--TODO 키워드 안쓴다면 ID 변경--%>
                                         <button class="btn btn-outline-secondary" type="button" id="search">검색
                                         </button>
