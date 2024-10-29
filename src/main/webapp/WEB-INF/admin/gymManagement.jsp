@@ -159,7 +159,7 @@
             <div id="pageNation" class="row justify-content-center">
                 <div class="row pt-5">
                     <div class="col-md-12 d-flex justify-content-center ">
-                        <nav aria-label="Page navigation" data-search-contents="${gym_search_content}">
+                        <nav aria-label="Page navigation" data-search-contents="${search_content}">
                             <input type="hidden" id="totalCount" value="${total}">
                             <input type="hidden" id="currentPage" value="${page}">
                             <ul id="pagination" class="pagination justify-content-center align-items-center"></ul>

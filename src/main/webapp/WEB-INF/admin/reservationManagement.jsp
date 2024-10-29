@@ -135,7 +135,7 @@
                         <div class="col-md-12 d-flex justify-content-center ">
                             <nav aria-label="Page navigation">
                                 <input type="hidden" id="totalCount" value="${tatal}"
-                                       data-search-contents= ${reservation_search_content}><%--FIXME--%>
+                                       data-search-contents= ${search_content}><%--FIXME--%>
                                 <input type="hidden" id="currentPage" value="${page}">
                                 <ul id="pagination" class="pagination justify-content-center align-items-center">
 
