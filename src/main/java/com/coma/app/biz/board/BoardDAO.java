@@ -304,7 +304,11 @@ public class BoardDAO {
 	public BoardDTO selectOneSearchTitleCount(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchTitleCount 시작");
 		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_location().replace("'", "\'"), boardDTO.getBoard_title().replace("'", "\'")};
+		String content = boardDTO.getSearch_content();
+		if (content != null){
+			content = boardDTO.getSearch_content().replace("'", "\'");
+		}
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"),content};
 		try {
 			result = jdbcTemplate.queryForObject(ONE_SEARCH_TITLE_COUNT, args, new BoardRowMapperOneSearchTitleCount());
 		} catch (Exception e) {
@@ -388,7 +392,7 @@ public class BoardDAO {
 	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchPatternId 시작");
 		List<BoardDTO> result = null;
-		Object[] args = {boardDTO.getBoard_writer_id().replace("'", "\'"), boardDTO.getBoard_min_num(), 10};
+		Object[] args = {boardDTO.getBoard_writer_id().replace("'", "\'"), boardDTO.getPage(), 10};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_PATTERN_ID, args, new BoardRowMapperAllSearchPatternId());
 		} catch (Exception e) {
@@ -404,7 +408,11 @@ public class BoardDAO {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchTitle 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_location().replace("'", "\'"), boardDTO.getSearch_keyword().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
+		String content = boardDTO.getSearch_content();
+		if ( content != null){
+		content = boardDTO.getSearch_content().replace("'", "\'");
+		}
+		Object[] args = {boardDTO.getSearch_keyword().replace("'", "\'"),content, boardDTO.getBoard_min_num(), offset};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_TITLE, args, new BoardRowMapperAllSearchTitle());
 		} catch (Exception e) {
