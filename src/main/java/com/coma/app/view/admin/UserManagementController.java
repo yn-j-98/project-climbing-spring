@@ -4,6 +4,7 @@ package com.coma.app.view.admin;
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
 import com.coma.app.view.annotation.LoginCheck;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 public class UserManagementController {
 
@@ -37,25 +39,25 @@ public class UserManagementController {
         }
         int min_num = (page - 1) * size;
 
-        System.out.println("min_num = " + min_num);
+        log.info("min_num = {}", min_num);
 
         memberDTO.setMember_min_num(min_num);
 //		필터검색 ACTION
 //		회원이름, 회원 아이디, 가입날짜
-        List<MemberDTO> search_datas = null;
+        List<MemberDTO> datas = null;
 
 
         String search_keyword = memberDTO.getSearch_keyword();
 
         if (search_keyword.equals("member_id")) {
-            search_datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
+            datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
 
 //            // TODO 삭제해야되는가?
 //        } else if (search_keyword.equals("member_name")) {
 //            search_datas = this.memberService.selectAllSearchNameAdmin(memberDTO);
 
         } else if (search_keyword.equals("member_join_date")) {
-            search_datas = this.memberService.selectAllSearchDateAdmin(memberDTO);
+            datas = this.memberService.selectAllSearchDateAdmin(memberDTO);
 
         } else {
             model.addAttribute("title", "Server Error");
@@ -64,9 +66,9 @@ public class UserManagementController {
             return "views/info";
         }
         // datas 로그
-        System.out.println("UserManagementController datas = " + search_datas);
+        log.info("UserManagementController datas {} " , datas);
 
-        model.addAttribute("search_datas", search_datas);
+        model.addAttribute("datas", datas);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
 

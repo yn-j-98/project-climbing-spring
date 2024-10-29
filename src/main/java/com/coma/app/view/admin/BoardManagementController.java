@@ -80,10 +80,11 @@ public class BoardManagementController {
     @GetMapping("/boardManagementDetail.do")
     public String boardManagementDetail(ReplyDTO replyDTO, BoardDTO boardDTO, Model model) {
 
+        //TODO VIEW와 생각해보기 V는 LIST로 안 했기 때문에 ..
         List<BoardDTO> board_datas = boardService.selectAll(boardDTO);
         model.addAttribute("board_datas", board_datas);
         List<ReplyDTO> reply_datas = replyService.selectAll(replyDTO);
-        model.addAttribute("reply_datas", reply_datas);
+        model.addAttribute("REPLY", reply_datas);
 
         return "admin/boardManagementDetail";
     }
