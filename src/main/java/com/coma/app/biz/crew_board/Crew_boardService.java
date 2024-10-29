@@ -2,11 +2,22 @@ package com.coma.app.biz.crew_board;
 
 import java.util.List;
 
-public interface Crew_boardService {
-	List<Crew_boardDTO> selectAllCrewBoard(Crew_boardDTO crew_boardDTO);
-	Crew_boardDTO selectOne(Crew_boardDTO crew_boardDTO);
-	Crew_boardDTO selectOneCount(Crew_boardDTO crew_boardDTO);
-	boolean insert(Crew_boardDTO crew_boardDTO);
-	boolean update(Crew_boardDTO crew_boardDTO);
-	boolean delete(Crew_boardDTO crew_boardDTO);
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service("crew_boardService")
+public class Crew_boardService {
+
+	@Autowired
+	Crew_boardDAO crew_boardDAO;
+
+
+	public List<Crew_boardDTO> selectAll(Crew_boardDTO crew_boardDTO) {
+
+		return crew_boardDAO.selectAll(crew_boardDTO);
+	}
+
+	public void insert(Crew_boardDTO crew_boardDTO) {
+		crew_boardDAO.insert(crew_boardDTO);
+	}
 }
