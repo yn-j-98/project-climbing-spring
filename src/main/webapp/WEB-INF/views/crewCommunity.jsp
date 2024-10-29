@@ -225,6 +225,14 @@
 			});
 		});
 
+		// 다른 .do 요청으로 이동 시 연결 해제
+		$(window).on('beforeunload', function () {
+			if (stompClient !== null) {
+				stompClient.disconnect();
+				console.log("웹소켓 연결 해제");
+			}
+		});
+
 		$("#sendBtn").click(function () {
 			let content = $("#text").val();
 			if (content === '') {
