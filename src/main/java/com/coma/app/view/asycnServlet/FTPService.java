@@ -23,9 +23,9 @@ public class FTPService {
     //FTP PORT 번호
     private static final int PORT = 21;
     //FTP 로그인 아이디
-    private static final String USER_ID = "comapro";
+    private static final String USER_ID = ""; // TODO 키값 제거하도록 합시다.
     //FTP 로그인 비밀번호
-    private static final String USER_PASSWORD = "Pro0728!";
+    private static final String USER_PASSWORD = ""; // TODO 키값 제거하도록 합시다.
     // FTP 서버 초기 주소
     private static final String FTP_FILE_PATH = "/www/";
 
