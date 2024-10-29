@@ -274,7 +274,7 @@
 			
 	        $.ajax({
 	            type: "POST", 
-	            url: "checkId", // 서버에서 이메일 중복 검사를 처리하는 URL
+	            url: "checkId.do", // 서버에서 이메일 중복 검사를 처리하는 URL
 	            data: { // POST로 보낼때에는 data로 보낸다~!
 	                member_id: idCheck
 	            },

@@ -14,8 +14,8 @@ public class SMSPush {
 
 	//cafe24 문자 API 발송 요청 URL
 	private static String smsUrl = "https://sslsms.cafe24.com/sms_sender.php";
-	private static String cafe24_id = "no1fc20000";
-	private static String cafe24_secure = "14569e82136048ea492a1e37d2be82a0";
+	private static String cafe24_id = "";// TODO 키값 제거하도록 합시다.
+	private static String cafe24_secure = "";// TODO 키값 제거하도록 합시다.
 	
 //	//cafe24 문자 api 사용가능 여부 확인 URL
 //	private String apiUrl = "https://sslsms.cafe24.com/smsSenderPhone.php";
