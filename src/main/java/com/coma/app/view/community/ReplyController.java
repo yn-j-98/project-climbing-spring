@@ -1,21 +1,14 @@
 package com.coma.app.view.community;
 
+import com.coma.app.biz.board.BoardDTO;
+import com.coma.app.biz.reply.ReplyDTO;
+import com.coma.app.biz.reply.ReplyService;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.coma.app.biz.board.BoardDTO;
-import com.coma.app.biz.reply.ReplyDTO;
-import com.coma.app.biz.reply.ReplyService;
-
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class ReplyController {
