@@ -1,5 +1,6 @@
 package com.coma.app.view.member;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import com.coma.app.view.annotation.LoginCheck;
 
 import jakarta.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 public class JoinController {
 
@@ -23,7 +25,12 @@ public class JoinController {
 
 	//---------페이지 이동----------
 	@GetMapping("/join.do")
-	public String join() {
+	public String join(MemberDTO memberDTO, Model model) {
+		if (memberDTO.getMember_id() != null) {
+			log.info("memberDTO [{}]",memberDTO);
+			model.addAttribute("member_id",memberDTO.getMember_id());
+		}
+
 		return "views/join";
 	}
 	//---------------------------
