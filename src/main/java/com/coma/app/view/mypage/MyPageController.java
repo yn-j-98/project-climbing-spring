@@ -3,6 +3,7 @@ package com.coma.app.view.mypage;
 import java.io.File;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import com.coma.app.view.function.ProfileUpload;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 public class MyPageController {
 
@@ -37,7 +39,6 @@ public class MyPageController {
 	@Autowired
 	private HttpSession session;
 
-//----------페이지이동--------------
 	@LoginCheck
 	@GetMapping("/myPage.do")
 	public String myPage(MemberDTO memberDTO, BoardDTO boardDTO,ReservationDTO reservationDTO, Model model) {
@@ -48,7 +49,7 @@ public class MyPageController {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 
 
-		System.out.println("MyPage 로그인 정보 로그 : "+member_id);
+		log.info("MyPage 로그인 정보 [{}]",member_id);
 		//------------------------------------------------------------------
 		//내 정보 불러오는 코드 시작
 		//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
@@ -69,7 +70,6 @@ public class MyPageController {
 		if(memberDTO.getMember_role().equals("T")) {
 			//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
 			List<MemberDTO> member_list = this.memberService.selectAllNew(memberDTO);
-			//FIXME VIEW 값 확인
 			model.addAttribute("member_list", member_list);
 		}
 		//관리자 권한이 있다면 신규 등록한 아이디 출력 종료
@@ -85,7 +85,7 @@ public class MyPageController {
 
 		memberDTO.setMember_min_num(min_num);
 		//사용자가 입력한 글 목록 출력 후 전달 시작
-		//boardDTO.setBoard_writer_id(login); 모델에 mypage에서 쓸 컨디션 추가 부탁해야함
+//		boardDTO.setBoard_writer_id(login); 모델에 mypage에서 쓸 컨디션 추가 부탁해야함
 		boardDTO.setSearch_keyword(member_id);
 		//이후 구현 예정
 		//사용자가 입력한 글 목록 출력 후 전달 종료
