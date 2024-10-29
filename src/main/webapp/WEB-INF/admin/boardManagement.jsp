@@ -71,19 +71,19 @@
                         <div class="col-md-3 ">
                             <div class="form-floating">
                                 <%--TODO 컨디션 안쓴다면 ID 변경--%>
-                                <select class="form-select" id="board_search_keyword">
+                                <select class="form-select" id="search_keyword">
                                     <option ${board_search_keywoard == "BOARD_NUM" ? "selected":''} value="BOARD_NUM">게시글 번호</option>
                                     <option ${board_search_keywoard == "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
                                     <option ${board_search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
                                 </select>
-                                <label for="board_search_keyword">검색할 목록</label>
+                                <label for="search_keyword">검색할 목록</label>
                             </div>
                         </div>
                         <div class="col-md-9">
                             <div class="form-floating">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" aria-label="검색어 입력" placeholder="검색어 입력"
-                                           aria-describedby="search" id="board_search_content">
+                                           aria-describedby="search" id="search_content">
                                     <%--TODO 키워드 안쓴다면 ID 변경--%>
                                     <button class="btn btn-outline-secondary" type="button" id="search">검색
                                     </button>
@@ -143,7 +143,7 @@
     <div id="pageNation" class="row justify-content-center">
         <div class="row pt-5">
             <div class="col-md-12 d-flex justify-content-center ">
-                <nav aria-label="Page navigation" data-search-contents="${search_content}">
+                <nav aria-label="Page navigation">
                     <input type="hidden" id="totalCount" value="${total}"> <%--FIXME--%>
                     <input type="hidden" id="currentPage" value="${page}">
                     <ul id="pagination" class="pagination justify-content-center align-items-center">
