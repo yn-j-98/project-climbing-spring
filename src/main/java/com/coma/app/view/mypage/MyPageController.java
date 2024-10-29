@@ -37,7 +37,7 @@ public class MyPageController {
 	@Autowired
 	private HttpSession session;
 
-	//----------페이지이동--------------
+//----------페이지이동--------------
 	@LoginCheck
 	@GetMapping("/myPage.do")
 	public String myPage(MemberDTO memberDTO, BoardDTO boardDTO,ReservationDTO reservationDTO, Model model) {

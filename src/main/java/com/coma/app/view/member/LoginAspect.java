@@ -27,14 +27,14 @@ public class LoginAspect {
     // @Around 어드바이스는 @LoginCheck 어노테이션이 붙은 메서드를 가로채서 로그인 체크를 수행
     @Around("@annotation(com.coma.app.view.annotation.LoginCheck)")
     public Object checkLogin(ProceedingJoinPoint pjp) throws Throwable {
-        // 현재 요청과 응답 객체를 가져옴
+        // 사용자의 요청 정보를 검사 & 처리를 위해 필요해서 가져옴
+        //현재 세션을 가져온 후, 세션에서 사용자 아이디 또는 인증 토큰을 확인
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        // 세션에 저장된 사용자 아이디를 가져오기 위해 가져옴
+        // 로그인하지 않은 사용자 == 인증 정보가 없는 사용자
+        // 를 로그인페이지로 보내기 위해 가져옴
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-        // 로그인하지 않은 사용자를 로그인 페이지로 보내기 위해 가져옴
+        // 로그인 여부를 확인하기 위해 가져옴(로그인 O == 세션 조회 O)
         HttpSession session = request.getSession();
-
-
 
         // 로그인 체크 로직 실행
         loginCheckImpl.checkLogin(request, response, session);
