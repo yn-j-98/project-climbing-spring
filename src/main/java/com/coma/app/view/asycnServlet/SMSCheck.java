@@ -1,4 +1,4 @@
-package com.coma.app.view.async;
+package com.coma.app.view.asycnServlet;
 
 import java.util.Random;
 
