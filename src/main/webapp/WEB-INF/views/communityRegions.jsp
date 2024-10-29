@@ -66,7 +66,7 @@
 						<div class="col-md-6 col-lg-7">
 							<div class="form-group">
 								<div class="input-icon">
-									<input name="board_search_content" type="text" class="form-control"
+									<input name="search_content" type="text" class="form-control"
 										   placeholder="검색어를 입력해주세요" /> <span class="input-icon-addon">
 											<button type="submit" class="btn">
 												<i class="fa fa-search"></i>

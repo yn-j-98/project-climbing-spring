@@ -69,10 +69,10 @@
 												<i class="fa-solid fa-location-dot fs-2"></i>
 												<div class="row">
 													<div class="d-flex align-items-center">
-														<small class="mb-0" id="gym_name">${data.gym_name}</small>
+														<small class="mb-0" id="gym_name" class="gym_name">${data.gym_name}</small>
 													</div>
 													<div class="d-flex align-items-center">
-														<small class="mb-0" id="gym_location">${data.gym_location}</small>
+														<small class="mb-0" id="gym_location" class="gym_location">${data.gym_location}</small>
 													</div>
 												</div>
 												<div class="col-md-3 d-none">
@@ -124,8 +124,8 @@
 			button.classList.toggle('d-none');
 		}
 
-		var gymName = cardElement.querySelector('#gym_name').textContent;
-		var gymLocation = cardElement.querySelector('#gym_location').textContent;
+		const gymName = $('.gym_name').textContent;
+		const gymLocation = $('.gym_location').textContent;
 
 		document.getElementById('gym_name_input').value = gymName;
 		document.getElementById('gym_location_input').value = gymLocation;
@@ -176,7 +176,7 @@
 
 			preli.insertAdjacentHTML(
 							"beforeend",
-							"<a id='allprev' class='page-link' href='GymMainPage.do?page="
+							"<a id='allprev' class='page-link' href='gymMain.do?page="
 							+ prev
 							+ "' aria-label='Previous'>"
 							+ "<span aria-hidden='true'>&laquo;</span> </a>");
@@ -190,7 +190,7 @@
 			li.className = 'page-item';
 
 			li.insertAdjacentHTML("beforeend",
-					"<a class='page-link m-2' href='GymMainPage.do?page="
+					"<a class='page-link m-2' href='gymMain.do?page="
 					+ i + "' id='page-" + i + "' data-num='" + i
 					+ "'>" + i + "</a>");
 
@@ -205,7 +205,7 @@
 
 			endli.insertAdjacentHTML(
 					"beforeend",
-					"<a class='page-link' href='GymMainPage.do?page="
+					"<a class='page-link' href='gymMain.do?page="
 					+ next
 					+ "' id='allnext' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a>");
 
