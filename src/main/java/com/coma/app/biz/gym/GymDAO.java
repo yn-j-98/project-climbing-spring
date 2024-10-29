@@ -137,7 +137,7 @@ public class GymDAO {
 		Object[] args= {gymDTO.getGym_num()};
 		try {
 			//암벽장 PK로 검색 GYM_NUM
-			data= jdbcTemplate.queryForObject(ONE, new GymSelectRowMapperOneAll());
+			data= jdbcTemplate.queryForObject(ONE, args, new GymSelectRowMapperOneAll());
 		}
 		catch (Exception e) {
 		}
