@@ -45,7 +45,7 @@ public class LoginController {
 		}
 
 
-		return "views/login";
+		return "views/main";
 	}
 
 	@LoginCheck
