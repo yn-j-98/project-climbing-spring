@@ -235,7 +235,7 @@
             var passwordCheck = passwordCheckField.value; // 비밀번호 확인 input 입력값
             $.ajax({
                   type: "POST",
-                  url: "passwordcheck", // 서버에서 비밀번호 맞는지 검사를 처리하는 URL
+                  url: "checkPassword.do", // 서버에서 비밀번호 맞는지 검사를 처리하는 URL
                   data: { // POST로 보낼때에는 data로 보낸다~!
                       member_password: passwordCheck
                   },
