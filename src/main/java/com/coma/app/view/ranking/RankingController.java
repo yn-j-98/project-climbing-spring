@@ -102,7 +102,7 @@ public class RankingController {
 		
 		//받아온 값을 member_datas 값에 저장하여 전달
 		// FIXME 
-		model.addAttribute("member_datas", grade_datas);
+		model.addAttribute("member_datas", member_datas);
 		
 		return "views/personalRank";
 	}

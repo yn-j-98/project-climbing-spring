@@ -68,7 +68,7 @@ public class GymController {
 		gymDTO.setGym_min_num(min_num);
 
 		//암벽장 총 개수를 요청 selectOne
-		GymDTO gym_total = this.gymService.selectOne(gymDTO);
+		GymDTO gym_total = this.gymService.selectOneCount(gymDTO);
 
 		//암벽장 리스트를 model에 요청 selectAll
 		//암벽장 테이블에서 받을 값(암벽장 번호 / 암벽장 이름 / 암벽장 주소)
