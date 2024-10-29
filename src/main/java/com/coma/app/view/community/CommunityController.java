@@ -120,13 +120,13 @@ public class CommunityController{
         return "views/communityRegions"; // 설정된 페이지로 이동
     }
 
-    @GetMapping("/local.do")
+    @GetMapping("/location.do")
     public String local(Model model, BoardDTO boardDTO) {
 
         String Location = boardDTO.getBoard_location(); // 지역검색
 
 
-        log.info("local.Location : ["+Location+"]");
+        log.info("location.Location : ["+Location+"]");
 
         // 지역명 맵핑
         String location = Location(Location);
@@ -141,19 +141,19 @@ public class CommunityController{
         minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
         int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
 
-        log.info("local.minBoard : [" + minBoard+"]");
+        log.info("location.minBoard : [" + minBoard+"]");
 
         boardDTO.setBoard_min_num(minBoard);
 
 
 //        boardDTO.setBoard_condition("BOARD_ALL_SEARCH_TITLE");
-        log.info("local.boardDTO : [" + boardDTO+"]");
+        log.info("location.boardDTO : [" + boardDTO+"]");
         List<BoardDTO> datas = this.boardService.selectAllSearchTitle(boardDTO);
-        log.info("local.datas : [" + datas+"]");
+        log.info("location.datas : [" + datas+"]");
 
 //        boardDTO.setBoard_condition("BOARD_ONE_SEARCH_TITLE_COUNT");
         BoardDTO boardCount = this.boardService.selectOneSearchTitleCount(boardDTO);
-        log.info("local.boardCount : [" + boardCount+"]");
+        log.info("location.boardCount : [" + boardCount+"]");
 
         listNum = boardCount.getTotal();
 
