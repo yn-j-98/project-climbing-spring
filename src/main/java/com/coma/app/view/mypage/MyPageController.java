@@ -168,7 +168,7 @@ public class MyPageController {
 
 
 	//DeleteReservationAction
-	@PostMapping("/deleteRerservation.do")
+	@GetMapping("/deleteRerservation.do")
 	public String deleteReservation(ReservationDTO reservationDTO, Model model) {	
 		boolean flag =  this.reservationService.delete(reservationDTO);
 
