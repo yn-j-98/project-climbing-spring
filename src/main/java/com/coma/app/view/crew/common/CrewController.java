@@ -41,8 +41,6 @@ public class CrewController{
 
 	@LoginCheck
 	@GetMapping("/crewList.do")
-
-
 	public String crewList(Model model, CrewDTO crewDTO) {
 
 
