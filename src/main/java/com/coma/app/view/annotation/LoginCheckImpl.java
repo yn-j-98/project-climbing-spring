@@ -11,7 +11,7 @@ public class LoginCheckImpl {
 
     private static final String MEMBER_ID = "MEMBER_ID"; // 회원 ID를 나타내는 상수
     private static final String CREW_CHECK = "CREW_CHECK"; // 크루 체크를 나타내는 상수
-
+    private static final String ROLE_CHECK = "ROLE_CHECK";
 
     //현재 요청과 응답, 세션 객체를 이용하여 로그인 정보를 검사하는 메서드.
     public void checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -34,8 +34,8 @@ public class LoginCheckImpl {
 
     //요청과 세션 객체에서 로그인 정보를 가져오는 메서드
     private String[] getLoginInformation(HttpServletRequest request, HttpSession session) {
-        //로그인 정보 배열 [MEMBER_ID, CREW_CHECK]
-        String[] loginInfo = new String[2]; // 로그인 정보 배열 생성
+        //로그인 정보 배열 [MEMBER_ID, CREW_CHECK, ROLE_CHECK]
+        String[] loginInfo = new String[3]; // 로그인 정보 배열 생성
         fillLoginInfoFromCookies(request, loginInfo); // 쿠키에서 로그인 정보를 가져와 배열에 저장
         fillLoginInfoFromSession(session, loginInfo); // 세션에서 로그인 정보를 가져와 배열에 저장
         return loginInfo; // 로그인 정보 배열 반환
@@ -50,6 +50,8 @@ public class LoginCheckImpl {
                     loginInfo[0] = cookie.getValue(); // 배열의 첫 번째 요소에 쿠키 값을 저장
                 } else if (CREW_CHECK.equals(cookie.getName())) { // 쿠키 이름이 CREW_CHECK인 경우
                     loginInfo[1] = cookie.getValue(); // 배열의 두 번째 요소에 쿠키 값을 저장
+                } else if (ROLE_CHECK.equals(cookie.getName())) { // 쿠키 이름 이 ROLE_CHECK인 경우
+                    loginInfo[2] = cookie.getValue();  // 배열의 세 번째 요소에 쿠키 값을 저장
                 }
             }
         }
@@ -63,6 +65,9 @@ public class LoginCheckImpl {
         }
         if (loginInfo[1] == null) { // 배열의 두 번째 요소가 null인 경우
             loginInfo[1] = (String) session.getAttribute(CREW_CHECK); // 세션에서 CREW_CHECK를 가져와 저장
+        }
+        if (loginInfo[2] == null) { // 배열의 세 번째 요소가 null인 경우
+            loginInfo[2] = (String) session.getAttribute(ROLE_CHECK); // 세션에서 ROLE_CHECK를 가져와 저장
         }
     }
 
@@ -79,6 +84,11 @@ public class LoginCheckImpl {
         if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
             // 세션의 CREW_CHECK에 배열의 두 번째 요소를 저장
             session.setAttribute(CREW_CHECK, loginInfo[1]);
+        }
+        // 세션의 ROLE_CHECK가 null이고 배열의 세 번째 요소가 null이 아닌 경우
+        if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
+            // 세션의 ROLE_CHECK에 배열의 세 번째 요소를 저장
+            session.setAttribute(ROLE_CHECK, loginInfo[2]);
         }
     }
 
@@ -106,7 +116,8 @@ public class LoginCheckImpl {
         Cookie[] cookies = request.getCookies(); // 요청에서 쿠키 배열을 가져옴
         if (cookies != null) { // 쿠키가 null이 아니면
             for (Cookie cookie : cookies) { // 모든 쿠키를 순회
-                if (MEMBER_ID.equals(cookie.getName()) || CREW_CHECK.equals(cookie.getName())) { // 쿠키 이름이 MEMBER_ID 또는 CREW_CHECK인 경우
+                // 쿠키 이름이 MEMBER_ID 또는 CREW_CHECK 또는 ROLE_CHECK 인 경우
+                if (MEMBER_ID.equals(cookie.getName()) || CREW_CHECK.equals(cookie.getName()) || ROLE_CHECK.equals(cookie.getName())) {
                     cookie.setMaxAge(0); // 쿠키를 무효화 (만료 시간 0 설정)
                     cookie.setPath("/"); // 전체 경로에 적용
                     response.addCookie(cookie); // 응답에 추가
