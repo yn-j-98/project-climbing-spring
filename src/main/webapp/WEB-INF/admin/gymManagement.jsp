@@ -173,7 +173,7 @@
 
 <!-- 암벽장 추가 모달-->
 <!--모달창 전송 멀티파트타입 인코딩 설정-->
-<form id="insertForm" action="gymManagement.do" method="POST" enctype="multipart/form-data">
+<form id="insertForm" action="gymInsert.do" method="POST" enctype="multipart/form-data">
     <div class="modal fade" id="climbingGymModal" tabindex="-1" aria-labelledby="gym-modal-title" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content rounded-4">
