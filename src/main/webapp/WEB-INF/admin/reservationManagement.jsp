@@ -45,7 +45,7 @@
 
 </head>
 <body>
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 <div class="main-panel flex-grow-1 p-4">
     <div class="nav-toggle position-absolute top-0 start-0">
         <button class="sidenav-toggler btn btn-icon btn-round btn-white h-100 w-25">
@@ -71,8 +71,8 @@
                                 <div class="form-floating">
                                     <%--TODO 컨디션 안쓴다면 ID 변경--%>
                                     <select class="form-select" id="search_keyword">
-                                        <option ${reservation_search_keyword == "RESERVATION_MEMBER_ID" ? "selected":''} value="RESERVATION_MEMBER_ID">예약자</option>
-                                        <option ${reservation_search_keyword == "RESERVATION_GYM_NUM" ? "selected":''} value="RESERVATION_GYM_NUM">암벽장</option>
+                                        <option ${search_keyword == "RESERVATION_MEMBER_ID" ? "selected":''} value="RESERVATION_MEMBER_ID">예약자</option>
+                                        <option ${search_keyword == "RESERVATION_GYM_NUM" ? "selected":''} value="RESERVATION_GYM_NUM">암벽장</option>
                                     </select>
                                     <label for="search_keyword">검색할 목록</label>
                                 </div>
@@ -162,7 +162,7 @@
                     if (reservationDelete) {//확인을 누른다며
                         <!-- TODO 성공시 동기 로직 -->
                         var form = $('<form/>', {
-                            action: '컨트롤러가 지정해준 값.do',
+                            action: 'reservationManagement.do',
                             method: 'POST',
                             style: 'display: none;'
                         });
@@ -178,15 +178,15 @@
 
         //검색 동기
         $('#search').click(function () {
-            var search_content = $('#search_content').val();
             var search_keyword = $('#search_keyword').val();//문자열 값으로 변환
-            console.log("search_content = [" + search_content + "]");
+            var search_content = $('#search_content').val();
             console.log("search_keyword = [" + search_keyword + "]");
+            console.log("search_content = [" + search_content + "]");
 
             var form = $('<form/>', {
                 //TODO .do 입력
-                action: '컨트롤러가 지정해준 값',
-                method: 'POST',
+                action: 'reservationManagement.do',
+                method: 'GET',
                 style: 'display: none;'
             });
             form.append($('<input/>', {type: 'hidden', name: 'reservation_search_keyword', value: search_keyword}));

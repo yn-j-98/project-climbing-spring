@@ -27,7 +27,7 @@
     </style>
 </head>
 <body>
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 <!-- container start -->
 <div class="container">
     <div class="page-inner">
@@ -106,11 +106,11 @@
                             if (replyDelete) {
                                 // 폼 생성
                                 var form = $('<form/>', {
-                                    //TODO
-                                    action: '컨트롤러가 지정해준 값.do',
+                                    action: 'boardManagementDetail.do',
                                     method: 'POST',
                                     style: 'display: none;'
                                 });
+
                                 var boardNum = $(this).data("boardNum");
                                 var replyNum = $(this).data("replyNum");
 

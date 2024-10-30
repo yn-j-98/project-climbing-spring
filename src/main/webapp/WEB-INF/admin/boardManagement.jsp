@@ -45,7 +45,7 @@
     </style>
 </head>
 <body>
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 <div class="main-panel flex-grow-1 p-4">
     <div class="nav-toggle position-absolute top-0 start-0">
         <button class="sidenav-toggler btn btn-icon btn-round btn-white h-100 w-25">
@@ -72,9 +72,9 @@
                             <div class="form-floating">
                                 <%--TODO 컨디션 안쓴다면 ID 변경--%>
                                 <select class="form-select" id="search_keyword">
-                                    <option ${board_search_keywoard == "BOARD_NUM" ? "selected":''} value="BOARD_NUM">게시글 번호</option>
-                                    <option ${board_search_keywoard == "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
-                                    <option ${board_search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
+                                    <option ${search_keywoard == "BOARD_NUM" ? "selected":''} value="BOARD_NUM">게시글 번호</option>
+                                    <option ${search_keywoard == "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
+                                    <option ${search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
                                 </select>
                                 <label for="search_keyword">검색할 목록</label>
                             </div>
@@ -144,7 +144,7 @@
         <div class="row pt-5">
             <div class="col-md-12 d-flex justify-content-center ">
                 <nav aria-label="Page navigation">
-                    <input type="hidden" id="totalCount" value="${total}"> <%--FIXME--%>
+                    <input type="hidden" id="totalCount" value="${total}">
                     <input type="hidden" id="currentPage" value="${page}">
                     <ul id="pagination" class="pagination justify-content-center align-items-center">
                         <!--페이지네이션 삽입-->
@@ -175,7 +175,7 @@
                     if (boardDelete) {
                         // 폼 생성
                         var form = $('<form/>', {
-                            action: '컨트롤러가 지정해준 값.do',
+                            action: 'boardManagement.do',
                             method: 'POST',
                             style: 'display: none;'
                         });
@@ -198,19 +198,19 @@
 
         //검색 동기
         $('#search').click(function () {
-            var board_search_content = $('#board_search_content').val();
-            var board_search_keyword = $('#board_search_keyword').val();//문자열 값으로 변환
+            var board_search_content = $('#search_content').val();
+            var board_search_keyword = $('#search_keyword').val();//문자열 값으로 변환
             console.log("board_search_content = [" + board_search_content + "]");
             console.log("board_search_keyword = [" + board_search_keyword + "]");
 
             var form = $('<form/>', {
                 //TODO .do 입력
-                action: '컨트롤러가 지정해준 값.do',
+                action: 'boardManagement.do',
                 method: 'POST',
                 style: 'display: none;'
             });
-            form.append($('<input/>', {type: 'hidden', name: 'board_search_keyword', value: board_search_keyword}));
-            form.append($('<input/>', {type: 'hidden', name: 'board_search_content', value: board_search_content}));
+            form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: board_search_keyword}));
+            form.append($('<input/>', {type: 'hidden', name: 'search_content', value: board_search_content}));
             // 문서에 form 추가
             $('body').append(form);
             form.submit();
@@ -223,8 +223,8 @@
 
             var form = $('<form/>', {
                 //TODO .do 입력
-                action: '컨트롤러가 지정해준 값.do',
-                method: 'POST',
+                action: 'boardManagementDetail.do',
+                method: 'GET',
                 style: 'display: none;'
             });
             form.append($('<input/>', {type: 'hidden', name: 'board_num', value: boardNum}));
