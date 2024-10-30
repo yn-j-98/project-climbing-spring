@@ -173,7 +173,7 @@
 
 <!-- 암벽장 추가 모달-->
 <!--모달창 전송 TODO 컨트롤러 요청 확인-->
-<form id="insertForm" action="컨트롤러 요청 확인.do" method="POST">
+<form id="insertForm" action="gymInsert.do" method="POST">
     <div class="modal fade" id="climbingGymModal" tabindex="-1" aria-labelledby="gym-modal-title" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content rounded-4">
