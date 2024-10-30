@@ -5,6 +5,7 @@ import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.reply.ReplyDTO;
 import com.coma.app.biz.reply.ReplyServiceImpl;
 import com.coma.app.view.annotation.LoginCheck;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class BoardManagementController {
     @Autowired
@@ -32,10 +34,12 @@ public class BoardManagementController {
             page = 1;
         }
         int min_num = (page - 1) * size;
-        System.out.println("min = " + min_num);
+        log.info("boardManagement min_num = {}", min_num);
+        log.info("boardManagement page ={}",page);
         boardDTO.setBoard_min_num(min_num);
-        System.out.println("page = " + page);
         boardDTO.setPage(page);
+
+
         //-----------------------------------------------------------------------------
 
         List<BoardDTO> datas = boardService.selectAll(boardDTO);

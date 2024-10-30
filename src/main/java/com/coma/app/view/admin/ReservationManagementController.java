@@ -41,7 +41,7 @@ public class ReservationManagementController {
             pageNum = 1;
         }
         minNum = ((pageNum - 1) * size); // 최소 게시글 번호 계산
-        int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
+        int listNum = reservationDTO.getTotal(); // 게시글 총 개수를 저장할 변수 초기화
 
 
         reservationDTO.setReservation_min_num(minNum);
