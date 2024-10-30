@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ReservationDTO {
-	private int reservation_num;          // 예약번호
+	private String reservation_num;          // 예약번호
 	private String reservation_date;        // 예약날짜 
 	//FIXME SQL DATE형식이라 String으로 변환하여 줄것!
 	private int reservation_gym_num;      // 암벽장 FK
