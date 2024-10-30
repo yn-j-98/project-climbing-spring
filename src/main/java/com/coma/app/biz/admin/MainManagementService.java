@@ -51,12 +51,13 @@ public class MainManagementService {
                 {title:%s, text:%s}]
                 """;
         String data = String.format(formatData,
-                "사용자",memberTotalDate,
-                "암벽장",gymTotalDate,
-                "예약",reservationTotalDate,
-                "게시판",boardTotalDate,
-                "크루전",battleTotalDate);
+                "'사용자'",memberTotalDate,
+                "'암벽장'",gymTotalDate,
+                "'예약'",reservationTotalDate,
+                "'게시판'",boardTotalDate,
+                "'크루전'",battleTotalDate);
         log.info("data : [{}]",data);
+
         return data;
     }
 
@@ -69,7 +70,7 @@ public class MainManagementService {
     }
 
     private int getReservationTotal(ReservationDTO reservationDTO) {
-        return reservationDAO.selectOneCount(reservationDTO).getTotal();
+        return reservationDAO.selectOneCountYearAdmin(reservationDTO).getTotal();
     }
 
     private int getBoardTotal(BoardDTO boardDTO) {

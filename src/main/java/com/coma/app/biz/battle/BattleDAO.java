@@ -307,6 +307,20 @@ public class BattleDAO {
 		return  result;
 	}
 
+	//FIXME 관리자 페이지 추가한 메서드입니다.입니다.
+	public List<BattleDTO> selectAdminAll5Active(BattleDTO battleDTO){
+		System.out.println("    [로그] com.coma.app.biz.battle.selectAllActive 시작");
+		List<BattleDTO> result = null;
+		Object[] args = new Object[]{battleDTO.getPage(),5};
+		try{
+			result = jdbcTemplate.query(ALL_ACTIVE,args,new BattleRowMapperAllActive());
+		}catch(Exception e){
+			System.err.println("	[에러] com.coma.app.biz.battle.selectAllActive Sql문 실패 : ALL_ACTIVE = " + ALL_ACTIVE);
+			e.printStackTrace();
+		}
+		return  result;
+	}
+
 	//해당 암벽장에서 실행된 크루전 전부 출력
 	public List<BattleDTO> selectAllGymBattle(BattleDTO battleDTO){
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllGymBattle 시작");
