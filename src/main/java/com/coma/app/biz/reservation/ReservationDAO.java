@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReservationDAO {
 	//예약 등록 RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE
-	private final String INSERT = "INSERT INTO RESERVATION (RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE) " 
-			+ "VALUES (?, ?, ?, ?);";
+	private final String INSERT = "INSERT INTO RESERVATION (RESERVATION_NUM, RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE) "
+			+ "VALUES (?, ?, ?, ?, ?);";
 	
 	//PK로 예약 정보 찾기 RESERVATION_NUM
 	private final String ONE = "SELECT " 
@@ -137,7 +137,7 @@ public class ReservationDAO {
 
 	public boolean insert(ReservationDTO reservationDTO) {
 		//예약 등록 RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE
-		int result=jdbcTemplate.update(INSERT,reservationDTO.getReservation_gym_num(), reservationDTO.getReservation_date(), reservationDTO.getReservation_member_id(), reservationDTO.getReservation_price());
+		int result=jdbcTemplate.update(INSERT,reservationDTO.getReservation_num() ,reservationDTO.getReservation_gym_num(), reservationDTO.getReservation_date(), reservationDTO.getReservation_member_id(), reservationDTO.getReservation_price());
 		if(result<=0) {
 			return false;
 		}
@@ -296,7 +296,7 @@ class ReservationSelectRowMapperOne implements RowMapper<ReservationDTO> {
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
 		System.out.print("DB에서 가져온 데이터 {");
-		reservationDTO.setReservation_num(rs.getInt("RESERVATION_NUM"));
+		reservationDTO.setReservation_num(rs.getString("RESERVATION_NUM"));
 		System.err.println("reservation_num = ["+reservationDTO.getReservation_num()+"]");
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
 		System.err.println("reservation_date = ["+reservationDTO.getReservation_date()+"]");
@@ -316,7 +316,7 @@ class ReservationRowMapperAll implements RowMapper<ReservationDTO> {
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
 		System.out.print("DB에서 가져온 데이터 {");
-		reservationDTO.setReservation_num(rs.getInt("RESERVATION_NUM"));
+		reservationDTO.setReservation_num(rs.getString("RESERVATION_NUM"));
 		System.err.println("reservation_num = ["+reservationDTO.getReservation_num()+"]");
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
 		System.err.println("reservation_date = ["+reservationDTO.getReservation_date()+"]");
