@@ -135,7 +135,7 @@
 
 	var naver_id_login = new naver_id_login( // 네이버 로그인을 위한 객체 생성
 			"kQSIom2rw1yt29HcbNc8", // 내 client ID: 네이버 개발자 센터에서 발급받은 클라이언트 ID
-			"http://localhost:8088/Coma_Project_Spring/login.jsp" // 내 callback url: 로그인 후 보여질 URL
+			"http://localhost:8088/login.do" // 내 callback url: 로그인 후 보여질 URL
 	);
 
 	// 네이버 로그인 객체를 생성하고, 고유한 상태 값을 생성
@@ -150,7 +150,7 @@
 	// 이 로그인 API를 사용할 페이지의 주소를 설정
 	// 이 주소는 네이버 로그인 API에서 검증하는 페이지 주소
 	naver_id_login
-			.setDomain("http://localhost:8088/Coma_Project_Spring/login.jsp");
+			.setDomain("http://localhost:8088/login.do");
 
 	// 로그인 요청에 사용할 상태 값을 설정
 	naver_id_login.setState(state);
@@ -174,9 +174,7 @@
 			// 이메일 추출
 			var email = naverUserInfo;
 			// 이메일 정보 C에게 전송
-			sendToController({
-				member_id : email
-			});
+			sendToController(email);
 		}
 	}
 
@@ -187,7 +185,7 @@
 			naverLoginCallback(); // 콜백함수 호출
 		} else {
 			// 로그인 상태가 아닐 경우 경고
-			sweetAlert_error("로그인 상태가 아닙니다.","")
+			sweetAlert_error("로그인 상태가 아닙니다.","");
 		}
 	}
 
@@ -220,13 +218,11 @@
 					success : function(res) {
 						// 사용자 정보에서 이메일을 추출함
 						var email = res.kakao_account.email;
-
+						console.log("data: ["+email+"]");
 						Kakao.Auth.logout();
 
 						// 추출한 이메일을 C에게 전송
-						sendToController({
-							member_id : email
-						});
+						sendToController(email);
 					},
 					// 사용자 정보 요청을 실패했다면
 					fail : function(error) {
@@ -253,7 +249,7 @@
 		// 화면에 정보 표시
 		document.getElementById('user-email').textContent = "Email: " + responsePayload.email;
 
-		sendToController({member_id : responsePayload.email});
+		sendToController(responsePayload.email);
 
 	}
 	//디코딩 함수
@@ -278,13 +274,16 @@
 
 	// C에게 사용자 정보 (이메일)전송하는 함수 (네이버, 카카오)
 	function sendToController(userInfo) {
+		console.log("console log userInfo : "+userInfo)
 		$.ajax({
 			// 서버 API URL
-			url : 'loginAPI',
+			url : 'loginAPI.do',
 			// 요청방식
 			method : 'POST',
 			// C에게 전송할 데이터
-			data : userInfo,
+			data: JSON.stringify({member_id:userInfo}),
+			contentType: 'application/json',
+			dataType: 'json',
 			// DB에 해당 이메일이 존재한다면
 			success : function(response) {
 				console.log('서버 응답: ', response);

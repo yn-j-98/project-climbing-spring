@@ -64,9 +64,9 @@ public class MainManagementController{
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO MODEL이 끝나면 주석풀기
         //		최신글 5개  제목 + 내용만 대시보드
-//		List<BoardDTO> board_datas = this.boardService.selectAllBoardAllTop5(boardDTO);
+		List<BoardDTO> board_datas = this.boardService.selectAllRecentBoard5(boardDTO);
         //		최신 크루전 5개 (개최일 빠른순 == 내림차순) 개최일, 암벽장 이름, 참여 크루
-//		List<BattleDTO> battle_datas = this.battleService.selectAllBattleAllTop5(battleDTO);
+		List<BattleDTO> battle_datas = this.battleService.selectAllBattleAllTop4(battleDTO);
 
 
         // 모델에 데이터를 추가
@@ -79,9 +79,8 @@ public class MainManagementController{
         model.addAttribute("monthly_join_datas", monthly_join_datas);
         model.addAttribute("monthly_reservation_datas", monthly_reservation_datas);
         model.addAttribute("region_gym_datas", region_gym_datas);
-        //TODO MODEL이 끝나면 주석풀기
-//        model.addAttribute("board_datas", board_datas);
-//        model.addAttribute("battle_datas", battle_datas);
+        model.addAttribute("board_datas", board_datas);
+        model.addAttribute("battle_datas", battle_datas);
 
         //
 

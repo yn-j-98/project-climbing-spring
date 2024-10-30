@@ -1,10 +1,9 @@
-package com.coma.app.view.async;
+package com.coma.app.view.asycnServlet;
 
 import java.util.Random;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coma.app.biz.member.MemberDTO;
@@ -13,10 +12,8 @@ import com.coma.app.view.function.SMSPush;
 @RestController
 public class SMSCheck {
 
-
-
 	@PostMapping("/smscheck.do")
-	public @ResponseBody String smsCheck(@RequestBody MemberDTO memberDTO) {
+	public String smsCheck(@RequestBody MemberDTO memberDTO) {
 
 		// 인증번호 최대 길이
 		int citationMax = 8;
