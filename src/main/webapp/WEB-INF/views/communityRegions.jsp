@@ -54,7 +54,7 @@
 					<div class="row">
 						<div class="col-md-3 col-lg-3">
 							<div class="form-group">
-								<select name="board_search_keyword"
+								<select name="search_keyword"
 										class="form-select form-control-lg">
 									<option value="SEARCH_TITLE">글 제목</option>
 									<option value="SEARCH_WRITER">작성자</option>

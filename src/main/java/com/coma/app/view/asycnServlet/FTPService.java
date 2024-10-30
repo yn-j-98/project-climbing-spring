@@ -83,6 +83,8 @@ public class FTPService {
 
     private void FTPServiceDisConnect(){
         try{
+            //ftp server 로그아웃
+            if(!this.ftpClient.logout())log.error("ftpClient logout Fail");
             //ftp 연결 종료
             this.ftpClient.disconnect();
         } catch (IOException e) {
@@ -91,7 +93,7 @@ public class FTPService {
 
     }
 
-    public String ftpFileUpload(MultipartFile file, String img_Folder, String FolderName,int member_folder) throws IOException {
+    public String ftpFolderList(MultipartFile file, String img_Folder, String FolderName) throws IOException {
 
         //업로드를 하기 위해 파일 이름을 받아옵니다.
         String localFileName = file.getOriginalFilename();
@@ -104,15 +106,15 @@ public class FTPService {
 
         // 이미지가 업로드될 주소를 지정
         //사용자 아이디
-        String createFolder = FolderName+"/"+member_folder+"/";
+        String createFolder = FolderName+"/";
 
         // 두 주소를 합쳐줍니다.
         String folderPath = FTPService.FTP_FILE_PATH+ftpCreateFolder+createFolder;
-        System.out.println(folderPath);
+        log.info("folderPath : [{}]",folderPath);
 
         // 랜덤 숫자를 이름으로 변경합니다.
         String img_name = img_security()+fileForm;
-        System.out.println(img_name);
+        log.info("img_name : [{}]",img_name);
 
         try {
             //FTP 서버 접속
@@ -138,8 +140,65 @@ public class FTPService {
             //ftp server 에 파일 적용
             if(!this.ftpClient.storeFile(folderPath+img_name,file.getInputStream()))log.error("ftpClient storeFile Fail");
 
-            //ftp server 로그아웃
-            if(!this.ftpClient.logout())log.error("ftpClient logout Fail");
+
+            //FTP 서버 종료
+            FTPServiceDisConnect();
+        } catch (IOException e) {
+            log.error("FTP 파일 입출력 문제 발생");
+            log.error(e.getMessage());
+        }
+
+        //넘길 이미지 주소를 전달합니다.
+        return UPLOAD_DIRECTORY+ftpCreateFolder+createFolder+img_name;
+    }
+
+    public String ftpFileUpload(MultipartFile file, String img_Folder, String FolderName,int member_folder) throws IOException {
+
+        //업로드를 하기 위해 파일 이름을 받아옵니다.
+        String localFileName = file.getOriginalFilename();
+
+        //받아온 파일의 형식만 불러와줍니다.
+        String fileForm = localFileName.substring(localFileName.lastIndexOf("."));
+
+        //이미지 저장 상위 폴더
+        String ftpCreateFolder = img_Folder+"/";
+
+        // 이미지가 업로드될 주소를 지정
+        //사용자 아이디
+        String createFolder = FolderName+"/"+member_folder+"/";
+
+        // 두 주소를 합쳐줍니다.
+        String folderPath = FTPService.FTP_FILE_PATH+ftpCreateFolder+createFolder;
+        log.info("folderPath : [{}]",folderPath);
+
+        // 랜덤 숫자를 이름으로 변경합니다.
+        String img_name = img_security()+fileForm;
+        log.info("img_name : [{}]",img_name);
+
+        try {
+            //FTP 서버 접속
+            FTPServiceConnect();
+            log.error("ftpClient connect");
+            //연결 여부를 확인하고 연결 되어있다면
+
+
+            //폴더 추가
+            if(!this.ftpClient.makeDirectory(folderPath))log.error("ftpClient makeDirectory ROOT/test Fail");
+
+            //최종 파일 위치 확인용 로그
+            System.out.println("FTP FilePath ["+folderPath+"]");
+
+            //파일 타입 지정
+            if(!this.ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE))log.error("ftpClient setFileType Fail");
+
+            //파일 데이터 전송을 위한 임시 포트 생성
+            //ftpClient.enterLocalActiveMode(); 서버에 전송할 데이터 방화벽 설정이 되어있다면  연결을 못할 수 있다.
+            this.ftpClient.enterLocalPassiveMode();
+            log.error("ftpClient enterLocalPassiveMode");
+
+            //ftp server 에 파일 적용
+            if(!this.ftpClient.storeFile(folderPath+img_name,file.getInputStream()))log.error("ftpClient storeFile Fail");
+
 
             //FTP 서버 종료
             FTPServiceDisConnect();
