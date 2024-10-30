@@ -14,7 +14,6 @@ import com.coma.app.biz.reservation.ReservationService;
 import com.coma.app.view.annotation.LoginCheck;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -55,9 +55,7 @@ public class MainManagementController{
         // !★!★!★!★!★!★!★!★ TODO Impl (컨디션값) 참고하기!★!★!★!★!★!★!★!★!★!★!★!★
         //		사용자- 관리자  count*,암벽장 count*,예약 수 count*,게시판 수 count(*),크루전 수 c*
         String managementTotal = mainManagementService.getManagementTotalDate(memberDTO,gymDTO,reservationDTO,boardDTO,battleDTO);
-        log.info("managementTotal [{}]",managementTotal);
-        String managementTotal_json = objectMapper.writeValueAsString(managementTotal);
-        log.info("managementTotal_json [{}]",managementTotal_json);
+        log.info("managementTotal_json [{}]",managementTotal);
         //		월별 가입자 수 count(꺾은선그래프)
 		List<MemberDTO> monthly_join_datas = this.memberService.selectAllMonthCountAdmin(memberDTO);
         log.info("monthly_join_datas [{}]",monthly_join_datas);
@@ -85,7 +83,7 @@ public class MainManagementController{
 
         // 모델에 데이터를 추가
         // V와 값 통일시키기
-        model.addAttribute("total_data", managementTotal_json);
+        model.addAttribute("total_data", managementTotal);
         model.addAttribute("monthly_join_datas", monthly_join);
         model.addAttribute("monthly_reservation_datas", monthly_reservation);
         model.addAttribute("region_gym_datas", region_gym);
