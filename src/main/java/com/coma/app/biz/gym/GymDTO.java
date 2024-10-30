@@ -3,6 +3,7 @@ package com.coma.app.biz.gym;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -25,4 +26,5 @@ public class GymDTO {
 	private String gym_battle_game_date;	//현재 암벽장의 크루전 게임날짜
 	private int total;		//암벽장 총 개수
 	private int gym_min_num;	// 페이지 네이션 시작 PK
+	private MultipartFile gym_file;	// 암벽장 사진
 }
