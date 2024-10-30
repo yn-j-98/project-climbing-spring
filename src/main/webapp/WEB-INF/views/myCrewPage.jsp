@@ -45,7 +45,9 @@
 					<div class="d-flex justify-content-center align-items-center">
 						<a href="crew.do"
 						   class="text-dark text-decoration-underline link-primary">
-							<h3 class="m-0">내크루</h3>
+							<h3 class="m-0">
+								<b>내크루</b>
+							</h3>
 						</a>
 						<h3 class="px-5 m-0">/</h3>
 						<a href="crewCommunity.do"
@@ -56,7 +58,7 @@
 						<a href="CrewBattlePage.do"
 						   class="text-dark text-decoration-none link-primary">
 							<p class="fs-4 m-0">
-								<b>크루전 개최</b>
+								크루전 개최
 							</p>
 						</a>
 						<h3 class="px-5 m-0">/</h3>
@@ -73,7 +75,7 @@
 					<h4>크루명 ${CREW.crew_name}</h4>
 					<div class="card card-stats card-round pt-3 px-5 pb-5">
 						<!-- 크루 사진 이미지 -->
-						<img src="${CREW.crew_profile }" class="crew-image "
+						<img src="${crew_profile}" class="crew-image "
 							alt="내가 가입한 크루 사진" />
 					</div>
 				</div>

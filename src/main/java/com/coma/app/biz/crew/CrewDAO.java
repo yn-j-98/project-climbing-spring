@@ -5,11 +5,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class CrewDAO {
 	//크루 PK로 크루 검색 CREW_NUM
@@ -43,7 +45,7 @@ public class CrewDAO {
 			"    CREW_LEADER,\n" +
 			"    CREW_BATTLE_STATUS,\n" +
 			"    CREW_PROFILE,\n" +
-			"    (SELECT COUNT(*) FROM member WHERE MEMBER_CREW_NUM = ?) AS CREW_CURRENT_MEMBER_SIZE\n" +
+			"    (SELECT COUNT(*) FROM MEMBER WHERE MEMBER_CREW_NUM = ?) AS CREW_CURRENT_MEMBER_SIZE\n" +
 			"FROM \n" +
 			"    CREW \n" +
 			"WHERE \n" +
@@ -52,31 +54,22 @@ public class CrewDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public boolean insert(CrewDTO crewDTO) {
-		System.out.println("crew.CrewDAO.insert 시작");
-		System.out.println("crew.CrewDAO.insert 성공");
-		return true;
+	private boolean insert(CrewDTO crewDTO) {
+		return false;
 	}
-	public boolean update(CrewDTO crewDTO) {
-		System.out.println("crew.CrewDAO.update 시작");
-		System.out.println("crew.CrewDAO.update 성공");
-		return true;
+	private boolean update(CrewDTO crewDTO) {
+		return false;
 	}
-	public boolean delete(CrewDTO crewDTO) {
-		System.err.println("crew.CrewDAO.delete시작");
-		System.out.println("crew.CrewDAO.delete 성공");
-		return true;
+	private boolean delete(CrewDTO crewDTO) {
+		return false;
 	}
-
 	//크루 PK로 크루 검색 CREW_NUM
 	public CrewDTO selectOne(CrewDTO crewDTO){
-		System.out.println("crew.CrewDAO.selectOne 시작");
 		CrewDTO result = null;
 		Object[] args = {crewDTO.getCrew_num()};
 		try {
 			result = jdbcTemplate.queryForObject(ONE, args, new CrewRowMapperOne());
 		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchIdCount 실패 " + e.getMessage());
 			e.printStackTrace();
 		}
 		return result;
@@ -84,12 +77,10 @@ public class CrewDAO {
 
 	//크루 총 개수
 	public CrewDTO selectOneCount(CrewDTO crewDTO){
-		System.out.println("crew.CrewDAO.selectOneCount 시작");
 		CrewDTO result = null;
 		try {
 			result = jdbcTemplate.queryForObject(ONE_COUNT, new CrewRowMapperOneCount());
 		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.crew.CrewDAO.selectOneCount 실패 " + ONE_COUNT);
 			e.printStackTrace();
 		}
 		return result;
@@ -97,13 +88,11 @@ public class CrewDAO {
 
 	//해당 크루 현재 인원수 CREW_NUM
 	public CrewDTO selectOneCountCurretMemberSize(CrewDTO crewDTO) {
-		System.out.println("crew.CrewDAO.selectOneCountCurretMemberSize 시작");
 		CrewDTO result = null;
 		Object[] args = {crewDTO.getCrew_num(), crewDTO.getCrew_num()};
 		try {
 			result = jdbcTemplate.queryForObject(ONE_COUNT_CURRENT_MEMBER_SIZE, args, new CrewRowMapperOneCountCurrentMemberSize());
 		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.crew.CrewDAO.selectOneCountCurretMemberSize 실패 " + ONE_COUNT_CURRENT_MEMBER_SIZE);
 			e.printStackTrace();
 		}
 		return result;
@@ -111,25 +100,23 @@ public class CrewDAO {
 
 	//(페이지네이션) 크루 전체 목록 Crew_min_num, Crew_max_num
 	public List<CrewDTO> selectAll(CrewDTO crewDTO){
-		System.out.println("crew.CrewDAO.selectAll 시작");
 		List<CrewDTO> result = null;
-		int minNum = crewDTO.getCrew_min_num(); // 페이지에서 시작 인덱스
-		int offset = minNum;
+		int offset = crewDTO.getCrew_min_num(); // 페이지에서 시작 인덱스
 		Object[] args = {offset,10};
 		try {
 			result = jdbcTemplate.query(ALL, args, new CrewRowMapperAll());
 		} catch (Exception e) {
-			System.err.println("	[에러]com.coma.app.biz.crew_board.selectAllCrewBoard 실패 " + e.getMessage());
 			e.printStackTrace();
 		}
 		return result;
 	}
 }
 
+@Slf4j
 class CrewRowMapperAll implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.crew.selectAll 검색 성공");
+		log.info("검색 성공");
 		CrewDTO crewDTO = new CrewDTO();
 		try{
 			crewDTO.setCrew_num(resultSet.getInt("CREW_NUM"));
@@ -177,11 +164,11 @@ class CrewRowMapperAll implements RowMapper<CrewDTO> {
 	}
 }
 
-
+@Slf4j
 class CrewRowMapperOne implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.crew.selectOne 검색 성공");
+		log.info("검색 성공");
 		CrewDTO crewDTO = new CrewDTO();
 		try{
 			crewDTO.setCrew_num(resultSet.getInt("CREW_NUM"));
@@ -229,10 +216,11 @@ class CrewRowMapperOne implements RowMapper<CrewDTO> {
 	}
 }
 
+@Slf4j
 class CrewRowMapperOneCount implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.crew.selectOneCount 검색 성공");
+		log.info("검색 성공");
 		CrewDTO crewDTO = new CrewDTO();
 		try{
 			crewDTO.setTotal(resultSet.getInt("CREW_TOTAL"));
@@ -244,10 +232,11 @@ class CrewRowMapperOneCount implements RowMapper<CrewDTO> {
 	}
 }
 
+@Slf4j
 class CrewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
 	@Override
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-		System.out.println("com.coma.app.biz.crew.selectOneCountCurrentMemberSize 검색 성공");
+		log.info("검색 성공");
 		CrewDTO crewDTO = new CrewDTO();
 		try{
 			crewDTO.setCrew_num(resultSet.getInt("CREW_NUM"));
