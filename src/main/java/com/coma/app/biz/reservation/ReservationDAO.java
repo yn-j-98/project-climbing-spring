@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReservationDAO {
 	//예약 등록 RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE
-	private final String INSERT = "INSERT INTO RESERVATION (RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE) " 
-			+ "VALUES (?, ?, ?, ?);";
+	private final String INSERT = "INSERT INTO RESERVATION (RESERVATION_NUM, RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE) "
+			+ "VALUES (?, ?, ?, ?, ?);";
 	
 	//PK로 예약 정보 찾기 RESERVATION_NUM
 	private final String ONE = "SELECT " 
@@ -82,6 +82,10 @@ public class ReservationDAO {
 			+ "FROM RESERVATION\n"
 			+ "WHERE RESERVATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)";
 
+	//전체 예약 개수 출력 // TODO 관리자 메인 페이지
+	private final String ONE_COUNT_ADMIN = "SELECT COUNT(*) AS RESERVATION_TOTAL\n"
+			+ "FROM RESERVATION\n";
+
 	//월별 예약수 출력 // TODO 관리자 메인 페이지
 	private final String ALL_COUNT_MONTH_ADMIN = "SELECT \n"
 			+ "    DATE_FORMAT(RESERVATION_DATE, '%Y-%m') AS RESERVATION_MONTH,\n"
@@ -137,7 +141,7 @@ public class ReservationDAO {
 
 	public boolean insert(ReservationDTO reservationDTO) {
 		//예약 등록 RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE
-		int result=jdbcTemplate.update(INSERT,reservationDTO.getReservation_gym_num(), reservationDTO.getReservation_date(), reservationDTO.getReservation_member_id(), reservationDTO.getReservation_price());
+		int result=jdbcTemplate.update(INSERT,reservationDTO.getReservation_num() ,reservationDTO.getReservation_gym_num(), reservationDTO.getReservation_date(), reservationDTO.getReservation_member_id(), reservationDTO.getReservation_price());
 		if(result<=0) {
 			return false;
 		}
@@ -198,6 +202,17 @@ public class ReservationDAO {
 		try {
 			//최근 1년 예약 개수 출력 // TODO 관리자 메인 페이지
 			data= jdbcTemplate.queryForObject(ONE_COUNT_YEAR_ADMIN, new ReservationCountRowMapperOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public ReservationDTO selectOneCountAdmin(ReservationDTO reservationDTO){
+		ReservationDTO data=null;
+		try {
+			//전체 예약 개수 출력 // TODO 관리자 메인 페이지
+			data= jdbcTemplate.queryForObject(ONE_COUNT_ADMIN, new ReservationCountRowMapperOne());
 		}
 		catch (Exception e) {
 		}
@@ -296,7 +311,7 @@ class ReservationSelectRowMapperOne implements RowMapper<ReservationDTO> {
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
 		System.out.print("DB에서 가져온 데이터 {");
-		reservationDTO.setReservation_num(rs.getInt("RESERVATION_NUM"));
+		reservationDTO.setReservation_num(rs.getString("RESERVATION_NUM"));
 		System.err.println("reservation_num = ["+reservationDTO.getReservation_num()+"]");
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
 		System.err.println("reservation_date = ["+reservationDTO.getReservation_date()+"]");
@@ -316,7 +331,7 @@ class ReservationRowMapperAll implements RowMapper<ReservationDTO> {
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
 		System.out.print("DB에서 가져온 데이터 {");
-		reservationDTO.setReservation_num(rs.getInt("RESERVATION_NUM"));
+		reservationDTO.setReservation_num(rs.getString("RESERVATION_NUM"));
 		System.err.println("reservation_num = ["+reservationDTO.getReservation_num()+"]");
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
 		System.err.println("reservation_date = ["+reservationDTO.getReservation_date()+"]");

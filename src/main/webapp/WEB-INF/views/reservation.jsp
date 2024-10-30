@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>예약 상세 페이지</title>
-
+	<script src="js/payment.js"></script>
 <!-- Fonts and icons -->
 <script src="assets/js/plugin/webfont/webfont.min.js"></script>
 <script src="https://kit.fontawesome.com/7f7b0ec58f.js"
@@ -35,6 +35,7 @@
 					<form action="gymReservation.do">
 					<div class="card-body">
 						<input type="hidden" id="gymNum" name="reservation_gym_num" value="${gym_num}">
+						<input type="hidden" id="gymName" name="reservation_gym_name" value="${gym_name}">
 						<div class="row">
 							<div class="col-md-2 d-flex align-items-center">
 								<p class="mb-0">아이디</p>

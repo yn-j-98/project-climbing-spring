@@ -33,7 +33,7 @@ public class BoardController {
 
 
     @LoginCheck
-    @PostMapping("/boardDelete.do")
+    @GetMapping("/boardDelete.do")
     public String boardDelete(HttpSession session, BoardDTO boardDTO) {
         //사용자 아이디
         String member_id = (String) session.getAttribute("MEMBER_ID");
@@ -65,7 +65,7 @@ public class BoardController {
         } else {
             // 요청에서 게시글 제목과 내용을 가져옴
 
-//            세션에 저장되어 있는 폴더 개수를 가져옵니다. 삼항연산자로 만약 세션값이 null이 아니라면 정수형으로 변경하여 가져오도록합니다.
+            // 세션에 저장되어 있는 폴더 개수를 가져옵니다. 삼항연산자로 만약 세션값이 null이 아니라면 정수형으로 변경하여 가져오도록합니다.
             // int folder_session = (session.getAttribute("FOLDER_NUM") != null) ? (Integer) session.getAttribute("FOLDER_NUM") : 0;
 
             // 게시글의 제목, 내용, 지역, 작성자를 DTO에 설정
