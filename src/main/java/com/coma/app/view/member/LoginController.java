@@ -62,30 +62,8 @@ public class LoginController {
                 model.addAttribute("path", "login.do");
             }
         }
-	@LoginCheck
-	@PostMapping("/login.do") // 로그인 처리
-	public String login(MemberDTO memberDTO,HttpServletResponse response, HttpServletRequest request, HttpSession session) {
-		// 로그인 정보가 있는지 확인
-		String member_id = (String) session.getAttribute("MEMBER_ID");
-		String path = "redirect:login.do";
-		if (member_id == null) {
-			memberDTO = this.memberService.selectOneSearchIdPassword(memberDTO);
-			if (memberDTO != null) {
-				String role = memberDTO.getMember_role();
-				path = "redirect:main.do";
-				if("T".equals(role)){
-					path = "redirect:mainManagement.do";
-				}
-				// 로그인 성공 시 세션에 회원 정보 저장
-				session.setAttribute("MEMBER_ID", memberDTO.getMember_id());
-				session.setAttribute("CREW_CHECK", memberDTO.getMember_crew_num());
-				setCookies(memberDTO, response, request); // 쿠키 설정 메서드 호출
-			}
-		}
 
 
-		return path;
-	}
         return "views/info";
     }
 

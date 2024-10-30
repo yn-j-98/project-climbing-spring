@@ -115,12 +115,12 @@
         <div class="accordion-item">
           <h2 class="accordion-header" id="gym_aria_labelledby${status}">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gym_aria_controls${status}" aria-expanded="true" aria-controls="gym_aria_controls${status}">
-              ${battle_data.board_title}
+              ${battle_data.setBattle_gym_name}
             </button>
           </h2>
           <div id="gym_aria_controls${status}" class="accordion-collapse collapse" aria-labelledby="gym_aria_labelledby${status}" data-bs-parent="#gym_data_bs_parent${status}">
             <div class="accordion-body">
-              ${battle_data.board_content}
+              ${battle_data.setBattle_game_date}
             </div>
           </div>
         </div>
@@ -139,8 +139,8 @@
   $(document).ready(function() {
     //----------------------------------------------------------------------
     // json 형식으로 데이터를 저장
-    const card_data = JSON.stringify(${total_data});// TODO Controller 에서 알려주면 코드 수정 예정
-
+    const card_data1 = JSON.stringify(${total_data});// TODO Controller 에서 알려주면 코드 수정 예정
+    const card_data = Array.from(card_data1);
     //상당 Html 코드 생성 함수
     function bootstrap_card_html(card) {
       return '<div class="col-sm-6 col-md-2">' +
@@ -184,7 +184,7 @@
 <script>
   //----------------------------
   //가입자 chart 데이터
-  const member_Chart_Data =JSON.stringify(${monthly_join_datas});
+  const member_Chart_Data =JSON.parse(${monthly_join_datas});
   //가입자 데이터 제목
   const member_Chart_Data_title = member_Chart_Data.map(member => member.member_reservation_month);
   //가입자 데이터 내용
@@ -192,7 +192,7 @@
   //----------------------------
   //----------------------------
   //예약자 chart 데이터
-  const registration_Chart_Data =JSON.stringify(${monthly_reservation_datas});
+  const registration_Chart_Data =JSON.parse(${monthly_reservation_datas});
   //예약자 데이터 제목
   const registration_Chart_Data_title = registration_Chart_Data.map(registration => registration.reservation_month);
   //예약자 데이터 내용
@@ -200,7 +200,7 @@
   //----------------------------
   //----------------------------
   //암벽장 chart 데이터
-  const gym_Chart_Data =JSON.stringify(${region_gym_datas});
+  const gym_Chart_Data =JSON.parse(${region_gym_datas});
 
   //암벽장 데이터 제목
   // const gym_Chart_Data_title = member_Chart_Data.map(({Total}) => data.tile);

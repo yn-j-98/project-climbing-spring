@@ -43,13 +43,7 @@ public class MainManagementService {
         int battleTotalDate = getBattleTotal(battleDTO);
         log.info("getManagementTotalDate battleTotalDate : [{}]",battleTotalDate);
 
-        String formatData = """
-                [{title:%s, text:%s},
-                {title:%s, text:%s},
-                {title:%s, text:%s},
-                {title:%s, text:%s},
-                {title:%s, text:%s}]
-                """;
+        String formatData = "[{title:%s, text:%s},{title:%s, text:%s},{title:%s, text:%s},{title:%s, text:%s},{title:%s, text:%s}]";
         String data = String.format(formatData,
                 "'사용자'",memberTotalDate,
                 "'암벽장'",gymTotalDate,

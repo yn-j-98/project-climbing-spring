@@ -12,6 +12,8 @@ import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.biz.reservation.ReservationService;
 import com.coma.app.view.annotation.LoginCheck;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +40,14 @@ public class MainManagementController{
     @Autowired
     private MainManagementService mainManagementService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     // 관리자 메인
     @LoginCheck
     @GetMapping("/mainManagement.do")
     public String mainManagement(Model model, MemberDTO memberDTO,
-                                 GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) {
+                                 GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) throws JsonProcessingException {
 
         // 차트js
         // 통계 데이터 가져오기
@@ -51,15 +56,23 @@ public class MainManagementController{
         //		사용자- 관리자  count*,암벽장 count*,예약 수 count*,게시판 수 count(*),크루전 수 c*
         String managementTotal = mainManagementService.getManagementTotalDate(memberDTO,gymDTO,reservationDTO,boardDTO,battleDTO);
         log.info("managementTotal [{}]",managementTotal);
+        String managementTotal_json = objectMapper.writeValueAsString(managementTotal);
+        log.info("managementTotal_json [{}]",managementTotal_json);
         //		월별 가입자 수 count(꺾은선그래프)
 		List<MemberDTO> monthly_join_datas = this.memberService.selectAllMonthCountAdmin(memberDTO);
         log.info("monthly_join_datas [{}]",monthly_join_datas);
+        String monthly_join = objectMapper.writeValueAsString(monthly_join_datas);
+        log.info("monthly_join [{}]",monthly_join);
         //		월별 예약 수 count (막대그래프)
 		List<ReservationDTO> monthly_reservation_datas = this.reservationService.selectAllCountMonthAdmin(reservationDTO);
         log.info("monthly_reservation_datas [{}]",monthly_reservation_datas);
+        String monthly_reservation = objectMapper.writeValueAsString(monthly_reservation_datas);
+        log.info("monthly_reservation [{}]",monthly_reservation);
         //		지역별 암벽장 수 count(동그라미)
 		List<GymDTO> region_gym_datas = this.gymService.selectAllLocationCountAdmin(gymDTO);
         log.info("region_gym_datas [{}]",region_gym_datas);
+        String region_gym = objectMapper.writeValueAsString(region_gym_datas);
+        log.info("region_gym [{}]",region_gym);
 
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO MODEL이 끝나면 주석풀기
@@ -72,10 +85,10 @@ public class MainManagementController{
 
         // 모델에 데이터를 추가
         // V와 값 통일시키기
-        model.addAttribute("total_data", managementTotal);
-        model.addAttribute("monthly_join_datas", monthly_join_datas);
-        model.addAttribute("monthly_reservation_datas", monthly_reservation_datas);
-        model.addAttribute("region_gym_datas", region_gym_datas);
+        model.addAttribute("total_data", managementTotal_json);
+        model.addAttribute("monthly_join_datas", monthly_join);
+        model.addAttribute("monthly_reservation_datas", monthly_reservation);
+        model.addAttribute("region_gym_datas", region_gym);
         model.addAttribute("board_datas", board_datas);
         model.addAttribute("battle_datas", battle_datas);
 
