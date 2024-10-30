@@ -151,6 +151,10 @@ public class CommunityController{
         log.info("location.boardDTO : [" + boardDTO+"]");
         List<BoardDTO> datas = this.boardService.selectAllSearchTitle(boardDTO);
         log.info("location.datas : [" + datas+"]");
+        System.out.println("com.coma.app.view.CommunityController.datas"+datas);
+        log.info("datas = [{}]",datas);
+
+
 
 //        boardDTO.setBoard_condition("BOARD_ONE_SEARCH_TITLE_COUNT");
         BoardDTO boardCount = this.boardService.selectOneSearchTitleCount(boardDTO);

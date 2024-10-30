@@ -71,5 +71,5 @@
       <aop:pointcut id="txPointcut" expression="execution(* com.coma.app.biz.reservation.ReservationInsertService.insert(..))"/>
       <aop:advisor advice-ref="txAdviceDelete" pointcut-ref="txPointcut"/>
    </aop:config>
-
+    
 </beans>
