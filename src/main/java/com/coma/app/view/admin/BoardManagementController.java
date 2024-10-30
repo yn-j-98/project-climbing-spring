@@ -34,16 +34,20 @@ public class BoardManagementController {
             page = 1;
         }
         int min_num = (page - 1) * size;
-        log.info("boardManagement min_num = {}", min_num);
-        log.info("boardManagement page ={}",page);
+        int total = boardDTO.getTotal();
+        log.info("boardManagement min_num = {}, page={}, total={}", min_num,page,total);
+
         boardDTO.setBoard_min_num(min_num);
-        boardDTO.setPage(page);
 
 
         //-----------------------------------------------------------------------------
 
         List<BoardDTO> datas = boardService.selectAll(boardDTO);
+        model.addAttribute("page", page);
+
         model.addAttribute("datas", datas);
+
+        model.addAttribute("total", total);
 
         return "admin/boardManagement";
     }
@@ -67,13 +71,7 @@ public class BoardManagementController {
             flag = false;
         }
         model.addAttribute("title", "글 삭제");
-
-        if (flag) {
-            model.addAttribute("msg", "선택된 글 삭제 성공!");
-        } else {
-            model.addAttribute("msg", "글 삭제 실패..");
-        }
-
+        model.addAttribute("msg", flag ? "선택된 글 삭제 성공!" : "글 삭제 실패..");
         model.addAttribute("path", "boardManagement.do");
 
 //        //TODO 일괄삭제기능도 포함
