@@ -4,12 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 
+@Slf4j
 @Repository
 public class MemberDAO {
 	//아이디로 찾기 FIXME 관리자 권한 추가(char값 'T','F')
@@ -145,14 +147,14 @@ public class MemberDAO {
 
 	//월별 가입자 수 출력 // TODO 관리자 메인 페이지
 	private final String ALL_MONTH_COUNT_ADMIN = "SELECT\n"
-			+ "DATE_FORMAT(MEMBER_REGISTRATION_DATE, '%Y-%m') AS MEMBER_RESISTRATION_MONTH,\n"
+			+ "DATE_FORMAT(MEMBER_REGISTRATION_DATE, '%Y-%m') AS MEMBER_RESERVATION_MONTH,\n"
 			+ "    COUNT(*) AS MEMBER_TOTAL\n"
 			+ "FROM\n"
 			+ "    MEMBER\n"
 			+ "GROUP BY\n"
-			+ "    MEMBER_RESISTRATION_MONTH\n"
+			+ "    MEMBER_RESERVATION_MONTH\n"
 			+ "ORDER BY\n"
-			+ "    MEMBER_RESISTRATION_MONTH";
+			+ "    MEMBER_RESERVATION_MONTH";
 
 	// 회원 검색(페이지네이션) // TODO 회원 관리 페이지
 	private final String ALL_SEARCH_ADMIN = "SELECT MEMBER_ID, MEMBER_NAME, MEMBER_REGISTRATION_DATE\n" +
@@ -565,16 +567,19 @@ class MemberSearchCountOne implements RowMapper<MemberDTO> {
 	};
 }
 
+@Slf4j
 class MemberSelectAllMonthCountAdmin implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO = new MemberDTO();
 		System.out.print("DB에서 가져온 데이터 {");
+
 		memberDTO.setMember_reservation_month(rs.getString("MEMBER_RESERVATION_MONTH"));
 		System.err.println("member_reservation_month = [" + memberDTO.getMember_reservation_month() + "]");
 		memberDTO.setTotal(rs.getInt("MEMBER_TOTAL"));
 		System.err.print("member_total = [" + memberDTO.getTotal() + "]");
 		System.out.println("}");
+		log.error("selectAllMonthContAdmin memberDTO [{}]",memberDTO);
 		return memberDTO;
 	};
 }
