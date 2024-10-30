@@ -82,6 +82,10 @@ public class ReservationDAO {
 			+ "FROM RESERVATION\n"
 			+ "WHERE RESERVATION_DATE >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)";
 
+	//전체 예약 개수 출력 // TODO 관리자 메인 페이지
+	private final String ONE_COUNT_ADMIN = "SELECT COUNT(*) AS RESERVATION_TOTAL\n"
+			+ "FROM RESERVATION\n";
+
 	//월별 예약수 출력 // TODO 관리자 메인 페이지
 	private final String ALL_COUNT_MONTH_ADMIN = "SELECT \n"
 			+ "    DATE_FORMAT(RESERVATION_DATE, '%Y-%m') AS RESERVATION_MONTH,\n"
@@ -198,6 +202,17 @@ public class ReservationDAO {
 		try {
 			//최근 1년 예약 개수 출력 // TODO 관리자 메인 페이지
 			data= jdbcTemplate.queryForObject(ONE_COUNT_YEAR_ADMIN, new ReservationCountRowMapperOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public ReservationDTO selectOneCountAdmin(ReservationDTO reservationDTO){
+		ReservationDTO data=null;
+		try {
+			//전체 예약 개수 출력 // TODO 관리자 메인 페이지
+			data= jdbcTemplate.queryForObject(ONE_COUNT_ADMIN, new ReservationCountRowMapperOne());
 		}
 		catch (Exception e) {
 		}
