@@ -2,6 +2,8 @@ package com.coma.app.biz.admin;
 
 import com.coma.app.biz.battle.BattleDAO;
 import com.coma.app.biz.battle.BattleDTO;
+import com.coma.app.biz.battle_record.Battle_recordDAO;
+import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.crew.CrewDAO;
 import com.coma.app.biz.crew.CrewDTO;
 import com.coma.app.biz.member.MemberDAO;
@@ -19,6 +21,9 @@ public class CrewManagementService {
 
     @Autowired
     BattleDAO battleDAO;
+
+    @Autowired
+    Battle_recordDAO battle_recordDAO;
 
     @Autowired
     CrewDAO crewDAO;
@@ -66,6 +71,11 @@ public class CrewManagementService {
         return datas;
     }
 
+    public CrewDTO battleRecord(CrewDTO crewDTO){
+        //크루 이름을 받아와 크루 번호를 찾습니다.
+        //받은 크루 번호를 전달합니다.
+        return this.crewDAO.selectOneName(crewDTO);
+    }
     public BattleDTO selectOneSearchWinner(BattleDTO battleDTO){
         return battleDAO.selectOneSearchWinner(battleDTO);
     }
@@ -74,4 +84,18 @@ public class CrewManagementService {
     }
 
 
+    public boolean updateBattleRecord(Battle_recordDTO battle_recordDTO){
+        boolean result = false;
+        //승리 크루를 모두 업데이트한 후
+        battle_recordDTO.setBattle_record_is_winner("T");
+        if(this.battle_recordDAO.update(battle_recordDTO)){
+            //나머지 크루에 MVP 만 저장해둡니다.
+            if(this.battle_recordDAO.UPDATE_MVP(battle_recordDTO)){
+                result = true;
+                log.info("updateBattleRecord result = [{}]",result);
+            }
+        }
+        log.info("updateBattleRecord result = [{}]",result);
+        return result;
+    }
 }
