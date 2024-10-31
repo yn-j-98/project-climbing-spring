@@ -37,17 +37,17 @@ public class CheckController {
 	}
 	
 	@PostMapping("/checkPassword.do")
-	public @ResponseBody String checkPassword(MemberDTO memberDTO) {
+	public @ResponseBody String checkPassword(@RequestBody MemberDTO memberDTO) {
 
 		log.info("checkPassword 비동기 처리 시작");
 
 		//model 에 사용자 ID를 넘겨 값이 있는 지 확인 후
 		memberDTO = this.memberService.selectOneSearchIdPassword(memberDTO);
 		
-		String result = "false";
+		String result = "true";
 		//값이 없으면 true 를 반환 합니다.
 		if(memberDTO != null) {
-			result = "true";
+			result = "false";
 		}
 
 		log.info("result 값 : {}", result);

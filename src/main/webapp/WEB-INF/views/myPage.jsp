@@ -54,8 +54,10 @@
 							</a>
 						</div>
 						<div class="col-md-6 text-center">
+							<a href="deleteMember.do">
 							<button class="btn btn-danger" onclick="confirmDeleteMember()">회원
 								탈퇴</button>
+							</a>
 						</div>
 					</div>
 				</div>
