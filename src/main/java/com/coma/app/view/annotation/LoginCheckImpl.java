@@ -12,28 +12,45 @@ public class LoginCheckImpl {
 
     private static final String MEMBER_ID = "MEMBER_ID"; // 회원 ID를 나타내는 상수
     private static final String CREW_CHECK = "CREW_CHECK"; // 크루 체크를 나타내는 상수
-    private static final String ROLE_CHECK = "ROLE_CHECK";
+    private static final String ROLE_CHECK = "ROLE_CHECK"; // 회원인지 관리자인지를 나타내는 상수
 
     //현재 요청과 응답, 세션 객체를 이용하여 로그인 정보를 검사하는 메서드.
-    public void checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
 
         String[] loginInfo = getLoginInformation(request, session); // 로그인 정보를 가져옴
         synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
 
+
         if (loginInfo[0] == null) { // 로그인 정보가 없으면
-            String redirectUrl = redirectLogin(); // 로그인 페이지로 리다이렉트 URL 설정
-            if (redirectUrl != null) { // 리다이렉트 URL이 null이 아니면
-                try {
-                    response.sendRedirect(redirectUrl); // 로그인 페이지로 리다이렉트
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            model.addAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
+            model.addAttribute("msg", "로그인 페이지로 이동합니다.");
+            model.addAttribute("path", "login.do");
+            return "views/info";
+        } else {
+            if (!isAdmin(loginInfo) && isCrewAbsent(loginInfo)) {
+                model.addAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
+                model.addAttribute("msg", "크루 목록 페이지로 이동합니다.");
+                model.addAttribute("path", "views/crewList");
+                return "views/info";
             }
         }
+        return null; // 로그인 정보가 있으면 null 반환
+
+
+//        if (loginInfo[0] == null) { // 로그인 정보가 없으면
+//            String redirectUrl = redirectLogin(); // 로그인 페이지로 리다이렉트 URL 설정
+//            if (redirectUrl != null) { // 리다이렉트 URL이 null이 아니면
+//                try {
+//                    response.sendRedirect(redirectUrl); // 로그인 페이지로 리다이렉트
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
     }
-    private String redirectLogin() {
-        return "redirect:login.do"; // 로그인 페이지 URL 반환
-    }
+//    private String redirectLogin() {
+//        return "redirect:login.do"; // 로그인 페이지 URL 반환
+//    }
 
 
     //요청과 세션 객체에서 로그인 정보를 가져오는 메서드
@@ -46,6 +63,7 @@ public class LoginCheckImpl {
     }
 
 
+    // 쿠키에서 로그인 정보를 가져와 배열에 저장하는 메서드
     private void fillLoginInfoFromCookies(HttpServletRequest request, String[] loginInfo) {
         Cookie[] cookies = request.getCookies(); // 요청에서 쿠키 배열을 가져옴
         if (cookies != null) { // 쿠키가 null이 아니면
@@ -78,6 +96,7 @@ public class LoginCheckImpl {
     // SESSION에 KEY 값 저장
     // 이게 수행되어야, SESSION에서 MEMBER_ID가 나옴
     // MEMBER_ID를 호출하면, SESSION에 저장된 MEMBER_ID가 나오는 함수
+    // ==> 세션과 로그인 정보를 동기화하는 메서드
     private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
         // 세션의 MEMBER_ID가 null이고 배열의 첫 번째 요소가 null이 아닌 경우
         if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
@@ -90,10 +109,18 @@ public class LoginCheckImpl {
             session.setAttribute(CREW_CHECK, loginInfo[1]);
         }
         // 세션의 ROLE_CHECK가 null이고 배열의 세 번째 요소가 null이 아닌 경우
-        if (session.getAttribute(ROLE_CHECK).equals("T") && loginInfo[2] != null) {
+        if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
             // 세션의 ROLE_CHECK에 배열의 세 번째 요소를 저장
             session.setAttribute(ROLE_CHECK, loginInfo[2]);
         }
+    }
+
+    private boolean isAdmin(String[] loginInfo) {
+        return loginInfo[2].equals("T");
+    }
+
+    private boolean isCrewAbsent(String[] loginInfo) {
+        return loginInfo[1] == null;
     }
 
 
