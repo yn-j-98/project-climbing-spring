@@ -74,7 +74,7 @@
 							</div>
 							<div class="col-md-10">
 								<div class="form-group">
-									<input type="text" class="form-control" id="member_point" value="${use_point}" name="user_point VIEW_USE_POINT" readonly/>
+									<input type="text" class="form-control" id="member_point" value="${use_point}" name="reservation_use_point" readonly/>
 								</div>
 							</div>
 							<div class="col-md-2 d-flex align-items-center">
