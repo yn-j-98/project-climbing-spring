@@ -4,16 +4,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class ReservationDAO {
 	//예약 등록 RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE
 	private final String INSERT = "INSERT INTO RESERVATION (RESERVATION_NUM, RESERVATION_GYM_NUM, RESERVATION_DATE, RESERVATION_MEMBER_ID, RESERVATION_PRICE) "
-			+ "VALUES (?, ?, ?, ?, ?);";
+			+ "VALUES (?, ?, ?, ?, ?)";
 	
 	//PK로 예약 정보 찾기 RESERVATION_NUM
 	private final String ONE = "SELECT " 
@@ -25,19 +27,27 @@ public class ReservationDAO {
 			+ "FROM " 
 			+ "    RESERVATION " 
 			+ "WHERE " 
-			+ "    RESERVATION_NUM = ?;";
+			+ "    RESERVATION_NUM = ?";
 
 	
 	//해당 암벽장 예약 가능 개수 RESERVATION_GYM_NUM
-	private final String ONE_COUNT = "SELECT G.GYM_RESERVATION_CNT - COUNT(*) AS RESERVATION_TOTAL "
-			+ "FROM GYM G " 
-			+ "LEFT JOIN RESERVATION R ON R.RESERVATION_GYM_NUM = G.GYM_NUM AND R.RESERVATION_DATE = ? " 
-			+ "WHERE G.GYM_NUM = ? " 
-			+ "GROUP BY G.GYM_RESERVATION_CNT;";
+	private final String ONE_COUNT = "SELECT COUNT(*) AS RESERVATION_TOTAL\n" +
+			"FROM\n" +
+			"(\n" +
+			"    SELECT G.GYM_RESERVATION_CNT AS RESERVATION_TOTAL\n" +
+			"    FROM\n" +
+			"        RESERVATION R\n" +
+			"    JOIN\n" +
+			"        GYM G\n" +
+			"    ON\n" +
+			"        R.RESERVATION_GYM_NUM = G.GYM_NUM\n" +
+			"    WHERE\n" +
+			"        R.RESERVATION_GYM_NUM = ? AND R.RESERVATION_DATE = ?\n" +
+			") AS SUBQUERY";
 
 	
 	//예약 취소 RESERVATION_NUM
-	private final String DELETE = "DELETE FROM RESERVATION WHERE RESERVATION_NUM = ?;";
+	private final String DELETE = "DELETE FROM RESERVATION WHERE RESERVATION_NUM = ?";
 
 	
 	//사용자 아이디로 예약한 내역 전부 출력 RESERVATION_MEMBER_ID
@@ -136,6 +146,24 @@ public class ReservationDAO {
 			+ "    R.RESERVATION_DATE DESC\n"
 			+ "LIMIT ?, ?";
 
+	//암벽장 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+	private final String ALL_ADMIN_SEARCH_GYM_NAME_COUNT = "SELECT \n"
+			+ "    COUNT(*) AS RESERVAION_COUNT \n"
+			+ "FROM \n"
+			+ "    RESERVATION R\n"
+			+ "JOIN \n"
+			+ "    GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM\n"
+			+ "WHERE \n"
+			+ "    G.GYM_NAME LIKE CONCAT('%', ?, '%')";
+
+	//예약자 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+	private final String ALL_ADMIN_SEARCH_MEMBER_ID_COUNT = "SELECT \n"
+			+ "    COUNT(*) AS RESERVAION_COUNT \n"
+			+ "FROM \n"
+			+ "    RESERVATION R\n"
+			+ "WHERE \n"
+			+ "    R.RESERVATION_MEMBER_ID = ?";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
@@ -219,6 +247,30 @@ public class ReservationDAO {
 		return data;
 	}
 
+	public ReservationDTO selectOneCountSearchGymNameAdmin(ReservationDTO reservationDTO){
+		ReservationDTO data=null;
+		Object[] args={reservationDTO.getSearch_content()};
+		try {
+			//암벽장 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+			data= jdbcTemplate.queryForObject(ALL_ADMIN_SEARCH_GYM_NAME_COUNT, args, new ReservationCountRowMapperOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public ReservationDTO selectOneCountSearchMemberIdAdmin(ReservationDTO reservationDTO){
+		ReservationDTO data=null;
+		Object[] args={reservationDTO.getSearch_content()};
+		try {
+			//예약자 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+			data= jdbcTemplate.queryForObject(ALL_ADMIN_SEARCH_MEMBER_ID_COUNT, args, new ReservationCountRowMapperOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
 	public List<ReservationDTO> selectAll(ReservationDTO reservationDTO){
 		List<ReservationDTO> datas=null;
 		Object[] args={reservationDTO.getReservation_member_id()};
@@ -279,89 +331,89 @@ public class ReservationDAO {
 	}
 
 }
-
+@Slf4j
 class ReservationCountRowMapperOne implements RowMapper<ReservationDTO> {
 
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("ReservationCountRowMapperOne DB에서 가져온 데이터 ↓↓↓↓↓");
 		reservationDTO.setTotal(rs.getInt("RESERVATION_TOTAL"));
-		System.err.print("reservation_total = ["+reservationDTO.getTotal()+"]");
-		System.out.println("}");
+		log.info("reservation_total = ["+reservationDTO.getTotal()+"]");
+		log.info("ReservationCountRowMapperOne DB에서 가져온 데이터 ↑↑↑↑↑");
 		return reservationDTO;
 	};
 }
-
+@Slf4j
 class ReservationCountMonthRowMapperAll implements RowMapper<ReservationDTO> {
 
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("ReservationCountMonthRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		reservationDTO.setReservation_month(rs.getString("RESERVATION_MONTH"));
-		System.err.println("reservation_month = ["+reservationDTO.getReservation_month()+"]");
+		log.info("reservation_month = ["+reservationDTO.getReservation_month()+"]");
 		reservationDTO.setTotal(rs.getInt("RESERVATION_TOTAL"));
-		System.err.print("reservation_total = ["+reservationDTO.getTotal()+"]");
-		System.out.println("}");
+		log.info("total = ["+reservationDTO.getTotal()+"]");
+		log.info("ReservationCountMonthRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return reservationDTO;
 	};
 }
-
+@Slf4j
 class ReservationSelectRowMapperOne implements RowMapper<ReservationDTO> {
 
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("ReservationSelectRowMapperOne DB에서 가져온 데이터 ↓↓↓↓↓");
 		reservationDTO.setReservation_num(rs.getString("RESERVATION_NUM"));
-		System.err.println("reservation_num = ["+reservationDTO.getReservation_num()+"]");
+		log.info("reservation_num = ["+reservationDTO.getReservation_num()+"]");
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
-		System.err.println("reservation_date = ["+reservationDTO.getReservation_date()+"]");
+		log.info("reservation_date = ["+reservationDTO.getReservation_date()+"]");
 		reservationDTO.setReservation_gym_num(rs.getInt("RESERVATION_GYM_NUM"));
-		System.err.println("reservation_gym_num = ["+reservationDTO.getReservation_gym_num()+"]");
+		log.info("reservation_gym_num = ["+reservationDTO.getReservation_gym_num()+"]");
 		reservationDTO.setReservation_member_id(rs.getString("RESERVATION_MEMBER_ID"));
-		System.err.println("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
+		log.info("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
 		reservationDTO.setReservation_price(rs.getInt("RESERVATION_PRICE"));
-		System.err.print("reservation_price = ["+reservationDTO.getReservation_price()+"]");
-		System.out.println("}");
+		log.info("reservation_price = ["+reservationDTO.getReservation_price()+"]");
+		log.info("ReservationSelectRowMapperOne DB에서 가져온 데이터 ↑↑↑↑↑");
 		return reservationDTO;
 	};
 }
-
+@Slf4j
 class ReservationRowMapperAll implements RowMapper<ReservationDTO> {
 
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("ReservationRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		reservationDTO.setReservation_num(rs.getString("RESERVATION_NUM"));
-		System.err.println("reservation_num = ["+reservationDTO.getReservation_num()+"]");
+		log.info("reservation_num = ["+reservationDTO.getReservation_num()+"]");
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
-		System.err.println("reservation_date = ["+reservationDTO.getReservation_date()+"]");
+		log.info("reservation_date = ["+reservationDTO.getReservation_date()+"]");
 		reservationDTO.setReservation_gym_num(rs.getInt("RESERVATION_GYM_NUM"));
-		System.err.println("reservation_gym_num = ["+reservationDTO.getReservation_gym_num()+"]");
+		log.info("reservation_gym_num = ["+reservationDTO.getReservation_gym_num()+"]");
 		reservationDTO.setReservation_member_id(rs.getString("RESERVATION_MEMBER_ID"));
-		System.err.println("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
+		log.info("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
 		reservationDTO.setReservation_price(rs.getInt("RESERVATION_PRICE"));
-		System.err.println("reservation_price = ["+reservationDTO.getReservation_price()+"]");
+		log.info("reservation_price = ["+reservationDTO.getReservation_price()+"]");
 		reservationDTO.setReservation_gym_name(rs.getString("GYM_NAME"));
-		System.err.println("reservation_name = ["+reservationDTO.getReservation_gym_name()+"]");
-		System.out.println("}");
+		log.info("reservation_name = ["+reservationDTO.getReservation_gym_name()+"]");
+		log.info("ReservationRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return reservationDTO;
 	};
 }
-
+@Slf4j
 class ReservationAdminRowMapperAll implements RowMapper<ReservationDTO> {
 
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("ReservationAdminRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		reservationDTO.setReservation_member_id(rs.getString("RESERVATION_MEMBER_ID"));
-		System.err.println("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
+		log.info("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
 		reservationDTO.setReservation_gym_name(rs.getString("GYM_NAME"));
-		System.err.println("reservation_name = ["+reservationDTO.getReservation_gym_name()+"]");
+		log.info("reservation_gym_name = ["+reservationDTO.getReservation_gym_name()+"]");
 		reservationDTO.setReservation_price(rs.getInt("RESERVATION_PRICE"));
-		System.err.println("reservation_price = ["+reservationDTO.getReservation_price()+"]");
+		log.info("reservation_price = ["+reservationDTO.getReservation_price()+"]");
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
-		System.err.print("reservation_date = ["+reservationDTO.getReservation_date()+"]");
-		System.out.println("}");
+		log.info("reservation_date = ["+reservationDTO.getReservation_date()+"]");
+		log.info("ReservationAdminRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return reservationDTO;
 	};
 }

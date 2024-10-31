@@ -4,12 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 
+@Slf4j
 @Repository
 public class MemberDAO {
 	//아이디로 찾기 FIXME 관리자 권한 추가(char값 'T','F')
@@ -65,7 +67,16 @@ public class MemberDAO {
 			+ "WHERE MEMBER_ID = ?";
 
 	//관리자 권한 변경 MEMBER_ROLE, MEMBER_ID // TODO 회원 관리 페이지
-	private final String UPDATE_ADMIN = "UPDATE MEMBER SET MEMBER_ROLE = ? WHERE MEMBER_ID = ?";
+	private final String UPDATE_ADMIN = """
+	UPDATE MEMBER SET MEMBER_PASSWORD = ?, 
+                  MEMBER_NAME = ?,
+                  MEMBER_CURRENT_POINT = ?,
+                  MEMBER_LOCATION = ?,
+                  MEMBER_CREW_NUM = ?,
+                  MEMBER_PHONE = ?,
+                  MEMBER_ROLE = ?
+              WHERE MEMBER_ID = ?
+	""";
 
 	//관리자가 아닌 신규회원 출력 (기간 7일)
 	private final String ALL_NEW = "SELECT MEMBER_ID,MEMBER_PASSWORD,MEMBER_NAME,MEMBER_PHONE,MEMBER_PROFILE,MEMBER_REGISTRATION_DATE,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE,MEMBER_LOCATION,MEMBER_ROLE\n"
@@ -145,14 +156,14 @@ public class MemberDAO {
 
 	//월별 가입자 수 출력 // TODO 관리자 메인 페이지
 	private final String ALL_MONTH_COUNT_ADMIN = "SELECT\n"
-			+ "DATE_FORMAT(MEMBER_REGISTRATION_DATE, '%Y-%m') AS MEMBER_RESISTRATION_MONTH,\n"
+			+ "DATE_FORMAT(MEMBER_REGISTRATION_DATE, '%Y-%m') AS MEMBER_RESERVATION_MONTH,\n"
 			+ "    COUNT(*) AS MEMBER_TOTAL\n"
 			+ "FROM\n"
 			+ "    MEMBER\n"
 			+ "GROUP BY\n"
-			+ "    MEMBER_RESISTRATION_MONTH\n"
+			+ "    MEMBER_RESERVATION_MONTH\n"
 			+ "ORDER BY\n"
-			+ "    MEMBER_RESISTRATION_MONTH";
+			+ "    MEMBER_RESERVATION_MONTH";
 
 	// 회원 검색(페이지네이션) // TODO 회원 관리 페이지
 	private final String ALL_SEARCH_ADMIN = "SELECT MEMBER_ID, MEMBER_NAME, MEMBER_REGISTRATION_DATE\n" +
@@ -173,71 +184,69 @@ public class MemberDAO {
 			+ "ORDER BY MEMBER_ID\n"
 			+ "LIMIT ?,?";
 
+	//회원 검색 카운트 // TODO 관리자 메인 페이지
+	private final String ALL_SEARCH_ADMIN_COUNT = "SELECT COUNT(*) AS MEMBER_TOTAL\n"
+			+ "FROM MEMBER";
+
+	//회원 아이디로 검색 카운트 // TODO 관리자 메인 페이지
+	private final String ALL_SEARCH_ID_ADMIN_COUNT = "SELECT COUNT(*) AS MEMBER_TOTAL\n"
+			+ "FROM MEMBER\n"
+			+ "WHERE MEMBER_ID = ?";
+
+	//회원 가입날짜로 검색 카운트 // TODO 관리자 메인 페이지
+	private final String ALL_SEARCH_DATE_ADMIN_COUNT = "SELECT COUNT(*) AS MEMBER_TOTAL\n"
+			+ "FROM MEMBER\n"
+			+ "WHERE MEMBER_REGISTRATION_DATE LIKE CONCAT('%', ?, '%')";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
 	public boolean insert(MemberDTO memberDTO) {
 		//회원가입 MEMBER_ID ,MEMBER_NAME, MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION
 		int result = jdbcTemplate.update(INSERT, memberDTO.getMember_id(), memberDTO.getMember_name(), memberDTO.getMember_password(), memberDTO.getMember_phone(), memberDTO.getMember_location());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateAll(MemberDTO memberDTO) {
 		//회원정보 업데이트 MEMBER_PASSWORD, MEMBER_PROFILE, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_ALL, memberDTO.getMember_password(), memberDTO.getMember_profile(), memberDTO.getMember_phone(), memberDTO.getMember_location(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateWithoutProfile(MemberDTO memberDTO) {
 		//회원정보 업데이트 (profile X) MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_WITHOUT_PROFILE, memberDTO.getMember_password(), memberDTO.getMember_phone(), memberDTO.getMember_location(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateCrew(MemberDTO memberDTO) {
 		//크루가입 (크루가입시 가입날짜입력때문에 분리) MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_CREW, memberDTO.getMember_crew_num(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateAdmin(MemberDTO memberDTO) {
-		//관리자 권한 변경 MEMBER_ROLE, MEMBER_ID
-		int result = jdbcTemplate.update(UPDATE_ADMIN, memberDTO.getMember_role(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+		//관리자 권한 변경 MEMBER_NAME = ?,
+		//                  MEMBER_CURRENT_POINT = ?,
+		//                  MEMBER_LOCATION = ?,
+		//                  MEMBER_CREW_NUM = ?,
+		//                  MEMBER_PHONE = ?,
+		//                  MEMBER_ROLE = ?
+		int result = jdbcTemplate.update(UPDATE_ADMIN, memberDTO.getMember_password(), memberDTO.getMember_name(), memberDTO.getMember_current_point(), memberDTO.getMember_location(), memberDTO.getMember_crew_num(), memberDTO.getMember_phone(), memberDTO.getMember_role(), memberDTO.getMember_id());
+        return result > 0;
+    }
 
 	public boolean updateCurrentPoint(MemberDTO memberDTO) {
 		//사용자 포인트 업데이트 MEMBER_CURRENT_POINT, MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_CURRENT_POINT, memberDTO.getMember_current_point(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean delete(MemberDTO memberDTO) {
 		//회원탈퇴 MEMBER_ID
 		int result = jdbcTemplate.update(DELETE, memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public MemberDTO selectOneSearchId(MemberDTO memberDTO) {
 		MemberDTO data = null;
@@ -280,6 +289,41 @@ public class MemberDAO {
 		try {
 			//관리자를 제외한 사용자 전체 수 출력 // TODO 관리자 메인 페이지
 			data = jdbcTemplate.queryForObject(ONE_COUNT_ADMIN, new MemberSearchCountOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public MemberDTO selectOneSearchCountAdmin(MemberDTO memberDTO) {
+		MemberDTO data = null;
+		try {
+			//회원 검색 카운트 // TODO 관리자 메인 페이지
+			data = jdbcTemplate.queryForObject(ALL_SEARCH_ADMIN_COUNT, new MemberSearchCountOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public MemberDTO selectOneSearchIdCountAdmin(MemberDTO memberDTO) {
+		MemberDTO data = null;
+		Object[] args = {memberDTO.getSearch_content()};
+		try {
+			//회원 아이디로 검색 카운트 // TODO 관리자 메인 페이지
+			data = jdbcTemplate.queryForObject(ALL_SEARCH_ID_ADMIN_COUNT, args, new MemberSearchCountOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public MemberDTO selectOneSearchDateCountAdmin(MemberDTO memberDTO) {
+		MemberDTO data = null;
+		Object[] args = {memberDTO.getSearch_content()};
+		try {
+			//회원 가입날짜로 검색 카운트 // TODO 관리자 메인 페이지
+			data = jdbcTemplate.queryForObject(ALL_SEARCH_DATE_ADMIN_COUNT, args, new MemberSearchCountOne());
 		}
 		catch (Exception e) {
 		}
@@ -412,185 +456,186 @@ public class MemberDAO {
 		return datas;
 	}
 }
-
+@Slf4j
 class MemberSelectRowMapperOne implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO=new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberSelectRowMapperOne DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_id(rs.getString("MEMBER_ID"));
-		System.err.println("member_id = ["+memberDTO.getMember_id()+"]");
+		log.info("member_id = [{}]",memberDTO.getMember_id());
 		memberDTO.setMember_password(rs.getString("MEMBER_PASSWORD"));
-		System.err.println("member_password = ["+memberDTO.getMember_password()+"]");
+		log.info("member_password = [{}]",memberDTO.getMember_password());
 		memberDTO.setMember_name(rs.getString("MEMBER_NAME"));
-		System.err.println("member_name = ["+memberDTO.getMember_name()+"]");
+		log.info("member_name = [{}]",memberDTO.getMember_name());
 		memberDTO.setMember_phone(rs.getString("MEMBER_PHONE"));
-		System.err.println("member_phone = ["+memberDTO.getMember_phone()+"]");
+		log.info("member_phone = [{}]",memberDTO.getMember_phone());
 		memberDTO.setMember_profile(rs.getString("MEMBER_PROFILE"));
-		System.err.println("member_profile = ["+memberDTO.getMember_profile()+"]");
+		log.info("member_profile = [{}]",memberDTO.getMember_profile());
 		memberDTO.setMember_registration_date(rs.getString("MEMBER_REGISTRATION_DATE"));
-		System.err.println("member_registration_date = ["+memberDTO.getMember_registration_date()+"]");
+		log.info("member_registration_date = [{}]",memberDTO.getMember_registration_date());
 		memberDTO.setMember_current_point(rs.getInt("MEMBER_CURRENT_POINT"));
-		System.err.println("member_current_point = ["+memberDTO.getMember_current_point()+"]");
+		log.info("member_current_point = [{}]",memberDTO.getMember_current_point());
 		memberDTO.setMember_total_point(rs.getInt("MEMBER_TOTAL_POINT"));
-		System.err.println("member_total_point = ["+memberDTO.getMember_total_point()+"]");
+		log.info("member_total_point = [{}]",memberDTO.getMember_total_point());
 		memberDTO.setMember_crew_num(rs.getInt("MEMBER_CREW_NUM"));
-		System.err.println("member_crew_num = ["+memberDTO.getMember_crew_num()+"]");
+		log.info("member_crew_num = [{}]",memberDTO.getMember_crew_num());
 		memberDTO.setMember_crew_join_date(rs.getString("MEMBER_CREW_JOIN_DATE"));
-		System.err.println("member_crew_join_date = ["+memberDTO.getMember_crew_join_date()+"]");
+		log.info("member_crew_join_date = [{}]",memberDTO.getMember_crew_join_date());
 		memberDTO.setMember_location(rs.getString("MEMBER_LOCATION"));
-		System.err.println("member_location = ["+memberDTO.getMember_location()+"]");
+		log.info("member_location = [{}]",memberDTO.getMember_location());
 		memberDTO.setMember_role(rs.getString("MEMBER_ROLE"));
-		System.err.print("member_role = ["+memberDTO.getMember_role()+"]");
-		System.out.println("}");
+		log.info("member_role = [{}]",memberDTO.getMember_role());
+		log.info("MemberSelectRowMapperOne DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberSearchCrewMemberNameRowMapperAll implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO=new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberSearchCrewMemberNameRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_name(rs.getString("MEMBER_NAME"));
-		System.err.print("member_name = ["+memberDTO.getMember_name()+"]");
-		System.out.println("}");
+		log.info("member_name = [{}]",memberDTO.getMember_name());
+		log.info("MemberSearchCrewMemberNameRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberTop10RankRowMapperAll implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO=new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberTop10RankRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_name(rs.getString("MEMBER_NAME"));
-		System.err.println("member_name = ["+memberDTO.getMember_name()+"]");
+		log.info("member_name = [{}]",memberDTO.getMember_name());
 		memberDTO.setMember_profile(rs.getString("MEMBER_PROFILE"));
-		System.err.print("member_profile = ["+memberDTO.getMember_profile()+"]");
-		System.out.println("}");
+		log.info("member_profile = [{}]",memberDTO.getMember_profile());
+		log.info("MemberTop10RankRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberTop10CrewRankRowMapperAll implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO=new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberTop10CrewRankRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_crew_profile(rs.getString("CREW_PROFILE"));
-		System.err.println("member_crew_profile = ["+memberDTO.getMember_crew_profile()+"]");
+		log.info("member_crew_profile = [{}]",memberDTO.getMember_crew_profile());
 		memberDTO.setMember_crew_name(rs.getString("CREW_NAME"));
-		System.err.print("member_crew_name = ["+memberDTO.getMember_crew_name()+"]");
-		System.out.println("}");
+		log.info("member_crew_name = [{}]",memberDTO.getMember_crew_name());
+		log.info("MemberTop10CrewRankRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberCrewRankRowMapperAll implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO=new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberCrewRankRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_crew_num(rs.getInt("CREW_NUM"));
-		System.err.println("member_crew_num = ["+memberDTO.getMember_crew_num()+"]");
+		log.info("member_crew_num = [{}]",memberDTO.getMember_crew_num());
 		memberDTO.setMember_crew_name(rs.getString("CREW_NAME"));
-		System.err.println("member_crew_name = ["+memberDTO.getMember_crew_name()+"]");
+		log.info("member_crew_name = [{}]",memberDTO.getMember_crew_name());
 		memberDTO.setMember_crew_leader(rs.getString("CREW_LEADER"));
-		System.err.println("member_crew_leader = ["+memberDTO.getMember_crew_leader()+"]");
+		log.info("member_crew_leader = [{}]",memberDTO.getMember_crew_leader());
 		memberDTO.setMember_crew_current_size(rs.getInt("CREW_CURRENT_SIZE"));
-		System.err.println("member_crew_current_size = ["+memberDTO.getMember_crew_current_size()+"]");
+		log.info("member_crew_current_size = [{}]",memberDTO.getMember_crew_current_size());
 		memberDTO.setMember_total_point(rs.getInt("MEMBER_TOTAL_POINT"));
-		System.err.print("member_total_point = ["+memberDTO.getMember_total_point()+"]");
-		System.out.println("}");
+		log.info("member_total_point = [{}]",memberDTO.getMember_total_point());
+		log.info("MemberCrewRankRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberSelectRowMapperAll implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO=new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberSelectRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_id(rs.getString("MEMBER_ID"));
-		System.err.println("member_id = ["+memberDTO.getMember_id()+"]");
+		log.info("member_id = [{}]",memberDTO.getMember_id());
 		memberDTO.setMember_password(rs.getString("MEMBER_PASSWORD"));
-		System.err.println("member_password = ["+memberDTO.getMember_password()+"]");
+		log.info("member_password = [{}]",memberDTO.getMember_password());
 		memberDTO.setMember_name(rs.getString("MEMBER_NAME"));
-		System.err.println("member_name = ["+memberDTO.getMember_name()+"]");
+		log.info("member_name = [{}]",memberDTO.getMember_name());
 		memberDTO.setMember_phone(rs.getString("MEMBER_PHONE"));
-		System.err.println("member_phone = ["+memberDTO.getMember_phone()+"]");
+		log.info("member_phone = [{}]",memberDTO.getMember_phone());
 		memberDTO.setMember_profile(rs.getString("MEMBER_PROFILE"));
-		System.err.println("member_profile = ["+memberDTO.getMember_profile()+"]");
+		log.info("member_profile = [{}]",memberDTO.getMember_profile());
 		memberDTO.setMember_registration_date(rs.getString("MEMBER_REGISTRATION_DATE"));
-		System.err.println("member_registration_date = ["+memberDTO.getMember_registration_date()+"]");
+		log.info("member_registration_date = [{}]",memberDTO.getMember_registration_date());
 		memberDTO.setMember_current_point(rs.getInt("MEMBER_CURRENT_POINT"));
-		System.err.println("member_current_point = ["+memberDTO.getMember_current_point()+"]");
+		log.info("member_current_point = [{}]",memberDTO.getMember_current_point());
 		memberDTO.setMember_total_point(rs.getInt("MEMBER_TOTAL_POINT"));
-		System.err.println("member_total_point = ["+memberDTO.getMember_total_point()+"]");
+		log.info("member_total_point = [{}]",memberDTO.getMember_total_point());
 		memberDTO.setMember_crew_num(rs.getInt("MEMBER_CREW_NUM"));
-		System.err.println("member_crew_num = ["+memberDTO.getMember_crew_num()+"]");
+		log.info("member_crew_num = [{}]",memberDTO.getMember_crew_num());
 		memberDTO.setMember_crew_join_date(rs.getString("MEMBER_CREW_JOIN_DATE"));
-		System.err.println("member_crew_join_date = ["+memberDTO.getMember_crew_join_date()+"]");
+		log.info("member_crew_join_date = [{}]",memberDTO.getMember_crew_join_date());
 		memberDTO.setMember_location(rs.getString("MEMBER_LOCATION"));
-		System.err.println("member_location = ["+memberDTO.getMember_location()+"]");
+		log.info("member_location = [{}]",memberDTO.getMember_location());
 		memberDTO.setMember_role(rs.getString("MEMBER_ROLE"));
-		System.err.print("member_role = ["+memberDTO.getMember_role()+"]");
-		System.out.println("}");
+		log.info("member_role = [{}]",memberDTO.getMember_role());
+		log.info("MemberSelectRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberSearchCrewRowMapperOne implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO = new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberSearchCrewRowMapperOne DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_crew_num(rs.getInt("MEMBER_CREW_NUM"));
-		System.err.print("member_crew_num = [" + memberDTO.getMember_crew_num() + "]");
-		System.out.println("}");
+		log.info("member_crew_num = [{}]",memberDTO.getMember_crew_num());
+		log.info("MemberSearchCrewRowMapperOne DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberSearchCountOne implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO = new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberSearchCountOne DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setTotal(rs.getInt("MEMBER_TOTAL"));
-		System.err.print("member_total = [" + memberDTO.getTotal() + "]");
-		System.out.println("}");
+		log.info("total = [{}]",memberDTO.getTotal());
+		log.info("MemberSearchCountOne DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
 
+@Slf4j
 class MemberSelectAllMonthCountAdmin implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO = new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberSelectAllMonthCountAdmin DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_reservation_month(rs.getString("MEMBER_RESERVATION_MONTH"));
-		System.err.println("member_reservation_month = [" + memberDTO.getMember_reservation_month() + "]");
+		log.info("member_reservation_month = [{}]",memberDTO.getMember_reservation_month());
 		memberDTO.setTotal(rs.getInt("MEMBER_TOTAL"));
-		System.err.print("member_total = [" + memberDTO.getTotal() + "]");
-		System.out.println("}");
+		log.info("total = [{}]",memberDTO.getTotal());
+		log.info("MemberSelectAllMonthCountAdmin DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }
-
+@Slf4j
 class MemberSelectAllSearchAdmin implements RowMapper<MemberDTO> {
 
 	public MemberDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		MemberDTO memberDTO = new MemberDTO();
-		System.out.print("DB에서 가져온 데이터 {");
+		log.info("MemberSelectAllSearchAdmin DB에서 가져온 데이터 ↓↓↓↓↓");
 		memberDTO.setMember_id(rs.getString("MEMBER_ID"));
-		System.err.println("member_id = [" + memberDTO.getMember_id() + "]");
+		log.info("member_id = [{}]",memberDTO.getMember_id());
 		memberDTO.setMember_name(rs.getString("MEMBER_NAME"));
-		System.err.println("member_name = [" + memberDTO.getMember_name() + "]");
+		log.info("member_name = [{}]",memberDTO.getMember_name());
 		memberDTO.setMember_registration_date(rs.getString("MEMBER_REGISTRATION_DATE"));
-		System.err.print("member_registration_date = [" + memberDTO.getMember_registration_date() + "]");
-		System.out.println("}");
+		log.info("member_registration_date = [{}]",memberDTO.getMember_registration_date());
+		log.info("MemberSelectAllSearchAdmin DB에서 가져온 데이터 ↑↑↑↑↑");
 		return memberDTO;
 	};
 }

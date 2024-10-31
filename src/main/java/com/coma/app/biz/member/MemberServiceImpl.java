@@ -60,6 +60,11 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public List<MemberDTO> selectAllSearchIdAdmin(MemberDTO memberDTO) {
+		String content = memberDTO.getSearch_content();
+		if (content == null) {
+			return null;
+		}
+
 		return this.memberDAO.selectAllSearchIdAdmin(memberDTO);
 	}
 
@@ -86,6 +91,21 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberDTO selectOneCountAdmin(MemberDTO memberDTO) {
 		return this.memberDAO.selectOneCountAdmin(memberDTO);
+	}
+
+	@Override
+	public MemberDTO selectOneSearchCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectOneSearchCountAdmin(memberDTO);
+	}
+
+	@Override
+	public MemberDTO selectOneSearchIdCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectOneSearchIdCountAdmin(memberDTO);
+	}
+
+	@Override
+	public MemberDTO selectOneSearchDateCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectOneSearchDateCountAdmin(memberDTO);
 	}
 
 	@Override

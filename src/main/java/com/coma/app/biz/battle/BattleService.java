@@ -10,10 +10,12 @@ public interface BattleService {
 	List<BattleDTO> selectAllBattle(BattleDTO battleDTO);
 	List<BattleDTO> selectAllWinBattle(BattleDTO battleDTO);
 	List<BattleDTO> selectAllCrewMemberName(BattleDTO battleDTO);
+	List<BattleDTO> selectAdminAll5Active(BattleDTO battleDTO);
 	BattleDTO selectOneSearchMemberBattle(BattleDTO battleDTO);
 	BattleDTO selectOneSearchBattle(BattleDTO battleDTO);
 	BattleDTO selectOneCountActive(BattleDTO battleDTO);
 	BattleDTO selectOneCountActiveBattle(BattleDTO battleDTO);
+
 	boolean insert(BattleDTO battleDTO);
 	boolean InsertBattleModal(BattleDTO battleDTO);
 	boolean update(BattleDTO battleDTO);
