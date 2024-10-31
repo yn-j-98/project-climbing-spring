@@ -275,12 +275,15 @@
 	        $.ajax({
 	            type: "POST", 
 	            url: "checkId.do", // 서버에서 이메일 중복 검사를 처리하는 URL
-	            data: { // POST로 보낼때에는 data로 보낸다~!
-	                member_id: idCheck
-	            },
-	            dataType: "text",
+				headers: {'Content-Type' : 'application/json'},
+	            data:  JSON.stringify({member_id: idCheck}) ,
+
+	            dataType: "json",
 	            success: function(data) { // 데이터 받는데 성공한 함수
-	                if (data == 'true') { // data가 true 값이라면
+					console.log('data= ['+typeof data+']');
+					console.log('data= ['+data+']');
+					console.log('data= ['+(typeof "true") +']');
+	                if (data === "true") { // data가 true 값이라면
 	                    idField.classList.remove('input-error'); // input창 색깔 빨강 지우고 
 	                    idField.classList.add('input-success'); // input창 색깔 초록 추가해
 	                    errorId.style = "display: block;"; // 그리고 small태그 나타나게해줘 
