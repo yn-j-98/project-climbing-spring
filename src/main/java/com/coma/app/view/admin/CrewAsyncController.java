@@ -31,7 +31,8 @@ public class CrewAsyncController {
     @PostMapping("/crewName.do")
     public @ResponseBody List<Battle_recordDTO> crewName(@RequestBody Battle_recordDTO battle_recordDTO) {
 
-        List<Battle_recordDTO> battle_record_datas = battle_recordService.selectAllWinner(battle_recordDTO);
+        log.info("crewName.battle_recordDTO = {}",battle_recordDTO);
+        List<Battle_recordDTO> battle_record_datas = battle_recordService.selectAllParticipantCrew(battle_recordDTO);
         log.info("battle_record_datas = {}",battle_record_datas);
 
         return battle_record_datas;
@@ -40,6 +41,7 @@ public class CrewAsyncController {
     @PostMapping("/mvpMember.do")
     public @ResponseBody String mvpMember(@RequestBody CrewDTO crewDTO) throws JsonProcessingException {
 
+        log.info("mvpMember.crewDTO = {}",crewDTO);
         //크루 이름으로 크루를 찾고
         //크루pk로 크루원들 전부 출력
        List<MemberDTO> datas = crewManagementService.mvpMember(crewDTO);
