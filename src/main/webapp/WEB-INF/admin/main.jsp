@@ -198,7 +198,7 @@
   //예약자 데이터 제목
   const registration_Chart_Data_title = registration_Chart_Data.map(registration => registration.reservation_month);
   //예약자 데이터 내용
-  const registration_Chart_Data_text = registration_Chart_Data.map(total => total.reservation_count);
+  const registration_Chart_Data_text = registration_Chart_Data.map(total => total.total);
   //----------------------------
   //----------------------------
   //암벽장 chart 데이터

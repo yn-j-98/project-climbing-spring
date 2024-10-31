@@ -22,9 +22,6 @@ import java.util.List;
 @Controller
 public class CrewBattleController {
     @Autowired
-    private ServletContext servletContext;
-
-    @Autowired
     private Battle_recordService battle_recordService;
 
     @Autowired
@@ -137,25 +134,13 @@ public class CrewBattleController {
         //내 크루가 참여신청한 크루전 출력
         battleDTO.setBattle_crew_num(crew_num);
         BattleDTO my_battle = this.battleService.selectOneSearchMemberBattle(battleDTO);
-
-        if (my_battle != null) {
-            //이미지 파일명 url로 정제
-            battleDTO.setBattle_gym_profile(makeURL(my_battle));
-            log.info("이미지 = [{}]", battleDTO.getBattle_gym_profile());
-        }
+        log.info("이미지 = [{}]", battleDTO.getBattle_gym_profile());
         model.addAttribute("my_battle", battleDTO);//내크루전 정보
 
         //전체 크루전 목록 출력 + 페이지네이션
         battleDTO.setBattle_min_num(minBoard);
         List<BattleDTO> battle_datas = this.battleService.selectAllActive(battleDTO);
 
-        //전체목록의 이미지 파일명 url로 정제
-        if (battle_datas != null) {
-            for (BattleDTO data : battle_datas) {
-                log.info("이미지 = [{}]", data.getBattle_gym_profile());
-                data.setBattle_gym_profile(makeURL(data));
-            }
-        }
         model.addAttribute("battle_datas", battle_datas);//활성화 되어있는 크루전 전체목록
 
         //활성화되어있는 크루전 총 개수 출력
@@ -165,18 +150,5 @@ public class CrewBattleController {
 
         return "views/crewBattleMain";
     }
-
-    //암벽장 이미지 파일명으로 url 생성
-    private String makeURL(BattleDTO battleDTO) {
-        String filename = "";
-
-        if (battleDTO.getBattle_gym_profile() == null) {
-            filename = "default.jpg"; // 기본 이미지
-        } else {
-            filename = battleDTO.getBattle_gym_profile(); // 암벽장 이미지 받아옴
-        }
-        return servletContext.getContextPath() + "/img/" + filename;
-    }
-
 
 }

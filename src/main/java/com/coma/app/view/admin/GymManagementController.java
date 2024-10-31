@@ -3,17 +3,14 @@ package com.coma.app.view.admin;
 import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.gym.GymService;
 import com.coma.app.view.annotation.LoginCheck;
-import jakarta.servlet.ServletContext;
+import com.coma.app.view.asycnServlet.FTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,8 +25,7 @@ public class GymManagementController {
     private GymService gymService;
 
     @Autowired
-    private ServletContext servletContext;
-
+    private FTPService ftpService;
 
     @LoginCheck
     @GetMapping("/gymManagement.do")
@@ -106,12 +102,9 @@ public class GymManagementController {
     암벽장 소개
     암벽장 사진 (파일 업로드)
     */
-        String uploadPath = servletContext.getRealPath("/gym_img/");
         MultipartFile file = gymDTO.getGym_file();
-        String fileName = file.getOriginalFilename();
+        String fileName = ftpService.ftpFileUpload(file,"gym_img");
         log.info("파일명 : [{}]",fileName);
-
-        file.transferTo(new File(uploadPath + fileName));
 
         gymDTO.setGym_profile(fileName);
         log.info("프로필 이미지 저장 로그 : [{}]", gymDTO);

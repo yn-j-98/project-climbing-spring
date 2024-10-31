@@ -71,14 +71,6 @@ public class MainPageController{
         List<MemberDTO> crew_rank_datas = memberService.selectAllTop10CrewRank(memberDTO);
         //model_crew_rank_datas에 담아서 보내주기
 
-        //model_member_rank_datas에 담아서 보내기
-        for(MemberDTO data : crew_rank_datas) {
-            String contextPath = request.getServletContext().getContextPath();
-
-            String profilePath = contextPath + "/profile_img/" + data.getMember_crew_profile();
-            data.setMember_crew_profile(profilePath);
-        }
-
         //    request.setAttribute("model_crew_rank_datas", model_crew_rank_datas);
         model.addAttribute("crew_rank_datas",crew_rank_datas);
 
@@ -89,12 +81,6 @@ public class MainPageController{
 
         List<MemberDTO> member_rank_datas = memberService.selectAllTop10Rank(memberDTO);
 
-        for (MemberDTO data : member_rank_datas) {
-            String profileFileName = data.getMember_profile();
-            String contextPath = request.getServletContext().getContextPath();
-            String profilePath = contextPath + "/profile_img/" + profileFileName;
-            data.setMember_profile(profilePath);
-        }
         //    request.setAttribute("model_member_rank_datas", model_member_rank_datas);
         model.addAttribute("member_rank_datas",member_rank_datas);
 
