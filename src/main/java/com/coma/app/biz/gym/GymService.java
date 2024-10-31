@@ -8,9 +8,12 @@ public interface GymService {
 	List<GymDTO> selectAllLocationCountAdmin(GymDTO gymDTO);
 	List<GymDTO> selectAllAdmin(GymDTO gymDTO);
 	List<GymDTO> selectAllAdminVerified(GymDTO gymDTO);
+	List<GymDTO> selectAllAdminSearch(GymDTO gymDTO);
 
 	GymDTO selectOne(GymDTO gymDTO);
 	GymDTO selectOneCount(GymDTO gymDTO);
+	GymDTO selectOneAdminVerifiedCount(GymDTO gymDTO);
+	GymDTO selectOneAdminSearchCount(GymDTO gymDTO);
 
 	boolean insert(GymDTO gymDTO);
 	boolean insertAdmin(GymDTO gymDTO);

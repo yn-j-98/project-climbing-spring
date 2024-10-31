@@ -100,7 +100,39 @@ public class GymDAO {
 			"    GYM_NUM DESC\n" +
 			"LIMIT ?, ?";
 
-	//
+	// 전체 암벽장 중 이름 검색 // TODO 암벽장 관리 페이지
+	private final String ALL_ADMIN_SEARCH = "SELECT \n" +
+			"    GYM_NUM,\n" +
+			"    GYM_PROFILE,\n" +
+			"    GYM_NAME,\n" +
+			"    GYM_LOCATION,\n" +
+			"    GYM_PRICE,\n" +
+			"    GYM_DESCRIPTION,\n" +
+			"    GYM_ADMIN_BATTLE_VERIFIED\n" +
+			"FROM \n" +
+			"    gym\n" +
+			"WHERE \n" +
+			"    GYM_NAME LIKE CONCAT('%', ?, '%')\n" +
+			"ORDER BY \n" +
+			"    GYM_NUM DESC\n" +
+			"LIMIT ?, ?";
+
+	//승인,비승인된 암벽장 중 이름 검색 카운트 // TODO 암벽장 관리 페이지
+	private final String ALL_ADMIN_VERIFIED_COUNT = "SELECT \n" +
+			"    COUNT(*) AS GYM_COUNT \n" +
+			"FROM \n" +
+			"    gym\n" +
+			"WHERE \n" +
+			"    GYM_ADMIN_BATTLE_VERIFIED = ?\n" +
+			"    AND GYM_NAME LIKE CONCAT('%', ?, '%')";
+
+	// 전체 암벽장 중 이름 검색 카운트 // TODO 암벽장 관리 페이지
+	private final String ALL_ADMIN_SEARCH_COUNT = "SELECT \n" +
+			"    COUNT(*) AS GYM_COUNT \n" +
+			"FROM \n" +
+			"    gym\n" +
+			"WHERE \n" +
+			"    GYM_NAME LIKE CONCAT('%', ?, '%')";
 
 	//암벽장 추가 GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE // TODO 암벽장 관리 페이지
 	private final String INSERT_ADMIN = "INSERT INTO GYM (GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE)\n"
@@ -172,6 +204,30 @@ public class GymDAO {
 		return data;
 	}
 
+	public GymDTO selectOneAdminVerifiedCount(GymDTO gymDTO) {
+		GymDTO data=null;
+		Object[] args= {gymDTO.getGym_admin_battle_verified(),gymDTO.getSearch_content()};
+		try {
+			//승인,비승인된 암벽장 중 이름 검색 카운트 // TODO 암벽장 관리 페이지
+			data= jdbcTemplate.queryForObject(ALL_ADMIN_VERIFIED_COUNT, args, new GymCountRowMapper());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public GymDTO selectOneAdminSearchCount(GymDTO gymDTO) {
+		GymDTO data=null;
+		Object[] args= {gymDTO.getSearch_content()};
+		try {
+			//전체 암벽장 중 이름 검색 카운트 // TODO 암벽장 관리 페이지
+			data= jdbcTemplate.queryForObject(ALL_ADMIN_SEARCH_COUNT, args, new GymCountRowMapper());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
 	public List<GymDTO> selectAll(GymDTO gymDTO){
 
 		Object[] args= {gymDTO.getGym_min_num(),6};
@@ -202,6 +258,14 @@ public class GymDAO {
 		// 승인,비승인된 암벽장 중 이름 검색 // TODO 암벽장 관리 페이지
 		List<GymDTO> datas=null;
 		datas=jdbcTemplate.query(ALL_ADMIN_VERIFIED,args,new GymAdminMapperAll());
+		return datas;
+	}
+
+	public List<GymDTO> selectAllAdminSearch(GymDTO gymDTO){
+		Object[] args= {gymDTO.getSearch_content(),gymDTO.getGym_min_num(),10};
+		// 전체 암벽장 중 이름 검색 // TODO 암벽장 관리 페이지
+		List<GymDTO> datas=null;
+		datas=jdbcTemplate.query(ALL_ADMIN_SEARCH,args,new GymAdminMapperAll());
 		return datas;
 	}
 }
