@@ -5,7 +5,7 @@
 <!-- FIXME 네비게이션바 코드 시작 -->
 <div class="sidebar col-md-2 p-4 position-fixed z-3">
 	<div class="main-header-logo text-center">
-		<a href="adminMain.do"><img src="images/logo.png" alt="Main.jsp"></a>
+		<a href="mainManagement.do"><img src="images/logo.png" alt="Main.jsp"></a>
 	</div>
 	<div class="container text-center h-75">
 		<div class="sidebar-wrapper position-relative" data-background-color="wheat" style="position: relative;">

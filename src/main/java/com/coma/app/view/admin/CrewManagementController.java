@@ -6,6 +6,7 @@ import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
 import com.coma.app.biz.crew.CrewService;
+import com.coma.app.biz.member.MemberDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,24 +82,19 @@ public class CrewManagementController {
 
 
     // 크루전 관리
-    @PostMapping("/crewBattleManagement.do")
-    public String crewBattleManagement(Model model) {
-		/*
-		selectbox
-			크루전 번호, 암벽장 이름, 크루전 진행 날짜
+    @PostMapping("/crewManagement.do")
+    public String crewManagementMvp(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO) {
 
+        //MVP 크루이름을 전달해 크루 번호를 받아옵니다.
+        List<MemberDTO> mvp_datas = crewManagementService.mvpMember(crewDTO);
 
-		크루전 번호
-		암벽장 이름
-		크루전 진행 날짜
-		크루전 생성일
-		상태 ( t/f )
-		↑ SELECTALL
+        //승리 크루를 받아옵니다.
+        crewDTO.setCrew_name(battle_recordDTO.getBattle_record_crew_name());
+        //승리 크루 이름을 보내 크루 번호를 받아옵니다.
+        List<MemberDTO> winner_datas = crewManagementService.mvpMember(crewDTO);
 
+        int
 
-		 */
-
-        // 크루 정보 등록 필요 nullcheck (t/f)
 
 
         return null;

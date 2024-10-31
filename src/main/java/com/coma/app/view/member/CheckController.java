@@ -2,6 +2,7 @@ package com.coma.app.view.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,7 @@ public class CheckController {
 	private MemberService memberService;
 	
 	@PostMapping("/checkId.do")
-	public @ResponseBody String checkId(MemberDTO memberDTO) {
+	public @ResponseBody String checkId(@RequestBody MemberDTO memberDTO) {
 		System.out.println("CheckController checkId 비동기 처리 로그");
 		
 		//model 에 사용자 ID를 넘겨 값이 있는 지 확인 후
