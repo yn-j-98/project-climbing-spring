@@ -145,7 +145,7 @@
             <div class="row">
               <label for="winner-crew" class="col-sm-2 col-form-label">승리크루</label>
               <div class="col-sm-10">
-                <select class="form-select" id="winner-crew" name="battle_record_crew_name">
+                <select class="form-select" id="winner-crew" name="crew_name">
                   <option>승리크루</option>
                   <!-- 비동기로 데이터를 받을 예정 -->
                 </select>
@@ -156,7 +156,7 @@
               <div class="col-sm-10" id="mvp-div">
                 <div class="row">
                   <div class="col-md-6">
-                    <select class="form-select" id="mvp-crew" name="crew_name">
+                    <select class="form-select" id="mvp-crew">
                       <option>MVP CREW</option>
                       <!-- 비동기로 데이터를 받을 예정 -->
                     </select>
@@ -226,7 +226,7 @@
         const gym_name_text = gym_name.text();
         //크루전 번호
         battle_num_text = battle_num.text();
-
+        $('#battle_num').val(battle_num_text);
         //암벽장 이름
         console.log('암벽장 이름 : '+gym_name_text);
         //크루전 번호
