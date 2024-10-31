@@ -87,6 +87,7 @@ public class LoginController {
         if (auto != null) { // 자동 로그인 체크되어있다면
             Cookie member_id_cookie = new Cookie("MEMBER_ID", memberDTO.getMember_id());
             Cookie member_crew_cookie = new Cookie("CREW_CHECK", String.valueOf(memberDTO.getMember_crew_num()));
+            Cookie member_role_cookie = new Cookie("MEMBER_ROLE", memberDTO.getMember_role());
 
             member_id_cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효 시간 설정 (7일)
             member_crew_cookie.setMaxAge(60 * 60 * 24 * 7);
