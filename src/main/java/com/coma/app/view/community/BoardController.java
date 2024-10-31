@@ -9,6 +9,7 @@ import com.coma.app.biz.reply.ReplyService;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 public class BoardController {
     @Autowired
@@ -205,7 +207,9 @@ public class BoardController {
     @GetMapping("/content.do")
     public String content(Model model, BoardDTO boardDTO, ReplyDTO replyDTO, MemberDTO memberDTO) {
 
-//        boardDTO.setboard_condition("BOARD_ONE"); // 글 selectOne 컨디션
+        log.info("content.board_num :{[]}", boardDTO.getBoard_num());
+
+//      boardDTO.setboard_condition("BOARD_ONE"); // 글 selectOne 컨디션
         boardDTO = this.boardService.selectOne(boardDTO); // pk로 글 selectOne
 
         System.out.println("게시글 정보 조회: " + boardDTO);

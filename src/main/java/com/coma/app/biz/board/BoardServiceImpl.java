@@ -39,6 +39,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<BoardDTO> selectAllSearchBoard(BoardDTO boardDTO) {return this.boardDAO.selectAllSearchBoard(boardDTO);}
 
+
+
+	@Override
+	public List<BoardDTO> selectAllSearchTitleAll(BoardDTO boardDTO) {return this.boardDAO.selectAllSearchTitleAll(boardDTO);
+	}
 	@Override
 	public BoardDTO selectOne(BoardDTO boardDTO) {return this.boardDAO.selectOne(boardDTO);}
 
@@ -64,6 +69,11 @@ public class BoardServiceImpl implements BoardService{
 	public BoardDTO selectOneSearchNameCount(BoardDTO boardDTO) {return this.boardDAO.selectOneSearchNameCount(boardDTO);}
 
 	@Override
+	public BoardDTO selectOneSearchTitleCountAll(BoardDTO boardDTO) {
+		return this.boardDAO.selectOneSearchTitleCountAll(boardDTO);
+	}
+
+	@Override
 	public BoardDTO selectOneBoardTotal(BoardDTO boardDTO) {return this.boardDAO.selectOneBoardTotal(boardDTO);}
 
 	@Override
@@ -78,6 +88,8 @@ public class BoardServiceImpl implements BoardService{
 	public boolean updateCnt(BoardDTO boardDTO) {
 		return this.boardDAO.updateCnt(boardDTO);
 	}
+
+
 
 	@Override
 	public boolean delete(BoardDTO boardDTO) {

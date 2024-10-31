@@ -56,7 +56,7 @@ figure.image_resized img {
 			</div>
 			<div class="row border-top border-dark py-3">
 				<form action="reply.do" method="POST">
-					<input type="hidden" name="board_id" value="${BOARD.board_num}" />
+					<input type="hidden" name="reply_board_num" value="${BOARD.board_num}" />
 					<div class="row">
 						<div class="col-11">
 							<div class="form-group">
