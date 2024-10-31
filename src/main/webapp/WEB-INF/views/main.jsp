@@ -66,6 +66,8 @@
 .menu-box{
 	width:120px;
 	height:120px;
+	overflow:hidden;
+	box-shadow: 1px 4px 5px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width:768px){
@@ -102,8 +104,7 @@
 			<div class="row py-5">
 				<div
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
-					<div
-						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
+					<div class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
 						<a href="store.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary">
