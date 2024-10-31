@@ -52,7 +52,6 @@ public class UserManagementController {
             if (search_keyword.equals("MEMBERID")) {
                 log.info("memberDTO [{}]",memberDTO);
                 datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
-
 //            // TODO 삭제해야되는가?
 //        } else if (search_keyword.equals("member_name")) {
 //            search_datas = this.memberService.selectAllSearchNameAdmin(memberDTO);
@@ -73,24 +72,6 @@ public class UserManagementController {
         model.addAttribute("size", size);
 
         return "admin/userManagement";
-    }
-
-
-    // 회원 관리 리스트
-    @PostMapping("/userManagement.do")
-    public String userManagementList(Model model, MemberDTO memberDTO) {
-        //		회원 탈퇴 MEMBER DELETE
-        boolean flag = this.memberService.delete(memberDTO);
-        model.addAttribute("title","회원 탈퇴");
-        if(flag){
-            model.addAttribute("msg", "회원 탈퇴 처리 성공!");
-        }
-        else {
-            model.addAttribute("msg", "회원 탈퇴 처리 실패 ..");
-        }
-        model.addAttribute("path", "userManagement.do");
-
-        return "views/info";
     }
 
     @GetMapping("/userManagementDetail.do")

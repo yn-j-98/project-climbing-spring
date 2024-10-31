@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="assets/css/kaiadmin.css"/>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <!--페이지네이션 외부 스크립트-->
-    <script src="js/pagenation.js"></script>
+    <script src="js/pagination.js"></script>
     <!-- sweetAlert JS FILE -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
@@ -79,7 +79,7 @@
     </style>
 </head>
 <body>
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 <div class="main-panel flex-grow-1 p-4">
     <div class="nav-toggle position-absolute top-0 start-0">
         <button class="sidenav-toggler btn btn-icon btn-round btn-white h-100 w-25">
@@ -131,11 +131,11 @@
                             <div class="row g-0 d-flex flex-column">
                                 <div class="col mt-2">
                                     <img src="${gym.gym_profile}" class="card-img figure-img img-fluid rounded"
-                                         alt="${gym.gym_title} 사진">
+                                         alt="${gym.gym_name} 사진">
                                 </div>
                                 <div class="col">
                                     <div class="card-body">
-                                        <h5 class="card-title border-bottom border-dark-subtle">${gym.gym_title}</h5>
+                                        <h5 class="card-title border-bottom border-dark-subtle">${gym.gym_name}</h5>
                                         <div class="mt-3">
                                             <p class="card-text">
                                                 <strong>암벽장 위치:</strong> ${gym.gym_location}
@@ -225,7 +225,7 @@
                         <div class="row mb-2 align-items-center">
                             <label for="gymDescription" class="form-label col-sm-3">암벽장 소개</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" id="gymDescription" rows="3"
+                                <textarea class="form-control" id="gymDescription" name="gym_description" rows="3"
                                           placeholder="암벽장 소개 입력"></textarea>
                             </div>
                         </div>
@@ -269,8 +269,10 @@
         );
 
         // .hoverDiv 요소 클릭 시 이벤트 처리
-        $(".hoverDiv").click(function () {
-            handleHoverDivClick($(this));
+        $(".hoverDiv").each(function () {
+            $(this).click(function () {
+                handleHoverDivClick($(this));
+            });
         });
 
         // 모달창 암벽장 등록 로그
@@ -295,12 +297,13 @@
 
     // .hoverDiv 요소 클릭 시 호출되는 함수
     function handleHoverDivClick(element) {
-        var gymNum = element.data("gymNum"); // gym 번호 가져오기
-        var gymBattleStatus = element.data("gymAdminBattleVerified"); // gym 크루전 상태 가져오기
-
+        var gymNum = element.data("gym-num"); // gym 번호 가져오기
+        var gymBattleStatus = element.data("gym-battle-status"); // gym 크루전 상태 가져오기
+        console.log("gymNum = [" + gymNum + "]");
+        console.log("gymBattleStatus = [" + gymBattleStatus + "]");
         // 크루전 상태에 따라 알림 창 띄우기 및 승인 여부 확인
         if (gymBattleStatus !== undefined && gymBattleStatus !== "") {
-            if (gymBattleStatus === "T") {
+            if (gymBattleStatus === "F") {
                 sweetAlert_confirm_info('크루전 개최를 승인하지 않은 암벽장입니다', '크루전을 승인하시겠습니까?', '승인', '취소')
                     .then(function (battleInsert) {
                         if (battleInsert) {
@@ -311,6 +314,7 @@
                                 style: 'display: none;'
                             });
                             form.append($('<input/>', {type: 'hidden', name: 'gym_num', value: gymNum}));
+                            $('body').append(form);
                             form.submit();
                         }
                     });

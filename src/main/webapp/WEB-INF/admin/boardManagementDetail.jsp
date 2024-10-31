@@ -29,8 +29,13 @@
 <body>
 <mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 <!-- container start -->
+<div class="main-panel flex-grow-1 p-4">
+    <div class="nav-toggle position-absolute top-0 start-0">
+        <button class="sidenav-toggler btn btn-icon btn-round btn-white h-100 w-25">
+            <i class="fa fa-align-left"></i>
+        </button>
+    </div>
 <div class="container">
-    <div class="page-inner">
         <div class="row py-3">
             <div class="col-12">
                 <h1 class="text-center">${board_title}</h1>
@@ -90,7 +95,8 @@
         </c:when>
         </c:choose>
         </c:forEach>
-
+    </div>
+</div>
         <!--   Core JS Files   -->
         <script src="assets/js/core/jquery-3.7.1.min.js"></script>
         <script src="assets/js/core/popper.min.js"></script>

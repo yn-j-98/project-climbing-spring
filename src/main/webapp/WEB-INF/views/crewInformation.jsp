@@ -60,7 +60,7 @@
 						<p class="mb-0">크루장 : ${CREW.crew_leader}</p>
 					</div>
 					<div class="col-md-5 d-flex align-items-center justify-content-end">
-						<p class="mb-0">크루 인원 : ${CREW.crew_current_member_size}</p>
+						<p class="mb-0">현재 크루 인원 : ${CREW.crew_current_member_size}</p>
 					</div>
 				</div>
 				<div class="row border-bottom border-dark pb-3"></div>
