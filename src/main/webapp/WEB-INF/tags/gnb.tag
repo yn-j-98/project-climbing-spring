@@ -2,6 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ attribute name="member_id" %>
 
+<style>
+	.navbar .navbar-nav .nav-item .nav-link{
+		color: #212223 !important;
+		padding: 8px 30px !important;
+		font-size: 16px !important;
+	}
+</style>
 
 <div class="offcanvas-lg offcanvas-start d-lg-none" tabindex="-1"
 	 id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
@@ -62,6 +69,8 @@
 				<a class="navbar-brand" href="main.do">
 					<img src="./images/logo.png" alt="navbar brand" class="navbar-brand" height="80" />
 				</a>
+			</nav>
+			<nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
 				<ul class="navbar-nav">
 					<li class="nav-item"><a class="nav-link" href="store.do">상점</a></li>
 					<li class="nav-item"><a class="nav-link" href="gymMain.do">암벽장</a></li>
@@ -70,7 +79,7 @@
 					<li class="nav-item"><a class="nav-link" href="community.do">커뮤니티</a></li>
 				</ul>
 			</nav>
-			<ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+			<ul class="navbar-nav topbar-nav align-items-center">
 				<c:if test="${empty member_id}">
 					<li class="nav-item">
 						<a class="nav-link" href="login.do"> login </a>
