@@ -9,6 +9,7 @@ public interface ReplyService {
 
 	boolean insert(ReplyDTO replyDTO);
 
+
 	boolean update(ReplyDTO replyDTO);
 
 	boolean delete(ReplyDTO replyDTO);

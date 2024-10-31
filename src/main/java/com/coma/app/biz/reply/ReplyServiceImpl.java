@@ -23,6 +23,9 @@ public class ReplyServiceImpl implements ReplyService{
 
 	@Override
 	public boolean insert(ReplyDTO replyDTO) {
+		if(replyDTO.getReply_writer_id() == null) {
+			return false;
+		}
 		return this.replyDAO.insert(replyDTO);
 	}
 

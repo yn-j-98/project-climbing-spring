@@ -11,6 +11,9 @@ public interface BoardService {
 	List<BoardDTO> selectAllRowNum(BoardDTO boardDTO);
 	List<BoardDTO> selectAllRecentBoard5(BoardDTO boardDTO);
 	List<BoardDTO> selectAllSearchBoard(BoardDTO boardDTO);
+	BoardDTO selectOneSearchTitleCountAll(BoardDTO boardDTO);
+
+	List<BoardDTO> selectAllSearchTitleAll(BoardDTO boardDTO);
 	BoardDTO selectOne(BoardDTO boardDTO);
 	BoardDTO selectOneWriterId(BoardDTO boardDTO);
 	BoardDTO selectOneCount(BoardDTO boardDTO);
