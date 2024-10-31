@@ -41,6 +41,7 @@ public class BattleDAO {
 			"    C.CREW_NAME AS BATTLE_CREW_NAME,\n" +
 			"    C.CREW_CURRENT_MEMBER_SIZE AS BATTLE_CREW_NUM,\n"+
 			"    C.CREW_LEADER AS BATTLE_MEMBER_NAME,\n" +
+			" (SELECT COUNT(*) OVER )" +
 			"FROM\n" +
 			"    BATTLE B\n" +
 			"JOIN\n" +
@@ -49,6 +50,8 @@ public class BattleDAO {
 			"    BATTLE_RECORD BR ON B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\n" +
 			"JOIN\n" +
 			"    CREW C ON C.CREW_NUM = BR.BATTLE_RECORD_CREW_NUM\n" +
+			"JOIN \n"+
+			"    MEMBER M ON M.MEMBER_CREW_NUM = C.CREW_NUM\n" +
 			"WHERE\n" +
 			"    B.BATTLE_NUM = ?";
 

@@ -114,9 +114,9 @@
 						</a>
 					</div>
 					<a href="store.do" class="mt-2">
-						<h4 class="text-center text-primary">
+						<h5 class="text-center text-black-50">
 							암벽화 상점
-						</h4>
+						</h5>
 					</a>
 				</div>
 				<div
@@ -132,9 +132,9 @@
 						</a>
 					</div>
 					<a href="gymMain.do" class="mt-2">
-						<h4 class="text-center text-primary">
+						<h5 class="text-center text-black-50">
 							암벽장 투어
-						</h4>
+						</h5>
 					</a>
 				</div>
 				<div
@@ -150,9 +150,9 @@
 						</a>
 					</div>
 					<a href="crewList.do" class="mt-2">
-						<h4 class="text-center text-primary">
+						<h5 class="text-center text-black-50">
 							크루 가입
-						</h4>
+						</h5>
 					</a>
 				</div>
 				<div
@@ -168,9 +168,9 @@
 						</a>
 					</div>
 					<a href="location.do" class="mt-2">
-						<h4 class="text-center text-primary">
+						<h5 class="text-center text-black-50">
 							지역별 커뮤니티
-						</h4>
+						</h5>
 					</a>
 				</div>
 				<div
@@ -186,9 +186,9 @@
 						</a>
 					</div>
 					<a href="crewBattle.do" class="mt-2">
-						<h4 class="text-center text-primary">
+						<h5 class="text-center text-black-50">
 							개인 크루전
-						</h4>
+						</h5>
 					</a>
 				</div>
 				<div
@@ -204,9 +204,9 @@
 						</a>
 					</div>
 					<a href="personalRank.do" class="mt-2">
-						<h4 class="text-center text-primary">
+						<h5 class="text-center text-black-50">
 							전체 랭킹
-						</h4>
+						</h5>
 					</a>
 				</div>
 			</div>
