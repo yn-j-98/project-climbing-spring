@@ -83,25 +83,34 @@ public class CrewManagementController {
 
     // 크루전 관리
     @PostMapping("/crewManagement.do")
-    public String crewManagementMvp(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO) {
+    public String crewManagementMvp(Model model, Battle_recordDTO battle_recordDTO, CrewDTO crewDTO) {
+        log.info("crewManagementMvp Start");
+        String infoPath = "crewManagement.do";
+        String title = "크루전 정보 등록 성공";
+        String msg = "크루전 등록에 성공했습니다.";
 
-        //MVP 크루이름을 전달해 크루 번호를 받아옵니다.
-        List<MemberDTO> mvp_datas = crewManagementService.mvpMember(crewDTO);
+        //승리크루 크루이름을 전달해 크루 번호를 받아옵니다.
+        CrewDTO battle_record_winner_crew_num = crewManagementService.battleRecord(crewDTO);
+        log.info("battle_record_winner_crew_num : [{}]", battle_record_winner_crew_num);
 
-        //승리 크루를 받아옵니다.
-        crewDTO.setCrew_name(battle_recordDTO.getBattle_record_crew_name());
-        //승리 크루 이름을 보내 크루 번호를 받아옵니다.
-        List<MemberDTO> winner_datas = crewManagementService.mvpMember(crewDTO);
+        //받아온 mvp 이름을 추가하여 model 에 전달합니다.
+        battle_recordDTO.setBattle_record_crew_num(battle_record_winner_crew_num.getCrew_num());
 
-        int
+        //update 여부를 확인하여 view 로 정보를 전달합니다.
+        if(!crewManagementService.updateBattleRecord(battle_recordDTO)){
+             title = "크루전 정보 등록 실패";
+             msg = "서버 오류로 크루전 등록에 실패했습니다.";
+        }
 
+        model.addAttribute("title", title);
+        model.addAttribute("msg", msg);
+        model.addAttribute("path", infoPath);
 
-
-        return null;
+        return "views/info";
     }
 
 
-    // 비동기
+
     @PostMapping("/crewBattleManagementDetail.do")
     public String crewBattleManagementDetail(Model model) {
 
