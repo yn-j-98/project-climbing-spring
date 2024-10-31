@@ -78,9 +78,6 @@ public class GymServiceImpl implements GymService {
 
     @Override
     public boolean updateAdminBattleVerified(GymDTO gymDTO) {
-        if (gymDTO.getGym_admin_battle_verified().equals("T")) {
-            return false;
-        }
         return this.gymDAO.updateAdminBattleVerified(gymDTO);
     }
 

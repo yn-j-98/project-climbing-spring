@@ -136,6 +136,14 @@ public class Battle_recordDAO{
 			+ "WHERE \r\n"
 			+ "	BATTLE_RECORD_BATTLE_NUM = ? \r\n"
 			+ "	AND BATTLE_RECORD_CREW_NUM = ?";
+	//크루전 승리크루 업데이트 BATTLE_RECORD_IS_WINNER, BATTLE_RECORD_MVP_ID, BATTLE_RECORD_BATTLE_NUM, BATTLE_RECORD_CREW_NUM
+	private final String UPDATE_MVP = """
+			UPDATE
+			BATTLE_RECORD
+			SET
+			BATTLE_RECORD_MVP_ID = ?
+			WHERE
+			BATTLE_RECORD_BATTLE_NUM = ?""";
 
 	//해당 암벽장에서 실행된 크루전 전부 출력 BATTLE_GYM_NUM
 		private final String ALL_PARTICIPANT_BATTLE = "SELECT\r\n"
@@ -198,10 +206,18 @@ public class Battle_recordDAO{
 		}
 		return true;
 	}
+	public boolean UPDATE_MVP(Battle_recordDTO battle_recordDTO) {
+		System.out.println("	[로그] com.coma.app.biz.battle_record.UPDATE_MVP 시작");
+		int result = jdbcTemplate.update(UPDATE_MVP,battle_recordDTO.getBattle_record_mvp_id(),battle_recordDTO.getBattle_record_battle_num());
+		if(result <= 0){
+			System.err.println("	[에러]com.coma.app.biz.battle_record.UPDATE_MVP sql 실패 : UPDATE = " + UPDATE );
+			return false;
+		}
+		return true;
+	}
 	public boolean delete(Battle_recordDTO battle_recordDTO) {
 		return false;
 	}
-
 	//해당 크루전 내용 BATTLE_RECORD_ONE_BATTLE
 	public Battle_recordDTO selectOneBattle(Battle_recordDTO battle_recordDTO) {
 		System.out.println("	[로그]com.coma.app.biz.battle_record.selectOneBattle 시작");
@@ -534,7 +550,7 @@ class BattleRecordRowMapperAllWinnerParticipantGym implements RowMapper<Battle_r
 		System.out.println("com.coma.app.biz.battle_record.selectAllWinnerParticipantGym 검색 성공");
 		Battle_recordDTO data = new Battle_recordDTO();
 		try {
-			data.setBattle_record_crew_name(rs.getString("CREW_NUM"));
+			data.setBattle_record_crew_name(rs.getString("CREW_NAME"));
 		} catch (SQLException e) {
 			System.err.println("Battle_record_crew_name = null");
 			data.setBattle_record_crew_name(null);

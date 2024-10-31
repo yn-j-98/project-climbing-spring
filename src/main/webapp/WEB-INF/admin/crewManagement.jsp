@@ -88,7 +88,7 @@
           <c:forEach items="${datas}" var="data">
             <tr class="battle-table-tr">
               <th scope="row" class="battle_num">${data.battle_num}</th>
-              <td><a class="submenu text-dark" href="crewManagementDetail.do?battle_num=${data.battle_num}">${data.battle_gym_name}</a></td>
+              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.do?battle_num=${data.battle_num}">${data.battle_gym_name}</a></td>
               <td class="battle_game_date">${data.battle_game_date}</td>
               <td class="battle_registration_date">${data.battle_registration_date}</td>
               <input type="hidden" class="battle_isGame" value="${data.battle_status}"/>
@@ -133,7 +133,7 @@
               <label for="gym-name" id="gym-modal-title" class="col-sm-2 col-form-label">암벽장</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control-plaintext" id="gym-name" placeholder="ex)더클라이밍" value="" readonly>
-                <input type="hidden" id="gym-num" value="">
+                <input type="hidden" id="battle_num" name="battle_record_battle_num" value="">
               </div>
             </div>
             <div class="row">
@@ -145,7 +145,7 @@
             <div class="row">
               <label for="winner-crew" class="col-sm-2 col-form-label">승리크루</label>
               <div class="col-sm-10">
-                <select class="form-select" id="winner-crew" name="winner-crew">
+                <select class="form-select" id="winner-crew" name="crew_name">
                   <option>승리크루</option>
                   <!-- 비동기로 데이터를 받을 예정 -->
                 </select>
@@ -156,13 +156,13 @@
               <div class="col-sm-10" id="mvp-div">
                 <div class="row">
                   <div class="col-md-6">
-                    <select class="form-select" id="mvp-crew" name="mvp_crew">
+                    <select class="form-select" id="mvp-crew">
                       <option>MVP CREW</option>
                       <!-- 비동기로 데이터를 받을 예정 -->
                     </select>
                   </div>
                   <div class="col-md-6">
-                    <select class="form-select" id="mvp" name="mvp">
+                    <select class="form-select" id="mvp" name="battle_record_mvp_id">
                       <option>MVP</option>
                       <!-- 비동기로 데이터를 받을 예정 -->
                     </select>
@@ -174,7 +174,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">취소</button>
-          <button type="button" class="btn btn-primary">등록</button>
+          <input type="submit" class="btn btn-primary" value="등록">
         </div>
       </div>
     </div>
@@ -226,7 +226,7 @@
         const gym_name_text = gym_name.text();
         //크루전 번호
         battle_num_text = battle_num.text();
-
+        $('#battle_num').val(battle_num_text);
         //암벽장 이름
         console.log('암벽장 이름 : '+gym_name_text);
         //크루전 번호

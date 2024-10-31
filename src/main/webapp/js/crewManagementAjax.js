@@ -17,8 +17,9 @@ $(document).ready(function () {
         $.ajax({
             url: 'crewName.do',
             type: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: JSON.stringify({battle_record_battle_num : battle_num_text}),
             dataType: 'json',
-            data: {battle_num : battle_num_text},
             success: function (datas) {
                 console.log('ajax success log Start');
                 console.log(JSON.stringify(datas));
@@ -34,8 +35,8 @@ $(document).ready(function () {
 
 
                 function crew_name(data) { // select option 생성
-                    console.log('function mvp_name log : ['+data.crew_name+']');
-                    return '<option value="'+data.crew_name+'">'+data.crew_name+'</option>';
+                    console.log('function mvp_name log : ['+data.battle_record_crew_name+']');
+                    return '<option value="'+data.battle_record_crew_name+'">'+data.battle_record_crew_name+'</option>';
                 }
                 console.log('ajax success log End');
             },
@@ -47,29 +48,28 @@ $(document).ready(function () {
     }); // modal JS 종료
 
 //FIXME mvp_crew 확인 JS 실행
-    winner_crew_select.on('change',function () {
+    mvp_crew_select.on('change',function () {
         //TODO url 바꿔야함
         $.ajax({
             url : 'mvpMember.do',
             type : 'POST',
             dataType : 'json',
+            headers: { 'Content-Type': 'application/json' },
             data : JSON.stringify({crew_name:mvp_crew_select.val()}),
             success : function (datas) {
                 console.log('ajax success log Start');
-                console.log(JSON.stringify(datas));
-                // var datas = [{member_name:'dd'},{member_name:'ff'},{member_name:'gg'}];//TODO 임시 데이터
-                mvp_select_result();// 크루 select 초기화 함수 호출
 
-                // datas.forEach(data => { // 받아온 데이터로 option 생성
-                //     mvp_crew_select.append(mvp_name(data));
-                // });
-                datas.forEach(data => {
-                    mvp_select.append(mvp_name(data));
-                })
+                mvp_select_result();// 크루 select 초기화 함수 호출
+                const jsonData = JSON.parse(datas).map(data => data.member_name);
+                console.log(jsonData);
+
+                jsonData.forEach(function(value) {
+                    mvp_select.append(mvp_name(value));
+                });
 
                 function mvp_name(data) {
-                    console.log('function mvp_name log : ['+data.member_name+']');
-                    return '<option value="'+data.member_name+'">'+data.member_name+'</option>';
+                    console.log('function mvp_name log : ['+data+']');
+                    return '<option value="'+data+'">'+data+'</option>';
                 }
                 console.log('ajax success log End');
             },error : function (error) {

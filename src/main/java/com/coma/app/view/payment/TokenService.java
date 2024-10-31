@@ -31,7 +31,7 @@ public class TokenService {
             System.out.println("토큰 요청 실패");
             e.printStackTrace();
         }
-        System.out.println(response.body());
+        System.out.println("response.body() = ["+response.body()+"]");
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;
         try {
