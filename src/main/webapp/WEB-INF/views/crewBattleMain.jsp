@@ -61,7 +61,7 @@
 						<p class="fs-4 m-0">커뮤니티</p>
 					</a>
 					<h3 class="px-5 m-0">/</h3>
-					<a href="CrewBattlePage.do"
+					<a href="crewBattle.do"
 					   class="text-dark text-decoration-underline link-primary">
 						<h3 class="m-0">
 							<b>크루전 개최</b>
@@ -169,13 +169,13 @@
 	function renderpagination() {
 		var url = window.location.pathname;
 		console.log("pagenation.js url :"+url)
-		var _totalCount = parseInt($("#totalCount").val());  // 서버에서 전달된 전체 게시물 개수
+		var _totalCount = parseInt($("#total").val());  // 서버에서 전달된 전체 게시물 개수
 		//NaN / null 유효성 검사
 		if (isNaN(_totalCount) || _totalCount === 0 || _totalCount === null) {
 			_totalCount = 0;
 		}
 
-		var currentPage = parseInt($("#currentPage").val()); // 서버에서 전달된 현재 페이지 번호
+		var currentPage = parseInt($("#page").val()); // 서버에서 전달된 현재 페이지 번호
 		//NaN / null 유효성 검사
 		if (isNaN(currentPage) || currentPage === 0 || currentPage === null) {
 			currentPage = 1;

@@ -55,7 +55,7 @@
 							<p class="fs-4 m-0">커뮤니티</p>
 						</a>
 						<h3 class="px-5 m-0">/</h3>
-						<a href="CrewBattlePage.do"
+						<a href="crewBattle.do"
 						   class="text-dark text-decoration-none link-primary">
 							<p class="fs-4 m-0">
 								크루전 개최
@@ -63,7 +63,7 @@
 						</a>
 						<h3 class="px-5 m-0">/</h3>
 						<a href="crewList.do"
-						   class="text-dark text-decoration-underline  link-primary">
+						   class="text-dark text-decoration-none  link-primary">
 							<p class="fs-4 m-0">크루 가입</p>
 						</a>
 					</div>

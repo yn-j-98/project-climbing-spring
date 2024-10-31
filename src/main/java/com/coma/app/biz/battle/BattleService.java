@@ -18,4 +18,5 @@ public interface BattleService {
 	boolean InsertBattleModal(BattleDTO battleDTO);
 	boolean update(BattleDTO battleDTO);
 	boolean delete(BattleDTO battleDTO);
+	BattleDTO selectOneSearchCountActive(BattleDTO battleDTO);
 }
