@@ -19,6 +19,9 @@ public interface MemberService {
 	MemberDTO selectOneSearchIdPassword(MemberDTO memberDTO);
 	MemberDTO selectOneSearchMyCrew(MemberDTO memberDTO);
 	MemberDTO selectOneCountAdmin(MemberDTO memberDTO);
+	MemberDTO selectOneSearchCountAdmin(MemberDTO memberDTO);
+	MemberDTO selectOneSearchIdCountAdmin(MemberDTO memberDTO);
+	MemberDTO selectOneSearchDateCountAdmin(MemberDTO memberDTO);
 
 	boolean insert(MemberDTO memberDTO);
 
