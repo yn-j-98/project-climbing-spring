@@ -55,6 +55,11 @@ public class ReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
+	public ReservationDTO selectOneCountAdmin(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectOneCountAdmin(reservationDTO);
+	}
+
+	@Override
 	public boolean insert(ReservationDTO reservationDTO) {
 		return this.reservationDAO.insert(reservationDTO);
 	}
