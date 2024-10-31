@@ -29,7 +29,7 @@
 
 </head>
 <body class="user-select-none">
-<mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
+<mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
 
 <div class="main-panel p-2 overflow-x-hidden">
   <div class="nav-toggle position-absolute top-0 start-0">
@@ -63,7 +63,7 @@
     </div>
     <div class="accordion" id="board-accordion">
 
-      <c:if test="${empty datas}">
+      <c:if test="${empty board_datas}">
       <div class="accordion-item">
         <h2 class="accordion-header" id="board_aria_labelledby">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#aria_controls" aria-expanded="true" aria-controls="aria_controls">
@@ -72,17 +72,17 @@
         </h2>
       </div>
     </c:if>
-    <c:if test="${not empty datas}">
-      <c:forEach items="${datas}" var="data" varStatus="status">
+    <c:if test="${not empty board_datas}">
+      <c:forEach items="${board_datas}" var="data" varStatus="status">
         <div class="accordion-item">
-          <h2 class="accordion-header" id="board_aria_labelledby${status}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#board_aria_controls${status}" aria-expanded="true" aria-controls="board_aria_controls${status}">
-              data.board_title
+          <h2 class="accordion-header" id="board_aria_labelledby${status.index}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#board_aria_controls${status.index}" aria-expanded="true" aria-controls="board_aria_controls${status.index}">
+              ${data.board_title}
             </button>
           </h2>
-          <div id="board_aria_controls${status}" class="accordion-collapse collapse" aria-labelledby="board_aria_labelledby${status}" data-bs-parent="#board_data_bs_parent${status}">
+          <div id="board_aria_controls${status.index}" class="accordion-collapse collapse" aria-labelledby="board_aria_labelledby${status.index}" data-bs-parent="#board_data_bs_parent${status.index}">
             <div class="accordion-body">
-              data.board_content
+              ${data.board_content}
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@
     </div>
     <div class="accordion" id="gym-accordion">
 
-      <c:if test="${empty datas}">
+      <c:if test="${empty battle_datas}">
       <div class="accordion-item">
         <h2 class="accordion-header" id="gym_aria_labelledby">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#aria_controls" aria-expanded="true" aria-controls="aria_controls">
@@ -110,17 +110,17 @@
         </h2>
       </div>
     </c:if>
-    <c:if test="${not empty datas}">
-      <c:forEach items="${datas}" var="data" varStatus="status">
+    <c:if test="${not empty battle_datas}">
+      <c:forEach items="${battle_datas}" var="battle_data" varStatus="status">
         <div class="accordion-item">
-          <h2 class="accordion-header" id="gym_aria_labelledby${status}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gym_aria_controls${status}" aria-expanded="true" aria-controls="gym_aria_controls${status}">
-              data.board_title
+          <h2 class="accordion-header" id="gym_aria_labelledby${status.index}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gym_aria_controls${status.index}" aria-expanded="true" aria-controls="gym_aria_controls${status.index}">
+              ${battle_data.battle_gym_name} / 게임일 : ${battle_data.battle_game_date}
             </button>
           </h2>
-          <div id="gym_aria_controls${status}" class="accordion-collapse collapse" aria-labelledby="gym_aria_labelledby${status}" data-bs-parent="#gym_data_bs_parent${status}">
+          <div id="gym_aria_controls${status.index}" class="accordion-collapse collapse" aria-labelledby="gym_aria_labelledby${status.index}" data-bs-parent="#gym_data_bs_parent${status.index}">
             <div class="accordion-body">
-              data.board_content
+              <img src="https://${battle_data.battle_gym_profile}" alt="GymImg" class="GymImg"/>
             </div>
           </div>
         </div>
@@ -184,28 +184,32 @@
 <script>
   //----------------------------
   //가입자 chart 데이터
+  <%--const member_Chart_Data =${monthly_join_datas};--%>
   const member_Chart_Data = ${monthly_join_datas};
   //가입자 데이터 제목
-  const member_Chart_Data_title = member_Chart_Data.map(({member_reservation_month})=> member_reservation_month);
+  let member_Chart_Data_title = member_Chart_Data.map(member => member.member_reservation_month);
   //가입자 데이터 내용
-  const member_Chart_Data_text = member_Chart_Data.map(({total}) => total);
+  let member_Chart_Data_text = member_Chart_Data.map(total => total.total);
   //----------------------------
   //----------------------------
   //예약자 chart 데이터
+  <%--const registration_Chart_Data =JSON.parse(${monthly_reservation_datas});--%>
   const registration_Chart_Data = ${monthly_reservation_datas};
+  console.log(registration_Chart_Data);
   //예약자 데이터 제목
-  const registration_Chart_Data_title = registration_Chart_Data.map(({reservation_month}) => reservation_month);
+  const registration_Chart_Data_title = registration_Chart_Data.map(registration => registration.reservation_month);
   //예약자 데이터 내용
-  const registration_Chart_Data_text = registration_Chart_Data.map(({total}) => total);
+  const registration_Chart_Data_text = registration_Chart_Data.map(total => total.reservation_count);
   //----------------------------
   //----------------------------
   //암벽장 chart 데이터
-  const gym_Chart_Data = ${region_gym_datas}
-}
+  <%--const gym_Chart_Data =JSON.parse(${region_gym_datas});--%>
+  const gym_Chart_Data = ${monthly_reservation_datas};
+  console.log(gym_Chart_Data);
   //암벽장 데이터 제목
-  // const gym_Chart_Data_title = member_Chart_Data.map(({Total}) => data.tile);
+  const gym_Chart_Data_title = gym_Chart_Data.map(data => data.gym_location);
   //암벽장 데이터 내용
-  const gym_Chart_Data_text = member_Chart_Data.map(({total}) => total);
+  const gym_Chart_Data_text = gym_Chart_Data.map(data => data.gym_count);
   //----------------------------
 
 </script>

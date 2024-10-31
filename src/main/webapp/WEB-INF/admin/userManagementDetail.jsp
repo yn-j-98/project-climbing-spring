@@ -6,7 +6,7 @@
 <html class="wf-publicsans-n3-active wf-publicsans-n4-active wf-publicsans-n5-active wf-publicsans-n6-active wf-publicsans-n7-active wf-fontawesome5solid-n4-active wf-fontawesome5regular-n4-active wf-simplelineicons-n4-active wf-fontawesome5brands-n4-active wf-active sidebar-color">
 
 <head>
-    <title>Title</title>
+  <title>관리자 : 회원정보 수정</title>
   <!-- Fonts and icons -->
   <script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
   <script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
@@ -22,6 +22,28 @@
 
   <!-- template Js File -->
   <script src="../../assets/js/kaiadmin.min.js"></script>
+
+  <!-- sweetAlert JS FILE -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+  <script src="../../js/sweetAlert_modal.js"></script>
+  <script>
+    $(document).ready(function() {
+      let form = $('#form');
+      form.on('submit', function(e) {
+        e.preventDefault();
+      });
+
+      // from.submit();
+      $('#submitButton').on('click', function () {
+        sweetAlert_confirm_warning('수정하시겠습니까?', '', '수정', '취소').then(function (result) {
+          if (result) {
+            form.off('submit').submit();
+          }
+        });
+      })
+    })
+  </script>
 </head>
 <body class="user-select-none">
 <mytag:admin_gnb member_id="Controller 데이터 입력할 예정"></mytag:admin_gnb>
@@ -40,7 +62,7 @@
           <h1 class="text-center"> ${data.member_name}님 회원 변경 </h1>
         </div>
         <div class="card-body p-3">
-          <form action="userManagementDetail.do" method="POST">
+          <form action="userManagementDetail.do" method="POST" id="form">
             <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <div class="form-floating">
@@ -64,7 +86,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="number" min="0" class="form-control" id="current_point" name="current_point" placeholder="Current Point" value="${data.current_point}">
+                  <input type="number" min="0" class="form-control" id="current_point" name="member_current_point" placeholder="Current Point" value="${data.member_current_point}">
                   <label for="current_point" class="form-label">Current Point</label>
                 </div>
               </div>
@@ -80,7 +102,7 @@
             <div class="row g-3 mb-3">
               <div class="col-md-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="member_crew" name="member_crew" placeholder="Crew" value="${data.member_crew}">
+                  <input type="number" class="form-control" id="member_crew" name="member_crew_num" min="0" placeholder="Crew" value="${data.member_crew_num}">
                   <label for="member_crew" class="form-label">Crew</label>
                 </div>
               </div>
@@ -99,14 +121,14 @@
                   <div class="col-md-2 ms-auto">
                     <label for="member_role" class="form-label">Role</label>
                     <select class="form-select" id="member_role" name="member_role">
-                        <option value="user">사용자</option>
-                        <option value="admin" ${data.member_role == 'T' ? selected : ''}>관리자</option>
+                      <option value="F">사용자</option>
+                      <option value="T" ${data.member_role eq 'T' ? 'selected':''}>관리자</option>
                     </select>
                   </div>
                   <div class="col-md-2 mt-auto">
                     <div class="row w-100 justify-content-end">
                       <button type="button" onclick='window.location.href = "userManagement.do"' class="btn btn-primary col-md-5 m-1">취소</button>
-                      <button type="submit" class="btn btn-primary col-md-5 m-1">등록</button>
+                      <button id="submitButton" class="btn btn-primary col-md-5 m-1">등록</button>
                     </div>
                   </div>
                 </div>

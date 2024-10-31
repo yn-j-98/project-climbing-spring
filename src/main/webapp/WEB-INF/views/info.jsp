@@ -13,26 +13,15 @@
     <script src="js/sweetAlert_modal.js"></script>
 </head>
 <body>
-<input type="hidden" id="title" value="${title}"/>
-<input type="hidden" id="msg" value="${msg}"/>
-<input type="hidden" id="path" value="${path}"/>
 <script>
     $(document).ready(function(){
-        let title = $("#title").val();
-        console.log(title);
-        let msg = $("#msg").val();
-        console.log(msg);
-        let path = $("#path").val();
-        console.log(path);
-        if(title == ""){
-            console.log(msg+'||'+path);
-            <%--alert('${msg}');--%>
-            sweetAlert_error(title,msg);
-        }
-        else{
-            sweetAlert_success(title,msg);
-        }
-        location.href=path;
+        Swal.fire({
+            title : '${title}',
+            text : '${msg}',
+            icon : 'info',
+        }).then(function (result){
+            location.href='${path}';
+        });
     })
 </script>
 
