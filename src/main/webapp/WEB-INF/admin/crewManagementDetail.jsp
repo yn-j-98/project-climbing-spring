@@ -45,7 +45,7 @@
   <div class="col-md-12 d-flex justify-content-center">
     <label for="gym-name" class="form-label col-md-1 mt-auto text-center">암벽장</label>
     <div class="col-md-10">
-      <input type="text" id="gym-name" readonly class="border-0 form-control" value="${data.gym_name}">
+      <input type="text" id="gym-name" readonly class="border-0 form-control" value="${data.battle_gym_name}">
     </div>
   </div>
 </div>
@@ -61,7 +61,7 @@
   <div class="col-md-12 d-flex justify-content-center">
     <label for="winner-crew" class="form-label col-md-1 mt-auto text-center">승리크루</label>
     <div class="col-md-10">
-      <input type="text" id="winner-crew" readonly class="border-0 form-control" value="${data.crew_name}">
+      <input type="text" id="winner-crew" readonly class="border-0 form-control" value="${data.battle_crew_name}">
     </div>
   </div>
 </div>
@@ -69,7 +69,7 @@
   <div class="col-md-12 d-flex justify-content-center">
     <label for="gym-mvp" class="form-label col-md-1 mt-auto text-center">MVP</label>
     <div class="col-md-10">
-      <input type="text" id="gym-mvp" readonly class="border-0 form-control" value="${data.battle_record_mvp_id}">
+      <input type="text" id="gym-mvp" readonly class="border-0 form-control" value="${data.battle_member_name}">
     </div>
   </div>
 </div>

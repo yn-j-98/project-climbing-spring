@@ -53,7 +53,7 @@ $(document).ready(function () {
             url : 'mvpMember.do',
             type : 'POST',
             dataType : 'json',
-            data : JSON.stringify({crew_name:mvp_select.val()}),
+            data : JSON.stringify({crew_name:mvp_crew_select.val()}),
             success : function (datas) {
                 console.log('ajax success log Start');
                 console.log(JSON.stringify(datas));
@@ -64,7 +64,7 @@ $(document).ready(function () {
                 //     mvp_crew_select.append(mvp_name(data));
                 // });
                 datas.forEach(data => {
-                    mvp_crew_select.append(mvp_name(data));
+                    mvp_select.append(mvp_name(data));
                 })
 
                 function mvp_name(data) {

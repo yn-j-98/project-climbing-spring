@@ -1,5 +1,7 @@
 package com.coma.app.view.admin;
 
+import com.coma.app.biz.admin.CrewManagementService;
+import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
@@ -22,57 +24,44 @@ public class CrewManagementController {
     private Battle_recordService battle_recordService;
 
     @Autowired
-    private CrewService crewService;
+    private CrewManagementService crewManagementService;
 
     @GetMapping("/crewManagement.do")
-    public String crewManagement(Model model, Battle_recordDTO battle_recordDTO) {
-
-        // TODO MODEL 끝나면 주석풀기
+    public String crewManagement(Model model, BattleDTO battleDTO) {
+        String search_keyword = battleDTO.getSearch_keyword();
+        log.info("crewManagement.search_keyword = [{}]", search_keyword);
+        log.info("crewManagement.search_content = [{}]", battleDTO.getSearch_content());
         // 페이지네이션
-//        int page = battle_recordDTO.getPage();
-//        int size = 10;
-//        if(page <= 0) {
-//            page = 1;
-//        }
-//        int min_num = (page - 1) * size;
-//
-//        log.info("min_num = {}", min_num);
-//
-//        battle_recordDTO.setBattle_record_min_num(min_num);
-//
-//        // 필터검색
-//        // 크루전 번호, 암벽장 이름, 크루전 진행 날짜, 크루전 생성일
-//
-//        List<Battle_recordDTO> datas = null;
-//
-//        String search_keyword = battle_recordDTO.getSearch_keyword();
-//
-//        // 크루전 번호로 검색
-//        if(search_keyword.equals("crew_battle_id")) {
-//            datas = this.battle_recordService.selectAllBattleNum(battle_recordDTO);
-//        }
-//        // 암벽장 이름으로 검색
-//        else if(search_keyword.equals("gym_name")) {
-//            datas = this.battle_recordService.selectAllGymName(battle_recordDTO);
-//        }
-//        else {
-//            model.addAttribute("title","Server Error");
-//            model.addAttribute("msg", "search_keyword error");
-//            model.addAttribute("path", "crewManagement.do");
-//            return "views/info";
-//        }
-//
-//        model.addAttribute("datas", datas);
-//        model.addAttribute("page", page);
-//        model.addAttribute("size", size);
+        int page = battleDTO.getPage();
+        int size = 10;
+        if(page <= 0) {
+            page = 1;
+        }
+        int min_num = (page - 1) * size;
+        log.info("min_num = {}", min_num);
+        battleDTO.setBattle_min_num(min_num);
 
+        // 검색 키워드
+        // 크루전 번호, 암벽장 이름, 크루전 진행 날짜, 크루전 생성일
+        List<BattleDTO> datas = crewManagementService.selectAll(battleDTO);
+        if(datas.isEmpty() || datas == null) {
+            model.addAttribute("title", "알수 없는 오류 발생");
+            model.addAttribute("msg", "");
+            model.addAttribute("path", "crewManagement.do");
+            return "views/info";
+        }
+        log.info("datas = [{}]", datas);
+        model.addAttribute("datas", datas);
+        model.addAttribute("page", page);
+        model.addAttribute("total", datas.size());
+        model.addAttribute("search_keyword", search_keyword);
 
         return "admin/crewManagement";
     }
 
     @GetMapping("/crewManagementDetail.do")
     public String crewManagementDetail(Model model, Battle_recordDTO battle_recordDTO, CrewDTO crewDTO) {
-
+//        "crewManagementDetail.do?battle_num=${data.battle_num}">${data.gym_name}
         // 크루전 정보 - 암벽장
         // 암벽장 명 , 게임일, 승리한 크루, MVP
         // TODO DAO 쿼리문 수정됐는지 확인하기
