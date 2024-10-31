@@ -93,8 +93,6 @@ public class CrewManagementController {
         //승리 크루 이름을 보내 크루 번호를 받아옵니다.
         List<MemberDTO> winner_datas = crewManagementService.mvpMember(crewDTO);
 
-        int
-
 
 
         return null;
