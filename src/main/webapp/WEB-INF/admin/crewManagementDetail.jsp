@@ -95,6 +95,10 @@
     </div>
   </div>
 </c:if>
+  <!--CREW_LEADER AS BATTLE_MEMBER_NAME
+  CREW_NAME AS BATTLE_CREW_NAME
+  CREW_CURRENT_MEMBER_SIZE AS BATTLE_CREW_NUM
+  -->
 <c:if test="${not empty datas}">
   <c:forEach items="${datas}" var="data">
     <div class="row col-md-6 mt-3 ms-auto me-auto">
@@ -102,9 +106,9 @@
         <div class="card-body">
           <div class="row d-flex justify-content-center">
             <div class="col-md-12">
-              <p class="card-title text-center h4">${data.crew_name} <span class="badge bg-secondary">${data.crew_current_member_size}</span></p>
+              <p class="card-title text-center h4">${data.battle_crew_name} <span class="badge bg-secondary">${data.battle_crew_num}</span></p>
               <div class="col-md-12">
-                <p class="card-subtitle mb-2 mt-2 text-center h6">크루장: ${data.crew_leader}</p>
+                <p class="card-subtitle mb-2 mt-2 text-center h6">크루장: ${data.battle_member_name}</p>
               </div>
             </div>
           </div>

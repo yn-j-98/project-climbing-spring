@@ -60,71 +60,18 @@ public class CrewManagementController {
     }
 
     @GetMapping("/crewManagementDetail.do")
-    public String crewManagementDetail(Model model, Battle_recordDTO battle_recordDTO, CrewDTO crewDTO) {
-//        "crewManagementDetail.do?battle_num=${data.battle_num}">${data.gym_name}
+    public String crewManagementDetail(Model model, BattleDTO battleDTO) {
+        log.info("crewManagementDetail.battle_num = [{}]", battleDTO.getBattle_num());
         // 크루전 정보 - 암벽장
         // 암벽장 명 , 게임일, 승리한 크루, MVP
-        // TODO DAO 쿼리문 수정됐는지 확인하기
-        List<Battle_recordDTO> data = this.battle_recordService.selectAllWinnerParticipantGym(battle_recordDTO);
+        BattleDTO data = this.crewManagementService.selectOneSearchWinner(battleDTO);
+        model.addAttribute("data", data);
 
         // 참여 크루
         // 크루명 / 크루장 / 크루원 수
-        // TODO DAO 쿼리문 수정됐는지 확인하기
-//        List<CrewDTO> datas = this.crewService.selectAllParticipant(crewDTO);
-
-        model.addAttribute("data", data);
-//        model.addAttribute("datas", datas);
+        List<BattleDTO> datas = crewManagementService.selectAllSearchPariticipants(battleDTO);
+        model.addAttribute("datas", datas);
 
         return "admin/crewManagementDetail";
-    }
-
-
-
-    // 크루전 관리
-    @PostMapping("/crewBattleManagement.do")
-    public String crewBattleManagement(Model model) {
-		/*
-		selectbox
-			크루전 번호, 암벽장 이름, 크루전 진행 날짜
-
-
-		크루전 번호
-		암벽장 이름
-		크루전 진행 날짜
-		크루전 생성일
-		상태 ( t/f )
-		↑ SELECTALL
-
-
-		 */
-
-        // 크루 정보 등록 필요 nullcheck (t/f)
-
-
-        return null;
-    }
-
-
-    // 비동기
-    @PostMapping("/crewBattleManagementDetail.do")
-    public String crewBattleManagementDetail(Model model) {
-
-        //		크루전 진행한 전체 크루 사람 selectall
-        //
-        //		크루전 진행한 1개 크루명 자체를 불러오기 selectall
-        //
-        //		selectall* selectall 재활용(C)
-		/*
-		!!!!!!!!!!!!!!!!!!!!!!!비동기
-		암벽장 이름
-		크루전 진행 날짜
-		승리 크루 크루명 (크루전 진행한 크루의 크루명 selectall 검색해야하기때문에)
-		크루전 MVP
-		↑ INSERT
-
-
-		 */
-
-        return null;
     }
 }
