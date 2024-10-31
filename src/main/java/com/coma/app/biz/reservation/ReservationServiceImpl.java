@@ -60,6 +60,16 @@ public class ReservationServiceImpl implements ReservationService{
 	}
 
 	@Override
+	public ReservationDTO selectOneCountSearchGymNameAdmin(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectOneCountSearchGymNameAdmin(reservationDTO);
+	}
+
+	@Override
+	public ReservationDTO selectOneCountSearchMemberIdAdmin(ReservationDTO reservationDTO) {
+		return this.reservationDAO.selectOneCountSearchMemberIdAdmin(reservationDTO);
+	}
+
+	@Override
 	public boolean insert(ReservationDTO reservationDTO) {
 		return this.reservationDAO.insert(reservationDTO);
 	}

@@ -146,6 +146,24 @@ public class ReservationDAO {
 			+ "    R.RESERVATION_DATE DESC\n"
 			+ "LIMIT ?, ?";
 
+	//암벽장 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+	private final String ALL_ADMIN_SEARCH_GYM_NAME_COUNT = "SELECT \n"
+			+ "    COUNT(*) AS RESERVAION_COUNT \n"
+			+ "FROM \n"
+			+ "    RESERVATION R\n"
+			+ "JOIN \n"
+			+ "    GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM\n"
+			+ "WHERE \n"
+			+ "    G.GYM_NAME LIKE CONCAT('%', ?, '%')";
+
+	//예약자 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+	private final String ALL_ADMIN_SEARCH_MEMBER_ID_COUNT = "SELECT \n"
+			+ "    COUNT(*) AS RESERVAION_COUNT \n"
+			+ "FROM \n"
+			+ "    RESERVATION R\n"
+			+ "WHERE \n"
+			+ "    R.RESERVATION_MEMBER_ID = ?";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate; // 스프링부트 내장객체
 
@@ -223,6 +241,30 @@ public class ReservationDAO {
 		try {
 			//전체 예약 개수 출력 // TODO 관리자 메인 페이지
 			data= jdbcTemplate.queryForObject(ONE_COUNT_ADMIN, new ReservationCountRowMapperOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public ReservationDTO selectOneCountSearchGymNameAdmin(ReservationDTO reservationDTO){
+		ReservationDTO data=null;
+		Object[] args={reservationDTO.getSearch_content()};
+		try {
+			//암벽장 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+			data= jdbcTemplate.queryForObject(ALL_ADMIN_SEARCH_GYM_NAME_COUNT, args, new ReservationCountRowMapperOne());
+		}
+		catch (Exception e) {
+		}
+		return data;
+	}
+
+	public ReservationDTO selectOneCountSearchMemberIdAdmin(ReservationDTO reservationDTO){
+		ReservationDTO data=null;
+		Object[] args={reservationDTO.getSearch_content()};
+		try {
+			//예약자 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
+			data= jdbcTemplate.queryForObject(ALL_ADMIN_SEARCH_MEMBER_ID_COUNT, args, new ReservationCountRowMapperOne());
 		}
 		catch (Exception e) {
 		}

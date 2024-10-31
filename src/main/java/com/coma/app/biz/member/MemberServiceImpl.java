@@ -94,6 +94,21 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public MemberDTO selectOneSearchCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectOneSearchCountAdmin(memberDTO);
+	}
+
+	@Override
+	public MemberDTO selectOneSearchIdCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectOneSearchIdCountAdmin(memberDTO);
+	}
+
+	@Override
+	public MemberDTO selectOneSearchDateCountAdmin(MemberDTO memberDTO) {
+		return this.memberDAO.selectOneSearchDateCountAdmin(memberDTO);
+	}
+
+	@Override
 	public boolean insert(MemberDTO memberDTO) {
 		return this.memberDAO.insert(memberDTO);
 	}

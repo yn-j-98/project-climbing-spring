@@ -14,6 +14,8 @@ public interface ReservationService {
 	ReservationDTO selectOneReservation(ReservationDTO reservationDTO);
 	ReservationDTO selectOneCountYearAdmin(ReservationDTO reservationDTO);
 	ReservationDTO selectOneCountAdmin(ReservationDTO reservationDTO);
+	ReservationDTO selectOneCountSearchGymNameAdmin(ReservationDTO reservationDTO);
+	ReservationDTO selectOneCountSearchMemberIdAdmin(ReservationDTO reservationDTO);
 
 	boolean insert(ReservationDTO reservationDTO);
 

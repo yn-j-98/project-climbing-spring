@@ -101,24 +101,24 @@
 		<div class="row pt-2 pb-5">
 			<div class="col-12">
 				<div class="d-flex justify-content-center align-items-center">
-					<a href="CrewPage.do"
+					<a href="crew.do"
 					   class="text-dark text-decoration-none link-primary">
 						<p class="fs-4 m-0">내 크루</p>
 					</a>
 					<h3 class="px-5 m-0">/</h3>
-					<a href="CrewCommunityPage.do"
+					<a href="crewCommunity.do"
 					   class="text-dark text-decoration-underline  link-primary">
 						<h3 class="m-0">
 							<b>커뮤니티</b>
 						</h3>
 					</a>
 					<h3 class="px-5 m-0">/</h3>
-					<a href="CrewBattlePage.do"
+					<a href="crewBattle.do"
 					   class="text-dark text-decoration-none link-primary">
 						<p class="fs-4 m-0">크루전 개최</p>
 					</a>
 					<h3 class="px-5 m-0">/</h3>
-					<a href="CrewListPage.do"
+					<a href="crewList.do"
 					   class="text-dark text-decoration-none link-primary">
 						<p class="fs-4 m-0">크루 가입</p>
 					</a>
