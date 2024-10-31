@@ -64,4 +64,6 @@ public class CrewManagementService {
         List<MemberDTO> datas = memberDAO.selectAllSearchCrewMemberName(memberDTO);
         return datas;
     }
+
+
 }

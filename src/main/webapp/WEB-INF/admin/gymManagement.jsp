@@ -238,7 +238,7 @@
                                     <span id="previewSpan">사진 미리보기</span>
                                     <img class="d-none" id="previewImg"/>
                                 </div>
-                                <input type="file" class="form-control mt-2" id="gymImg" name="gym_profile">
+                                <input type="file" class="form-control mt-2" id="gymImg" name="gym_file" accept="image/*">
                                 <span class="form-text">파일입력장소</span>
                             </div>
                         </div>
@@ -314,6 +314,7 @@
                                 style: 'display: none;'
                             });
                             form.append($('<input/>', {type: 'hidden', name: 'gym_num', value: gymNum}));
+                            form.append($('<input/>', {type: 'hidden', name: 'gym_admin_battle_verified', value: gymBattleStatus}));
                             $('body').append(form);
                             form.submit();
                         }
