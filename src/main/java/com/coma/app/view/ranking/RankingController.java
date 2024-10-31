@@ -27,6 +27,14 @@ public class RankingController {
         //크루 랭킹을 model에 요청 point 순으로 selectAll 예정
         //랭킹 페이지가 두개 이기 때문에 model에 condition 값 전달
 
+        // 무한 스크롤
+        int page = memberDTO.getMember_min_num();
+        System.out.println("view에서 가져온 memberDTO.getMember_min_num()" + memberDTO.getMember_min_num());
+        int size = 8; // 페이지당 항목 수
+        int offset = page * size; // `page`를 기반으로 `offset`을 계산
+        memberDTO.setPage(size);
+        memberDTO.setMember_min_num(offset);
+
         //요청 값 : 전체 point / 등급 이미지 / 크루 이름 / 크루장 / 크루원명
         List<MemberDTO> member_datas = this.memberService.selectAllCrewRank(memberDTO);
 
