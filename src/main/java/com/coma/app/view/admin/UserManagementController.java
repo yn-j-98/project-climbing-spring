@@ -46,29 +46,29 @@ public class UserManagementController {
 //		회원이름, 회원 아이디, 가입날짜
         List<MemberDTO> datas = null;
 
-
         String search_keyword = memberDTO.getSearch_keyword();
 
-        if (search_keyword.equals("member_id")) {
-            datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
+        if(search_keyword != null){
+            if (search_keyword.equals("MEMBERID")) {
+                log.info("memberDTO [{}]",memberDTO);
+                datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
 
 //            // TODO 삭제해야되는가?
 //        } else if (search_keyword.equals("member_name")) {
 //            search_datas = this.memberService.selectAllSearchNameAdmin(memberDTO);
 
-        } else if (search_keyword.equals("member_join_date")) {
-            datas = this.memberService.selectAllSearchDateAdmin(memberDTO);
-
+            } else if (search_keyword.equals("DATE")) {
+                datas = this.memberService.selectAllSearchDateAdmin(memberDTO);
+            }
         } else {
-            model.addAttribute("title", "Server Error");
-            model.addAttribute("msg", "search_keyword error");
-            model.addAttribute("path", "userManagement.do");
-            return "views/info";
+            datas = this.memberService.selectAllSearchAdmin(memberDTO);
         }
         // datas 로그
         log.info("UserManagementController datas {} " , datas);
 
-        model.addAttribute("datas", datas);
+        model.addAttribute("data", datas);
+        model.addAttribute("search_keyword", search_keyword);
+        model.addAttribute("search_content", memberDTO.getSearch_content());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
 
@@ -94,27 +94,69 @@ public class UserManagementController {
     }
 
     @GetMapping("/userManagementDetail.do")
-    public String userManagementDetail() {
-        return "admin/userManagementDetail";
+    public String userManagementDetailGet(Model model, MemberDTO memberDTO) {
+        String path = "admin/userManagementDetail";
+        String infoPath = "userManagement.do";
+
+        //회원 아이디를 받아오면 회원에 대한 정보를 불러오고
+        MemberDTO memberOne = memberService.selectOneSearchId(memberDTO);
+
+        if(memberOne == null){
+            model.addAttribute("title", "잘못된요청");
+            model.addAttribute("msg","현재 없는 회원입니다.");
+            model.addAttribute("path", infoPath);
+            path = "views/info";
+        }
+
+        //해당 정보를 View에 data 로 전달합니다.
+        model.addAttribute("data", memberOne);
+
+
+        return path;
     }
 
-    // 회원 관리 -개인 상세 ( 모달 )
+    // 회원 관리 -개인 상세
     @PostMapping("/userManagementDetail.do")
-    public String userManagementDetail(Model model, MemberDTO memberDTO) {
+    public String userManagementDetailPost(Model model, MemberDTO memberDTO) {
 
-        // 회원관리 insert
-        boolean flag = this.memberService.insert(memberDTO);
-        if (!flag) {
-            model.addAttribute("title", "Server Error");
-            model.addAttribute("msg", "member insert 실패");
-            model.addAttribute("path", "userManagement.do");
-            return "views/info";
+        String infoPath = "userManagement.do";
+        String title = "회원정보 수정 성공";
+        String msg = "회원정보를 수정하였습니다.";
+        log.info("memberDTO [{}]", memberDTO);
+        // 회원관리 update
+        if (!this.memberService.updateAdmin(memberDTO)) {
+            infoPath = "userManagementDetail.do?member_id="+memberDTO.getMember_id();
+            title = "Server Error";
+            msg = "회원정보 수정 실패";
         }
         // role 로그
         System.out.println("userManagementDetail - role =" + (memberDTO.getMember_role()));
+        model.addAttribute("title", title);
+        model.addAttribute("msg", msg);
+        model.addAttribute("path", infoPath);
 
-
-        return "admin/userManagement";
+        return "views/info";
     }
 
+    @LoginCheck
+    @PostMapping("adminDeleteMember.do")
+    public String adminDeleteMember(Model model, MemberDTO memberDTO) {
+        String path = "userManagement.do";
+        String title = "회원 삭제";
+        String msg = "["+ memberDTO.getMember_id()+"] 회원이 삭제 되었습니다.";
+
+        if(!memberService.delete(memberDTO)){
+            title = "서버 오류";
+            msg = "회원삭제 실패";
+        };
+        log.info("path [{}]",path);
+        log.info("title [{}]",title);
+        log.info("msg [{}]",msg);
+
+        model.addAttribute("title", title);
+        model.addAttribute("msg", msg);
+        model.addAttribute("path", path);
+
+        return "views/info";
+    }
 }

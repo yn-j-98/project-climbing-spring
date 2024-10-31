@@ -4,11 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class GymDAO {
 	//(페이지 네이션) 암벽장 전체출력
@@ -55,7 +57,10 @@ public class GymDAO {
 	
 	//예약가능 개수 업데이트 GYM_RESERVATION_CNT, GYM_NUM
 	private final String UPDATE_RESERVATION_CNT = "UPDATE GYM SET GYM_RESERVATION_CNT = ? WHERE GYM_NUM = ?";
-	
+
+	//암벽장 승인여부 업데이트 GYM_ADMIN_BATTLE_VERIFIED, GYM_NUM // TODO 관리자 메인 페이지
+	private final String UPDATE_ADMIN_BATTLE_VERIFIED = "UPDATE GYM SET GYM_ADMIN_BATTLE_VERIFIED = ? WHERE GYM_NUM = ?";
+
 	//암벽장 등록 GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION
 	private final String INSERT = "INSERT INTO GYM (GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION) "
 			+ "VALUES (?, ?, ?, ?)";
@@ -72,13 +77,14 @@ public class GymDAO {
 			+ "    GYM_LOCATION_COUNT";
 
 	//암벽장 관리 리스트 출력(페이지네이션) // TODO 암벽장 관리 페이지
-	private final String ALL_ADMIN = "SELECT GYM_PROFILE, GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_ADMIN_BATTLE_VERIFIED\n"
+	private final String ALL_ADMIN = "SELECT GYM_NUM, GYM_PROFILE, GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_ADMIN_BATTLE_VERIFIED\n"
 			+ "FROM gym\n"
 			+ "ORDER BY GYM_NUM DESC\n"
 			+ "LIMIT ?, ?";
 
 	// 승인,비승인된 암벽장 중 이름 검색 // TODO 암벽장 관리 페이지
 	private final String ALL_ADMIN_VERIFIED = "SELECT \n" +
+			"    GYM_NUM,\n" +
 			"    GYM_PROFILE,\n" +
 			"    GYM_NAME,\n" +
 			"    GYM_LOCATION,\n" +
@@ -93,6 +99,8 @@ public class GymDAO {
 			"ORDER BY \n" +
 			"    GYM_NUM DESC\n" +
 			"LIMIT ?, ?";
+
+	//
 
 	//암벽장 추가 GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE // TODO 암벽장 관리 페이지
 	private final String INSERT_ADMIN = "INSERT INTO GYM (GYM_NAME, GYM_LOCATION, GYM_PRICE, GYM_DESCRIPTION, GYM_PROFILE)\n"
@@ -122,6 +130,15 @@ public class GymDAO {
 	public boolean update(GymDTO gymDTO) {
 		//예약가능 개수 업데이트 GYM_RESERVATION_CNT, GYM_NUM
 		int result=jdbcTemplate.update(UPDATE_RESERVATION_CNT, gymDTO.getGym_reservation_cnt(),gymDTO.getGym_num());
+		if(result<=0) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean updateAdminBattleVerified(GymDTO gymDTO) {
+		//암벽장 승인여부 업데이트 GYM_ADMIN_BATTLE_VERIFIED, GYM_NUM // TODO 관리자 메인 페이지
+		int result=jdbcTemplate.update(UPDATE_ADMIN_BATTLE_VERIFIED, gymDTO.getGym_admin_battle_verified(),gymDTO.getGym_num());
 		if(result<=0) {
 			return false;
 		}
@@ -168,7 +185,7 @@ public class GymDAO {
 
 		//지역별 암벽장 개수 출력 // TODO 관리자 메인 페이지
 		List<GymDTO> datas=null;
-		datas=jdbcTemplate.query(ALL_LOCATION_COUNT_ADMIN,new GymCountRowMapper());
+		datas=jdbcTemplate.query(ALL_LOCATION_COUNT_ADMIN,new GymLocationCountRowMapper());
 		return datas;
 	}
 
@@ -188,65 +205,81 @@ public class GymDAO {
 		return datas;
 	}
 }
-
+@Slf4j
 class GymSelectRowMapperOneAll implements RowMapper<GymDTO> {
 
 	public GymDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		GymDTO gymDTO=new GymDTO();
-		System.out.print("GymSelectRowMapper DB에서 가져온 데이터 {");
+		log.info("GymSelectRowMapper DB에서 가져온 데이터 ↓↓↓↓↓");
 		gymDTO.setGym_num(rs.getInt("GYM_NUM"));
-		System.err.println("gym_num = ["+gymDTO.getGym_num()+"]");
+		log.info("gym_num = [{}]", gymDTO.getGym_num());
 		gymDTO.setGym_name(rs.getString("GYM_NAME"));
-		System.err.println("gym_name = ["+gymDTO.getGym_name()+"]");
+		log.info("gym_name = [{}]", gymDTO.getGym_name());
 		gymDTO.setGym_profile(rs.getString("GYM_PROFILE"));
-		System.err.println("gym_profile = ["+gymDTO.getGym_profile()+"]");
+		log.info("gym_profile = [{}]", gymDTO.getGym_profile());
 		gymDTO.setGym_description(rs.getString("GYM_DESCRIPTION"));
-		System.err.println("gym_description = ["+gymDTO.getGym_description()+"]");
+		log.info("gym_description = [{}]", gymDTO.getGym_description());
 		gymDTO.setGym_location(rs.getString("GYM_LOCATION"));
-		System.err.println("gym_location = ["+gymDTO.getGym_location()+"]");
+		log.info("gym_location = [{}]", gymDTO.getGym_location());
 		gymDTO.setGym_reservation_cnt(rs.getInt("GYM_RESERVATION_CNT"));
-		System.err.println("gym_reservation = ["+gymDTO.getGym_reservation_cnt()+"]");
+		log.info("gym_reservation_cnt = [{}]", gymDTO.getGym_reservation_cnt());
 		gymDTO.setGym_price(rs.getInt("GYM_PRICE"));
-		System.err.println("gym_price = ["+gymDTO.getGym_price()+"]");
+		log.info("gym_price = [{}]", gymDTO.getGym_price());
 		gymDTO.setGym_battle_num(rs.getInt("BATTLE_NUM"));
-		System.err.println("gym_battle_num = ["+gymDTO.getGym_battle_num()+"]");
+		log.info("gym_battle_num = [{}]", gymDTO.getGym_battle_num());
 		gymDTO.setGym_battle_game_date(rs.getString("BATTLE_GAME_DATE"));
-		System.err.print("gym_battle_game_date = ["+gymDTO.getGym_battle_game_date()+"]");
-		System.out.println("}");
+		log.info("gym_battle_game_date = [{}]", gymDTO.getGym_battle_game_date());
+		log.info("GymSelectRowMapper DB에서 가져온 데이터 ↑↑↑↑↑");
 		return gymDTO;
 	};
 }
-
+@Slf4j
 class GymCountRowMapper implements RowMapper<GymDTO> {
 
 	public GymDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		GymDTO gymDTO=new GymDTO();
-		System.out.print("GymCountRowMapper DB에서 가져온 데이터 {");
+		log.info("GymCountRowMapper DB에서 가져온 데이터 ↓↓↓↓↓");
 		gymDTO.setTotal(rs.getInt("GYM_TOTAL"));
-		System.err.print("gym_total = ["+gymDTO.getTotal()+"]");
-		System.out.println("}");
+		log.info("total = [{}]", gymDTO.getTotal());
+		log.info("GymCountRowMapper DB에서 가져온 데이터 ↑↑↑↑↑");
 		return gymDTO;
 	};
 }
+@Slf4j
+class GymLocationCountRowMapper implements RowMapper<GymDTO> {
 
+	public GymDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		GymDTO gymDTO=new GymDTO();
+		log.info("GymLocationCountRowMapper DB에서 가져온 데이터 ↓↓↓↓↓");
+		gymDTO.setGym_location(rs.getString("GYM_LOCATION_COUNT"));
+		log.info("gym_location = [{}]", gymDTO.getGym_location());
+		gymDTO.setTotal(rs.getInt("GYM_TOTAL"));
+		log.info("total = [{}]", gymDTO.getTotal());
+		log.info("GymLocationCountRowMapper DB에서 가져온 데이터 ↑↑↑↑↑");
+		return gymDTO;
+	};
+}
+@Slf4j
 class GymAdminMapperAll implements RowMapper<GymDTO> {
 
 	public GymDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		GymDTO gymDTO=new GymDTO();
-		System.out.print("GymCountRowMapper DB에서 가져온 데이터 {");
+		log.info("GymAdminMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
+		gymDTO.setGym_num(rs.getInt("GYM_NUM"));
+		log.info("gym_num = [{}]", gymDTO.getGym_num());
 		gymDTO.setGym_profile(rs.getString("GYM_PROFILE"));
-		System.err.println("gym_profile = ["+gymDTO.getGym_profile()+"]");
+		log.info("gym_profile = [{}]", gymDTO.getGym_profile());
 		gymDTO.setGym_name(rs.getString("GYM_NAME"));
-		System.err.println("gym_name = ["+gymDTO.getGym_name()+"]");
+		log.info("gym_name = [{}]", gymDTO.getGym_name());
 		gymDTO.setGym_location(rs.getString("GYM_LOCATION"));
-		System.err.println("gym_location = ["+gymDTO.getGym_location()+"]");
+		log.info("gym_location = [{}]", gymDTO.getGym_location());
 		gymDTO.setGym_price(rs.getInt("GYM_PRICE"));
-		System.err.println("gym_price = ["+gymDTO.getGym_price()+"]");
+		log.info("gym_price = [{}]", gymDTO.getGym_price());
 		gymDTO.setGym_description(rs.getString("GYM_DESCRIPTION"));
-		System.err.println("gym_description = ["+gymDTO.getGym_description()+"]");
+		log.info("gym_description = [{}]", gymDTO.getGym_description());
 		gymDTO.setGym_admin_battle_verified(rs.getString("GYM_ADMIN_BATTLE_VERIFIED"));
-		System.err.print("gym_admin_battle_verified = ["+gymDTO.getGym_admin_battle_verified()+"]"); // TODO GYM_VERIFIED 추가
-		System.out.println("}");
+		log.info("gym_admin_battle_verified = [{}]", gymDTO.getGym_admin_battle_verified());
+		log.info("GymAdminMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return gymDTO;
 	};
 }

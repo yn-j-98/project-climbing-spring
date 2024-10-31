@@ -67,7 +67,16 @@ public class MemberDAO {
 			+ "WHERE MEMBER_ID = ?";
 
 	//관리자 권한 변경 MEMBER_ROLE, MEMBER_ID // TODO 회원 관리 페이지
-	private final String UPDATE_ADMIN = "UPDATE MEMBER SET MEMBER_ROLE = ? WHERE MEMBER_ID = ?";
+	private final String UPDATE_ADMIN = """
+	UPDATE MEMBER SET MEMBER_PASSWORD = ?, 
+                  MEMBER_NAME = ?,
+                  MEMBER_CURRENT_POINT = ?,
+                  MEMBER_LOCATION = ?,
+                  MEMBER_CREW_NUM = ?,
+                  MEMBER_PHONE = ?,
+                  MEMBER_ROLE = ?
+              WHERE MEMBER_ID = ?
+	""";
 
 	//관리자가 아닌 신규회원 출력 (기간 7일)
 	private final String ALL_NEW = "SELECT MEMBER_ID,MEMBER_PASSWORD,MEMBER_NAME,MEMBER_PHONE,MEMBER_PROFILE,MEMBER_REGISTRATION_DATE,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE,MEMBER_LOCATION,MEMBER_ROLE\n"
@@ -181,65 +190,49 @@ public class MemberDAO {
 	public boolean insert(MemberDTO memberDTO) {
 		//회원가입 MEMBER_ID ,MEMBER_NAME, MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION
 		int result = jdbcTemplate.update(INSERT, memberDTO.getMember_id(), memberDTO.getMember_name(), memberDTO.getMember_password(), memberDTO.getMember_phone(), memberDTO.getMember_location());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateAll(MemberDTO memberDTO) {
 		//회원정보 업데이트 MEMBER_PASSWORD, MEMBER_PROFILE, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_ALL, memberDTO.getMember_password(), memberDTO.getMember_profile(), memberDTO.getMember_phone(), memberDTO.getMember_location(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateWithoutProfile(MemberDTO memberDTO) {
 		//회원정보 업데이트 (profile X) MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_WITHOUT_PROFILE, memberDTO.getMember_password(), memberDTO.getMember_phone(), memberDTO.getMember_location(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateCrew(MemberDTO memberDTO) {
 		//크루가입 (크루가입시 가입날짜입력때문에 분리) MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_CREW, memberDTO.getMember_crew_num(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean updateAdmin(MemberDTO memberDTO) {
-		//관리자 권한 변경 MEMBER_ROLE, MEMBER_ID
-		int result = jdbcTemplate.update(UPDATE_ADMIN, memberDTO.getMember_role(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+		//관리자 권한 변경 MEMBER_NAME = ?,
+		//                  MEMBER_CURRENT_POINT = ?,
+		//                  MEMBER_LOCATION = ?,
+		//                  MEMBER_CREW_NUM = ?,
+		//                  MEMBER_PHONE = ?,
+		//                  MEMBER_ROLE = ?
+		int result = jdbcTemplate.update(UPDATE_ADMIN, memberDTO.getMember_password(), memberDTO.getMember_name(), memberDTO.getMember_current_point(), memberDTO.getMember_location(), memberDTO.getMember_crew_num(), memberDTO.getMember_phone(), memberDTO.getMember_role(), memberDTO.getMember_id());
+        return result > 0;
+    }
 
 	public boolean updateCurrentPoint(MemberDTO memberDTO) {
 		//사용자 포인트 업데이트 MEMBER_CURRENT_POINT, MEMBER_ID
 		int result = jdbcTemplate.update(UPDATE_CURRENT_POINT, memberDTO.getMember_current_point(), memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public boolean delete(MemberDTO memberDTO) {
 		//회원탈퇴 MEMBER_ID
 		int result = jdbcTemplate.update(DELETE, memberDTO.getMember_id());
-		if (result <= 0) {
-			return false;
-		}
-		return true;
-	}
+        return result > 0;
+    }
 
 	public MemberDTO selectOneSearchId(MemberDTO memberDTO) {
 		MemberDTO data = null;

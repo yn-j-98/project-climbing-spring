@@ -14,6 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @Service("MainManagementService")
 public class MainManagementService {
@@ -32,15 +36,15 @@ public class MainManagementService {
     public String getManagementTotalDate(MemberDTO memberDTO, GymDTO gymDTO, ReservationDTO reservationDTO,
                                       BoardDTO boardDTO, BattleDTO battleDTO){
 
-        int memberTotalDate = getMemberTotal(memberDTO);
+        String memberTotalDate = getMemberTotal(memberDTO)+"";
         log.info("getManagementTotalDate memberTotalDate : [{}]",memberTotalDate);
-        int gymTotalDate = getGymTotal(gymDTO);
+        String gymTotalDate = getGymTotal(gymDTO)+"";
         log.info("getManagementTotalDate gymTotalDate : [{}]",gymTotalDate);
-        int reservationTotalDate = getReservationTotal(reservationDTO);
+        String reservationTotalDate = getReservationTotal(reservationDTO)+"";
         log.info("getManagementTotalDate reservationTotalDate : [{}]",reservationTotalDate);
-        int boardTotalDate = getBoardTotal(boardDTO);
+        String boardTotalDate = getBoardTotal(boardDTO)+"";
         log.info("getManagementTotalDate boardTotalDate : [{}]",boardTotalDate);
-        int battleTotalDate = getBattleTotal(battleDTO);
+        String battleTotalDate = getBattleTotal(battleDTO)+"";
         log.info("getManagementTotalDate battleTotalDate : [{}]",battleTotalDate);
 
         String formatData = "[{title:%s, text:%s},{title:%s, text:%s},{title:%s, text:%s},{title:%s, text:%s},{title:%s, text:%s}]";

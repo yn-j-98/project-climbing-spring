@@ -11,13 +11,13 @@
   <script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
 
   <!-- CSS Files -->
-  <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="../../assets/css/plugins.min.css" />
   <link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
 
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
-  <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
   <!-- template Js File -->
   <script src="../../assets/js/kaiadmin.min.js"></script>

@@ -16,6 +16,7 @@ public interface GymService {
 	boolean insertAdmin(GymDTO gymDTO);
 
 	boolean update(GymDTO gymDTO);
+	boolean updateAdminBattleVerified(GymDTO gymDTO);
 
 	boolean delete(GymDTO gymDTO);
 }

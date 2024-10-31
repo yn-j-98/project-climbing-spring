@@ -2,6 +2,7 @@ package com.coma.app.view.gym;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 public class GymController {
 	@Autowired
@@ -48,6 +50,7 @@ public class GymController {
 
 	@GetMapping("/gymMain.do")
 	public String gymMain(GymDTO gymDTO, Model model) {
+		log.info("gymMain.do 도착");
 		//boolean flag_Redirect = false; // 값을 전달해야하게 때문에 forward 방식으로 전달해야한다.
 		//---------------------------------------------------------------------------
 		//해당 페이지에서 공통으로 사용할 변수 and 객체
@@ -57,23 +60,25 @@ public class GymController {
 		//페이지 네이션을 위한 페이지 개수를 구하는 로직을 구현
 
 		int page = gymDTO.getPage();
+		log.info("page = [{}]", page);
+
 		int size = 10; // 한 페이지에 표시할 게시글 수
 		if (page <= 0) { // 페이지가 0일 때 (npe방지)
 			page = 1;
 		}
 		int min_num = (page - 1) * size;
-
-		System.out.println("min = " + min_num);
+		log.info("min_num = [{}]", min_num);
 
 		gymDTO.setGym_min_num(min_num);
 
 		//암벽장 총 개수를 요청 selectOne
 		GymDTO gym_total = this.gymService.selectOneCount(gymDTO);
+		log.info("gym_total = [{}]", gym_total);
 
 		//암벽장 리스트를 model에 요청 selectAll
 		//암벽장 테이블에서 받을 값(암벽장 번호 / 암벽장 이름 / 암벽장 주소)
 		List<GymDTO> gym_datas = this.gymService.selectAll(gymDTO);
-		System.out.println(gym_datas);
+		log.info("gym_datas =[{}]", gym_datas);
 		//------------------------------------------------------------
 		//지도 API를 사용하기 위해 json 형식으로 보내는 로직
 		String json = "[";
@@ -89,13 +94,14 @@ public class GymController {
 			json = json.substring(0, json.lastIndexOf(",")); 
 		}
 		json+="]";
-		System.out.println(json);
+		log.info("json = [{}]", json);
 		//------------------------------------------------------------
 		//암벽장 리스트를 View로 전달
 		model.addAttribute("gym_datas", gym_datas);
 		//암벽장 전체 개수를 View로 전달
 		//FIXME V에서 앞에 model 빼야지 작동함
 		model.addAttribute("total", gym_total.getTotal());
+		log.info("total = [{}]", gym_total.getTotal());
 		//암벽장 페이지 페이지 번호를 전달.
 		model.addAttribute("page", page);
 		//json 형식 데이터 전송
@@ -106,6 +112,7 @@ public class GymController {
 	@LoginCheck
 	@PostMapping("/gymReservation.do")
 	public String gymReservation(GymDTO gymDTO, ReservationDTO reservationDTO, MemberDTO memberDTO, Model model) {
+		log.info("gymReservation.do 도착");
 		String path = "views/info"; // view에서 알려줄 예정 alert 창 띄우기 위한 JavaScript 페이지
 		//로그인 정보가 있는지 확인해주고
 		String member_id = (String) session.getAttribute("MEMBER_ID");
@@ -206,25 +213,26 @@ public class GymController {
 	@LoginCheck
 	@PostMapping("/gymReservationInfo.do")
 	public String gymReservationInfo(Model model,GymDTO gymDTO, MemberDTO memberDTO, ReservationDTO reservationDTO) {
-
+		log.info("gymReservationInfo.do 도착");
 		String error_path = "views/info";
 
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 
 		//FIXME reservation_date M에서
 		String gym_reservation_date = reservationDTO.getReservation_date();
-
+		log.info("gym_reservation_date = [{}]", gym_reservation_date);
 		//------------------------------------------------------------
 		//해당 기능에서 공통으로 사용할 변수 and 객체
 		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
 		int gym_num = gymDTO.getGym_num();
-		System.err.println("36 예약날짜 ="+gym_reservation_date);
+		log.info("gym_num = [{}]", gym_num);
+
 //		System.err.println("사용포인트 넘어왔니"+memberDTO.getMember_use_point);
 //		int reservation_use_point=0;
 //		if(memberDTO.getMember_use_point!=null) {
 //			reservation_use_point = memberDTO.getMember_use_point;
 //		}
-		System.err.println("사용포인트 넘어왔니"+reservationDTO.getReservation_use_point());
+		log.info("reservation_use_point = [{}]", reservationDTO.getReservation_use_point());
 		int reservation_use_point=reservationDTO.getReservation_use_point();
 //		if(memberDTO.getMember_use_point!=null) {
 //			reservation_use_point = memberDTO.getMember_use_point;
@@ -254,9 +262,11 @@ public class GymController {
 				reservation_use_point = max_Point;
 			}
 			//(사용자 아이디)을 MemberDTO에 추가합니다.
+			memberDTO.setMember_id(member_id);
 			//TODO 사용자의 현재 포인트를 SelectOne으로 요청하고
 			MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
 			//TODO 해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
+
 			int use_Point = member_point.getMember_current_point() - reservation_use_point;
 			//use_Point 값이
 			//음수 == error_message : 현재 포인트가 부족하여 예약에 실패하였습니다. (현재 포인트 : XX)
@@ -279,6 +289,8 @@ public class GymController {
 			//해당 암벽장 정보의 예약 최대 인원을 요청합니다.
 			int reservation_total_cnt = this.gymService.selectOne(gymDTO).getGym_reservation_cnt();
 			//암벽장 번호와 예약 날짜를 Reservation DTO 에 추가해줍니다.
+			reservationDTO.setReservation_gym_num(gym_num);
+			reservationDTO.setReservation_date(gym_reservation_date);
 			//model 에 selectOne 을 요청하여 현재 예약한 인원을 요청합니다.
 			int reservation_current_cnt = this.reservationService.selectOneCount(reservationDTO).getTotal();
 			//예약 인원이 resrvation_cnt = resrvation_total_cnt - resrvation_current_cnt
@@ -334,7 +346,6 @@ public class GymController {
 		String gym_description="";
 		String gym_location="";
 		int gym_price=0;
-
 		//해당 암벽장의 승리 크루전 객체
 		//크루전 정보 변수 및 객체
 		int Gym_battle_num;
@@ -351,7 +362,8 @@ public class GymController {
 		gym_profile = "https://"+data.getGym_profile();
 		gym_description = data.getGym_description();
 		gym_location = data.getGym_location();
-		int price = data.getGym_price();
+		gym_price = data.getGym_price();
+
 		//암벽장 정보 로직 종료
 		//---------------------------------------------------------------------------
 		//해당 암벽장에서 승리한 크루 목록 로직 시작
@@ -379,7 +391,7 @@ public class GymController {
 		if(member_id != null) {
 			//사용자 포인트 요청 로직 시작
 			//사용자 아이디를 Member DTO에 저장하고
-
+			memberDTO.setMember_id(member_id);
 			//Member selectOne으로 Model에 해당 사용자의 사용가능 포인트요청
 			MemberDTO member_data = this.memberService.selectOneSearchId(memberDTO);
 			int member_current_point = 0 ;
@@ -388,7 +400,7 @@ public class GymController {
 				member_current_point = member_data.getMember_current_point();
 				//View로 사용 가능 포인트 전달
 				//FIXME V에서 앞에 Gym 빼야지 작동함
-				model.addAttribute("member_current_point", member_current_point);
+				model.addAttribute("gym_member_current_point", member_current_point);
 			}
 
 			//사용자 포인트 요청 로직 종료
