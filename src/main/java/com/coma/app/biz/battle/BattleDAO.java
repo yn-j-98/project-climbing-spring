@@ -14,6 +14,44 @@ public class BattleDAO {
 
 	/* 관리자 페이지 쿼리문 */
 
+	//해당 크루전의 승리크루 정보
+	private final String ONE_SEARCH_WINNER = "SELECT\n" +
+			"    B.BATTLE_NUM,\n" +
+			"    G.GYM_NAME,\n" +
+			"    B.BATTLE_GAME_DATE,\n" +
+			"    C.CREW_NAME AS BATTLE_CREW_NAME,\n" +
+			"    BR.BATTLE_RECORD_MVP_ID AS BATTLE_MEMBER_NAME\n" +
+			"FROM\n" +
+			"    BATTLE B\n" +
+			"JOIN\n" +
+			"    GYM G ON B.BATTLE_GYM_NUM = G.GYM_NUM\n" +
+			"JOIN\n" +
+			"    BATTLE_RECORD BR ON B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\n" +
+			"JOIN\n" +
+			"    CREW C ON C.CREW_NUM = BR.BATTLE_RECORD_CREW_NUM\n" +
+			"WHERE\n" +
+			"    B.BATTLE_NUM = ?\n" +
+			"    AND BR.BATTLE_RECORD_IS_WINNER = 'T'";
+
+	// 해당 크루전의 모든 참여 크루 정보
+	private final String ALL_SEARCH_PARTICIPANTS = "SELECT\n" +
+			"    B.BATTLE_NUM,\n" +
+			"    G.GYM_NAME,\n" +
+			"    B.BATTLE_GAME_DATE,\n" +
+			"    C.CREW_NAME AS BATTLE_CREW_NAME,\n" +
+			"    C.CREW_CURRENT_MEMBER_SIZE AS BATTLE_CREW_NUM,\n"+
+			"    C.CREW_LEADER AS BATTLE_MEMBER_NAME,\n" +
+			"FROM\n" +
+			"    BATTLE B\n" +
+			"JOIN\n" +
+			"    GYM G ON B.BATTLE_GYM_NUM = G.GYM_NUM\n" +
+			"JOIN\n" +
+			"    BATTLE_RECORD BR ON B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\n" +
+			"JOIN\n" +
+			"    CREW C ON C.CREW_NUM = BR.BATTLE_RECORD_CREW_NUM\n" +
+			"WHERE\n" +
+			"    B.BATTLE_NUM = ?";
+
 	//todo
 	// 메인페이지 - selectOne
 	// 활성화되어 있는 크루전 count(*)
@@ -361,7 +399,7 @@ public class BattleDAO {
 	public List<BattleDTO> selectAllActive(BattleDTO battleDTO){
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllActive 시작");
 		List<BattleDTO> result = null;
-		Object[] args = new Object[]{battleDTO.getPage(),10};
+		Object[] args = new Object[]{battleDTO.getBattle_min_num(),10};
 		try{
 			result = jdbcTemplate.query(ALL_ACTIVE,args,new BattleRowMapperAllActive());
 		}catch(Exception e){
@@ -375,7 +413,7 @@ public class BattleDAO {
 	public List<BattleDTO> selectAdminAll5Active(BattleDTO battleDTO){
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllActive 시작");
 		List<BattleDTO> result = null;
-		Object[] args = new Object[]{battleDTO.getPage(),5};
+		Object[] args = new Object[]{battleDTO.getBattle_min_num(),5};
 		try{
 			result = jdbcTemplate.query(ALL_ACTIVE,args,new BattleRowMapperAllActive());
 		}catch(Exception e){
@@ -504,6 +542,31 @@ public class BattleDAO {
 		List<BattleDTO> result = null;
 		try{
 			result = jdbcTemplate.query(All_CREW_MEMBER_NAME,new BattleRowMapperAllCrewMemberName());
+		}catch (Exception e) {
+			System.err.println("	[에러] com.coma.app.biz.battle.selectAllCrewMemberName Sql문 실패 : All_CREW_MEMBER_NAME = " + All_CREW_MEMBER_NAME);
+			e.printStackTrace();
+		}
+		return result;
+	}
+	//해당 크루전의 승리크루 정보
+	public BattleDTO selectOneSearchWinner(BattleDTO battleDTO){
+		System.out.println("    [로그] com.coma.app.biz.battle.selectAllCrewMemberName 시작");
+		BattleDTO result = null;
+		try{
+			result = jdbcTemplate.queryForObject(ONE_SEARCH_WINNER,new BattleRowMapperOneSearchWinner(),battleDTO.getBattle_num());
+		}catch (Exception e) {
+			System.err.println("	[에러] com.coma.app.biz.battle.selectAllCrewMemberName Sql문 실패 : All_CREW_MEMBER_NAME = " + All_CREW_MEMBER_NAME);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	// 해당 크루전의 모든 참여 크루 정보
+	public List<BattleDTO> selectAllSearchPariticipants(BattleDTO battleDTO){
+		System.out.println("    [로그] com.coma.app.biz.battle.selectAllCrewMemberName 시작");
+		List<BattleDTO> result = null;
+		try{
+			result = jdbcTemplate.query(ALL_SEARCH_PARTICIPANTS,new BattleRowMapperAllSearchParticipants(),battleDTO.getBattle_num());
 		}catch (Exception e) {
 			System.err.println("	[에러] com.coma.app.biz.battle.selectAllCrewMemberName Sql문 실패 : All_CREW_MEMBER_NAME = " + All_CREW_MEMBER_NAME);
 			e.printStackTrace();
@@ -858,6 +921,93 @@ class BattleRowMapperAllCrewMemberName implements RowMapper<BattleDTO> {
 		try{
 			battleDTO.setBattle_member_name(rs.getString("MEMBER_NAME"));
 		}catch (Exception e){
+			System.err.println("Battle_member_name = null");
+			battleDTO.setBattle_member_name(null);
+		}
+		return battleDTO;
+	}
+}
+
+class BattleRowMapperOneSearchWinner implements RowMapper<BattleDTO> {
+	@Override
+	public BattleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		System.out.println("com.coma.app.biz.battle.BattleRowMapperOneSearchWinner 검색 성공");
+		BattleDTO battleDTO = new BattleDTO();
+
+		try {
+			battleDTO.setBattle_num(rs.getInt("BATTLE_NUM"));
+		} catch (Exception e) {
+			System.err.println("Battle_num = null");
+			battleDTO.setBattle_num(0); // 기본값으로 설정, 필요시 변경
+		}
+		try {
+			battleDTO.setBattle_gym_name(rs.getString("GYM_NAME"));
+		} catch (Exception e) {
+			System.err.println("Battle_gym_name = null");
+			battleDTO.setBattle_gym_name(null);
+		}
+		try {
+			battleDTO.setBattle_game_date(rs.getString("BATTLE_GAME_DATE"));
+		} catch (Exception e) {
+			System.err.println("Battle_game_date = null");
+			battleDTO.setBattle_game_date(null);
+		}
+		try {
+			battleDTO.setBattle_crew_name(rs.getString("BATTLE_CREW_NAME"));
+		} catch (Exception e) {
+			System.err.println("Battle_crew_name = null");
+			battleDTO.setBattle_crew_name(null);
+		}
+		try {
+			battleDTO.setBattle_member_name(rs.getString("BATTLE_MEMBER_NAME"));
+		} catch (Exception e) {
+			System.err.println("Battle_member_name = null");
+			battleDTO.setBattle_member_name(null);
+		}
+		return battleDTO;
+	}
+}
+class BattleRowMapperAllSearchParticipants implements RowMapper<BattleDTO> {
+	@Override
+	public BattleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		System.out.println("com.coma.app.biz.battle.BattleRowMapperOneSearchWinner 검색 성공");
+		BattleDTO battleDTO = new BattleDTO();
+		try {
+			battleDTO.setBattle_num(rs.getInt("BATTLE_NUM"));
+		} catch (Exception e) {
+			System.err.println("Battle_num = null");
+			battleDTO.setBattle_num(0);
+		}
+		//CREW_CURRENT_MEMBER_SIZE AS BATTLE_CREW_NUM
+		try {
+			battleDTO.setBattle_crew_num(rs.getInt("BATTLE_CREW_NUM"));
+		} catch (Exception e) {
+			System.err.println("battle_crew_num = null");
+			battleDTO.setBattle_num(0);
+		}
+		try {
+			battleDTO.setBattle_gym_name(rs.getString("GYM_NAME"));
+		} catch (Exception e) {
+			System.err.println("Battle_gym_name = null");
+			battleDTO.setBattle_gym_name(null);
+		}
+		try {
+			battleDTO.setBattle_game_date(rs.getString("BATTLE_GAME_DATE"));
+		} catch (Exception e) {
+			System.err.println("Battle_game_date = null");
+			battleDTO.setBattle_game_date(null);
+		}
+		//CREW_NAME AS BATTLE_CREW_NAME
+		try {
+			battleDTO.setBattle_crew_name(rs.getString("BATTLE_CREW_NAME"));
+		} catch (Exception e) {
+			System.err.println("Battle_crew_name = null");
+			battleDTO.setBattle_crew_name(null);
+		}
+		//CREW_LEADER AS BATTLE_MEMBER_NAME
+		try {
+			battleDTO.setBattle_member_name(rs.getString("BATTLE_MEMBER_NAME"));
+		} catch (Exception e) {
 			System.err.println("Battle_member_name = null");
 			battleDTO.setBattle_member_name(null);
 		}
