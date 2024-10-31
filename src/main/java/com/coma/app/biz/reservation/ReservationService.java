@@ -13,6 +13,7 @@ public interface ReservationService {
 	ReservationDTO selectOneCount(ReservationDTO reservationDTO);
 	ReservationDTO selectOneReservation(ReservationDTO reservationDTO);
 	ReservationDTO selectOneCountYearAdmin(ReservationDTO reservationDTO);
+	ReservationDTO selectOneCountAdmin(ReservationDTO reservationDTO);
 
 	boolean insert(ReservationDTO reservationDTO);
 
