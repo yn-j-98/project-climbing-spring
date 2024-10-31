@@ -4,6 +4,7 @@ import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.gym.GymService;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 
+@Slf4j
 @Controller
 public class GymManagementController {
 
@@ -38,6 +40,8 @@ public class GymManagementController {
         	↑
     SELECTALL (아마도)
     */
+        String search_keyword =  gymDTO.getSearch_keyword();
+        int listNum = 0;
         int page = gymDTO.getPage();
         int size = 10; // 한 페이지에 표시할 게시글 수
         if (page <= 0) { // 페이지가 0일 때 (npe방지)
@@ -45,25 +49,44 @@ public class GymManagementController {
         }
         int min_num = (page - 1) * size;
 
-
-        gymDTO = this.gymService.selectOneCount(gymDTO);
-        int listNum = gymDTO.getTotal();
-
-
+        List<GymDTO> datas = null;
+        //페이지 네이션을 위한 값
         gymDTO.setGym_min_num(min_num);
-        List<GymDTO> datas = this.gymService.selectAllAdmin(gymDTO);
+        if (search_keyword == null) {
+            listNum = this.gymService.selectOneCount(gymDTO).getTotal();
+            datas = this.gymService.selectAllAdmin(gymDTO);
+            log.debug("if (search_keyword == null) end");
+        }
+        else if("ALL".equals(search_keyword)){
+            //전체 암벽장 이름 검색
+            listNum = this.gymService.selectOneAdminSearchCount(gymDTO).getTotal();
+            datas = this.gymService.selectAllAdminSearch(gymDTO);
+            log.debug("else if(\"ALL\".equals(search_keyword)) end");
+        }
+        else if("adminCertified".equals(search_keyword)){
+            //크루전 등록 된 암벽장 이름 검색
+            gymDTO.setGym_admin_battle_verified("T");
+            listNum = this.gymService.selectOneAdminVerifiedCount(gymDTO).getTotal();
+            datas = this.gymService.selectAllAdminVerified(gymDTO);
+            log.debug("else if(\"adminCertified\".equals(search_keyword)) end");
+        }
+        else if("adminUnCertified".equals(search_keyword)){
+            //크루전 등록 안된 암벽장 이름 검색
+            gymDTO.setGym_admin_battle_verified("F");
+            listNum = this.gymService.selectOneAdminVerifiedCount(gymDTO).getTotal();
+            datas = this.gymService.selectAllAdminVerified(gymDTO);
+            log.debug("else if(\"adminUnCertified\".equals(search_keyword)) end");
+        }//승인 비승인된 암벽장 검색
 
-        this.gymService.selectAllAdminVerified(gymDTO);
-        //승인 비승인된 암벽장 검색
-
-
-
-
+        log.info("admin gym datas [{}]",datas);
+        log.info("admin gym listNum [{}]",listNum);
+        log.info("admin gym page [{}]",page);
 
         model.addAttribute("datas", datas);//암벽장 전체 데이터
+        model.addAttribute("search_keyword",gymDTO.getSearch_keyword());
+        model.addAttribute("search_content",gymDTO.getSearch_content());
         model.addAttribute("page", page);//현재 페이지
         model.addAttribute("total", listNum);//암벽장 총 개수
-
 
         return "admin/gymManagement";
     }
@@ -85,12 +108,12 @@ public class GymManagementController {
         String uploadPath = servletContext.getRealPath("/gym_img/");
         MultipartFile file = gymDTO.getGym_file();
         String fileName = file.getOriginalFilename();
-        System.out.println("파일명 " + fileName);
+        log.info("파일명 : [{}]",fileName);
 
         file.transferTo(new File(uploadPath + fileName));
 
         gymDTO.setGym_profile(fileName);
-        System.out.println("프로필 이미지 저장 로그: " + gymDTO); // 프로필 이미지 저장 로그
+        log.info("프로필 이미지 저장 로그 : [{}]", gymDTO);
 
         if (!this.gymService.insertAdmin(gymDTO)) {
             title = "실패";
@@ -103,5 +126,28 @@ public class GymManagementController {
         return "views/info";
     }
 
+    @LoginCheck
+    @PostMapping("/gymManagementReq.do")
+    public String gymManagementReq(Model model, GymDTO gymDTO) {
+
+        String infoPath = "gymManagement.do";
+        String title = "크루전이 등록되었습니다.";
+        String msg = "";
+
+        //암벽장 번호, 암벽장 크루전 등록 여부를 받습니다.
+        if(!gymService.updateAdminBattleVerified(gymDTO)){
+            title = "크루전 등록 실패";
+            if("T".equals(gymDTO.getGym_admin_battle_verified())){
+                title = "이미 크루전이 등록되어 있는 암벽장입니다.";
+            }
+            msg = "Server 오류로 크루전에 등록에 실패하였습니디.";
+        }
+
+        model.addAttribute("title", title);
+        model.addAttribute("msg", msg);
+        model.addAttribute("path", infoPath);
+
+        return "views/info";
+    }
 
 }
