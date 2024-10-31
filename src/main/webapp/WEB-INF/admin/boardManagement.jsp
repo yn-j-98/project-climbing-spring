@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>게시판 관리</title>
     <!--   Core JS Files   -->
-    <script src="assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
 
     <!-- Bootstrap JavaScript with Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
@@ -15,31 +15,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
-    <script src="assets/js/core/bootstrap.min.js"></script>
+    <script src="../../assets/js/core/bootstrap.min.js"></script>
 
-    <!--페이지네이션 외부 스크립트-->
-    <script src="js/pagenation.js"></script>
+
     <!-- sweetAlert JS FILE -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
-    <script src="js/sweetAlert_modal.js"></script>
+    <script src="../../js/sweetAlert_modal.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/kaiadmin.css"/>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <!-- Fonts and icons -->
     <script src="assets/js/plugin/webfont/webfont.min.js"></script>
     <script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="assets/css/plugins.min.css"/>
-    <link rel="stylesheet" href="assets/css/kaiadmin.css"/>
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../assets/css/plugins.min.css"/>
+    <link rel="stylesheet" href="../../assets/css/kaiadmin.css"/>
 
 
     <!-- template Js File -->
     <script src="assets/js/kaiadmin.min.js"></script>
+    <!--페이지네이션 외부 스크립트-->
+    <script src="../../js/pagination.js"></script>
     <style>
 
     </style>
@@ -72,7 +72,6 @@
                             <div class="form-floating">
                                 <%--TODO 컨디션 안쓴다면 ID 변경--%>
                                 <select class="form-select" id="search_keyword">
-                                    <option ${search_keywoard == "BOARD_NUM" ? "selected":''} value="BOARD_NUM">게시글 번호</option>
                                     <option ${search_keywoard == "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
                                     <option ${search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
                                 </select>
@@ -117,20 +116,29 @@
                                 </thead>
                                 <!--데이터 목록-->
                                 <tbody id="boardList">
-                                <c:forEach var="board" items="${datas}">
-                                    <tr class="align-middle board-detail" data-board-num="${board.board_num}">
-                                        <td>
-                                            <div class="form-check text-start">
-                                                <input class="form-check-input" type="checkbox" value="">
-                                            </div>
-                                        </td>
-                                        <td>${board.board_title}</td>
-                                        <td>${board.member_name}</td>
-                                        <td class="overflow-hidden">
-                                            ${board.board_writer_id}
+                                <c:if test="${empty datas}">
+                                    <tr class="align-middle">
+                                        <td colspan="4">
+                                            등록된 게시글이 없습니다.
                                         </td>
                                     </tr>
-                                </c:forEach>
+                                </c:if>
+                                <c:if test="${not empty datas}">
+                                    <c:forEach var="board" items="${datas}">
+                                        <tr class="align-middle board-detail" data-board-num="">
+                                            <td>
+                                                <div class="form-check text-start">
+                                                    <input class="form-check-input" type="checkbox" value="${board.board_num}">
+                                                </div>
+                                            </td>
+                                            <td class="board-detail-title">${board.board_title}</td>
+                                            <td><%--${board.member_name}--%></td>
+                                            <td class="overflow-hidden">
+                                                    ${board.board_writer_id}
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </c:if>
                                 </tbody>
                             </table>
                         </div>
@@ -182,7 +190,7 @@
 
                         // 체크된 모든 항목의 boardNum을 추가
                         checkedItems.each(function () {
-                            var boardNum = $(this).data("boardNum");
+                            const boardNum = $(this).val();
                             console.log("boardNum =[" + boardNum + "]");
                             //TODO 배열 요청 자체적으로 배열로 만들어서 넘긴다 = 같은이름이기 때문에
                             form.append($('<input/>', {type: 'hidden', name: 'board_num_list', value: boardNum}));
@@ -190,48 +198,51 @@
 
                         console.log("폼 HTML = [" + form.html() + "]"); // 폼 내부의 HTML 내용 출력
                         form.appendTo('body').submit(); // 폼을 body에 추가하여 제출
-                        // sweetAlert_success('삭제가 완료되었습니다', ' ');
+                        //sweetAlert_success('삭제가 완료되었습니다', ' ');
                         //TODO 컨트롤러가 인포페이지로 이동해줄것
                     }
                 });
         });
 
-        //검색 동기
-        $('#search').click(function () {
-            var board_search_content = $('#search_content').val();
-            var board_search_keyword = $('#search_keyword').val();//문자열 값으로 변환
-            console.log("board_search_content = [" + board_search_content + "]");
-            console.log("board_search_keyword = [" + board_search_keyword + "]");
-
-            var form = $('<form/>', {
-                //TODO .do 입력
-                action: 'boardManagement.do',
-                method: 'POST',
-                style: 'display: none;'
-            });
-            form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: board_search_keyword}));
-            form.append($('<input/>', {type: 'hidden', name: 'search_content', value: board_search_content}));
-            // 문서에 form 추가
-            $('body').append(form);
-            form.submit();
-        });
+        // //검색 동기
+        // $('#search').click(function () {
+        //     var board_search_content = $('#search_content').val();
+        //     var board_search_keyword = $('#search_keyword').val();//문자열 값으로 변환
+        //     console.log("board_search_content = [" + board_search_content + "]");
+        //     console.log("board_search_keyword = [" + board_search_keyword + "]");
+        //
+        //     var form = $('<form/>', {
+        //         //TODO .do 입력
+        //         action: 'boardManagement.do',
+        //         method: 'POST',
+        //         style: 'display: none;'
+        //     });
+        //     form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: board_search_keyword}));
+        //     form.append($('<input/>', {type: 'hidden', name: 'search_content', value: board_search_content}));
+        //     // 문서에 form 추가
+        //     $('body').append(form);
+        //     form.submit();
+        // });
 
         //글 내용 클릭시 상세페이지로 이동
-        $('.board-detail').click(function () {
-            let boardNum = $(this).data('boardNum');
-            console.log("boardNum = [" + boardNum + "]");
+        $('.board-detail').each(function () {
+                const boardNum = $(this).find("input.form-check-input").val();
+            $(this).find(".board-detail-title").on("click" ,function () {
+                console.log("boardNum = [" + boardNum + "]");
 
-            var form = $('<form/>', {
-                //TODO .do 입력
-                action: 'boardManagementDetail.do',
-                method: 'GET',
-                style: 'display: none;'
+                var form = $('<form/>', {
+                    //TODO .do 입력
+                    action: 'boardManagementDetail.do',
+                    method: 'GET',
+                    style: 'display: none;'
+                });
+                form.append($('<input/>', {type: 'hidden', name: 'board_num', value: boardNum}));
+                // 문서에 form 추가
+                $('body').append(form);
+                form.submit();
             });
-            form.append($('<input/>', {type: 'hidden', name: 'board_num', value: boardNum}));
-            // 문서에 form 추가
-            $('body').append(form);
-            form.submit();
         });
+
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

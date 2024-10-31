@@ -5,176 +5,174 @@ import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.battle.BattleService;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
+import com.coma.app.biz.crew.CrewDTO;
 import com.coma.app.view.annotation.LoginCheck;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 
 
+@Slf4j
 @Controller
-
-
-
 public class CrewBattleController {
+    @Autowired
+    private ServletContext servletContext;
 
-   @Autowired
-   private Battle_recordService battle_recordService;
+    @Autowired
+    private Battle_recordService battle_recordService;
 
-   @Autowired
-   private BattleService battleService;
+    @Autowired
+    private BattleService battleService;
 
-   @LoginCheck
-   @GetMapping("/crewBattleDetail.do")
-   public String crewBattle(Model model, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO) {
+    @LoginCheck
+    @GetMapping("/crewBattleDetail.do")
+    public String crewBattle(Model model, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO) {
+        /*
+         * 크루전 상세 페이지 이동
+         * 뷰에게서 view_battle_num을 받아옵니다.
+         * battle_record DTO와 DAO를 생성
+         * DTO에 battle_record_battle_num을 set
+         * 크루전 내용을 위해 selectOne
+         * 컨디션은 BATTLE_RECORD_ONE_BATTLE
+         *
+         * DTO를 따로 하나 더 파서
+         * DTO에 battle_record_battle_num을 set
+         * 크루전 참가 크루를 위해 selectAll
+         * 컨디션은 BATTLE_RECORD_ALL_PARTICIPANT_CREW
+         */
+        int battle_num = battleDTO.getBattle_num();
 
+        //크루전 번호로 크루전 검색
+        log.info("검색할 크루전 pk = [{}]", battle_num);
+        battle_recordDTO.setBattle_record_battle_num(battle_num);
+        battle_recordDTO = this.battle_recordService.selectOneBattle(battle_recordDTO);
+        log.info("crewBattle.battle_recordDTO [{}]",battle_recordDTO);
+        model.addAttribute("battle_record", battle_recordDTO);
 
-      /*
-       * 크루전 상세 페이지 이동
-       * 뷰에게서 view_battle_num을 받아옵니다.
-       * battle_record DTO와 DAO를 생성
-       * DTO에 battle_record_battle_num을 set
-       * 크루전 내용을 위해 selectOne
-       * 컨디션은 BATTLE_RECORD_ONE_BATTLE
-       *
-       * DTO를 따로 하나 더 파서
-       * DTO에 battle_record_battle_num을 set
-       * 크루전 참가 크루를 위해 selectAll
-       * 컨디션은 BATTLE_RECORD_ALL_PARTICIPANT_CREW
-       */
+        //크루전 번호로 참여크루 총 개수 검색
+        battleDTO.setBattle_num(battle_num);
+        int battle_total = this.battleService.selectOneSearchCountActive(battleDTO).getTotal();
+        log.info("크루전 참여크루 총 개수 = [{}]",battle_total);
+        model.addAttribute("battle_total", battle_total);
 
+        //크루전 번호로 참여한 크루들 정보 검색
+        battle_recordDTO.setBattle_record_battle_num(battle_num);
+        List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllParticipantCrew(battle_recordDTO);
+        if (battle_record_datas.isEmpty()) {log.error("battle_record_datas 비어있음");}
+        for (Battle_recordDTO data : battle_record_datas) {
+            log.info("crewBattle.battle_record_datas [{}]",data);
+        }
+        model.addAttribute("battle_record_datas", battle_record_datas);
 
-      //view_battle_num
+        //크루전 종료 여부
+        boolean flag = false;
+        for (Battle_recordDTO data : battle_record_datas) {
+            log.info("crewBattle.battle_record_datas [{}]",data);
+            if (data.getBattle_record_is_winner().equals("T")) {
+                flag = true;
+                break;
+            }
+        }
+        model.addAttribute("battle_flag", flag);
+        if (flag) {
+            log.info("경기 결과 있음");
+        } else {
+            log.info("경기 시작전");
+        }
 
-      //크루전 내용
+        return "views/crewBattleContent";
+    }
 
-      //		battle_recordDTO.setModel_battle_record_condition("BATTLE_RECORD_ONE_BATTLE");//크루전 내용 컨디션
-      battle_recordDTO = this.battle_recordService.selectOneBattle(battle_recordDTO);
-      System.out.println("CrewBattleController.battle_recordDTO ["+battle_recordDTO+"]");
+    @GetMapping("/crewBattle.do")
+    public String crewBattle(Model model, BattleDTO battleDTO, @SessionAttribute("MEMBER_ID") String member_id, @SessionAttribute("CREW_CHECK") Integer crew_num) {
+        log.info("crewBattle.session.member_id = [{}]", member_id);
+        log.info("crewBattle.session.crew_num = [{}]", crew_num);
+        /*
+         * 페이지네이션을 하기위해 뷰에게서 page_num을 받아오고
+         * 페이지네이션 계산 후
+         * memberDTO와 DAO 생성
+         * DTO에 member_id를 set해주고
+         * 내 크루를 찾기위해 selectOne
+         * 컨디션은 MEMBER_SEARCH_MY_CREW
+         *
+         * battleDTO와 DAO 생성
+         * DTO에 battle_crew_num을 set해주고
+         * 내 크루 크루전을 찾기위해 selectOne
+         * 컨디션은 VATTLE_SEARCH_MEMBER_BATTLE
+         *
+         * battleDTO를 따로 하나 더 생성해서
+         * 크루전 목록  selectAll
+         * min_num과 max_num을 set
+         * 컨디션은 BATTLE_ALL_ACTIVE
+         *
+         * battleDTO 또 하나 더 생성해서
+         * 크루전 총 개수 selectOne
+         * 컨디션은 BATTLE_ONE_COUNT_ACTIVE
+         */
+        int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
+        int minBoard = 1; // 최소 게시글 수 초기화
 
-      //참여크루 총 개수
+        if (crew_num == null) {
+            model.addAttribute("title", "페이지 접근 실패");
+            model.addAttribute("msg", "가입된 크루가 없습니다");
+            model.addAttribute("path", "crewList.do");
+            return "views/info";
+        }
+        int pageNum = battleDTO.getPage(); //자동바인딩
+        if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
+            pageNum = 1;
+        }
+        minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
+        model.addAttribute("page", pageNum);//현재페이지번호
 
-//        battleDTO.setBattle_condition("BATTLE_ONE_COUNT_ACTIVE");
-      battleDTO = this.battleService.selectOneCountActive(battleDTO);
+        //내 크루가 참여신청한 크루전 출력
+        battleDTO.setBattle_crew_num(crew_num);
+        BattleDTO my_battle = this.battleService.selectOneSearchMemberBattle(battleDTO);
+        if (my_battle != null) {
+            //이미지 파일명 url로 정제
+            battleDTO.setBattle_gym_profile(makeURL(my_battle));
+            log.info("이미지 = [{}]", battleDTO.getBattle_gym_profile());
+        }
+        model.addAttribute("my_battle", battleDTO);//내크루전 정보
 
-      //참여한 크루들 정보
-//        battle_recordDTO.setBattle_record_condition("BATTLE_RECORD_ALL_PARTICIPANT_CREW");
-      List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllParticipantCrew(battle_recordDTO);
+        //전체 크루전 목록 출력 + 페이지네이션
+        battleDTO.setBattle_min_num(minBoard);
+        List<BattleDTO> battle_datas = this.battleService.selectAllActive(battleDTO);
 
-      boolean flag = false; //크루전 종료 여부
+        //전체목록의 이미지 파일명 url로 정제
+        if (battle_datas != null) {
+            for (BattleDTO data : battle_datas) {
+                log.info("이미지 = [{}]", data.getBattle_gym_profile());
+                data.setBattle_gym_profile(makeURL(data));
+            }
+        }
+        model.addAttribute("battle_datas", battle_datas);//활성화 되어있는 크루전 전체목록
 
-      for(Battle_recordDTO data : battle_record_datas) {
-         System.out.println("crewBattleDetail.battle_record_datas ["+data+"]");
-         if(data.getBattle_record_is_winner().equals("T")) {
-            flag = true;
-         }
-      }
-      if(flag) {
-         System.err.println("경기 결과 있음");
-      }
-      else {
-         System.err.println("경기 시작전");
-      }
+        //활성화되어있는 크루전 총 개수 출력
+        BattleDTO battle_count = this.battleService.selectOneSearchCountActive(battleDTO);
+        int listNum = battle_count.getTotal();
+        model.addAttribute("total", listNum);//전체 게시글 총개수
 
+        return "views/crewBattleMain";
+    }
 
-      model.addAttribute("battle_record_datas", battle_record_datas);
-      model.addAttribute("battle_record", battle_recordDTO);
-      model.addAttribute("battle_total", battleDTO);
-      model.addAttribute("battle_flag", flag);
+    //암벽장 이미지 파일명으로 url 생성
+    private String makeURL(BattleDTO battleDTO) {
+        String filename = "";
 
-
-      return "crewBattleContent";
-   }
-
-   @GetMapping("/crewBattle.do")
-   public String crewBattle(HttpSession session, Model model, BattleDTO battleDTO) {
-
-      /*
-       * 페이지네이션을 하기위해 뷰에게서 page_num을 받아오고
-       * 페이지네이션 계산 후
-       * memberDTO와 DAO 생성
-       * DTO에 member_id를 set해주고
-       * 내 크루를 찾기위해 selectOne
-       * 컨디션은 MEMBER_SEARCH_MY_CREW
-       *
-       * battleDTO와 DAO 생성
-       * DTO에 battle_crew_num을 set해주고
-       * 내 크루 크루전을 찾기위해 selectOne
-       * 컨디션은 VATTLE_SEARCH_MEMBER_BATTLE
-       *
-       * battleDTO를 따로 하나 더 생성해서
-       * 크루전 목록  selectAll
-       * min_num과 max_num을 set
-       * 컨디션은 BATTLE_ALL_ACTIVE
-       *
-       * battleDTO 또 하나 더 생성해서
-       * 크루전 총 개수 selectOne
-       * 컨디션은 BATTLE_ONE_COUNT_ACTIVE
-       */
-
-
-      String member_id = (String) session.getAttribute("MEMBER_ID");
-      //선택한 크루 정보
-      int crew_num = 0;
-      if(member_id!=null) {
-         System.err.println("CrewBattlePageAction crew_num = "+crew_num);
-         crew_num = (Integer) session.getAttribute("CREW_NUM");
-      }
-
-      int pageNum = battleDTO.getPage();//요거 필요
-      int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
-      int minBoard = 1; // 최소 게시글 수 초기화
-
-      if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
-         pageNum = 1;
-      }
-
-      minBoard = ((pageNum - 1) * boardSize); // 최소 게시글 번호 계산
-      int listNum = 0; // 게시글 총 개수를 저장할 변수 초기화
-
-      battleDTO.setBattle_crew_num(crew_num);//크루pk
-
-
-//        battleDTO.setBattle_condition("BATTLE_SEARCH_MEMBER_BATTLE");//내 크루전 컨디션
-      battleDTO = this.battleService.selectOneSearchMemberBattle(battleDTO);
-      if(battleDTO != null) {
-         battleDTO.setBattle_gym_profile("https://"+battleDTO.getBattle_gym_profile());
-         System.out.println("이미지 : "+battleDTO.getBattle_gym_profile());
-      }
-
-      battleDTO.setBattle_min_num(minBoard);
-
-//        battleDTO.setBattle_condition("BATTLE_ALL_ACTIVE");//전체 크루전 목록 컨디션
-      List<BattleDTO> battle_datas = this.battleService.selectAllActive(battleDTO);
-
-      if(battle_datas != null) {
-         for(BattleDTO data : battle_datas) {
-            System.out.println("이미지 : "+data.getBattle_gym_profile());
-            data.setBattle_gym_profile("https://"+data.getBattle_gym_profile());
-         }
-      }
-
-//        battleDTO.setBattle_condition("BATTLE_ONE_COUNT_ACTIVE");//크루전 총 개수 컨디션(페이지네이션)
-      BattleDTO battle_count = this.battleService.selectOneCountActive(battleDTO);
-
-      listNum = battle_count.getTotal();
-
-      model.addAttribute("my_battle", battleDTO);//내크루전(암벽장, 주소, 날짜, 번호)
-      model.addAttribute("page", pageNum);//전체 게시글 총수
-      model.addAttribute("total", listNum);//현재페이지번호
-      model.addAttribute("battle_datas", battle_datas);//크루전목록
-
-
-
-
-      return "views/crewBattleMain";
-   }
-
-
-
+        if (battleDTO.getBattle_gym_profile() == null) {
+            filename = "default.jpg"; // 기본 이미지
+        } else {
+            filename = battleDTO.getBattle_gym_profile(); // 암벽장 이미지 받아옴
+        }
+        return servletContext.getContextPath() + "/img/" + filename;
+    }
 
 
 }

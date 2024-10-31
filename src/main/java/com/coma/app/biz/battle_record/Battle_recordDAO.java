@@ -24,17 +24,17 @@ public class Battle_recordDAO{
 			+ "	G.GYM_LOCATION,\r\n"
 			+ "	B.BATTLE_GAME_DATE\r\n"
 			+ "FROM\r\n"
-			+ "	COMA.BATTLE_RECORD BR\r\n"
+			+ "	BATTLE_RECORD BR\r\n"
 			+ "JOIN\r\n"
-			+ "	COMA.CREW C\r\n"
+			+ "	CREW C\r\n"
 			+ "ON\r\n"
 			+ "	BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\r\n"
 			+ "JOIN\r\n"
-			+ "	COMA.BATTLE B\r\n"
+			+ "	BATTLE B\r\n"
 			+ "ON\r\n"
 			+ "	BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\r\n"
 			+ "JOIN\r\n"
-			+ "	COMA.GYM G\r\n"
+			+ "	GYM G\r\n"
 			+ "ON\r\n"
 			+ "	B.BATTLE_GYM_NUM = G.GYM_NUM\r\n"
 			+ "WHERE\r\n"
@@ -42,27 +42,29 @@ public class Battle_recordDAO{
 			+ "	AND BR.BATTLE_RECORD_CREW_NUM = ?";
 
 	//해당 크루전 내용 BATTLE_RECORD_BATTLE_NUM
+	//FIXME 정보 여러개 나와서 1개만 출력하게 쿼리문 수정
 	private final String ONE_BATTLE = "SELECT\r\n"
 			+ "	BR.BATTLE_RECORD_NUM,\r\n"
 			+ "	G.GYM_NAME,\r\n"
 			+ "	G.GYM_LOCATION,\r\n"
 			+ "	B.BATTLE_GAME_DATE\r\n"
 			+ "FROM\r\n"
-			+ "	COMA.BATTLE_RECORD BR\r\n"
+			+ "	BATTLE_RECORD BR\r\n"
 			+ "JOIN\r\n"
-			+ "	COMA.BATTLE B\r\n"
+			+ "	BATTLE B\r\n"
 			+ "ON\r\n"
 			+ "	B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\r\n"
 			+ "JOIN\r\n"
-			+ "	COMA.CREW C\r\n"
+			+ "	CREW C\r\n"
 			+ "ON\r\n"
 			+ "	BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\r\n"
 			+ "JOIN\r\n"
-			+ "	COMA.GYM G\r\n"
+			+ "	GYM G\r\n"
 			+ "ON\r\n"
 			+ "	B.BATTLE_GYM_NUM = G.GYM_NUM\r\n"
 			+ "WHERE\r\n"
-			+ "	B.BATTLE_NUM = ?";
+			+ " B.BATTLE_NUM = ?\r\n"
+			+ "LIMIT 1";
 	
 	//크루전 등록 확인여부 BATTLE_RECORD_BATTLE_NUM, BATTLE_RECORD_CREW_NUM
 	private final String ONE_BATTLE_RECORD = "SELECT\n" +
@@ -70,9 +72,9 @@ public class Battle_recordDAO{
 			"    BATTLE_GYM_NUM,\n" +
 			"    BATTLE_GAME_DATE\n" +
 			"FROM\n" +
-			"    COMA.BATTLE B\n" +
+			"    BATTLE B\n" +
 			"JOIN\n" +
-			"    COMA.BATTLE_RECORD BR\n" +
+			"    BATTLE_RECORD BR\n" +
 			"ON\n" +
 			"    BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\n" +
 			"WHERE\n" +
@@ -85,9 +87,9 @@ public class Battle_recordDAO{
 			"    BR.BATTLE_RECORD_BATTLE_NUM,\n" +
 			"    COUNT_BATTLE.BATTLE_CREW_TOTAL\n" +
 			"FROM\n" +
-			"    COMA.BATTLE_RECORD BR\n" +
+			"    BATTLE_RECORD BR\n" +
 			"JOIN\n" +
-			"    COMA.BATTLE B \n" +
+			"    BATTLE B \n" +
 			"ON \n" +
 			"    B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\n" +
 			"JOIN\n" +
@@ -96,7 +98,7 @@ public class Battle_recordDAO{
 			"        BATTLE_RECORD_BATTLE_NUM,\n" +
 			"        COUNT(DISTINCT BATTLE_RECORD_CREW_NUM) AS BATTLE_CREW_TOTAL\n" +
 			"    FROM\n" +
-			"        COMA.BATTLE_RECORD\n" +
+			"        BATTLE_RECORD\n" +
 			"    GROUP BY BATTLE_RECORD_BATTLE_NUM\n" +
 			"    ) COUNT_BATTLE\n" +
 			"ON\n" +
@@ -114,20 +116,20 @@ public class Battle_recordDAO{
 			"    C.CREW_LEADER,\n" +
 			"    C.CREW_PROFILE\n" +
 			"FROM\n" +
-			"    COMA.BATTLE_RECORD BR\n" +
+			"    BATTLE_RECORD BR\n" +
 			"JOIN\n" +
-			"    COMA.CREW C\n" +
+			"    CREW C\n" +
 			"ON\n" +
 			"    BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\n" +
 			"WHERE\n" +
 			"    BR.BATTLE_RECORD_BATTLE_NUM = ?";
 	
 	//크루전 등록 BATTLE_RECORD_BATTLE_NUM, BATTLE_RECORD_CREW_NUM
-	private final String INSERT = "INSERT INTO COMA.BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM) VALUES (?,?)";
+	private final String INSERT = "INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM) VALUES (?,?)";
 	
 	//크루전 승리크루 업데이트 BATTLE_RECORD_IS_WINNER, BATTLE_RECORD_MVP_ID, BATTLE_RECORD_BATTLE_NUM, BATTLE_RECORD_CREW_NUM
 	private final String UPDATE = "UPDATE \r\n"
-			+ "	COMA.BATTLE_RECORD \r\n"
+			+ "	BATTLE_RECORD \r\n"
 			+ "SET \r\n"
 			+ "	BATTLE_RECORD_IS_WINNER = ?,\r\n"
 			+ "	BATTLE_RECORD_MVP_ID = ?\r\n"
@@ -143,13 +145,13 @@ public class Battle_recordDAO{
 				+ "	B.BATTLE_GAME_DATE,\r\n"
 				+ "	BATTLE_RECORD_MVP_ID\r\n"
 				+ "FROM\r\n"
-				+ "	COMA.BATTLE_RECORD BR\r\n"
+				+ "	BATTLE_RECORD BR\r\n"
 				+ "JOIN\r\n"
-				+ "	COMA.BATTLE B\r\n"
+				+ "	BATTLE B\r\n"
 				+ "ON\r\n"
 				+ "	BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\r\n"
 				+ "JOIN\r\n"
-				+ "	COMA.GYM G\r\n"
+				+ "	GYM G\r\n"
 				+ "ON\r\n"
 				+ "	B.BATTLE_GYM_NUM = G.GYM_NUM\r\n"
 				+ "WHERE\r\n"
@@ -162,13 +164,13 @@ public class Battle_recordDAO{
 				+ "    C.CREW_PROFILE, \r\n"
 				+ "    BR.BATTLE_RECORD_MVP_ID\r\n"
 				+ "FROM \r\n"
-				+ "    COMA.BATTLE_RECORD BR\r\n"
+				+ "    BATTLE_RECORD BR\r\n"
 				+ "JOIN \r\n"
-				+ "    COMA.BATTLE B \r\n"
+				+ "    BATTLE B \r\n"
 				+ "ON \r\n"
 				+ "	BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\r\n"
 				+ "JOIN \r\n"
-				+ "    COMA.CREW C \r\n"
+				+ "    CREW C \r\n"
 				+ "ON \r\n"
 				+ "	BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\r\n"
 				+ "WHERE \r\n"
@@ -313,19 +315,19 @@ class BattleRecordRowMapperOneBattle implements RowMapper<Battle_recordDTO>{
 		try {
 			data.setBattle_record_gym_name(rs.getString("GYM_NAME"));
 		} catch (SQLException e) {
-			System.err.println("Battle_record_gym_name = null");
+			System.err.println("battle_record_gym_name = null");
 			data.setBattle_record_gym_name(null);
 		}
 		try {
 			data.setBattle_record_gym_location(rs.getString("GYM_LOCATION"));
 		} catch (SQLException e) {
-			System.err.println("Battle_record_gym_location = null");
+			System.err.println("battle_record_gym_location = null");
 			data.setBattle_record_gym_location(null);
 		}
 		try {
 			data.setBattle_record_game_date(rs.getString("BATTLE_GAME_DATE"));
 		} catch (SQLException e) {
-			System.err.println("Battle_record_battle_game_date = null");
+			System.err.println("battle_record_battle_game_date = null");
 			data.setBattle_record_game_date(null);
 		}
 		return data;
