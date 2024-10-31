@@ -103,10 +103,10 @@
                                         <h5 class="card-title border-bottom border-dark-subtle">예약 정보</h5>
                                         <div class="mt-3">
                                             <p class="card-text">
-                                                <strong>암벽장 위치:</strong> ${reservation.gym_location}
+                                                <strong>암벽장 위치:</strong> ${reservation.reservation_gym_location}
                                             </p>
                                             <p class="card-text">
-                                                <strong>암벽장 가격:</strong> ${reservation.gym_price}원
+                                                <strong>암벽장 가격:</strong> ${reservation.reservation_gym_price}원
                                             </p>
                                             <p class="card-text">
                                                 <strong>예약자명:</strong> ${reservation.reservation_member_name}
@@ -114,6 +114,9 @@
                                             <p class="card-text">
                                                 <strong>실제 결제 금액:</strong> ${reservation.reservation_price}원
                                                     <%--TODO 이 값들 다 조정필요--%>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>예약 날짜:</strong> ${reservation.reservation_date}
                                             </p>
                                             <div class="text-end">
                                                 <button type="button" class="btn btn-danger"
@@ -169,6 +172,7 @@
 
                         form.append($('<input/>', {type: 'hidden', name: 'reservation_num', value: reservationNum}));
                         console.log("폼 HTML = [" + form.html() + "]"); // 폼 내부의 HTML 내용 출력
+                        $('body').append(form);
                         form.submit();
                         // sweetAlert_success('삭제가 완료되었습니다', ' ');
                         //TODO 컨트롤러가 인포페이지로 이동해줄것
@@ -189,8 +193,8 @@
                 method: 'GET',
                 style: 'display: none;'
             });
-            form.append($('<input/>', {type: 'hidden', name: 'reservation_search_keyword', value: search_keyword}));
-            form.append($('<input/>', {type: 'hidden', name: 'reservation_search_content', value: search_content}));
+            form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: search_keyword}));
+            form.append($('<input/>', {type: 'hidden', name: 'search_content', value: search_content}));
             // 문서에 form 추가
             $('body').append(form);
             form.submit();
