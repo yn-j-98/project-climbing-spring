@@ -169,7 +169,9 @@ public class GymDAO {
 	}
 
 	public boolean updateAdminBattleVerified(GymDTO gymDTO) {
-		//암벽장 승인여부 업데이트 GYM_ADMIN_BATTLE_VERIFIED, GYM_NUM // TODO 관리자 메인 페이지
+		//암벽장 승인여부 업데이트 GYM_ADMIN_BATTLE_VERIFIED, GYM_NUM
+		log.info("[{}]",gymDTO.getGym_admin_battle_verified());
+		log.info("[{}]",gymDTO.getGym_num());
 		int result=jdbcTemplate.update(UPDATE_ADMIN_BATTLE_VERIFIED, gymDTO.getGym_admin_battle_verified(),gymDTO.getGym_num());
 		if(result<=0) {
 			return false;

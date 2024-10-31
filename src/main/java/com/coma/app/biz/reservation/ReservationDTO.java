@@ -26,5 +26,8 @@ public class ReservationDTO {
 	private String search_keyword;	// 예약 검색 목록
 	private String search_content;	// 예약 검색 내용
 	private int reservation_min_num;	// 페이지 네이션 시작 PK
+	private String reservation_gym_location;	// 예약 암벽장 위치
+	private int reservation_gym_price;	// 예약한 암벽장 실제 가격
+	private String reservation_member_name;	// 예약 사용자 이름
 
 }

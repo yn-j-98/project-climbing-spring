@@ -72,12 +72,18 @@ public class BoardDAO {
 	//ID로 검색한 글 개수 BOARD_WRITER_ID
 	private final String ONE_SEARCH_ID_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL FROM BOARD WHERE BOARD_WRITER_ID = ?";
 
-	//제목으로 검색한 글 개수 BOARD_TITLE
+	//제목으로 검색한 글 개수 BOARD_TITLE - 지역검색
 	//문자열 연결 CONCAT함수 사용
 	private final String ONE_SEARCH_TITLE_COUNT = "SELECT COUNT(*) AS BOARD_TOTAL \r\n"
 			+ "FROM BOARD \r\n"
 			+ "WHERE BOARD_LOCATION LIKE CONCAT('%', ?, '%') \r\n"
 			+ "  AND BOARD_TITLE LIKE CONCAT('%', ?, '%')";
+
+	//제목 검색 count - 전체검색
+	private final String ONE_SEARCH_TITLE_COUNT_All = "SELECT COUNT(*) AS BOARD_TOTAL \r\n"
+			+ "FROM BOARD \r\n"
+			+ "WHERE BOARD_TITLE LIKE CONCAT('%', ?, '%')";
+
 
 	//이름으로 검색한 글 개수 MEMBER_NAME AS BOARD_WRITER_ID
 	//문자열 연결 CONCAT함수 사용
@@ -142,11 +148,23 @@ public class BoardDAO {
 			"    B.BOARD_WRITER_ID\n" +
 			"FROM\n" +
 			"    BOARD B\n" +
-			"JOIN\n" +
-			"    MEMBER M ON M.MEMBER_ID = B.BOARD_WRITER_ID\n" +
 			"WHERE\n" +
 			"    B.BOARD_LOCATION LIKE CONCAT('%', ?, '%') \n" +
 			"    AND B.BOARD_TITLE LIKE CONCAT('%', ?, '%')\n" +
+			"LIMIT ?, ?";
+
+//	제목으로 검색,(전체 커뮤니티)
+	private final String ALL_SEARCH = "SELECT\n" +
+			"    B.BOARD_NUM,\n" +
+			"    B.BOARD_TITLE,\n" +
+			"    B.BOARD_CONTENT,\n" +
+			"    B.BOARD_CNT,\n" +
+			"    B.BOARD_LOCATION,\n" +
+			"    B.BOARD_WRITER_ID\n" +
+			"FROM\n" +
+			"    BOARD B\n" +
+			"WHERE\n" +
+			"    B.BOARD_TITLE LIKE CONCAT('%', ?, '%')\n" +
 			"LIMIT ?, ?";
 
 
@@ -290,7 +308,7 @@ public class BoardDAO {
 	public BoardDTO selectOneSearchIdCount(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchIdCount 시작");
 		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_writer_id()};
+		Object[] args = {boardDTO.getSearch_content()};
 		try {
 			result = jdbcTemplate.queryForObject(ONE_SEARCH_ID_COUNT, args, new BoardRowMapperOneSearchIdCount());
 		} catch (Exception e) {
@@ -318,11 +336,30 @@ public class BoardDAO {
 		return result;
 	}
 
+	//제목으로 검색한 글 개수 BOARD_TITLE
+	public BoardDTO selectOneSearchTitleCountAll(BoardDTO boardDTO) {
+		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchTitleCountAll 시작");
+		BoardDTO result = null;
+		String content = boardDTO.getSearch_content();
+		if (content != null){
+			System.out.println("BoardDAO.content :"+content);
+			content = boardDTO.getSearch_content().replace("'", "\'");
+		}
+		Object[] args = {content};
+		try {
+			result = jdbcTemplate.queryForObject(ONE_SEARCH_TITLE_COUNT_All, args, new BoardRowMapperOneSearchTitleCount());
+		} catch (Exception e) {
+			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectOneSearchTitleCountAll 실패 " + ONE_SEARCH_TITLE_COUNT_All);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	//이름으로 검색한 글 개수 MEMBER_NAME AS BOARD_WRITER_ID
 	public BoardDTO selectOneSearchNameCount(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectOneSearchNameCount 시작");
 		BoardDTO result = null;
-		Object[] args = {boardDTO.getBoard_writer_id().replace("'", "\'")};
+		Object[] args = {boardDTO.getSearch_content().replace("'", "\'")};
 		try {
 			result = jdbcTemplate.queryForObject(ONE_SEARCH_NAME_COUNT, args, new BoardRowMapperOneSearchNameCount());
 		} catch (Exception e) {
@@ -392,7 +429,7 @@ public class BoardDAO {
 	public List<BoardDTO> selectAllSearchPatternId(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchPatternId 시작");
 		List<BoardDTO> result = null;
-		Object[] args = {boardDTO.getBoard_content().replace("'", "\'"), boardDTO.getBoard_min_num(), 10};
+		Object[] args = {boardDTO.getSearch_content().replace("'", "\'"), boardDTO.getBoard_min_num(), 10};
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_PATTERN_ID, args, new BoardRowMapperAllSearchPatternId());
 		} catch (Exception e) {
@@ -422,13 +459,31 @@ public class BoardDAO {
 		return result;
 	}
 
+	//제목으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_TITLE, board_min_num, board_max_num
+	// LIMIT절 사용으로 pstmt 수정
+	public List<BoardDTO> selectAllSearchTitleAll(BoardDTO boardDTO) {
+		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectAllSearchTitleAll 시작");
+		List<BoardDTO> result = null;
+		int offset = 10; //페이지네이션 시작위치
+		String content = boardDTO.getSearch_content();
+		Object[] args = {content, boardDTO.getBoard_min_num(), offset};
+		try {
+			result = jdbcTemplate.query(ALL_SEARCH, args, new BoardRowMapperAllSearchTitle());
+		} catch (Exception e) {
+			System.err.println("	[에러]com.coma.app.biz.board.BoardDAO.selectAllSearchTitleAll 실패 " + ALL_SEARCH);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	//이름으로 검색 페이지네이션 윈도우함수 ROW_NUMBER()사용 BOARD_WRITER_ID 재사용 BOARD_WRITER_ID, board_min_num, board_max_num FIXME
 	//LIMIT절 사용으로 pstmt 수정
 	public List<BoardDTO> selectAllSearchName(BoardDTO boardDTO) {
 		System.out.println("	[로그]com.coma.app.biz.board.BoardDAO.selectallsearchName 시작");
 		List<BoardDTO> result = null;
 		int offset = 10; //페이지네이션 시작위치
-		Object[] args = {boardDTO.getBoard_writer_id().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
+		Object[] args = {boardDTO.getSearch_content().replace("'", "\'"), boardDTO.getBoard_min_num(), offset};
+		System.out.println("search_content : ["+boardDTO.getSearch_content());
 		try {
 			result = jdbcTemplate.query(ALL_SEARCH_NAME, args, new BoardRowMapperAllSearchName());
 		} catch (Exception e) {

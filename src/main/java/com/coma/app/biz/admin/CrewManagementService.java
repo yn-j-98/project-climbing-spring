@@ -72,4 +72,6 @@ public class CrewManagementService {
     public List<BattleDTO> selectAllSearchPariticipants(BattleDTO battleDTO){
         return battleDAO.selectAllSearchPariticipants(battleDTO);
     }
+
+
 }

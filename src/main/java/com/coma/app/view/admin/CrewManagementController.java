@@ -6,6 +6,7 @@ import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
 import com.coma.app.biz.crew.CrewService;
+import com.coma.app.biz.member.MemberDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,5 +74,50 @@ public class CrewManagementController {
         model.addAttribute("datas", datas);
 
         return "admin/crewManagementDetail";
+    }
+
+
+
+    // 크루전 관리
+    @PostMapping("/crewManagement.do")
+    public String crewManagementMvp(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO) {
+
+        //MVP 크루이름을 전달해 크루 번호를 받아옵니다.
+        List<MemberDTO> mvp_datas = crewManagementService.mvpMember(crewDTO);
+
+        //승리 크루를 받아옵니다.
+        crewDTO.setCrew_name(battle_recordDTO.getBattle_record_crew_name());
+        //승리 크루 이름을 보내 크루 번호를 받아옵니다.
+        List<MemberDTO> winner_datas = crewManagementService.mvpMember(crewDTO);
+
+        int
+
+
+
+        return null;
+    }
+
+
+    // 비동기
+    @PostMapping("/crewBattleManagementDetail.do")
+    public String crewBattleManagementDetail(Model model) {
+
+        //		크루전 진행한 전체 크루 사람 selectall
+        //
+        //		크루전 진행한 1개 크루명 자체를 불러오기 selectall
+        //
+        //		selectall* selectall 재활용(C)
+		/*
+		!!!!!!!!!!!!!!!!!!!!!!!비동기
+		암벽장 이름
+		크루전 진행 날짜
+		승리 크루 크루명 (크루전 진행한 크루의 크루명 selectall 검색해야하기때문에)
+		크루전 MVP
+		↑ INSERT
+
+
+		 */
+
+        return null;
     }
 }

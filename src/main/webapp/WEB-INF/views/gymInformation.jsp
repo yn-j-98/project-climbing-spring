@@ -190,7 +190,7 @@
                 <form action="gymReservationInfo.do" method="POST">
                     <div class="form-group">
                         <input type="hidden" id="gymNum" name="gym_num" value="${gym_num}">
-                        <input type="hidden" name="reservation_price" value="${gym_price}">
+                        <input type="hidden" name="gym_price" value="${gym_price}">
                         가격 : ${gym_price} 원
                         <div class="d-flex align-items-center">
 
@@ -202,11 +202,11 @@
                         <div class="form-group d-none" id="point">
                             <p>보유포인트 : ${gym_member_current_point} pt</p>
                             사용포인트 :<c:if test="${gym_member_current_point < 5000}">
-                            <input type="number" name="VIEW_USE_POINT" max="${gym_member_current_point}" step="1"
+                            <input type="number" name="reservation_use_point" max="${gym_member_current_point}" step="1"
                                    value="0"> pt
                         </c:if>
                             <c:if test="${gym_member_current_point >= 5000}">
-                                <input type="number" name="VIEW_USE_POINT" max="5000" min="0" step="1" value="0"> pt
+                                <input type="number" name="reservation_use_point" max="5000" min="0" step="1" value="0"> pt
                             </c:if>
                         </div>
                         <div class="form-group">

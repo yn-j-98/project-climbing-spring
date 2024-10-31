@@ -140,7 +140,7 @@ public class BattleDAO {
 			"JOIN\n" +
 			"  GYM G\n" +
 			"ON\n" +
-			"  B.BATTLE_GYM_NUM = G.GYM_NUM;";
+			"  B.BATTLE_GYM_NUM = G.GYM_NUM";
 
 	//todo
 	// 크루전 정보 등록 모달 - selectAll
@@ -286,7 +286,7 @@ public class BattleDAO {
 			"    BATTLE\n" +
 			"ORDER BY\n" +
 			"    BATTLE_NUM DESC\n" +
-			"LIMIT 4;";
+			"LIMIT 4";
 
 	//게임날짜 업데이트 BATTLE_GAME_DATE, BATTLE_NUM
 	private final String UPDATE = "UPDATE BATTLE SET BATTLE_GAME_DATE = ? WHERE BATTLE_NUM = ?";

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -134,12 +135,18 @@ public class GymManagementController {
         String title = "크루전이 등록되었습니다.";
         String msg = "";
 
+        if("T".equals(gymDTO.getGym_admin_battle_verified())){
+            title = "이미 크루전이 등록되어 있는 암벽장입니다.";
+        }
+
+        gymDTO.setGym_admin_battle_verified("T");
+        log.info("GymDTO [{}]",gymDTO);
+
+
         //암벽장 번호, 암벽장 크루전 등록 여부를 받습니다.
         if(!gymService.updateAdminBattleVerified(gymDTO)){
             title = "크루전 등록 실패";
-            if("T".equals(gymDTO.getGym_admin_battle_verified())){
-                title = "이미 크루전이 등록되어 있는 암벽장입니다.";
-            }
+
             msg = "Server 오류로 크루전에 등록에 실패하였습니디.";
         }
 

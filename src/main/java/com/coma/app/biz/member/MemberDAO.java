@@ -30,10 +30,11 @@ public class MemberDAO {
 			+ "WHERE MEMBER_CREW_NUM = ?";
 
 	//랭킹높은순으로 정렬 관리자
-	private final String SEARCH_RANK = "SELECT MEMBER_ID,MEMBER_PASSWORD,MEMBER_NAME,MEMBER_PHONE,MEMBER_PROFILE,MEMBER_REGISTRATION_DATE,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE,MEMBER_LOCATION,MEMBER_ROLE\r\n"
-			+ "FROM MEMBER\r\n"
-			+ "WHERE MEMBER_ROLE='F'\r\n"
-			+ "ORDER BY MEMBER_TOTAL_POINT DESC";
+	private final String SEARCH_RANK = "SELECT MEMBER_ID, MEMBER_PASSWORD, MEMBER_NAME, MEMBER_PHONE, MEMBER_PROFILE, MEMBER_REGISTRATION_DATE, MEMBER_CURRENT_POINT, MEMBER_TOTAL_POINT, MEMBER_CREW_NUM, MEMBER_CREW_JOIN_DATE, MEMBER_LOCATION, MEMBER_ROLE \n" +
+			"FROM MEMBER \n" +
+			"WHERE MEMBER_ROLE = 'F' \n" +
+			"ORDER BY MEMBER_TOTAL_POINT DESC \n" +
+			"LIMIT ?, ?";
 
 	//회원가입
 	private final String INSERT = "INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION) \r\n"
@@ -125,26 +126,27 @@ public class MemberDAO {
 			+ "	MEMBER_ID = ?";
 
 	//크루 랭킹 전체 출력
-	private final String ALL_CREW_RANK = "SELECT\r\n"
-			+ "	C.CREW_NUM,\r\n"
-			+ "    C.CREW_NAME,\r\n"
-			+ "    C.CREW_LEADER,\r\n"
-			+ "    C.CREW_MAX_MEMBER_SIZE,\r\n"
-			+ "    COUNT(M.MEMBER_ID) AS CREW_CURRENT_SIZE,\r\n"
-			+ "    SUM(M.MEMBER_TOTAL_POINT) AS MEMBER_TOTAL_POINT\r\n"
-			+ "FROM\r\n"
-			+ "    CREW C\r\n"
-			+ "JOIN\r\n"
-			+ "    MEMBER M \r\n"
-			+ "ON \r\n"
-			+ "    M.MEMBER_CREW_NUM = C.CREW_NUM\r\n"
-			+ "GROUP BY\r\n"
-			+ "	C.CREW_NUM,\r\n"
-			+ "    C.CREW_NAME,\r\n"
-			+ "    C.CREW_LEADER,\r\n"
-			+ "    C.CREW_MAX_MEMBER_SIZE\r\n"
-			+ "ORDER BY\r\n"
-			+ "    MEMBER_TOTAL_POINT DESC";
+	private final String ALL_CREW_RANK = "SELECT\n" +
+			"    C.CREW_NUM,\n" +
+			"    C.CREW_NAME,\n" +
+			"    C.CREW_LEADER,\n" +
+			"    C.CREW_MAX_MEMBER_SIZE,\n" +
+			"    COUNT(M.MEMBER_ID) AS CREW_CURRENT_SIZE,\n" +
+			"    SUM(M.MEMBER_TOTAL_POINT) AS MEMBER_TOTAL_POINT\n" +
+			"FROM\n" +
+			"    CREW C\n" +
+			"JOIN\n" +
+			"    MEMBER M \n" +
+			"ON \n" +
+			"    M.MEMBER_CREW_NUM = C.CREW_NUM\n" +
+			"GROUP BY\n" +
+			"    C.CREW_NUM,\n" +
+			"    C.CREW_NAME,\n" +
+			"    C.CREW_LEADER,\n" +
+			"    C.CREW_MAX_MEMBER_SIZE\n" +
+			"ORDER BY\n" +
+			"    MEMBER_TOTAL_POINT DESC\n" +
+			"LIMIT ?, ?;";
 
 	//사용자 포인트 업데이트 MEMBER_CURRENT_POINT, MEMBER_ID
 	private final String UPDATE_CURRENT_POINT = "UPDATE MEMBER SET MEMBER_CURRENT_POINT = ? WHERE MEMBER_ID = ?";
@@ -332,9 +334,10 @@ public class MemberDAO {
 
 	public List<MemberDTO> selectAllSearchRank(MemberDTO memberDTO) {
 		List<MemberDTO> datas = null;
+		Object[] args = { memberDTO.getMember_min_num() , memberDTO.getPage() };
 		try {
-			//랭킹높은순으로 정렬 관리자 FIXME 관리자 권한이 아닌사람들만
-			datas = jdbcTemplate.query(SEARCH_RANK, new MemberSelectRowMapperAll());
+			//랭킹높은순으로 정렬 관리자 (관리자 권한이 아닌사람들만)
+			datas = jdbcTemplate.query( SEARCH_RANK, args, new MemberSelectRowMapperAll());
 		}
 		catch (Exception e) {
 		}
@@ -343,9 +346,10 @@ public class MemberDAO {
 
 	public List<MemberDTO> selectAllCrewRank(MemberDTO memberDTO) {
 		List<MemberDTO> datas = null;
+		Object[] args = { memberDTO.getMember_min_num() , memberDTO.getPage() };
 		try {
 			//크루 랭킹 높은순으로 전체 출력
-			datas = jdbcTemplate.query(ALL_CREW_RANK, new MemberCrewRankRowMapperAll());
+			datas = jdbcTemplate.query(ALL_CREW_RANK, args, new MemberCrewRankRowMapperAll());
 		}
 		catch (Exception e) {
 		}
