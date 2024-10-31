@@ -51,6 +51,9 @@ public class CrewDAO {
 			"WHERE \n" +
 			"    CREW_NUM = ?";
 
+	// 크루 이름으로 크루 검색 CREW_NAME
+	private final String ONE_SEARCH_CREW_NAME = "SELECT CREW_NUM, CREW_NAME, CREW_DESCRIPTION, CREW_MAX_MEMBER_SIZE, CREW_LEADER, CREW_BATTLE_STATUS, CREW_PROFILE FROM CREW WHERE CREW_NAME = ? LIMIT 1";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -69,6 +72,16 @@ public class CrewDAO {
 		Object[] args = {crewDTO.getCrew_num()};
 		try {
 			result = jdbcTemplate.queryForObject(ONE, args, new CrewRowMapperOne());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public CrewDTO selectOneName(CrewDTO crewDTO){
+		CrewDTO result = null;
+		Object[] args = {crewDTO.getCrew_name()};
+		try {
+			result = jdbcTemplate.queryForObject(ONE_SEARCH_CREW_NAME, args, new CrewRowMapperOne());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

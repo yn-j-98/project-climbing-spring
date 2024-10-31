@@ -49,10 +49,10 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="col-md-2 ms-auto">
           <select class="form-select form-control" id="search_keyword" name="search_keyword">
-            <option value="NUM" ${crew_search_keyword = 'NUM' ? 'selected' : ''}>크루전 번호</option>
-            <option value="MEMBERNAME" ${crew_search_keyword = 'MEMBERNAME' ? 'selected' : ''}>암벽장 이름</option>
-            <option value="MEMBERID" ${crew_search_keyword = 'MEMBERID' ? 'selected' : ''}>경기 날짜</option>
-            <option value="DATE" ${crew_search_keyword = 'DATE' ? 'selected' : ''}>크루전 생성일</option>
+            <option value="NUM" ${search_keyword = 'NUM' ? 'selected' : ''}>크루전 번호</option>
+            <option value="MEMBERNAME" ${search_keyword = 'MEMBERNAME' ? 'selected' : ''}>암벽장 이름</option>
+            <option value="MEMBERID" ${search_keyword = 'MEMBERID' ? 'selected' : ''}>경기 날짜</option>
+            <option value="DATE" ${search_keyword = 'DATE' ? 'selected' : ''}>크루전 생성일</option>
           </select>
         </div>
         <div class="col-md-7">
@@ -88,10 +88,10 @@
           <c:forEach items="${datas}" var="data">
             <tr class="battle-table-tr">
               <th scope="row" class="battle_num">${data.battle_num}</th>
-              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.do?battle_num=${data.battle_num}">${data.gym_name}</a></td>
+              <td><a class="submenu text-dark" href="crewManagementDetail.do?battle_num=${data.battle_num}">${data.battle_gym_name}</a></td>
               <td class="battle_game_date">${data.battle_game_date}</td>
               <td class="battle_registration_date">${data.battle_registration_date}</td>
-              <input type="hidden" class="battle_isGame" value="${isGame}"/>
+              <input type="hidden" class="battle_isGame" value="${data.battle_status}"/>
               <td class="td_btn"> </td>
             </tr>
           </c:forEach>
