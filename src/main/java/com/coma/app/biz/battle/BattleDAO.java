@@ -27,44 +27,82 @@ public class BattleDAO {
 	private final String All_SEARCH_BATTLE_NUM = "SELECT\n" +
 			"  BATTLE_NUM,\n" +
 			"  BATTLE_GYM_NUM,\n" +
-			"  BATTLE_GAME_DATE\n" +
-			"  BATTLE_REGISTRATION_DATE\n" +
+			"  BATTLE_GAME_DATE,\n" +
+			"  BATTLE_REGISTRATION_DATE,\n" +
 			"  BATTLE_STATUS\n" +
 			"FROM\n" +
 			"  BATTLE\n" +
 			"WHERE\n" +
-			"  BATTLE_NUM = ?";
+			"  BATTLE_NUM = ?\n" +
+			"LIMIT ?,?";
 
 	//todo
 	// 크루전 관리 페이지 - selectAll
 	// selectBox 암벽장 이름으로 검색
 	private final String All_SEARCH_BATTLE_NAME = "SELECT\n" +
-			"  BATTLE.BATTLE_NUM,\n" +
-			"  BATTLE.BATTLE_GYM_NUM,\n" +
-			"  BATTLE.BATTLE_GAME_DATE,\n" +
-			"  BATTLE.BATTLE_REGISTRATION_DATE,\n" +
-			"  BATTLE.BATTLE_STATUS\n" +
+			"  B.BATTLE_NUM,\n" +
+			"  B.BATTLE_GYM_NUM,\n" +
+			"  G.GYM_NAME,\n" +
+			"  B.BATTLE_GAME_DATE,\n" +
+			"  B.BATTLE_REGISTRATION_DATE,\n" +
+			"  B.BATTLE_STATUS\n" +
 			"FROM\n" +
-			"  BATTLE\n" +
-			"  JOIN GYM ON BATTLE.BATTLE_GYM_NUM = GYM.GYM_NUM\n" +
+			"  BATTLE B\n" +
+			"  JOIN GYM G ON B.BATTLE_GYM_NUM = G.GYM_NUM\n" +
 			"WHERE\n" +
-			"  GYM.GYM_NAME LIKE CONCAT('%', ? ,'%')";
+			"  G.GYM_NAME LIKE CONCAT('%', ? ,'%')\n" +
+			"LIMIT ?,?";
 
 	//todo
 	// 크루전 관리 페이지 - selectAll
-	// selctBox 크루전 진행 날짜
+	// selctBox 크루전 등록 날짜 BATTLE_REGISTRATION_DATE
+	private final String All_SEARCH_REGISTRATION_DATE = "SELECT\n" +
+			"  B.BATTLE_NUM,\n" +
+			"  B.BATTLE_GYM_NUM,\n" +
+			"  G.GYM_NAME,\n" +
+			"  B.BATTLE_GAME_DATE,\n" +
+			"  B.BATTLE_REGISTRATION_DATE,\n" +
+			"  B.BATTLE_STATUS\n" +
+			"FROM\n" +
+			"  BATTLE B\n" +
+			"  JOIN GYM G ON B.BATTLE_GYM_NUM = G.GYM_NUM\n" +
+			"WHERE\n" +
+			"  BATTLE_REGISTRATION_DATE = ?\n" +
+			"LIMIT ?,?";
+
+	// todo
+	//  크루전 관리 페이지 - selectAll
+	//  selctBox 크루전 경기 날짜 BATTLE_GAME_DATE
+	private final String All_SEARCH_GAME_DATE = "SELECT\n" +
+			"  B.BATTLE_NUM,\n" +
+			"  B.BATTLE_GYM_NUM,\n" +
+			"  G.GYM_NAME,\n" +
+			"  B.BATTLE_GAME_DATE,\n" +
+			"  B.BATTLE_REGISTRATION_DATE,\n" +
+			"  B.BATTLE_STATUS\n" +
+			"FROM\n" +
+			"  BATTLE B\n" +
+			"  JOIN GYM G ON B.BATTLE_GYM_NUM = G.GYM_NUM\n" +
+			"WHERE\n" +
+			"  BATTLE_GAME_DATE = ?\n" +
+			"LIMIT ?,?";
 
 	//todo
 	// 크루전 관리 페이지 - selectAll
 	// 크루전 전체 목록 출력
 	private final String All_BATTLE = "SELECT\n" +
-			"  BATTLE_NUM,\n" +
-			"  BATTLE_GYM_NUM,\n" +
-			"  BATTLE_REGISTRATION_DATE,\n" +
-			"  BATTLE_GAME_DATE,\n" +
-			"  BATTLE_STATUS\n" +
+			"  B.BATTLE_NUM,\n" +
+			"  B.BATTLE_GYM_NUM,\n" +
+			"  G.GYM_NAME,\n" +
+			"  B.BATTLE_REGISTRATION_DATE,\n" +
+			"  B.BATTLE_GAME_DATE,\n" +
+			"  B.BATTLE_STATUS\n" +
 			"FROM\n" +
-			"  BATTLE";
+			"  BATTLE B\n" +
+			"JOIN\n" +
+			"  GYM G\n" +
+			"ON\n" +
+			"  B.BATTLE_GYM_NUM = G.GYM_NUM;";
 
 	//todo
 	// 크루전 정보 등록 모달 - selectAll
@@ -74,8 +112,11 @@ public class BattleDAO {
 			"FROM\n" +
 			"  BATTLE_RECORD BR\n" +
 			"  JOIN CREW C ON BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\n" +
+			"  JOIN BATTLE B ON BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\n" +
 			"WHERE\n" +
-			"  BR.BATTLE_RECORD_IS_WINNER = 'T'";
+			"  BR.BATTLE_RECORD_IS_WINNER = 'T'" +
+			"AND" +
+			"	BATTLE_NUM = ?";
 
 	//todo
 	// 크루전 정보 등록 모달 - selectAll
@@ -375,7 +416,8 @@ public class BattleDAO {
 	public List<BattleDTO> selectAllSearchBattleNum(BattleDTO battleDTO){
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllSearchBattleNum 시작");
 		List<BattleDTO> result = null;
-		Object[] args = new Object[]{battleDTO.getBattle_num()};
+		int offset = 10; //10개씩 페이지네이션
+		Object[] args = new Object[]{battleDTO.getSearch_content(),battleDTO.getBattle_min_num(),offset};
 		try{
 			result = jdbcTemplate.query(All_SEARCH_BATTLE_NUM,args,new BattleRowMapperAllSearchBattleNum());
 		}catch (Exception e) {
@@ -385,11 +427,42 @@ public class BattleDAO {
 		return result;
 	}
 
+	// selectBox 크루전 등록 날짜로 검색 BATTLE_REGISTRATION_DATE
+	public List<BattleDTO> selectAllSearchRegistrationDate(BattleDTO battleDTO){
+		System.out.println("    [로그] com.coma.app.biz.battle.selectAllSearchBattleName 시작");
+		List<BattleDTO> result = null;
+		int offset = 10; //10개씩 페이지네이션
+		Object[] args = new Object[]{battleDTO.getSearch_content(),battleDTO.getBattle_min_num(),offset};
+		try{
+			result = jdbcTemplate.query(All_SEARCH_REGISTRATION_DATE,args,new BattleRowMapperAllSearchBattleName());
+		}catch (Exception e) {
+			System.err.println("	[에러] com.coma.app.biz.battle.selectAllSearchRegistrationDate Sql문 실패 : All_SEARCH_BATTLE_NAME = " + All_SEARCH_BATTLE_NAME);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	// selectBox 크루전 경기 날짜로 검색  BATTLE_GAME_DATE
+	public List<BattleDTO> selectAllSearchGameDate(BattleDTO battleDTO){
+		System.out.println("    [로그] com.coma.app.biz.battle.selectAllSearchBattleName 시작");
+		List<BattleDTO> result = null;
+		int offset = 10; //10개씩 페이지네이션
+		Object[] args = new Object[]{battleDTO.getSearch_content(),battleDTO.getBattle_min_num(),offset};
+		try{
+			result = jdbcTemplate.query(All_SEARCH_GAME_DATE,args,new BattleRowMapperAllSearchBattleName());
+		}catch (Exception e) {
+			System.err.println("	[에러] com.coma.app.biz.battle.selectAllSearchGameDate Sql문 실패 : All_SEARCH_BATTLE_NAME = " + All_SEARCH_BATTLE_NAME);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	// selectBox 암벽장 이름으로 검색
 	public List<BattleDTO> selectAllSearchBattleName(BattleDTO battleDTO){
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllSearchBattleName 시작");
 		List<BattleDTO> result = null;
-		Object[] args = new Object[]{battleDTO.getBattle_gym_name()};
+		int offset = 10; //10개씩 페이지네이션
+		Object[] args = new Object[]{battleDTO.getSearch_content(),battleDTO.getBattle_min_num(),offset};
 		try{
 			result = jdbcTemplate.query(All_SEARCH_BATTLE_NAME,args,new BattleRowMapperAllSearchBattleName());
 		}catch (Exception e) {
@@ -417,7 +490,7 @@ public class BattleDAO {
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllWinBattle 시작");
 		List<BattleDTO> result = null;
 		try{
-			result = jdbcTemplate.query(All_WIN_BATTLE,new BattleRowMapperAllWinBattle());
+			result = jdbcTemplate.query(All_WIN_BATTLE,new BattleRowMapperAllWinBattle(),battleDTO.getBattle_num());
 		}catch (Exception e) {
 			System.err.println("	[에러] com.coma.app.biz.battle.selectAllWinBattle Sql문 실패 : All_WIN_BATTLE = " + All_WIN_BATTLE);
 			e.printStackTrace();
@@ -692,6 +765,12 @@ class BattleRowMapperAllSearchBattleName implements RowMapper<BattleDTO> {
 			battleDTO.setBattle_gym_num(0);
 		}
 		try{
+			battleDTO.setBattle_gym_name(rs.getString("GYM_NAME"));
+		}catch (Exception e){
+			System.err.println("battle_gym_name = null");
+			battleDTO.setBattle_gym_name(null);
+		}
+		try{
 			battleDTO.setBattle_game_date(rs.getString("BATTLE_GAME_DATE"));
 		}catch (Exception e){
 			System.err.println("Battle_game_date = null");
@@ -729,6 +808,12 @@ class BattleRowMapperAllBattle implements RowMapper<BattleDTO> {
 		}catch (Exception e){
 			System.err.println("Battle_gym_num = 0");
 			battleDTO.setBattle_gym_num(0);
+		}
+		try{
+			battleDTO.setBattle_gym_name(rs.getString("GYM_NAME"));
+		}catch (Exception e){
+			System.err.println("battle_gym_name = null");
+			battleDTO.setBattle_gym_name(null);
 		}
 		try{
 			battleDTO.setBattle_game_date(rs.getString("BATTLE_GAME_DATE"));
