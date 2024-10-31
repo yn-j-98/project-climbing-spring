@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coma.app.biz.board.BoardDTO;
@@ -54,6 +55,7 @@ public class MyPageController {
 		//내 정보 불러오는 코드 시작
 		//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
 		memberDTO.setMember_id(member_id);
+
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
 
 		//회원가입할때 무언가 문제가 발생하여 이미지가 설정되지 못했다면
@@ -110,7 +112,6 @@ public class MyPageController {
 
 		model.addAttribute("MEMBERDATA", memberDTO);
 		model.addAttribute("BOARD", boardList);
-		//FIXME V에서 앞에 model 빼야지 작동함
 		model.addAttribute("reservation_datas", reservation_datas);
 
 		return "views/myPage";
@@ -125,49 +126,42 @@ public class MyPageController {
 	// DeleteMemberAction
 	@LoginCheck
 	@PostMapping("/deleteMember.do")
-	public String deleteMember(MemberDTO memberDTO, Model model) {
-		String path = "views/info";
-
+	public String deleteMember(MemberDTO memberDTO, Model model, @SessionAttribute("MEMBER_ID") String member_id) {
+		memberDTO.setMember_id(member_id);
 		//탈퇴전 사용자의 프로필이미지를 가져오기 위해 아이디 하나 검색하는 컨디션을 추가합니다.
+		System.out.println("*******************************************"+memberDTO.getMember_id());
 		//탈퇴전 사용자의 프로필이미지를 가져와 줍니다.
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
 		//delete 를 성공하지 못했다면 Mypage로 보냅니다.
 		boolean flag = this.memberService.delete(memberDTO);
 		model.addAttribute("title", "회원 탈퇴");
-		if(flag) {//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.
+		//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.
 
-			//탈퇴전 사용자의 프로필이미지를 변수에 추가해줍니다.
-			String member_profile = memberDTO.getMember_profile();
-			//사용자의 프로필이미지가 default 이미지가 아니라면 실행합니다.
-			if(!member_profile.substring(0,member_profile.lastIndexOf(".")).equals("default")) {
-				//받아온 프로필이미지를 삭제하기 위해 서버 주소를 추가해줍니다.
-				String user_img_path = servletContext.getRealPath("/profile_img/" + member_profile);
-				//파일 위치 확인용 로그
-				System.out.println(user_img_path);
-				//내 PC에 파일을 확인해줍니다.
-				File file = new File(user_img_path);
-				//파일이 있다면
-				if(file.isFile()) {
-					//삭제해줍니다.
-					boolean flag_profile = file.delete();
-					//삭제 확인용 로그
-					System.out.println("프로필 삭제 여부 : "+flag_profile);
+			if (flag) { // 멤버 삭제에 성공했다면 로그아웃 후 메인 페이지로 이동합니다.
+				String memberProfile = memberDTO.getMember_profile();
+				if (memberProfile != null && !memberProfile.isEmpty() && !memberProfile.equals("default")) {
+					String userImgPath = servletContext.getRealPath("/profile_img/" + memberProfile);
+					File file = new File(userImgPath);
+					if (file.isFile()) {
+						boolean flagProfile = file.delete();
+
+						log.info("프로필 삭제 여부 {}", flagProfile);
+					}
 				}
+				session.invalidate();
+				model.addAttribute("msg", "회원 탈퇴 성공!");
+				model.addAttribute("path", "main.do");
+			} else {
+				model.addAttribute("msg", "회원 탈퇴 실패...");
+				model.addAttribute("path", "myPage.do");
 			}
-			System.err.println("회원탈퇴 성공 로그");
-			model.addAttribute("msg", "회원 탈퇴 성공!");
-			model.addAttribute("path", "main.do");
+		return "views/info";
 		}
-		else {
-			System.err.println("회원탈퇴 실패 로그");
-			model.addAttribute("msg", "회원 탈퇴 실패...");
-			model.addAttribute("path", "myPage.do");
-		}
-		return path;
-	}
+
 
 
 	//DeleteReservationAction
+
 	@GetMapping("/deleteRerservation.do")
 	public String deleteReservation(ReservationDTO reservationDTO, Model model) {	
 		boolean flag =  this.reservationService.delete(reservationDTO);

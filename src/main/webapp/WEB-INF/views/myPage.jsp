@@ -54,10 +54,10 @@
 							</a>
 						</div>
 						<div class="col-md-6 text-center">
-							<a href="deleteMember.do">
+							<form id="deleteMember" action="deleteMember.do" method="POST">
 							<button class="btn btn-danger" onclick="confirmDeleteMember()">회원
 								탈퇴</button>
-							</a>
+							</form>
 						</div>
 					</div>
 				</div>
