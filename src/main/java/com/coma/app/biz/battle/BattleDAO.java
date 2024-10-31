@@ -361,7 +361,7 @@ public class BattleDAO {
 	public List<BattleDTO> selectAllActive(BattleDTO battleDTO){
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllActive 시작");
 		List<BattleDTO> result = null;
-		Object[] args = new Object[]{battleDTO.getPage(),10};
+		Object[] args = new Object[]{battleDTO.getBattle_min_num(),10};
 		try{
 			result = jdbcTemplate.query(ALL_ACTIVE,args,new BattleRowMapperAllActive());
 		}catch(Exception e){
@@ -375,7 +375,7 @@ public class BattleDAO {
 	public List<BattleDTO> selectAdminAll5Active(BattleDTO battleDTO){
 		System.out.println("    [로그] com.coma.app.biz.battle.selectAllActive 시작");
 		List<BattleDTO> result = null;
-		Object[] args = new Object[]{battleDTO.getPage(),5};
+		Object[] args = new Object[]{battleDTO.getBattle_min_num(),5};
 		try{
 			result = jdbcTemplate.query(ALL_ACTIVE,args,new BattleRowMapperAllActive());
 		}catch(Exception e){

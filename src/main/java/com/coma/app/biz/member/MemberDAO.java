@@ -117,7 +117,7 @@ public class MemberDAO {
 			+ "	M.MEMBER_CREW_NUM\r\n"
 			+ "FROM\r\n"
 			+ "	MEMBER M\r\n"
-			+ "JOIN\r\n"
+			+ "LEFT JOIN\r\n"
 			+ "	CREW C\r\n"
 			+ "ON\r\n"
 			+ "	M.MEMBER_CREW_NUM = C.CREW_NUM\r\n"

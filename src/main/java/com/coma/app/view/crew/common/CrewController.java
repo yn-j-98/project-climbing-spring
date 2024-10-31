@@ -135,7 +135,7 @@ public class CrewController {
             session.setAttribute("CREW_CHECK", crew_num);
             title = "가입 성공";
             msg = "해당 크루에 가입을 완료했습니다";
-            path = "myCrewPage.do";
+            path = "crew.do";
         } else {
             // 업데이트 실패 시
             title = "가입 실패";
