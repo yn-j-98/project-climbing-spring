@@ -30,10 +30,11 @@ public class MemberDAO {
 			+ "WHERE MEMBER_CREW_NUM = ?";
 
 	//랭킹높은순으로 정렬 관리자
-	private final String SEARCH_RANK = "SELECT MEMBER_ID,MEMBER_PASSWORD,MEMBER_NAME,MEMBER_PHONE,MEMBER_PROFILE,MEMBER_REGISTRATION_DATE,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE,MEMBER_LOCATION,MEMBER_ROLE\r\n"
-			+ "FROM MEMBER\r\n"
-			+ "WHERE MEMBER_ROLE='F'\r\n"
-			+ "ORDER BY MEMBER_TOTAL_POINT DESC";
+	private final String SEARCH_RANK = "SELECT MEMBER_ID, MEMBER_PASSWORD, MEMBER_NAME, MEMBER_PHONE, MEMBER_PROFILE, MEMBER_REGISTRATION_DATE, MEMBER_CURRENT_POINT, MEMBER_TOTAL_POINT, MEMBER_CREW_NUM, MEMBER_CREW_JOIN_DATE, MEMBER_LOCATION, MEMBER_ROLE \n" +
+			"FROM MEMBER \n" +
+			"WHERE MEMBER_ROLE = 'F' \n" +
+			"ORDER BY MEMBER_TOTAL_POINT DESC \n" +
+			"LIMIT ?, ?";
 
 	//회원가입
 	private final String INSERT = "INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION) \r\n"
@@ -332,9 +333,10 @@ public class MemberDAO {
 
 	public List<MemberDTO> selectAllSearchRank(MemberDTO memberDTO) {
 		List<MemberDTO> datas = null;
+		Object[] args = { memberDTO.getMember_min_num() , memberDTO.getPage() };
 		try {
-			//랭킹높은순으로 정렬 관리자 FIXME 관리자 권한이 아닌사람들만
-			datas = jdbcTemplate.query(SEARCH_RANK, new MemberSelectRowMapperAll());
+			//랭킹높은순으로 정렬 관리자 (관리자 권한이 아닌사람들만)
+			datas = jdbcTemplate.query( SEARCH_RANK, args, new MemberSelectRowMapperAll());
 		}
 		catch (Exception e) {
 		}
