@@ -108,22 +108,34 @@ public class ReservationDAO {
 			+ "    RESERVATION_MONTH";
 
 	//예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
-	private final String ALL_ADMIN = "SELECT R.RESERVATION_MEMBER_ID, G.GYM_NAME, R.RESERVATION_PRICE, R.RESERVATION_DATE\n"
+	private final String ALL_ADMIN = "SELECT \n"
+			+ "    R.RESERVATION_NUM, \n"
+			+ "    G.GYM_LOCATION, \n"
+			+ "    G.GYM_PRICE, \n"
+			+ "    M.MEMBER_NAME, \n"
+			+ "    R.RESERVATION_PRICE, \n"
+			+ "    R.RESERVATION_DATE\n"
 			+ "FROM RESERVATION R\n"
-			+ "JOIN GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM"
+			+ "JOIN GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM\n"
+			+ "JOIN \n"
+			+ "    MEMBER M ON R.RESERVATION_MEMBER_ID = M.MEMBER_ID\n"
 			+ "ORDER BY R.RESERVATION_DATE DESC\n"
 			+ "LIMIT ? , ?";
 
 	//암벽장 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
 	private final String ALL_ADMIN_SEARCH_GYM_NAME = "SELECT \n"
-			+ "    R.RESERVATION_MEMBER_ID, \n"
-			+ "    G.GYM_NAME, \n"
+			+ "    R.RESERVATION_NUM, \n"
+			+ "    G.GYM_LOCATION, \n"
+			+ "    G.GYM_PRICE, \n"
+			+ "    M.MEMBER_NAME, \n"
 			+ "    R.RESERVATION_PRICE, \n"
 			+ "    R.RESERVATION_DATE\n"
 			+ "FROM \n"
 			+ "    RESERVATION R\n"
 			+ "JOIN \n"
 			+ "    GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM\n"
+			+ "JOIN \n"
+			+ "    MEMBER M ON R.RESERVATION_MEMBER_ID = M.MEMBER_ID\n"
 			+ "WHERE \n"
 			+ "    G.GYM_NAME LIKE CONCAT('%', ?, '%')\n"
 			+ "ORDER BY \n"
@@ -132,14 +144,18 @@ public class ReservationDAO {
 
 	//예약자 이름으로 검색한 예약 전체 출력(페이지네이션) // TODO 예약 관리 페이지
 	private final String ALL_ADMIN_SEARCH_MEMBER_ID = "SELECT \n"
-			+ "    R.RESERVATION_MEMBER_ID, \n"
-			+ "    G.GYM_NAME, \n"
+			+ "    R.RESERVATION_NUM, \n"
+			+ "    G.GYM_LOCATION, \n"
+			+ "    G.GYM_PRICE, \n"
+			+ "    M.MEMBER_NAME, \n"
 			+ "    R.RESERVATION_PRICE, \n"
 			+ "    R.RESERVATION_DATE\n"
 			+ "FROM \n"
 			+ "    RESERVATION R\n"
 			+ "JOIN \n"
 			+ "    GYM G ON R.RESERVATION_GYM_NUM = G.GYM_NUM\n"
+			+ "JOIN \n"
+			+ "    MEMBER M ON R.RESERVATION_MEMBER_ID = M.MEMBER_ID\n"
 			+ "WHERE \n"
 			+ "    R.RESERVATION_MEMBER_ID = ?\n"
 			+ "ORDER BY \n"
@@ -148,7 +164,7 @@ public class ReservationDAO {
 
 	//암벽장 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
 	private final String ALL_ADMIN_SEARCH_GYM_NAME_COUNT = "SELECT \n"
-			+ "    COUNT(*) AS RESERVAION_COUNT \n"
+			+ "    COUNT(*) AS RESERVATION_TOTAL \n"
 			+ "FROM \n"
 			+ "    RESERVATION R\n"
 			+ "JOIN \n"
@@ -158,7 +174,7 @@ public class ReservationDAO {
 
 	//예약자 이름으로 검색한 예약 전체 카운트 // TODO 예약 관리 페이지
 	private final String ALL_ADMIN_SEARCH_MEMBER_ID_COUNT = "SELECT \n"
-			+ "    COUNT(*) AS RESERVAION_COUNT \n"
+			+ "    COUNT(*) AS RESERVATION_TOTAL \n"
 			+ "FROM \n"
 			+ "    RESERVATION R\n"
 			+ "WHERE \n"
@@ -401,18 +417,21 @@ class ReservationRowMapperAll implements RowMapper<ReservationDTO> {
 }
 @Slf4j
 class ReservationAdminRowMapperAll implements RowMapper<ReservationDTO> {
-
 	public ReservationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReservationDTO reservationDTO=new ReservationDTO();
 		log.info("ReservationAdminRowMapperAll DB에서 가져온 데이터 ↓↓↓↓↓");
-		reservationDTO.setReservation_member_id(rs.getString("RESERVATION_MEMBER_ID"));
-		log.info("reservation_member_id = ["+reservationDTO.getReservation_member_id()+"]");
-		reservationDTO.setReservation_gym_name(rs.getString("GYM_NAME"));
-		log.info("reservation_gym_name = ["+reservationDTO.getReservation_gym_name()+"]");
+		reservationDTO.setReservation_num(rs.getString("RESERVATION_NUM"));
+		log.info("reservation_num = [{}]",reservationDTO.getReservation_num());
+		reservationDTO.setReservation_gym_location(rs.getString("GYM_LOCATION"));
+		log.info("reservation_gym_location = [{}]",reservationDTO.getReservation_gym_location());
+		reservationDTO.setReservation_gym_price(rs.getInt("GYM_PRICE"));
+		log.info("reservation_gym_price = [{}]",reservationDTO.getReservation_gym_price());
+		reservationDTO.setReservation_member_name(rs.getString("MEMBER_NAME"));
+		log.info("reservation_member_name = [{}]",reservationDTO.getReservation_member_name());
 		reservationDTO.setReservation_price(rs.getInt("RESERVATION_PRICE"));
-		log.info("reservation_price = ["+reservationDTO.getReservation_price()+"]");
+		log.info("reservation_price = [{}]",reservationDTO.getReservation_price());
 		reservationDTO.setReservation_date(rs.getString("RESERVATION_DATE"));
-		log.info("reservation_date = ["+reservationDTO.getReservation_date()+"]");
+		log.info("reservation_date = [{}]",reservationDTO.getReservation_date());
 		log.info("ReservationAdminRowMapperAll DB에서 가져온 데이터 ↑↑↑↑↑");
 		return reservationDTO;
 	};

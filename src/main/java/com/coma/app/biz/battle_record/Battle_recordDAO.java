@@ -532,7 +532,7 @@ class BattleRecordRowMapperAllWinnerParticipantGym implements RowMapper<Battle_r
 		System.out.println("com.coma.app.biz.battle_record.selectAllWinnerParticipantGym 검색 성공");
 		Battle_recordDTO data = new Battle_recordDTO();
 		try {
-			data.setBattle_record_crew_name(rs.getString("CREW_NUM"));
+			data.setBattle_record_crew_name(rs.getString("CREW_NAME"));
 		} catch (SQLException e) {
 			System.err.println("Battle_record_crew_name = null");
 			data.setBattle_record_crew_name(null);
