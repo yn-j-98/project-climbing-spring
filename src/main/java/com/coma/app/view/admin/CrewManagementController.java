@@ -61,20 +61,17 @@ public class CrewManagementController {
     }
 
     @GetMapping("/crewManagementDetail.do")
-    public String crewManagementDetail(Model model, Battle_recordDTO battle_recordDTO, CrewDTO crewDTO) {
-//        "crewManagementDetail.do?battle_num=${data.battle_num}">${data.gym_name}
+    public String crewManagementDetail(Model model, BattleDTO battleDTO) {
+        log.info("crewManagementDetail.battle_num = [{}]", battleDTO.getBattle_num());
         // 크루전 정보 - 암벽장
         // 암벽장 명 , 게임일, 승리한 크루, MVP
-        // TODO DAO 쿼리문 수정됐는지 확인하기
-        List<Battle_recordDTO> data = this.battle_recordService.selectAllWinnerParticipantGym(battle_recordDTO);
+        BattleDTO data = this.crewManagementService.selectOneSearchWinner(battleDTO);
+        model.addAttribute("data", data);
 
         // 참여 크루
         // 크루명 / 크루장 / 크루원 수
-        // TODO DAO 쿼리문 수정됐는지 확인하기
-//        List<CrewDTO> datas = this.crewService.selectAllParticipant(crewDTO);
-
-        model.addAttribute("data", data);
-//        model.addAttribute("datas", datas);
+        List<BattleDTO> datas = crewManagementService.selectAllSearchPariticipants(battleDTO);
+        model.addAttribute("datas", datas);
 
         return "admin/crewManagementDetail";
     }

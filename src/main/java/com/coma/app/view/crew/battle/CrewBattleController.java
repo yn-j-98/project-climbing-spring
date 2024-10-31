@@ -52,28 +52,30 @@ public class CrewBattleController {
         log.info("검색할 크루전 pk = [{}]", battle_num);
         battle_recordDTO.setBattle_record_battle_num(battle_num);
         battle_recordDTO = this.battle_recordService.selectOneBattle(battle_recordDTO);
-        log.info("crewBattle.battle_recordDTO [{}]",battle_recordDTO);
+        log.info("crewBattle.battle_recordDTO [{}]", battle_recordDTO);
         model.addAttribute("battle_record", battle_recordDTO);
 
         //크루전 번호로 참여크루 총 개수 검색
         battleDTO.setBattle_num(battle_num);
         int battle_total = this.battleService.selectOneSearchCountActive(battleDTO).getTotal();
-        log.info("크루전 참여크루 총 개수 = [{}]",battle_total);
+        log.info("크루전 참여크루 총 개수 = [{}]", battle_total);
         model.addAttribute("battle_total", battle_total);
 
         //크루전 번호로 참여한 크루들 정보 검색
         battle_recordDTO.setBattle_record_battle_num(battle_num);
         List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllParticipantCrew(battle_recordDTO);
-        if (battle_record_datas.isEmpty()) {log.error("battle_record_datas 비어있음");}
+        if (battle_record_datas.isEmpty()) {
+            log.error("battle_record_datas 비어있음");
+        }
         for (Battle_recordDTO data : battle_record_datas) {
-            log.info("crewBattle.battle_record_datas [{}]",data);
+            log.info("crewBattle.battle_record_datas [{}]", data);
         }
         model.addAttribute("battle_record_datas", battle_record_datas);
 
         //크루전 종료 여부
         boolean flag = false;
         for (Battle_recordDTO data : battle_record_datas) {
-            log.info("crewBattle.battle_record_datas [{}]",data);
+            log.info("crewBattle.battle_record_datas [{}]", data);
             if (data.getBattle_record_is_winner().equals("T")) {
                 flag = true;
                 break;
@@ -89,6 +91,7 @@ public class CrewBattleController {
         return "views/crewBattleContent";
     }
 
+    @LoginCheck
     @GetMapping("/crewBattle.do")
     public String crewBattle(Model model, BattleDTO battleDTO, @SessionAttribute("MEMBER_ID") String member_id, @SessionAttribute("CREW_CHECK") Integer crew_num) {
         log.info("crewBattle.session.member_id = [{}]", member_id);
@@ -118,7 +121,7 @@ public class CrewBattleController {
         int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
         int minBoard = 1; // 최소 게시글 수 초기화
 
-        if (crew_num == null) {
+        if (crew_num == null || crew_num <= 0) {
             model.addAttribute("title", "페이지 접근 실패");
             model.addAttribute("msg", "가입된 크루가 없습니다");
             model.addAttribute("path", "crewList.do");
@@ -134,6 +137,7 @@ public class CrewBattleController {
         //내 크루가 참여신청한 크루전 출력
         battleDTO.setBattle_crew_num(crew_num);
         BattleDTO my_battle = this.battleService.selectOneSearchMemberBattle(battleDTO);
+
         if (my_battle != null) {
             //이미지 파일명 url로 정제
             battleDTO.setBattle_gym_profile(makeURL(my_battle));
