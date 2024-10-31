@@ -36,6 +36,11 @@ public class BattleServiceImpl implements BattleService{
 	public List<BattleDTO> selectAllCrewMemberName(BattleDTO battleDTO) {return this.battleDAO.selectAllCrewMemberName(battleDTO);}
 
 	@Override
+	public List<BattleDTO> selectAdminAll5Active(BattleDTO battleDTO) {
+		return this.battleDAO.selectAdminAll5Active(battleDTO);
+	}
+
+	@Override
 	public BattleDTO selectOneSearchMemberBattle(BattleDTO battleDTO) {return this.battleDAO.selectOneSearchMemberBattle(battleDTO);}
 
 	@Override

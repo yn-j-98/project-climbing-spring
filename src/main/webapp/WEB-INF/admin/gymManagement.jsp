@@ -103,9 +103,9 @@
                     <div class="form-floating">
                         <%--TODO 컨디션 안쓴다면 ID 변경--%>
                         <select class="form-select" id="search_keyword">
-                            <option  ${gym_search_keyword == "ALL" ? "selected":''} value="ALL">전체</option>
-                            <option ${gym_search_keyword == "adminCertified" ? "selected":''} value="adminCertifiedC">등록</option>
-                            <option ${gym_search_keyword == "adminUnCertified" ? "selected":''} value="adminUnCertified">비등록</option>
+                            <option  ${search_keyword == "ALL" ? "selected":''} value="ALL">전체</option>
+                            <option ${search_keyword == "adminCertified" ? "selected":''} value="adminCertified">등록</option>
+                            <option ${search_keyword == "adminUnCertified" ? "selected":''} value="adminUnCertified">비등록</option>
                         </select>
                         <label for="search_keyword">검색할 목록</label>
                     </div>
@@ -125,7 +125,7 @@
             <!-- forEach 시작 TODO 삭제-->
             <div class="row" id="gymList">
                 <c:forEach var="gym" items="${datas}">
-                    <div class="col-md-4 hoverDiv" data-gym-battle-status="${gym.gym_battle_status}"
+                    <div class="col-md-4 hoverDiv" data-gym-battle-status="${gym.gym_admin_battle_verified}"
                          data-gym-num="${gym.gym_num}"><!--TODO 상태 바꾸기-->
                         <div class="card h-90">
                             <div class="row g-0 d-flex flex-column">
@@ -172,8 +172,8 @@
 </div>
 
 <!-- 암벽장 추가 모달-->
-<!--모달창 전송 TODO 컨트롤러 요청 확인-->
-<form id="insertForm" action="gymInsert.do" method="POST">
+<!--모달창 전송 멀티파트타입 인코딩 설정-->
+<form id="insertForm" action="gymInsert.do" method="POST" enctype="multipart/form-data">
     <div class="modal fade" id="climbingGymModal" tabindex="-1" aria-labelledby="gym-modal-title" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content rounded-4">
@@ -296,7 +296,7 @@
     // .hoverDiv 요소 클릭 시 호출되는 함수
     function handleHoverDivClick(element) {
         var gymNum = element.data("gymNum"); // gym 번호 가져오기
-        var gymBattleStatus = element.data("gymBattleStatus"); // gym 크루전 상태 가져오기
+        var gymBattleStatus = element.data("gymAdminBattleVerified"); // gym 크루전 상태 가져오기
 
         // 크루전 상태에 따라 알림 창 띄우기 및 승인 여부 확인
         if (gymBattleStatus !== undefined && gymBattleStatus !== "") {
@@ -306,7 +306,7 @@
                         if (battleInsert) {
                             var form = $('<form/>', {
                                 //TODO
-                                action: '컨트롤러가 지정해준 값.do',
+                                action: 'gymManagementReq.do',
                                 method: 'POST',
                                 style: 'display: none;'
                             });
@@ -356,12 +356,12 @@
         // window.location.href = `controller.do?search_keyword=`+search_keyword+`search_content=`+search_content;
         var form = $('<form/>', {
             //TODO .do 입력
-            action: '컨트롤러가 지정해준 값',
+            action: 'gymManagement.do',
             method: 'POST',
             style: 'display: none;'
         });
-        form.append($('<input/>', {type: 'hidden', name: 'gym_search_keyword', value: search_keyword}));
-        form.append($('<input/>', {type: 'hidden', name: 'gym_search_content', value: search_content}));
+        form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: search_keyword}));
+        form.append($('<input/>', {type: 'hidden', name: 'search_content', value: search_content}));
         // 문서에 form 추가
         $('body').append(form);
         form.submit();

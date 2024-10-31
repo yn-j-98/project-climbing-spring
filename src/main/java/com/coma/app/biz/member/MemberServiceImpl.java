@@ -60,6 +60,11 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public List<MemberDTO> selectAllSearchIdAdmin(MemberDTO memberDTO) {
+		String content = memberDTO.getSearch_content();
+		if (content == null) {
+			return null;
+		}
+
 		return this.memberDAO.selectAllSearchIdAdmin(memberDTO);
 	}
 

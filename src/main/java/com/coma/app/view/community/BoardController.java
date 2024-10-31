@@ -38,7 +38,6 @@ public class BoardController {
         //사용자 아이디
         String member_id = (String) session.getAttribute("MEMBER_ID");
 
-
         //사용자가 선택한 글번호를 받아서
         boardDTO.setBoard_writer_id(member_id);
         //model 에 전달해 글을 삭제하고
@@ -157,19 +156,11 @@ public class BoardController {
      */
     @LoginCheck
     @PostMapping("/boardUpdate.do")
-    public String boardUpdatePage(HttpSession session, Model model, BoardDTO boardDTO) {
+    public String boardUpdatePage(Model model, BoardDTO boardDTO) {
 
-
-        String member_id = (String) session.getAttribute("MEMBER_ID");
-
-        //만약 로그인 정보가 없다면
-        if (member_id == null) {
-
-            return "redirect:login.do";
-        } else {
             //사용자가 선택한 글번호를 받아서
 
-            boardDTO.setBoard_writer_id(member_id);
+
 //            boardDTO.setBoard_condition("BOARD_ONE_WRITER_ID");
             //model 에 전달하여 글 내용을 받아오고
             boardDTO = this.boardService.selectOneWriterId(boardDTO);
@@ -179,7 +170,7 @@ public class BoardController {
 
                 model.addAttribute("title", "죄송합니다");
 
-                model.addAttribute("path", "Mypage");
+                model.addAttribute("path", "mypage.do");
                 model.addAttribute("msg", "없는 게시글입니다.");
                 return "views/info";
 
@@ -201,15 +192,12 @@ public class BoardController {
                     //글 내용에서 img 태그가 있다면 해당 이미지 폴더의 번호만 가져오는 로직
                     content = content.substring(content.lastIndexOf("img") + 3).split("/")[2];
                     System.out.println("BoardController.boardUpdate.content : [" + content + "]");
-                    session.setAttribute("UPDATE_FOLDER_NUM", Integer.parseInt(content));
+                    //session.setAttribute("UPDATE_FOLDER_NUM", Integer.parseInt(content));
                 } catch (Exception e) {
-                    session.setAttribute("UPDATE_FOLDER_NUM", 0);
+                    //session.setAttribute("UPDATE_FOLDER_NUM", 0);
                 }
 
             }
-
-
-        }
 
         return "views/updateEditing";
     }
