@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 
 @Component
 public class LoginCheckImpl {
@@ -15,6 +16,7 @@ public class LoginCheckImpl {
 
     //현재 요청과 응답, 세션 객체를 이용하여 로그인 정보를 검사하는 메서드.
     public void checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
         String[] loginInfo = getLoginInformation(request, session); // 로그인 정보를 가져옴
         synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
 
@@ -29,7 +31,9 @@ public class LoginCheckImpl {
             }
         }
     }
-
+    private String redirectLogin() {
+        return "redirect:login.do"; // 로그인 페이지 URL 반환
+    }
 
 
     //요청과 세션 객체에서 로그인 정보를 가져오는 메서드
@@ -86,14 +90,10 @@ public class LoginCheckImpl {
             session.setAttribute(CREW_CHECK, loginInfo[1]);
         }
         // 세션의 ROLE_CHECK가 null이고 배열의 세 번째 요소가 null이 아닌 경우
-        if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
+        if (session.getAttribute(ROLE_CHECK).equals("T") && loginInfo[2] != null) {
             // 세션의 ROLE_CHECK에 배열의 세 번째 요소를 저장
             session.setAttribute(ROLE_CHECK, loginInfo[2]);
         }
-    }
-
-    private String redirectLogin() {
-        return "redirect:login.do"; // 로그인 페이지 URL 반환
     }
 
 

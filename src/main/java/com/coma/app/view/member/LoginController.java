@@ -1,6 +1,7 @@
 package com.coma.app.view.member;
 
 import com.coma.app.view.annotation.LoginCheckImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 public class LoginController {
 
@@ -83,17 +85,21 @@ public class LoginController {
     private void setCookies(MemberDTO memberDTO, HttpServletResponse response, HttpServletRequest request) {
 
         String auto = request.getParameter("VIEW_AUTO_LOGIN"); // 자동 로그인 체크
+        log.info("auto : {}", auto);
 
         if (auto != null) { // 자동 로그인 체크되어있다면
             Cookie member_id_cookie = new Cookie("MEMBER_ID", memberDTO.getMember_id());
             Cookie member_crew_cookie = new Cookie("CREW_CHECK", String.valueOf(memberDTO.getMember_crew_num()));
             Cookie member_role_cookie = new Cookie("MEMBER_ROLE", memberDTO.getMember_role());
 
+
             member_id_cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효 시간 설정 (7일)
             member_crew_cookie.setMaxAge(60 * 60 * 24 * 7);
+            member_role_cookie.setMaxAge(60 * 60 * 24 * 7);
 
             response.addCookie(member_id_cookie);
             response.addCookie(member_crew_cookie);
+            response.addCookie(member_role_cookie);
         }
     }
 }
