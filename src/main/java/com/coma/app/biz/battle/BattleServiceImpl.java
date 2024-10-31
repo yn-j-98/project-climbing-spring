@@ -68,4 +68,6 @@ public class BattleServiceImpl implements BattleService{
 		return this.battleDAO.delete(battleDTO);
 	}
 
+	@Override
+	public BattleDTO selectOneSearchCountActive(BattleDTO battleDTO) {return this.battleDAO.selectOneSearchCountActive(battleDTO);}
 }

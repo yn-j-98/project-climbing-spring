@@ -25,7 +25,6 @@
 
 	<!-- container start -->
 	<div class="container">
-
 		<div class="page-inner">
 			<div class="col-12 d-flex justify-content-center pb-3">
 				<h2>
@@ -42,7 +41,7 @@
 					<p class="mb-0">위치 : ${battle_record.battle_record_gym_location}</p>
 				</div>
 				<div class="col-md-5 d-flex align-items-center justify-content-end">
-					<p class="mb-0">참여 크루 수 : ${battle_total.battle_total}</p>
+					<p class="mb-0">참여 크루 수 : ${battle_total}</p>
 				</div>
 			</div>
 			<div class="row border-bottom border-dark pb-3"></div>
