@@ -67,6 +67,7 @@ public class CrewManagementService {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setMember_crew_num(crew_num);
         List<MemberDTO> datas = memberDAO.selectAllSearchCrewMemberName(memberDTO);
+        log.info("mvpMemberService = [{}]",datas);
         return datas;
     }
 
@@ -75,6 +76,13 @@ public class CrewManagementService {
         //받은 크루 번호를 전달합니다.
         return this.crewDAO.selectOneName(crewDTO);
     }
+    public BattleDTO selectOneSearchWinner(BattleDTO battleDTO){
+        return battleDAO.selectOneSearchWinner(battleDTO);
+    }
+    public List<BattleDTO> selectAllSearchPariticipants(BattleDTO battleDTO){
+        return battleDAO.selectAllSearchPariticipants(battleDTO);
+    }
+
 
     public boolean updateBattleRecord(Battle_recordDTO battle_recordDTO){
         boolean result = false;
