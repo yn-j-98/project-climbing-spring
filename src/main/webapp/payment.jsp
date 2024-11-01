@@ -2,18 +2,18 @@
 
 <html>
 <head>
+    <title>카카오페이</title>
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <script src="assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="assets/js/core/popper.min.js"></script>
     <script src="assets/js/core/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <title>카카오페이</title>
-
     <script src="js/payment.js"></script>
+
 
 </head>
 <body>
-<form action="gymReservation.do">
+
     <div class="card-body">
         <input type="hidden" id="gymNum" name="reservation_gym_num" value="1">
         <input type="hidden" id="gymName" name="reservation_gym_name" value="고물볼드">
@@ -74,7 +74,7 @@
                 onclick="window.location.href='main.do';">취소</button>
         <button type="button" class="btn btn-primary px-5" id="reservationbtn">예약</button>
     </div>
-</form>
+
 </body>
 
 
