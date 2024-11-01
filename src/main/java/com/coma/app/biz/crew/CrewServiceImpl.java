@@ -30,13 +30,23 @@ public class CrewServiceImpl implements CrewService{
 	public CrewDTO selectOneCountCurretMemberSize(CrewDTO crewDTO) {return this.crewDAO.selectOneCountCurretMemberSize(crewDTO);}
 
 	@Override
+	public CrewDTO selectOneBattleStatus(CrewDTO crewDTO) {
+		return this.crewDAO.selectOneBattleStatus(crewDTO);
+	}
+
+	@Override
 	public boolean insert(CrewDTO crewDTO) {
 		return false;
 	}
 
 	@Override
-	public boolean update(CrewDTO crewDTO) {
-		return false;
+	public boolean updateBattleTrue(CrewDTO crewDTO) {
+		return this.crewDAO.updateBattleTrue(crewDTO);
+	}
+
+	@Override
+	public boolean updateBattleFalse(CrewDTO crewDTO) {
+		return this.crewDAO.updateBattleFalse(crewDTO);
 	}
 
 	@Override

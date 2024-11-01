@@ -13,20 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.coma.app.biz.reservation.PaymentInfoDTO;
 
 @Slf4j
 @RestController
 public class Payment {
-
+    @Autowired
     private ReservationService reservationService;
-
-//    @RequestMapping(value = "/paymentPrepare.do", method = RequestMethod.GET)
-//    public void paymentPrepareGet (HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        log.info("사전 등록 GET paymentPrepare.do 도착");
-//    }
-
 
     @PostMapping(value = "/paymentPrepare.do")
     public void paymentPrepare (HttpServletResponse response, @RequestBody PaymentInfoDTO paymentInfoDTO) throws IOException {
@@ -106,9 +101,11 @@ public class Payment {
 
         // 바인딩할 커맨드객체에 gym_num이 없어서 request사용
         String imp_uid = request.getParameter("imp_uid");
+        String reservation_date = request.getParameter("reservation_date");
         int product_num = Integer.parseInt(request.getParameter("gym_num"));
         log.info("imp_uid = [{}]",imp_uid);
         log.info("product_num = [{}]",product_num);
+        log.info("reservation_date = [{}]",reservation_date);
 
         // uid 값 담을 DTO 생성
         PaymentInfoDTO paymentInfoDTO = new PaymentInfoDTO();
@@ -135,34 +132,37 @@ public class Payment {
             JSONObject jsonObject = (JSONObject) parser.parse(paymentInfoDTO.getResponse().body());
 
             // 'response' 객체 가져오기
-            JSONObject responseObject = (JSONObject) jsonObject.get("respo  nse");
-
+            JSONObject responseObject = (JSONObject) jsonObject.get("response");
+            System.out.println("139"+responseObject);
             if (responseObject != null) {
                 // 필요한 값 추출
-                log.info("gym_num = [{}]",product_num);
                 Long amount = (Long) responseObject.get("amount");
                 amount_result = amount.intValue(); // 결제 금액
                 String imp_uid1 = (String) responseObject.get("imp_uid");
                 String merchant_uid = (String) responseObject.get("merchant_uid");
-                String reservation_date = (String) responseObject.get("reservationDate");
-                int gym_num = (Integer) responseObject.get("gym_num");
                 String member_id = (String) responseObject.get("buyer_email");
 
                 // 결과 출력
-                log.info("결제된 가격 = [{}]",amount_result);
-                log.info("결제 고유번호 = [{}]",imp_uid1);
-                log.info("결제 날짜 = [{}]",reservation_date);
-                log.info("상점 고유번호 = [{}]",merchant_uid);
-                log.info("결제자 아이디 = [{}]",member_id);
+//                log.info("결제된 가격 = [{}]",amount_result);
+                System.out.println("결제된 가격 = ["+amount_result+"]");
+//                log.info("결제 고유번호 = [{}]",imp_uid1);
+                System.out.println("결제 고유번호 = ["+imp_uid1+"]");
+//                log.info("결제 날짜 = [{}]",reservation_date);
+                System.out.println("결제 날짜 = ["+reservation_date+"]");
+//                log.info("상점 고유번호 = [{}]",merchant_uid);
+                System.out.println("상점 고유번호 = ["+merchant_uid+"]");
+//                log.info("결제자 아이디 = [{}]",member_id);
+                System.out.println("결제자 아이디 = ["+member_id+"]");
 
+                int reservation_gym_num=product_num;
                 // 조회한 결제 내역 DB에 저장
                 reservationDTO = new ReservationDTO();
                 reservationDTO.setReservation_num(merchant_uid);
                 reservationDTO.setReservation_date(reservation_date);
-                reservationDTO.setReservation_gym_num(gym_num);
+                reservationDTO.setReservation_gym_num(reservation_gym_num);
                 reservationDTO.setReservation_member_id(member_id);
                 reservationDTO.setReservation_price(amount_result);
-
+                System.out.println("170도착 reservationDTO = ["+reservationDTO+"]");
                 flag = reservationService.insert(reservationDTO);
             } else {
                 System.out.println("Response 객체가 null입니다.");
