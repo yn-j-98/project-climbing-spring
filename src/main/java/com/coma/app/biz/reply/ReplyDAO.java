@@ -98,7 +98,7 @@ class ReplySelectRowMapper implements RowMapper<ReplyDTO> {
 
 	public ReplyDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ReplyDTO replyDTO=new ReplyDTO();
-		System.out.print("GymSelectRowMapper DB에서 가져온 데이터 {");
+		System.out.print("ReplySelectRowMapper DB에서 가져온 데이터 {");
 		replyDTO.setReply_num(rs.getInt("REPLY_NUM"));
 		System.err.println("reply_num = ["+replyDTO.getReply_num()+"]");
 		replyDTO.setReply_board_num(rs.getInt("REPLY_BOARD_NUM"));
