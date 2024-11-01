@@ -34,26 +34,23 @@ public class BattleDAO {
 			"    AND BR.BATTLE_RECORD_IS_WINNER = 'T'";
 
 	// 해당 크루전의 모든 참여 크루 정보
-	private final String ALL_SEARCH_PARTICIPANTS = "SELECT\n" +
-			"    B.BATTLE_NUM,\n" +
-			"    G.GYM_NAME,\n" +
-			"    B.BATTLE_GAME_DATE,\n" +
-			"    C.CREW_NAME AS BATTLE_CREW_NAME,\n" +
-			"    C.CREW_CURRENT_MEMBER_SIZE AS BATTLE_CREW_NUM,\n"+
-			"    C.CREW_LEADER AS BATTLE_MEMBER_NAME,\n" +
-			" (SELECT COUNT(*) OVER )" +
-			"FROM\n" +
-			"    BATTLE B\n" +
-			"JOIN\n" +
-			"    GYM G ON B.BATTLE_GYM_NUM = G.GYM_NUM\n" +
-			"JOIN\n" +
-			"    BATTLE_RECORD BR ON B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\n" +
-			"JOIN\n" +
-			"    CREW C ON C.CREW_NUM = BR.BATTLE_RECORD_CREW_NUM\n" +
-			"JOIN \n"+
-			"    MEMBER M ON M.MEMBER_CREW_NUM = C.CREW_NUM\n" +
-			"WHERE\n" +
-			"    B.BATTLE_NUM = ?";
+	private final String ALL_SEARCH_PARTICIPANTS = "SELECT" +
+			" B.BATTLE_NUM," +
+			" G.GYM_NAME," +
+			" B.BATTLE_GAME_DATE," +
+			" C.CREW_NAME AS BATTLE_CREW_NAME," +
+			" (SELECT COUNT(*) FROM MEMBER M WHERE M.MEMBER_CREW_NUM = C.CREW_NUM) AS BATTLE_CREW_NUM," +
+			" C.CREW_LEADER AS BATTLE_MEMBER_NAME" +
+			" FROM" +
+			" BATTLE B" +
+			" JOIN" +
+			" GYM G ON B.BATTLE_GYM_NUM = G.GYM_NUM" +
+			" JOIN" +
+			" BATTLE_RECORD BR ON B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM" +
+			" JOIN" +
+			" CREW C ON C.CREW_NUM = BR.BATTLE_RECORD_CREW_NUM" +
+			" WHERE" +
+			" B.BATTLE_NUM = ?";
 
 	//todo
 	// 메인페이지 - selectOne
