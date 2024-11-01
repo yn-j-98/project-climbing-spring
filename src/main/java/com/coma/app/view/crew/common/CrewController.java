@@ -153,23 +153,30 @@ public class CrewController {
         log.info("crewPage.crew_num = [{}]", crew_num);
 
 
-            // 크루 정보 가져오기
-            crewDTO.setCrew_num(crew_num);
-            crewDTO = this.crewService.selectOne(crewDTO);
+        // 크루 정보 가져오기
+        crewDTO.setCrew_num(crew_num);
+        crewDTO = this.crewService.selectOne(crewDTO);
 
-            // 크루 정보 + 크루 이미지 URL
-            model.addAttribute("CREW", crewDTO);
-            model.addAttribute("crew_profile", crewDTO.getCrew_profile());
+//        if (crewDTO == null) {
+//            model.addAttribute("title", "크루 정보 없음");
+//            model.addAttribute("msg", "해당 크루의 정보를 찾을 수 없습니다.");
+//            model.addAttribute("path", "crewList.do");
+//            return "views/info";
+//        }
 
-            // 해당 크루에 속한 사용자 이름 전부 출력
-            memberDTO.setMember_crew_num(crew_num);
-            List<MemberDTO> member_crew_datas = this.memberService.selectAllSearchCrewMemberName(memberDTO);
-            model.addAttribute("member_crew_datas", member_crew_datas);
+        // 크루 정보 + 크루 이미지 URL
+        model.addAttribute("CREW", crewDTO);
+        model.addAttribute("crew_profile", crewDTO.getCrew_profile());
 
-            // 해당 크루에 승리 기록 전부 출력
-            battle_recordDTO.setBattle_record_crew_num(crew_num);
-            List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllWinner(battle_recordDTO);
-            model.addAttribute("battle_record_datas", battle_record_datas);
+        // 해당 크루에 속한 사용자 이름 전부 출력
+        memberDTO.setMember_crew_num(crew_num);
+        List<MemberDTO> member_crew_datas = this.memberService.selectAllSearchCrewMemberName(memberDTO);
+        model.addAttribute("member_crew_datas", member_crew_datas);
+
+        // 해당 크루에 승리 기록 전부 출력
+        battle_recordDTO.setBattle_record_crew_num(crew_num);
+        List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllWinner(battle_recordDTO);
+        model.addAttribute("battle_record_datas", battle_record_datas);
 
         return "views/myCrewPage";
     }
