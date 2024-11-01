@@ -30,7 +30,6 @@ public class LoginController {
         return "views/login";
     }
 
-    @LoginCheck
     @PostMapping("/login.do") // 로그인 처리
     public String login(Model model, MemberDTO memberDTO, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         // 로그인 정보가 있는지 확인
