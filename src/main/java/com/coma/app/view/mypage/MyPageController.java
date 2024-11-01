@@ -111,17 +111,14 @@ public class MyPageController {
 
 		return "views/myPage";
 	}
-	@GetMapping("/editMyPage.do")
-	public String editMyPage() {
-		return "views/editMyPage";
-	}
 	//-------------------------------
 
 
 	// DeleteMemberAction
 	@LoginCheck
 	@PostMapping("/deleteMember.do")
-	public String deleteMember(MemberDTO memberDTO, Model model, @SessionAttribute("MEMBER_ID") String member_id) throws IOException {
+	public String deleteMember(MemberDTO memberDTO, Model model) throws IOException {
+		String member_id = (String)this.session.getAttribute("MEMBER_ID");
 		memberDTO.setMember_id(member_id);
 		//탈퇴전 사용자의 프로필이미지를 가져오기 위해 아이디 하나 검색하는 컨디션을 추가합니다.
 		System.out.println("*******************************************"+memberDTO.getMember_id());
@@ -176,17 +173,19 @@ public class MyPageController {
 		boolean flag = false;
 		MultipartFile file = memberDTO.getPhotoUpload();
 		// 프로필 이미지 업로드 처리
-		String filename = null;
-		if (file != null) {
-			filename = ftpService.ftpFileUpload(memberDTO.getPhotoUpload(), "profile_img",member_id); // profileUpload 주입된 인스턴스 사용
-			System.out.println("uploadfile not null 로그 : " + filename);
-			// uploadfile이 null이 아니라면 DB의 프로필 이미지를 변경합니다.
-			memberDTO.setMember_profile(filename); // 저장한 프로필 이미지로 변경합니다.
-			flag = this.memberService.updateAll(memberDTO);
-		}
-		else {
+		String filename = file.getOriginalFilename();
+			log.info("uploadFiel not null Log : [{}]", filename);
+		if ("".equals(filename)) {
 			System.out.println("uploadfile null 로그");
 			flag = this.memberService.updateWithoutProfile(memberDTO);
+		}
+		else {
+			log.info("uploadFiel not null Log : [{}]", filename);
+			filename = ftpService.ftpFileUpload(memberDTO.getPhotoUpload(), "profile_img", member_id); // ftpFileUpload 주입된 인스턴스 사용
+			// uploadfile이 null이 아니라면 DB의 프로필 이미지를 변경합니다.
+			log.info("Update File Name log : [{}]", filename);
+			memberDTO.setMember_profile(filename); // 저장한 프로필 이미지로 변경합니다.
+			flag = this.memberService.updateAll(memberDTO);
 		}
 
 		System.out.println("프로필 이미지 저장 로그: " + memberDTO); // 프로필 이미지 저장 로그
@@ -198,24 +197,20 @@ public class MyPageController {
 			session.setAttribute("CHANGE_CHECK", flag);
 		}
 
-		return "views/myPage";
+		return "myPage.do";
 	}
 
 
 	//ChangeMember.do
 	@LoginCheck
 	@GetMapping("/changeMember.do")
-	public String changeMember(MemberDTO memberDTO, Model model) {
+	public String changeMember(MemberDTO memberDTO, Model model) throws IOException {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 		//사용자 아이디를 model에 전달하고
 		memberDTO.setMember_id(member_id);
 		//전달해준 사용자 정보를 받아와 줍니다.
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
-
-		String profile = memberDTO.getMember_profile() != null ? memberDTO.getMember_profile() : "default.png";
-		memberDTO.setMember_profile("/profile_img/" + profile);
 		model.addAttribute("data", memberDTO);
-
 		return "views/editMyPage";
 	}
 

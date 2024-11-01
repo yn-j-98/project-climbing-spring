@@ -157,7 +157,7 @@
 				<div class="card-action text-center">
 					<button type="button"
 							class="btn btn-black px-5 mb-3 mb-sm-0 me-0 me-sm-4"
-							onclick="window.location.href='mypage.do';">취소</button>
+							onclick="window.location.href='myPage.do';">취소</button>
 					<button type="submit" id="update" class="btn btn-primary px-5">수정</button>
 				</div>
 			</div>
