@@ -52,6 +52,13 @@ public class MemberDAO {
 			+ "	MEMBER_LOCATION = ?\r\n"
 			+ "WHERE MEMBER_ID = ?";
 
+	//회원정보 업데이트 MEMBER_PASSWORD, MEMBER_PROFILE, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
+	private final String UPDATE_PASSWORD = "UPDATE MEMBER\r\n"
+			+ "SET\r\n"
+			+ "	MEMBER_PASSWORD = ?\r\n"
+			+ "WHERE MEMBER_ID = ?";
+
+
 	//회원정보 업데이트 (profile X) MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
 	private final String UPDATE_WITHOUT_PROFILE = "UPDATE MEMBER\r\n"
 			+ "SET\r\n"
@@ -214,6 +221,12 @@ public class MemberDAO {
 		int result = jdbcTemplate.update(UPDATE_ALL, memberDTO.getMember_password(), memberDTO.getMember_profile(), memberDTO.getMember_phone(), memberDTO.getMember_location(), memberDTO.getMember_id());
         return result > 0;
     }
+
+	public boolean updatePassword(MemberDTO memberDTO) {
+		//회원정보 업데이트 MEMBER_PASSWORD, MEMBER_PROFILE, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID
+		int result = jdbcTemplate.update(UPDATE_PASSWORD, memberDTO.getMember_password(), memberDTO.getMember_id());
+		return result > 0;
+	}
 
 	public boolean updateWithoutProfile(MemberDTO memberDTO) {
 		//회원정보 업데이트 (profile X) MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION, MEMBER_ID

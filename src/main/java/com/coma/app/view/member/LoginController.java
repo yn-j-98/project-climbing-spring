@@ -24,13 +24,12 @@ public class LoginController {
     @Autowired
     private MemberService memberService;
 
-    @LoginCheck
+
     @GetMapping("/login.do") // 로그인 페이지 이동
     public String login() {
         return "views/login";
     }
 
-    @LoginCheck
     @PostMapping("/login.do") // 로그인 처리
     public String login(Model model, MemberDTO memberDTO, HttpServletResponse response, HttpServletRequest request, HttpSession session) {
         // 로그인 정보가 있는지 확인
@@ -69,7 +68,6 @@ public class LoginController {
         return "views/info";
     }
 
-    @LoginCheck
     @GetMapping("/logout.do")// 로그아웃 처리
     public String logout(Model model, HttpServletResponse response, HttpServletRequest request) {
         LoginCheckImpl.logout(request, response);

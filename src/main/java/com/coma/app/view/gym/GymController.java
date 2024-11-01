@@ -115,7 +115,7 @@ public class GymController {
 		log.info("gymReservation.do 도착");
 		String path = "views/info"; // view에서 알려줄 예정 alert 창 띄우기 위한 JavaScript 페이지
 		//로그인 정보가 있는지 확인해주고
-		String member_id = (String) session.getAttribute("MEMBER_ID");
+//		String member_id = (String) session.getAttribute("MEMBER_ID");
 
 		//------------------------------------------------------------
 		//해당 기능에서 공통으로 사용할 변수 and 객체

@@ -95,19 +95,27 @@ public class BoardManagementController {
 
     @GetMapping("/boardManagementDetail.do")
     public String boardManagementDetail(ReplyDTO replyDTO, BoardDTO boardDTO, MemberDTO memberDTO, Model model) {
+        int board_num = boardDTO.getBoard_num();
+        log.info("boardManagementDetail.board_num = [{}]",board_num);
 
-        //TODO VIEW와 생각해보기 V는 LIST로 안 했기 때문에 ..
+        //게시판 상세보기
         BoardDTO board_data = boardService.selectOne(boardDTO);
+        log.info("board_data = [{}]",board_data);
 
+        //사용자 이미지, 아이디
         memberDTO.setMember_id(board_data.getBoard_writer_id());
         MemberDTO profile = memberService.selectOneSearchId(memberDTO);
+        log.info("profile = [{}]",profile);
 
         model.addAttribute("board_title",board_data.getBoard_title());
         model.addAttribute("board_content",board_data.getBoard_content());
         model.addAttribute("board_writer_profile",profile.getMember_profile());
         model.addAttribute("board_writer_id",board_data.getBoard_writer_id());
 
+        //해당 게시글의 댓글 목록
+        replyDTO.setReply_board_num(board_num);
         List<ReplyDTO> reply_datas = replyService.selectAll(replyDTO);
+        log.info("reply_datas = [{}]",reply_datas);
         model.addAttribute("REPLY", reply_datas);
 
         return "admin/boardManagementDetail";
@@ -115,17 +123,19 @@ public class BoardManagementController {
 
     @PostMapping("/boardManagementDetail.do")
     public String boardManagementDetail(Model model, ReplyDTO replyDTO) {
-
+        log.info("PostMapping.boardManagementDetail 시작");
         boolean flag = false;
         flag = this.replyService.delete(replyDTO);
         model.addAttribute("title", "댓글 삭제");
         if (flag) {
             model.addAttribute("msg", "댓글 삭제 성공!");
+            log.info("댓글 삭제 성공!");
         }
         else{
             model.addAttribute("msg","댓글 삭제 실패..");
+            log.info("댓글 삭제 실패..");
         }
-        model.addAttribute("path", "boardManagementDetail.do");
+        model.addAttribute("path", "boardManagementDetail.do?board_num="+replyDTO.getReply_board_num());
 
         return "views/info";
     }

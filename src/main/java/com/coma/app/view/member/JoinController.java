@@ -36,7 +36,6 @@ public class JoinController {
 	//---------------------------
 	
 	// 회원가입 페이지
-	@LoginCheck
 	@PostMapping("/join.do")
 	public String joinPage(Model model, MemberDTO memberDTO) {
 		

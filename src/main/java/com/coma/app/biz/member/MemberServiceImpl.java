@@ -139,6 +139,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public boolean updatePassword(MemberDTO memberDTO) {
+		return this.memberDAO.updatePassword(memberDTO);
+	}
+
+	@Override
 	public boolean delete(MemberDTO memberDTO) {
 		return this.memberDAO.delete(memberDTO);
 	}
