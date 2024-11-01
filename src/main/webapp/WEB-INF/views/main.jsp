@@ -66,6 +66,8 @@
 .menu-box{
 	width:120px;
 	height:120px;
+	overflow:hidden;
+	box-shadow: 1px 4px 5px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width:768px){
@@ -102,18 +104,19 @@
 			<div class="row py-5">
 				<div
 					class="col-2 d-flex justify-content-center align-items-center flex-column">
-					<div
-						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
+					<div class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
 						<a href="store.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
-								<span class="display-6 text-primary"> <i
-									class="fa-solid fa-store"></i>
+								<span class="display-6 text-primary">
+									<img src="/img/icons/icon_shoe.png" alt="icon_shoe" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
 					</div>
 					<a href="store.do" class="mt-2">
-						<h4 class="text-center text-primary">암벽화 상점</h4>
+						<h5 class="text-center text-black-50">
+							암벽화 상점
+						</h5>
 					</a>
 				</div>
 				<div
@@ -122,14 +125,16 @@
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
 						<a href="gymMain.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
-								<span class="display-6 text-primary"> <i
-									class="fa-solid fa-chess"></i>
+								<span class="display-6 text-primary">
+									<img src="/img/icons/icon_moutain.jpg" alt="icon_moutain" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
 					</div>
 					<a href="gymMain.do" class="mt-2">
-						<h4 class="text-center text-primary">암벽장 투어</h4>
+						<h5 class="text-center text-black-50">
+							암벽장 투어
+						</h5>
 					</a>
 				</div>
 				<div
@@ -138,14 +143,16 @@
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
 						<a href="crewList.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
-								<span class="display-6 text-primary"> <i
-									class="fa-solid fa-crown"></i>
+								<span class="display-6 text-primary">
+									<img src="/img/icons/icon_crew.jpg" alt="icon_crew" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
 					</div>
 					<a href="crewList.do" class="mt-2">
-						<h4 class="text-center text-primary">크루 가입</h4>
+						<h5 class="text-center text-black-50">
+							크루 가입
+						</h5>
 					</a>
 				</div>
 				<div
@@ -154,14 +161,16 @@
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
 						<a href="location.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
-								<span class="display-6 text-primary"> <i
-									class="fa-solid fa-comments"></i>
+								<span class="display-6 text-primary">
+									<img src="/img/icons/icon_community.jpg" alt="icon_community" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
 					</div>
 					<a href="location.do" class="mt-2">
-						<h4 class="text-center text-primary">지역별 커뮤니티</h4>
+						<h5 class="text-center text-black-50">
+							지역별 커뮤니티
+						</h5>
 					</a>
 				</div>
 				<div
@@ -170,14 +179,16 @@
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
 						<a href="crewBattle.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
-								<span class="display-6 text-primary"> <i
-									class="fa-solid fa-fire"></i>
+								<span class="display-6 text-primary">
+									<img src="/img/icons/icon_battle.jpg" alt="icon_battle" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
 					</div>
 					<a href="crewBattle.do" class="mt-2">
-						<h4 class="text-center text-primary">크루전</h4>
+						<h5 class="text-center text-black-50">
+							개인 크루전
+						</h5>
 					</a>
 				</div>
 				<div
@@ -186,14 +197,16 @@
 						class="rounded-circle bg-white d-block d-flex justify-content-center align-items-center menu-box border border-light-subtle">
 						<a href="personalRank.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
-								<span class="display-6 text-primary"> <i
-									class="fa-solid fa-ranking-star"></i>
+								<span class="display-6 text-primary">
+									<img src="/img/icons/icon_ranking.jpg" alt="icon_ranking" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
 					</div>
 					<a href="personalRank.do" class="mt-2">
-						<h4 class="text-center text-primary">전체 랭킹</h4>
+						<h5 class="text-center text-black-50">
+							전체 랭킹
+						</h5>
 					</a>
 				</div>
 			</div>

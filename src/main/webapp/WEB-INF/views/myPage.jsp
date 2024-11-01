@@ -54,8 +54,10 @@
 							</a>
 						</div>
 						<div class="col-md-6 text-center">
+							<form id="deleteMember" action="deleteMember.do" method="POST">
 							<button class="btn btn-danger" onclick="confirmDeleteMember()">회원
 								탈퇴</button>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -170,6 +172,7 @@
 		</div>
 		<!-- container end -->
 	</div>
+</div>
 	<!--   Core JS Files   -->
 	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
 	<script src="assets/js/core/popper.min.js"></script>
