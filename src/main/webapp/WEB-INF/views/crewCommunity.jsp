@@ -35,7 +35,7 @@
 			width: 800px;
 			height: 500px;
 			margin: 0 auto;
-			background-color: #a5a5a5;
+			background-color: #cccccc;
 			border-radius: 20px;
 			padding: 15px;
 			overflow-y: auto;
@@ -184,7 +184,6 @@
 				console.log("오류 데이터:", e.data);
 			}
 			addPost(data, data.crew_board_writer_id === memberId);
-			$("#postList").scrollTop($("#postList")[0].scrollHeight);
 		}
 
 		// WebSocket 메시지 전송 핸들러
@@ -248,6 +247,7 @@
 			postHtml += "</div>";
 
 			$("#postList").append(postHtml);
+			$("#postList").scrollTop($("#postList")[0].scrollHeight);
 		}
 	});
 </script>
