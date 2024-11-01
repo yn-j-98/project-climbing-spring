@@ -359,7 +359,12 @@ public class GymController {
 		GymDTO data = this.gymService.selectOne(gymDTO);
 		gym_num = data.getGym_num();
 		gym_name = data.getGym_name();
-		gym_profile = "https://"+data.getGym_profile();
+		gym_profile = data.getGym_profile();
+		if(gym_profile != null){
+			if(!data.getGym_profile().contains("http")){
+				gym_profile = "https://" + gym_profile;
+			}
+		}
 		gym_description = data.getGym_description();
 		gym_location = data.getGym_location();
 		gym_price = data.getGym_price();
@@ -372,9 +377,7 @@ public class GymController {
 		//battle_record selectAll으로 Model에 해당 암벽장에서 승리한 크루 목록을 요청하고
 		//데이터 : 승리크루 이름 / 승리크루 사진 / 승리크루 경기날짜 / MVP 이름
 		List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllWinnerParticipantGym(battle_recordDTO);
-		for (Battle_recordDTO battle_record_data : battle_record_datas) {
-			battle_record_data.setBattle_record_crew_profile(servletContext.getContextPath() + "/crew_img_foloder/" + battle_record_data.getBattle_record_crew_profile());
-		}
+
 		//해당 암벽장에서 승리한 크루 목록 로직 종료
 		//---------------------------------------------------------------------------
 		//해당 암벽장에 등록되어 있는 크루전 정보 로직 시작

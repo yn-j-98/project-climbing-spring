@@ -20,9 +20,12 @@
 	<div class=" offcanvas-body py-3">
 		<nav class="navbar h-100 flex-column justify-content-between">
 			<ul class="navbar-nav text-center">
+				<li class="nav-item p-3"><a class="nav-link " href="grigri.do"><span class="badge text-bg-info">GRIGRI</span></a></li>
 				<li class="nav-item p-3"><a class="nav-link" href="store.do">상점</a></li>
 				<li class="nav-item p-3"><a class="nav-link" href="gymMain.do">암벽장</a></li>
-				<li class="nav-item p-3"><a class="nav-link" href="crewList.do">크루</a></li>
+				<li class="nav-item p-3"><a class="nav-link" href="crewList.do">크루
+					<span class="badge text-bg-danger">new</span>
+				</a></li>
 				<li class="nav-item p-3"><a class="nav-link" href="crewRank.do">랭킹</a></li>
 				<li class="nav-item p-3"><a class="nav-link" href="community.do">커뮤니티</a></li>
 			</ul>
@@ -72,9 +75,12 @@
 			</nav>
 			<nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
 				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link" href="grigri.do"><span class="badge text-bg-info">GRIGRI</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="store.do">상점</a></li>
 					<li class="nav-item"><a class="nav-link" href="gymMain.do">암벽장</a></li>
-					<li class="nav-item"><a class="nav-link" href="crewList.do">크루</a></li>
+					<li class="nav-item"><a class="nav-link position-relative" href="crewList.do">
+						<span class="badge rounded-pill text-bg-danger me-1">new</span>크루
+					</a></li>
 					<li class="nav-item"><a class="nav-link" href="crewRank.do">랭킹</a></li>
 					<li class="nav-item"><a class="nav-link" href="community.do">커뮤니티</a></li>
 				</ul>

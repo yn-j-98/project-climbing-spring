@@ -195,21 +195,19 @@
   //예약자 chart 데이터
   <%--const registration_Chart_Data =JSON.parse(${monthly_reservation_datas});--%>
   const registration_Chart_Data = ${monthly_reservation_datas};
-  console.log(registration_Chart_Data);
   //예약자 데이터 제목
   const registration_Chart_Data_title = registration_Chart_Data.map(registration => registration.reservation_month);
   //예약자 데이터 내용
-  const registration_Chart_Data_text = registration_Chart_Data.map(total => total.reservation_count);
+  const registration_Chart_Data_text = registration_Chart_Data.map(total => total.total);
   //----------------------------
   //----------------------------
   //암벽장 chart 데이터
   <%--const gym_Chart_Data =JSON.parse(${region_gym_datas});--%>
-  const gym_Chart_Data = ${monthly_reservation_datas};
-  console.log(gym_Chart_Data);
+  const gym_Chart_Data = ${region_gym_datas};
   //암벽장 데이터 제목
   const gym_Chart_Data_title = gym_Chart_Data.map(data => data.gym_location);
   //암벽장 데이터 내용
-  const gym_Chart_Data_text = gym_Chart_Data.map(data => data.gym_count);
+  const gym_Chart_Data_text = gym_Chart_Data.map(data => data.total);
   //----------------------------
 
 </script>

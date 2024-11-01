@@ -1,23 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mytag"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
 	<title>코마 : 크루 커뮤니티</title>
 
-	<!--jquery cdn-->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-	<!--sockjs라이브러리 cdn-->
+	<!-- jquery cdn -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<!-- sockjs 라이브러리 cdn -->
 	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-	<!--stomp프로토콜 cdn-->
+
+	<!-- stomp 프로토콜 cdn -->
 	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@6.1.1/umd/stomp.min.js"></script>
 
 	<!-- Fonts and icons -->
-	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
-	<script src="https://kit.fontawesome.com/7f7b0ec58f.js"
-			crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
 
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
@@ -25,8 +26,7 @@
 	<link rel="stylesheet" href="assets/css/kaiadmin.css"/>
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<!--   Core JS Files   -->
-	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
+	<!-- Core JS Files -->
 	<script src="assets/js/core/popper.min.js"></script>
 	<script src="assets/js/core/bootstrap.min.js"></script>
 
@@ -125,70 +125,11 @@
 				</div>
 			</div>
 		</div>
-		<%--추가될 데이터 시작--%>
 		<div class="row">
 			<div class="col post-list" id="postList">
-				<c:forEach var="data" items="${datas}">
-					<c:choose>
-						<c:when test="${data.crew_board_writer_id == sessionScope.MEMBER_ID}">
-							<div class="row justify-content-end">
-								<div class="col-8 mb-2 post-item">
-									<div class="row no-gutters align-items-center post-row">
-										<!-- 메시지 내용 -->
-										<div class="col width-350">
-											<div class="card-body message-content" style="background: yellow">
-													<%--채팅 내용--%>
-												<span class="w-100" style="word-wrap: break-word;">
-														${data.crew_board_content}
-												</span>
-											</div>
-										</div>
-										<!-- 사용자 프로필 이미지 -->
-										<div class="coltext-center p-3 position-relative profile-image-col">
-											<div class="avatar avatar-xl">
-												<img src="${data.crew_board_writer_profile}"
-													 class="avatar-img rounded-circle" alt="작성자 사진">
-											</div>
-											<div class="text-overlay">
-													${data.crew_board_writer_name}
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<div class="row justify-content-start">
-								<div class="col-8 mb-2 post-item">
-									<div class="row no-gutters align-items-center post-row">
-										<!-- 사용자 프로필 이미지 -->
-										<div class="col-auto text-center p-3 position-relative profile-image-col">
-											<div class="avatar avatar-xl">
-												<img src="${data.crew_board_writer_profile}"
-													 class="avatar-img rounded-circle" alt="작성자 사진">
-											</div>
-											<div class="text-overlay">
-													${data.crew_board_writer_name}
-											</div>
-										</div>
-										<!-- 메시지 내용 -->
-										<div class="col width-350">
-											<div class="card-body message-content">
-													<%--채팅 내용--%>
-												<span class="w-100" style="word-wrap: break-word;">
-														${data.crew_board_content}
-												</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
+				<!--채팅 내역 동적 추가-->
 			</div>
 		</div>
-		<%--끝--%>
 		<div class="row justify-content-center mt-5">
 			<div class="col-md-10">
 				<div class="card card-stats card-round p-5">
@@ -209,122 +150,105 @@
 		<!-- container end -->
 	</div>
 </div>
+
 <script>
 	$(document).ready(function () {
-		let socket = new SockJS('http://localhost:8089/chat');
-		let stompClient = Stomp.over(socket);
+		let memberId = "${MEMBER_ID}"; // 로그인된 사용자 ID
+		let socket = new WebSocket("ws://localhost:8089/chat/" + memberId);
 
-		let crewNum = "<%= session.getAttribute("CREW_CHECK") %>" || "default";
-		let memberId = "<%= session.getAttribute("MEMBER_ID") %>";
+		socket.onopen = function () {
+			console.log("웹소켓 연결 성공");
+		}
 
-		stompClient.connect({}, function (frame) {
-			console.log('stomp 연결= ['+frame+']');
-			stompClient.subscribe('/topic/crew/' + crewNum, function (messageOutput) {
-				let message = JSON.parse(messageOutput.body);
-				displayMessage(message);
-			});
-		});
+		socket.onclose = function () {
+			console.log("웹소켓 연결 해제");
+		}
 
-		// 다른 .do 요청으로 이동 시 연결 해제
-		$(window).on('beforeunload', function () {
-			if (stompClient !== null) {
-				stompClient.disconnect();
-				console.log("웹소켓 연결 해제");
+		socket.onerror = function (error) {
+			console.error('에러 내용 :', error);
+			console.error('에러 상태 코드 :', error.status);
+			console.error('에러 응답 텍스트 :', error.responseText);
+		}
+
+		// WebSocket 메시지 수신 핸들러
+		socket.onmessage = function (e) {
+			let data;
+			try {
+				console.log(e.data);  // 받은 원본 데이터를 로그에 출력합니다.
+				data = JSON.parse(e.data);
+				// 정상적으로 파싱된 JSON 데이터를 처리합니다.
+			} catch (e) {
+				console.error("JSON 파싱 오류:", e);
+				console.log("오류 데이터:", e.data);
 			}
-		});
+			addPost(data, data.crew_board_writer_id === memberId);
+			$("#postList").scrollTop($("#postList")[0].scrollHeight);
+		}
 
+		// WebSocket 메시지 전송 핸들러
 		$("#sendBtn").click(function () {
 			let content = $("#text").val();
-			if (content === '') {
-				alert("메세지를 입력해주세요!");
-				return;
+			if (content) {
+				let message = {
+					crew_board_writer_id: memberId, // 작성자 ID
+					crew_board_content: content,
+					crew_board_writer_profile: "default_profile_url", // 사용자 프로필 URL
+					crew_board_writer_name: "사용자 이름" // 사용자 이름
+				};
+				socket.send(JSON.stringify(message));
+				$("#text").val(""); // 입력 필드 초기화
 			}
-
-			let chatMessage = {
-				crew_board_writer_id: memberId,
-				crew_board_content: content
-			};
-
-			stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
-			$("#text").val("");
 		});
 
+		// Enter 키로 메시지 전송
 		$("#text").keypress(function (e) {
-			if (e.which === 13) {
+			if (e.which === 13) { // Enter 키가 눌리면
 				$("#sendBtn").click();
-				return false;
+				return false; // 기본 동작 방지
 			}
 		});
 
-		function displayMessage(message) {
-			let newMessage = $("<div></div>", {
-				"class": "row " + (message.crew_board_writer_id === memberId ? "justify-content-end" : "justify-content-start")
-			}).append(
-					$("<div></div>", {
-						"class": "col-8 mb-2 post-item"
-					}).append(
-							$("<div></div>", {
-								"class": "row no-gutters align-items-center post-row"
-							}).append(
-									...(message.crew_board_writer_id !== memberId ? [
-										$("<div></div>", {
-											"class": "col-auto text-center p-3 position-relative profile-image-col"
-										}).append(
-												$("<div></div>", {
-													"class": "avatar avatar-xl"
-												}).append(
-														$("<img>", {
-															"src": message.crew_board_writer_profile,
-															"class": "avatar-img rounded-circle",
-															"alt": "작성자 사진"
-														})
-												),
-												$("<div></div>", {
-													"class": "text-overlay"
-												}).text(message.crew_board_writer_name)
-										)
-									] : []),
-									$("<div></div>", {
-										"class": "col width-350"
-									}).append(
-											$("<div></div>", {
-												"class": "card-body message-content",
-												"style": "background: " + (message.crew_board_writer_id === memberId ? "yellow" : "white")
-											}).append(
-													$("<span></span>", {
-														"class": "w-100",
-														"style": "word-wrap: break-word;"
-													}).text(message.crew_board_content)
-											)
-									),
-									...(message.crew_board_writer_id === memberId ? [
-										$("<div></div>", {
-											"class": "col-auto text-center p-3 position-relative profile-image-col"
-										}).append(
-												$("<div></div>", {
-													"class": "avatar avatar-xl"
-												}).append(
-														$("<img>", {
-															"src": message.crew_board_writer_profile,
-															"class": "avatar-img rounded-circle",
-															"alt": "작성자 사진"
-														})
-												),
-												$("<div></div>", {
-													"class": "text-overlay"
-												}).text(message.crew_board_writer_name)
-										)
-									] : [])
-							)
-					)
-			);
+		// 메시지를 동적으로 추가하는 함수
+		function addPost(data, isOwnMessage) {
+			let postHtml = "";
+			postHtml += "<div class='row justify-content-" + (isOwnMessage ? "end" : "start") + "'>";
+			postHtml += "<div class='col-8 mb-2 post-item'>";
+			postHtml += "<div class='row no-gutters align-items-center post-row'>";
 
-			$("#postList").append(newMessage);
-			$("#postList").scrollTop($("#postList")[0].scrollHeight);
+			if (!isOwnMessage) {
+				postHtml += "<div class='col-auto text-center p-3 position-relative profile-image-col'>";
+				postHtml += "<div class='avatar avatar-xl'>";
+				postHtml += "<img src='" + data.crew_board_writer_profile + "' class='avatar-img rounded-circle' alt='프로필 사진'>";
+				postHtml += "</div>";
+				postHtml += "<div class='text-overlay'>" + data.crew_board_writer_name + "</div>";
+				postHtml += "</div>";
+			}
+
+			postHtml += "<div class='col width-350'>";
+			postHtml += "<div class='card-body message-content'" + (isOwnMessage ? " style='background: yellow'" : "") + ">";
+			postHtml += "<span class='w-100' style='word-wrap: break-word;'>";
+			postHtml += data.crew_board_content;
+			postHtml += "</span>";
+			postHtml += "</div>";
+			postHtml += "</div>";
+
+			if (isOwnMessage) {
+				postHtml += "<div class='col text-center p-3 position-relative profile-image-col'>";
+				postHtml += "<div class='avatar avatar-xl'>";
+				postHtml += "<img src='" + data.crew_board_writer_profile + "' class='avatar-img rounded-circle' alt='프로필 사진'>";
+				postHtml += "</div>";
+				postHtml += "<div class='text-overlay'>" + data.crew_board_writer_name + "</div>";
+				postHtml += "</div>";
+			}
+
+			postHtml += "</div>";
+			postHtml += "</div>";
+			postHtml += "</div>";
+
+			$("#postList").append(postHtml);
 		}
 	});
 </script>
 
 </body>
-
 </html>

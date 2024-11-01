@@ -74,7 +74,6 @@ public class BoardManagementController {
         boolean flag = true;
 
         if (board_num_list != null) {
-            // TODO 아마도 수정 필요 ..
             log.info("board_num_list : [{}]",board_num_list);
             for (int data : board_num_list) {
                 log.info("board_num_list data : [{}]",data);
@@ -91,9 +90,6 @@ public class BoardManagementController {
         model.addAttribute("title", "글 삭제");
         model.addAttribute("msg", flag ? "선택된 글 삭제 성공!" : "글 삭제 실패..");
         model.addAttribute("path", "boardManagement.do");
-
-//        //TODO 일괄삭제기능도 포함
-//        //	트랜잭션
         return "views/info";
     }
 
