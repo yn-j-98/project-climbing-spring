@@ -100,12 +100,13 @@ public class CrewController {
 
     @LoginCheck
     @GetMapping("/crewJoin.do")
-    public String crewJoin(Model model, CrewDTO crewDTO, @SessionAttribute("MEMBER_ID") String member_id, HttpSession session) {
+    public String crewJoin(Model model, CrewDTO crewDTO, HttpSession session) {
         log.info("crewJoin.crew_num = [{}]", crewDTO.getCrew_num());
         //얼럿창 info 데이터
         String title = "";
         String msg = "";
         String path = "";
+        String member_id = (String) session.getAttribute("MEMBER_ID");
 
         //커맨드 객체로 바인딩된 크루 번호
         int crew_num = crewDTO.getCrew_num();
@@ -150,9 +151,8 @@ public class CrewController {
     @GetMapping("/crew.do")
     public String crewPage(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO, MemberDTO memberDTO, @SessionAttribute("CREW_CHECK") Integer crew_num) {
         log.info("crewPage.crew_num = [{}]", crew_num);
-        if (crew_num <= 0) {
-            return "redirect:crewList.do";
-        } else {
+
+
             // 크루 정보 가져오기
             crewDTO.setCrew_num(crew_num);
             crewDTO = this.crewService.selectOne(crewDTO);
@@ -170,7 +170,7 @@ public class CrewController {
             battle_recordDTO.setBattle_record_crew_num(crew_num);
             List<Battle_recordDTO> battle_record_datas = this.battle_recordService.selectAllWinner(battle_recordDTO);
             model.addAttribute("battle_record_datas", battle_record_datas);
-        }
+
         return "views/myCrewPage";
     }
 

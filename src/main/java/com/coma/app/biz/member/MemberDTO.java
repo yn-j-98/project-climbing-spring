@@ -3,6 +3,7 @@ package com.coma.app.biz.member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -23,6 +24,7 @@ public class MemberDTO {
 	private String member_role;            //관리자 권한
 	
 	//DTO에만 존재하는 데이터
+	private MultipartFile photoUpload;
 	private String member_grade_profile; //사용자의 등급 사진
 	private String member_grade_name; //사용자의 등급 이름
 	private int member_crew_current_size; //사용자의 크루의 현재 인원수

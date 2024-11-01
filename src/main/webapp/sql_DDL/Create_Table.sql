@@ -86,7 +86,7 @@ CREATE TABLE BATTLE_RECORD (
 );
 
 CREATE TABLE RESERVATION (
-                             RESERVATION_NUM INT PRIMARY KEY AUTO_INCREMENT,
+                             RESERVATION_NUM VARCHAR(100) PRIMARY KEY,
                              RESERVATION_DATE DATE NOT NULL,
                              RESERVATION_GYM_NUM INT NOT NULL,
                              RESERVATION_MEMBER_ID VARCHAR(100) NOT NULL,
