@@ -1,21 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mytag"%>
-<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+
 <title>예약 상세 페이지</title>
-<%--	<script src="js/payment.js"></script>--%>
+<!-- 결제 포트원 추가 -->
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
+<!-- Core JS Files -->
+<script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="../../assets/js/core/popper.min.js"></script>
+<script src="../../assets/js/core/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+
+<!-- 결제 외부 JS 추가 -->
+<script src="../../js/payment.js"></script>
+
 <!-- Fonts and icons -->
-<script src="assets/js/plugin/webfont/webfont.min.js"></script>
+<script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
 <script src="https://kit.fontawesome.com/7f7b0ec58f.js"
 	crossorigin="anonymous"></script>
 
 <!-- CSS Files -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="assets/css/plugins.min.css" />
-<link rel="stylesheet" href="assets/css/kaiadmin.css" />
+<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../assets/css/plugins.min.css" />
+<link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
 
 </head>
 <body>
@@ -32,7 +43,6 @@
 					<div class="card-header d-flex justify-content-center">
 						<div class="card-title">예   약</div>
 					</div>
-					<form action="gymReservation.do">
 					<div class="card-body">
 						<input type="hidden" id="gymNum" name="reservation_gym_num" value="${gym_num}">
 						<input type="hidden" id="gymName" name="reservation_gym_name" value="${gym_name}">
@@ -91,19 +101,15 @@
 						<button type="button"
 							class="btn btn-black px-5 mb-3 mb-sm-0 me-0 me-sm-4"
 							onclick="window.location.href='main.do';">취소</button>
-						<button type="submit" class="btn btn-primary px-5" id="reservation">예약</button>
+						<button type="button" class="btn btn-primary px-5" id="reservationbutton">예약</button>
 					</div>
-					</form>
+
 				</div>
 			</div>
 		</div>
 	</div>
 	
-	<!-- Core JS Files -->
-	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
-	<script src="assets/js/core/popper.min.js"></script>
-	<script src="assets/js/core/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
 
 </body>
 </html>

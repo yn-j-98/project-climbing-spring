@@ -35,6 +35,28 @@ public class CrewDAO {
 	//크루 총 개수
 	private final String ONE_COUNT = "SELECT COUNT(*) AS CREW_TOTAL FROM CREW";
 
+	// 크루의 참여상태 확인 // TODO 크루전 신청 페이지 추가(2024.11.01)
+	private final String ONE_BATTLE_STATUS = "SELECT\n" +
+			"	COUNT(*) AS CREW_TOTAL\n" +
+			"FROM\n" +
+			"	CREW\n" +
+			"WHERE\n" +
+			"	CREW_BATTLE_STATUS = 'T'\n" +
+			"AND CREW_NUM = ?";
+
+	// 크루 참여상태 참여로 변경 // TODO 크루전 신청 페이지 추가(2024.11.01)
+	private final String UPDATE_BATTLE_STATUS_TRUE = "UPDATE\n" +
+			"	CREW\n" +
+			"SET\n" +
+			"	CREW_BATTLE_STATUS = 'T'\n" +
+			"WHERE CREW_NUM = ?";
+
+	// 크루 참여상태 비참여로 변경 // TODO 관리자 페이지 추가(2024.11.01)
+	private final String UPDATE_BATTLE_STATUS_FALSE = "UPDATE\n" +
+			"	CREW\n" +
+			"SET\n" +
+			"	CREW_BATTLE_STATUS = 'F'\n" +
+			"WHERE CREW_NUM = ?";
 
 	//특정 크루 현재 인원수 CREW_NUM
 	private final String ONE_COUNT_CURRENT_MEMBER_SIZE = "SELECT \n" +
@@ -60,9 +82,25 @@ public class CrewDAO {
 	private boolean insert(CrewDTO crewDTO) {
 		return false;
 	}
-	private boolean update(CrewDTO crewDTO) {
-		return false;
+
+	public boolean updateBattleTrue(CrewDTO crewDTO) {
+		// 크루 참여상태 참여로 변경 // TODO 크루전 신청 페이지 추가(2024.11.01)
+		int result = jdbcTemplate.update(UPDATE_BATTLE_STATUS_TRUE, crewDTO.getCrew_num());
+			if(result <= 0) {
+				return false;
+			}
+		return true;
 	}
+
+	public boolean updateBattleFalse(CrewDTO crewDTO) {
+		// 크루 참여상태 비참여로 변경 // TODO 관리자 페이지 추가(2024.11.01)
+		int result = jdbcTemplate.update(UPDATE_BATTLE_STATUS_FALSE, crewDTO.getCrew_num());
+			if(result <= 0) {
+				return false;
+			}
+		return true;
+	}
+
 	private boolean delete(CrewDTO crewDTO) {
 		return false;
 	}
@@ -105,6 +143,18 @@ public class CrewDAO {
 		Object[] args = {crewDTO.getCrew_num(), crewDTO.getCrew_num()};
 		try {
 			result = jdbcTemplate.queryForObject(ONE_COUNT_CURRENT_MEMBER_SIZE, args, new CrewRowMapperOneCountCurrentMemberSize());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	// 크루의 참여상태 확인
+	public CrewDTO selectOneBattleStatus(CrewDTO crewDTO) {
+		CrewDTO result = null;
+		Object[] args = {crewDTO.getCrew_num()};
+		try {
+			result = jdbcTemplate.queryForObject(ONE_BATTLE_STATUS, args, new CrewRowMapperOneCount());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
