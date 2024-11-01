@@ -13,6 +13,11 @@
     <script src="https://kit.fontawesome.com/7f7b0ec58f.js"
             crossorigin="anonymous"></script>
 
+    <!-- sweetAlert JS FILE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+    <script src="../../js/sweetAlert_modal.js"></script>
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="assets/css/plugins.min.css"/>
@@ -35,7 +40,7 @@
             <i class="fa fa-align-left"></i>
         </button>
     </div>
-<div class="container">
+    <div class="container">
         <div class="row py-3">
             <div class="col-12">
                 <h1 class="text-center">${board_title}</h1>
@@ -59,80 +64,68 @@
                 </div>
             </div>
         </div>
-        <div class="row border-top border-dark py-3">
-            <form action="reply.do" method="POST">
-                <input type="hidden" name="board_id" value="${board_num}"/>
-                <div class="row">
-                    <div class="col-11">
-                        <div class="form-group">
-                            <input name="reply_content" type="text" class="form-control"
-                                   id="comment" placeholder="댓글를 입력해주세요"/>
+        <input id="boardNum" type="hidden" name="board_id" value="${param.board_num}"/>
+        <c:choose>
+            <c:when test="${not empty REPLY}">
+                <c:forEach var="reply" items="${REPLY}">
+                    <div class="row border-top border-bottom py-3 px-5 comment-item">
+                        <div class="col-md-2">
+                            <p>작성자: ${reply.reply_writer_id}</p>
+                        </div>
+                        <div class="col-md-9">
+                            <p class="comment-text">${reply.reply_content}</p>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-icon btn-clean me-0" type="button" id="deleteButton"
+                            ">
+                            <input id="replyNum" type="hidden" name="reply_num" value="${reply.reply_num}">
+                            삭제
+                            </button>
                         </div>
                     </div>
-                    <div class="col-1 d-flex align-items-center">
-                        <button type="submit" class="btn btn-secondary">댓글</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <c:forEach var="reply" items="${REPLY}">
-        <c:choose>
-        <c:when test="${not empty REPLY}">
-        <div class="row border-top border-bottom py-3 px-5 comment-item">
-            <div class="col-md-2">
-                <p>작성자: ${reply.reply_writer_id}</p>
-            </div>
-            <div class="col-md-9">
-                <p class="comment-text">${reply.reply_content}</p>
-            </div>
-            <div class="col-1">
-                <button class="btn btn-icon btn-clean me-0" type="button" id="deleteButton"
-                        data-reply-num="${reply.reply_num}" data-board-num="${board_num}">
-                    삭제
-                </button>
-            </div>
-        </div>
-        </c:when>
+                </c:forEach>
+            </c:when>
         </c:choose>
-        </c:forEach>
     </div>
 </div>
-        <!--   Core JS Files   -->
-        <script src="assets/js/core/jquery-3.7.1.min.js"></script>
-        <script src="assets/js/core/popper.min.js"></script>
-        <script src="assets/js/core/bootstrap.min.js"></script>
+<!--   Core JS Files   -->
+<script src="assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="assets/js/core/popper.min.js"></script>
+<script src="assets/js/core/bootstrap.min.js"></script>
 
-        <script>
-            // DOMContentLoaded 이벤트가 발생하면 콜백 함수를 실행
-            // 즉, DOM이 완전히 로드된 후에 이 코드가 실행
-            $(document).ready(function () {
-                $("#deleteButton").click(function () {
-                    sweetAlert_confirm_warning('댓글 삭제', '정말로 삭제하시겠습니까?', '삭제', '취소')
-                        .then(function (replyDelete) {
-                            if (replyDelete) {
-                                // 폼 생성
-                                var form = $('<form/>', {
-                                    action: 'boardManagementDetail.do',
-                                    method: 'POST',
-                                    style: 'display: none;'
-                                });
+<script>
+    // DOMContentLoaded 이벤트가 발생하면 콜백 함수를 실행
+    // 즉, DOM이 완전히 로드된 후에 이 코드가 실행
+    $(document).ready(function () {
+                        var boardNum = $("#boardNum").val();
+        $("#deleteButton").click(function () {
+            var data_num = this; // 이벤트가 발생한 버튼 요소 참조
 
-                                var boardNum = $(this).data("boardNum");
-                                var replyNum = $(this).data("replyNum");
-
-                                console.log("boardNum =[" + boardNum + "]");
-                                console.log("replyNum =[" + replyNum + "]");
-                                form.append($('<input/>', {type: 'hidden', name: 'board_num', value: boardNum}));
-                                form.append($('<input/>', {type: 'hidden', name: 'reply_num', value: replyNum}));
-                            }
-
-                            console.log("폼 HTML = [" + form.html() + "]"); // 폼 내부의 HTML 내용 출력
-                            form.appendTo('body').submit(); // 폼을 body에 추가하여 제출
-                            // sweetAlert_success('삭제가 완료되었습니다', ' ');
-                            //TODO 컨트롤러가 인포페이지로 이동해줄것
+            sweetAlert_confirm_warning('댓글 삭제', '정말로 삭제하시겠습니까?', '삭제', '취소')
+                .then(function (replyDelete) {
+                    if (replyDelete) {
+                        // 폼 생성
+                        var form = $('<form/>', {
+                            action: 'boardManagementDetail.do',
+                            method: 'POST',
+                            style: 'display: none;'
                         });
+
+                        var replyNum = $("#replyNum").val();
+
+                        console.log("replyNum =[" + replyNum + "]");
+                        console.log("boardNum =[" + boardNum + "]");
+                        form.append($('<input/>', {type: 'hidden', name: 'reply_num', value: replyNum}));
+                        form.append($('<input/>', {type: 'hidden', name: 'reply_board_num', value: boardNum}));
+                    }
+
+                    console.log("폼 HTML = [" + form.html() + "]"); // 폼 내부의 HTML 내용 출력
+                    form.appendTo('body').submit(); // 폼을 body에 추가하여 제출
+                    // sweetAlert_success('삭제가 완료되었습니다', ' ');
+                    //TODO 컨트롤러가 인포페이지로 이동해줄것
                 });
-            });
-        </script>
+        });
+    });
+</script>
 </body>
 </html>
