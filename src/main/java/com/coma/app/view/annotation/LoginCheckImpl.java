@@ -15,22 +15,22 @@ public class LoginCheckImpl {
     private static final String ROLE_CHECK = "ROLE_CHECK"; // 회원인지 관리자인지를 나타내는 상수
 
     //현재 요청과 응답, 세션 객체를 이용하여 로그인 정보를 검사하는 메서드.
-    public String checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session, Model model) {
+    public String checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
         String[] loginInfo = getLoginInformation(request, session); // 로그인 정보를 가져옴
         synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
 
 
         if (loginInfo[0] == null) { // 로그인 정보가 없으면
-            model.addAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
-            model.addAttribute("msg", "로그인 페이지로 이동합니다.");
-            model.addAttribute("path", "login.do");
+            request.setAttribute("title","페이지 접근 실패: 권한이 없습니다.");
+            request.setAttribute("msg","로그인 페이지로 이동합니다.");
+            request.setAttribute("path","login.do");
             return "views/info";
         } else {
             if (!isAdmin(loginInfo) && isCrewAbsent(loginInfo)) {
-                model.addAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
-                model.addAttribute("msg", "크루 목록 페이지로 이동합니다.");
-                model.addAttribute("path", "views/crewList");
+            request.setAttribute("title","페이지 접근 실패: 가입한 크루가 없습니다.");
+            request.setAttribute("msg","크루 목록 페이지로 이동합니다.");
+            request.setAttribute("path", "crewList.do");
                 return "views/info";
             }
         }
