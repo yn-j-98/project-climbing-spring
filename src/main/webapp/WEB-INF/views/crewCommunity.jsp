@@ -62,7 +62,7 @@
 
         .text-overlay {
             position: absolute;
-            top: 5px;
+            bottom:15px;
             left: 0;
             width: 100%;
             text-align: center;
@@ -156,7 +156,8 @@
 <script>
     $(document).ready(function () {
         const memberId = "${MEMBER_ID}"; // 로그인된 사용자 ID
-        const memberProfile = "${data.member_profile}"; //로그인 사용자 이미지
+        <%--const memberProfile = "${data.member_profile}"; //로그인 사용자 이미지--%>
+        const memberProfile = "https://comapro.cdn1.cafe24.com/gym_img/d428d070622.jpg"; //로그인 사용자 이미지
         const memberName = "${data.member_name}"; // 사용자 이름
         let socket = new WebSocket("ws://localhost:8089/chat/" + memberId);
 
@@ -230,13 +231,13 @@
         });
 
         // 메시지 동적 추가
-        function addPost(data, isOwnMessage) {
+        function addPost(data, isMyMessage) {
             let postHtml = "";
-            postHtml += "<div class='row justify-content-" + (isOwnMessage ? "end" : "start") + "'>";
+            postHtml += "<div class='row justify-content-" + (isMyMessage ? "end" : "start") + "'>";
             postHtml += "<div class='col-8 mb-2 post-item'>";
             postHtml += "<div class='row no-gutters align-items-center post-row'>";
 
-            if (!isOwnMessage) {
+            if (!isMyMessage) {
                 postHtml += "<div class='col-auto text-center p-3 position-relative profile-image-col'>";
                 postHtml += "<div class='avatar avatar-xl'>";
                 postHtml += "<img src='" + data.crew_board_writer_profile + "' class='avatar-img rounded-circle' alt='프로필 사진'>";
@@ -246,15 +247,15 @@
             }
 
             postHtml += "<div class='col width-350'>";
-            postHtml += "<div class='card-body message-content'" + (isOwnMessage ? " style='background: yellow'" : "") + ">";
+            postHtml += "<div class='card-body message-content'" + (isMyMessage ? " style='background: yellow'" : "") + ">";
             postHtml += "<span class='w-100' style='word-wrap: break-word;'>";
             postHtml += data.crew_board_content;
             postHtml += "</span>";
             postHtml += "</div>";
             postHtml += "</div>";
 
-            if (isOwnMessage) {
-                postHtml += "<div class='col text-center p-3 position-relative profile-image-col'>";
+            if (isMyMessage) {
+                postHtml += "<div class='col-auto text-center p-3 position-relative profile-image-col'>";
                 postHtml += "<div class='avatar avatar-xl'>";
                 postHtml += "<img src='" + data.crew_board_writer_profile + "' class='avatar-img rounded-circle' alt='프로필 사진'>";
                 postHtml += "</div>";
