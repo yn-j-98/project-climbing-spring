@@ -86,9 +86,7 @@ function requestPay() {
         amount: reservation_price,
         name: gym_name,
         buyer_email: member_id,
-        merchant_uid: merchant_uid,
-        gym_num: gym_num,
-        reservationDate : reservationDate
+        merchant_uid: merchant_uid
     },
         function (rsp) {
             if (rsp.success) {
@@ -101,13 +99,13 @@ function requestPay() {
                     data: {
                         imp_uid: rsp.imp_uid,  // 포트원 결제 고유번호
                         gym_num: gym_num,
+                        reservation_date : reservationDate,
                         merchant_uid: rsp.merchant_uid  // 주문번호
                     }
                 }).done(function (data) {
                     if (rsp.paid_amount == data) {
                         // 결제 API 성공시 로직
-                        alert("결제 및 결제검증완료");
-                        location.href = "main.do"
+                            location.href = "paymentSuccess.do"
                     } else {
                         alert("검증 실패");
                         // 결제 취소
@@ -119,7 +117,9 @@ function requestPay() {
                     console.error('에러 응답 텍스트:', error.responseText);
                 });
             } else {
-                alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+                console.error('error', error);
+                console.error('에러 상태 코드:', error.status);
+                console.error('에러 응답 텍스트:', error.responseText);
             }
         });
 };
@@ -127,5 +127,5 @@ function requestPay() {
 
 document.addEventListener('DOMContentLoaded', function () {
     // 버튼 클릭 시 requestPay 함수 호출
-    document.getElementById('reservationbtn').addEventListener('click', requestPay);
+    document.getElementById('reservationbutton').addEventListener('click', requestPay);
 });

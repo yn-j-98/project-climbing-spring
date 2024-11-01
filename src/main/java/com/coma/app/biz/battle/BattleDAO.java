@@ -206,7 +206,7 @@ public class BattleDAO {
 			"    B.BATTLE_NUM DESC\n" +
 			"LIMIT ?, ?";
 
-	//특정 사용자가 참여 예정인 크루전 찾기 BATTLE_RECORD_CREW_NUM
+	//특정 사용자가 참여 예정인 크루전 찾기 BATTLE_RECORD_CREW_NUM // TODO
 	private final String SEARCH_MEMBER_BATTLE = "SELECT\n"
 			+ "  B.BATTLE_NUM,\n"
 			+ "  G.GYM_NAME,\n"
@@ -223,9 +223,13 @@ public class BattleDAO {
 			+ "  BATTLE_RECORD BR\n"
 			+ "ON\n"
 			+ "  BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\n"
+			+ "JOIN\n"
+			+ "  CREW C\n"
+			+ "ON\n"
+			+ "  BR.BATTLE_RECORD_CREW_NUM = C.CREW_NUM\n"
 			+ "WHERE\n"
 			+ "  BR.BATTLE_RECORD_CREW_NUM = ? AND\n"
-			+ "  B.BATTLE_GAME_DATE > NOW()";
+			+ "  C.CREW_BATTLE_STATUS = 'T'";
 
 	//활성화 되있는 크루전 총 개수
 	private final String ONE_COUNT_ACTIVE = "SELECT COUNT(DISTINCT B.BATTLE_NUM) AS BATTLE_TOTAL\r\n"
@@ -249,17 +253,20 @@ public class BattleDAO {
 			"WHERE\n" +
 			"    B.BATTLE_NUM = ?";
 
-	//활성화 되있는 크루전 정보 BATTLE_NUM
+	//활성화 되있는 크루전 정보 BATTLE_NUM // TODO
 	private final String ONE_SEARCH_BATTLE = "SELECT\n"
-			+ "  BATTLE_NUM,\n"
-			+ "  BATTLE_GYM_NUM,\n"
-			+ "  BATTLE_GAME_DATE\n"
+			+ "  	B.BATTLE_NUM,\n"
+			+ "  	B.BATTLE_GYM_NUM,\n"
+			+ "  	B.BATTLE_GAME_DATE\n"
 			+ "FROM\n"
-			+ "  BATTLE\n"
+			+ "		BATTLE B\n"
+			+ "JOIN\r\n"
+			+ "		BATTLE_RECORD BR\r\n"
+			+ "ON\r\n"
+			+ "		B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\r\n"
 			+ "WHERE\n"
-			+ "  BATTLE_NUM = ? AND\n"
-			+ "  (BATTLE_GAME_DATE > NOW() OR\n"
-			+ "  BATTLE_GAME_DATE IS NULL)";
+			+ "  	B.BATTLE_NUM = ? AND\n"
+			+ " 	BR.BATTLE_RECORD_MVP_ID IS NULL";
 
 	//해당 암벽장에서 실행된 크루전 전부 출력 BATTLE_GYM_NUM
 	private final String ALL_GYM_BATTLE = "SELECT\r\n"
