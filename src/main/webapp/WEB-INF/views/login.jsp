@@ -34,6 +34,15 @@
 	<script src="js/sweetAlert_modal.js"></script>
 
 </head>
+<style>
+	.w-35{width: 35% !important;}
+	@media screen and (max-width: 1200px) {
+		.w-35{width: 50% !important;}
+	}
+	@media screen and (max-width: 768px) {
+		.w-35{width: 90% !important;}
+	}
+</style>
 <body>
 
 <!-- GNB 커스텀 태그 -->
@@ -44,58 +53,58 @@
 	<div
 			class="page-inner w-100 vh-100 d-flex justify-content-center align-items-center">
 		<!-- login card start -->
-		<div class="card card-stats card-round p-3">
+		<div class="card card-stats card-round w-35">
 			<div class="card-body p-5">
-				<h3 class="text-center">로그인</h3>
-				<form id="loginForm" action="login.do" method="POST"
-					  class="p-3">
+				<h3 class="text-center pt-4">로그인</h3>
+				<form id="loginForm" action="login.do" method="POST" class="p-3">
 					<div class="row">
-						<div
-								class="col-md-3 d-flex justify-content-end align-items-center p-0">
+						<div class="col-md-2 d-flex justify-content-end align-items-center p-0">
 							<h6 class="m-0">아이디</h6>
 						</div>
-						<div class="col-md-9 p-0">
-							<div class="form-group">
+						<div class="col-md-10 p-0">
+							<div class="form-group w-100">
 								<input type="email" class="form-control" id="email"
 									   name="member_id" required placeholder="아이디를 입력해주세요" />
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div
-								class="col-md-3 d-flex justify-content-end align-items-center p-0">
+						<div class="col-md-2 d-flex justify-content-end align-items-center p-0">
 							<h6 class="m-0">비밀번호</h6>
 						</div>
-						<div class="col-md-9 p-0">
-							<div class="form-group">
+						<div class="col-md-10 p-0">
+							<div class="form-group w-100">
 								<input type="password" class="form-control" id="password"
 									   name="member_password" required placeholder="비밀번호를 입력해주세요" />
 							</div>
 						</div>
 					</div>
 					<!-- 자동로그인 input -->
-					자동로그인 <input type="checkbox" class="ms-2" name="auto_login"
-								 value="checkLogin">
-					<!-- 구글 -->
-					<div id="g_id_onload"
-						 data-client_id="814167133402-goror7cuh15hv87v3f2l0j9t84uckvlk.apps.googleusercontent.com"
-						 data-context="signup" data-ux_mode="popup"
-						 data-callback="handleCredentialResponse" data-auto_prompt="false">
+					<div class="row">
+						<div class="col">
+							<span>자동 로그인</span>
+							<input type="checkbox" class="ms-2" name="auto_login" value="checkLogin">
+						</div>
 					</div>
-
-					<div class="g_id_signin" data-type="standard" data-shape="pill"
-						 data-theme="outline" data-text="signin_with" data-size="large"
-						 data-logo_alignment="left"></div>
-					<!-- 네이버 로그인 버튼 -->
-					<div class="row py-4">
-						<div
-								class="col-md-6 d-flex justify-content-center align-items-center">
+					<div class="row pt-3">
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary w-100">로그인</button>
+						</div>
+					</div>
+					<div class="row py-3">
+						<div class="col-12">
+							<button type="button" class="btn btn-secondary w-100"
+									id="joinBtn">회원가입</button>
+						</div>
+					</div>
+					<div class="row pb-2">
+						<div class="col-6 d-flex justify-content-center align-items-center">
+							<!-- 네이버 로그인 버튼 -->
 							<!-- 네이버 로그인 버튼 노출 영역 -->
 							<!-- 네이버 개발자 문서에서 가져옴 -->
 							<div id="naver_id_login"></div>
 						</div>
-						<div
-								class="col-md-6 d-flex justify-content-center align-items-center">
+						<div class="col-6 d-flex justify-content-center align-items-center">
 							<!-- 카카오 로그인 버튼 -->
 							<!-- https://developers.kakao.com/tool/resource/login 에서 가져온 images 파일 -->
 							<a id="kakao-login-btn" href="javascript:loginWithKakao()">
@@ -103,15 +112,17 @@
 							</a>
 						</div>
 					</div>
+					<!-- 구글 -->
 					<div class="row">
-						<div class="col-12">
-							<button type="button" class="btn btn-secondary w-100"
-									id="joinBtn">회원가입</button>
-						</div>
-					</div>
-					<div class="row pt-3">
-						<div class="col-12">
-							<button type="submit" class="btn btn-primary w-100">로그인</button>
+						<div class="col">
+							<div id="g_id_onload"
+								 data-client_id="814167133402-goror7cuh15hv87v3f2l0j9t84uckvlk.apps.googleusercontent.com"
+								 data-context="signup" data-ux_mode="popup"
+								 data-callback="handleCredentialResponse" data-auto_prompt="false">
+							</div>
+							<div class="g_id_signin" data-type="standard" data-shape="pill"
+								 data-theme="outline" data-text="signin_with" data-size="large"
+								 data-logo_alignment="left"></div>
 						</div>
 					</div>
 					<div class="d-flex justify-content-center mt-3">

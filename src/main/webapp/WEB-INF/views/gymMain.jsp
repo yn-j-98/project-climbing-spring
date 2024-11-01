@@ -42,14 +42,16 @@
 <div class="container pt-3">
 
 	<div class="page-inner">
-		<div class="col-md-12">
-			<div class="card card-stats card-round p-3">
-				<div class="card-header">
-					<div class="card-title">암벽장 지도</div>
-				</div>
-				<div class="card-body">
-					<div class="row">
-
+		<div class="row pt-4 pb-5">
+			<div class="col-12">
+				<h1 class="text-center">암벽장</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card card-stats card-round p-3">
+					<div class="card-body">
+						<div class="row">
 						<!-- 지도 영역 -->
 						<div class="col-md-8">
 							<c:import url="kakaoMap.jsp"></c:import>
@@ -64,27 +66,31 @@
 										<input type="hidden" id="gym_name_input" name="gym_name">
 										<input type="hidden" id="gym_location_input" name="gym_location"> <input type="hidden" name="gym_num" value="${data.gym_num}">
 										<div class="card card-stats card-round p-3 mt-3" onclick="handleClick(this)" id="${data.gym_name}">
-
-											<div class="responsive d-flex align-items-center">
-												<i class="fa-solid fa-location-dot fs-2"></i>
-												<div class="row">
-													<div class="d-flex align-items-center">
-														<small class="mb-0" id="gym_name" class="gym_name">${data.gym_name}</small>
-													</div>
-													<div class="d-flex align-items-center">
-														<small class="mb-0" id="gym_location" class="gym_location">${data.gym_location}</small>
+											<div class="row">
+												<div class="col-md-8">
+													<div class="row align-items-center">
+														<div class="col-sm-2">
+															<i class="fa-solid fa-location-dot fs-2"></i>
+														</div>
+														<div class="col-sm-10">
+															<div class="row flex-column">
+																<div class="col">
+																	<small class="mb-0" id="gym_name" class="gym_name">${data.gym_name}</small>
+																</div>
+																<div class="col">
+																	<small class="mb-0" id="gym_location" class="gym_location">${data.gym_location}</small>
+																</div>
+															</div>
+														</div>
 													</div>
 												</div>
-												<div class="col-md-3 d-none">
-													<button type="submit" class="btn btn-primary">이동</button>
+												<div class="col-md-4 text-end">
+														<button type="submit" class="btn btn-primary d-none visiblity-button">이동</button>
 												</div>
 											</div>
 										</div>
 									</form>
 								</c:forEach>
-
-
-
 								<!-- 페이지 네비게이션 -->
 								<div class="row pt-2">
 									<div class="col-md-10 d-flex justify-content-center">
@@ -103,6 +109,7 @@
 				</div>
 			</div>
 		</div>
+		</div>
 	</div>
 </div>
 
@@ -119,7 +126,7 @@
 		element.classList.toggle('active');
 
 		// 이동 버튼의 visibility를 토글
-		const button = element.querySelector('.col-md-3');
+		const button = element.querySelector('.visiblity-button');
 		if (button) {
 			button.classList.toggle('d-none');
 		}

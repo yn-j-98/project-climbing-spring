@@ -289,7 +289,7 @@
 						<div class="col-6 col-lg-2 pt-5 pt-lg-0 mt-5 mt-lg-0" style="height:260px;">
 							<div class="card card-stats w-100 h-100 rounded-5 p-3 overflow-hidden border border-light-subtle">
 								<h4 class="text-center">${board.board_title}</h4>	
-								<a href="BOARDONEPAGEACTION.do?board_num=${board.board_num}" class="text-dark link-primary">
+								<a href="content.do?board_num=${board.board_num}" class="text-dark link-primary">
 									${board.board_content}
 								</a>
 							</div>
