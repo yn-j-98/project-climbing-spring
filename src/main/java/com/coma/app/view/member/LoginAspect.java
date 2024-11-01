@@ -21,12 +21,9 @@ import jakarta.servlet.http.HttpSession;
 @Component
 public class LoginAspect {
 
+    @Autowired
     private LoginCheckImpl loginCheckImpl;
 
-    @Autowired
-    public LoginAspect(LoginCheckImpl loginCheckImpl) {
-        this.loginCheckImpl = loginCheckImpl;
-    }
 
     // @Around 어드바이스는 @LoginCheck 어노테이션이 붙은 메서드를 가로채서 로그인 체크를 수행
     @Around("@annotation(com.coma.app.view.annotation.LoginCheck)")
@@ -42,32 +39,27 @@ public class LoginAspect {
         HttpSession session = request.getSession();
 
         // Model 객체는 일반적으로 첫 번째 인수가 되므로 이를 이용
-        Model model = null;
-        for (Object arg : pjp.getArgs()) {
-            if (arg instanceof Model) {
-                model = (Model) arg;
-                break;
-            }
-        }
+//        Model model = null;
+//        for (Object arg : pjp.getArgs()) {
+//            if (arg instanceof Model) {
+//                model = (Model) arg;
+//                break;
+//            }
+//        }
 
         // 로그인 체크 로직 실행
 //        loginCheckImpl.checkLogin(request, response, session, model);
 
-        try {
+
             // 로그인 체크 로직 실행
-            String result = loginCheckImpl.checkLogin(request, response, session, model);
+            String result = loginCheckImpl.checkLogin(request, response, session);
 
             if (result != null) {
                 // 로그인 정보가 없어 리다이렉트가 필요한 경우
                 log.info("Redirect to login due to missing login information.");
                 return result;
             }
-        } catch (Exception e) {
-            model.addAttribute("title", "에러 발생: 로그인 체크 중 문제가 발생했습니다.");
-            model.addAttribute("msg", "관리자에게 문의하세요.");
-            model.addAttribute("path", "login.do");
-            return "views/info";
-        }
+
 
         // 로그인된 경우 원래 메서드를 실행
         log.info("@around Advice End");

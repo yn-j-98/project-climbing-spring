@@ -24,7 +24,7 @@ public class LoginController {
     @Autowired
     private MemberService memberService;
 
-    @LoginCheck
+
     @GetMapping("/login.do") // 로그인 페이지 이동
     public String login() {
         return "views/login";
@@ -69,7 +69,6 @@ public class LoginController {
         return "views/info";
     }
 
-    @LoginCheck
     @GetMapping("/logout.do")// 로그아웃 처리
     public String logout(Model model, HttpServletResponse response, HttpServletRequest request) {
         LoginCheckImpl.logout(request, response);
