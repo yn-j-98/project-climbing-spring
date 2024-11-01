@@ -32,6 +32,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 	<script src="js/sweetAlert_modal.js"></script>
+
 </head>
 <body>
 
@@ -113,9 +114,17 @@
 							<button type="submit" class="btn btn-primary w-100">로그인</button>
 						</div>
 					</div>
+					<div class="d-flex justify-content-center mt-3">
+						<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#passwordResetModal">
+							비밀번호 찾기
+						</button>
+					</div>
 				</form>
 			</div>
 		</div>
+
+
+
 		<!-- login card end -->
 	</div>
 	<!-- page-inner end -->
@@ -126,9 +135,37 @@
 	<p id="user-email"></p>
 </div>
 
+<!-- 비밀번호 찾기 모달 -->
+<div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="passwordResetModalLabel">비밀번호 찾기</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="resetPasswordForm">
+					<div class="form-group">
+						<label for="username">아이디</label>
+						<input type="text" class="form-control" id="username" name="username" placeholder="아이디를 입력하세요" required>
+						<span id="usernameMsg" style="font-size: 0.9em;"></span> <!-- 아이디 존재 여부 메시지 -->
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" id="sendPasswordBtn">임시 비밀번호 전송</button>
+			</div>
+		</div>
+	</div>
+</div>
 
+
+
+<script src="/js/checkEmail.js"></script>
 
 <script type="text/javascript">
+
 	// 네이버 로그인
 	// https://developers.naver.com/docs/login/web/web.md
 	// 에서 데이터를 가져왔다고 보면 됨
