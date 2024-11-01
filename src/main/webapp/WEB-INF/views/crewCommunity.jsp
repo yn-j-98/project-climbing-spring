@@ -33,11 +33,13 @@
 	<style>
 		.post-container {
 			width: 800px;
+			height: 500px;
 			margin: 0 auto;
 			background-color: #a5a5a5;
 			border-radius: 20px;
 			padding: 15px;
-			/*overflow-y: auto; 자동스크롤 기능*/
+			overflow-y: auto;
+		/*자동스크롤 기능*/
 		}
 
 		.post-item {
@@ -125,7 +127,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row post-container">
 			<div class="col post-list" id="postList">
 				<!--채팅 내역 동적 추가-->
 			</div>
