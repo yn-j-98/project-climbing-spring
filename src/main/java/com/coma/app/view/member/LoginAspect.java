@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -40,9 +41,33 @@ public class LoginAspect {
         // 로그인 여부를 확인하기 위해 가져옴(로그인 O == 세션 조회 O)
         HttpSession session = request.getSession();
 
-        // 로그인 체크 로직 실행
-        loginCheckImpl.checkLogin(request, response, session);
+        // Model 객체는 일반적으로 첫 번째 인수가 되므로 이를 이용
+        Model model = null;
+        for (Object arg : pjp.getArgs()) {
+            if (arg instanceof Model) {
+                model = (Model) arg;
+                break;
+            }
+        }
 
+        // 로그인 체크 로직 실행
+//        loginCheckImpl.checkLogin(request, response, session, model);
+
+        try {
+            // 로그인 체크 로직 실행
+            String result = loginCheckImpl.checkLogin(request, response, session, model);
+
+            if (result != null) {
+                // 로그인 정보가 없어 리다이렉트가 필요한 경우
+                log.info("Redirect to login due to missing login information.");
+                return result;
+            }
+        } catch (Exception e) {
+            model.addAttribute("title", "에러 발생: 로그인 체크 중 문제가 발생했습니다.");
+            model.addAttribute("msg", "관리자에게 문의하세요.");
+            model.addAttribute("path", "login.do");
+            return "views/info";
+        }
 
         // 로그인된 경우 원래 메서드를 실행
         log.info("@around Advice End");

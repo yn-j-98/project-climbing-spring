@@ -205,19 +205,19 @@
 
 <script>
 	// 모달창 버튼 클릭 함수
-	$(document).ready(function() {
+	$(document).ready(function () {
 		// 사진 변경 버튼 클릭시 모달창 표시
-		$('#changePhotoBtn').click(function() {
+		$('#changePhotoBtn').click(function () {
 			$('#photoModal').modal('show');
 		});
 
 		// 모달 닫기 버튼 클릭시 파일 입력 초기화
-		$('#photoModal .close').click(function() {
+		$('#photoModal .close').click(function () {
 			var fileInput = document.getElementById('photoUpload'); // 파일 선택 버튼
 			fileInput.value = ''; // 파일 비워줘
 			$('#photoModal').modal('hide');
 		});
-		$('#photoClose').click(function() {
+		$('#photoClose').click(function () {
 			var fileInput = document.getElementById('photoUpload'); // 파일 선택 버튼
 			fileInput.value = ''; // 파일 비워줘
 			$('#photoModal').modal('hide');
@@ -226,8 +226,8 @@
 
 	// 비밀번호 유효성 검사 = 회원의 비밀번호와 맞는지 확인해서 회원정보 수정 창 나오게 한다
 
-	$(document).ready(function() {
-		$("#check-pw-btn").click(function(event) { // 확인 버튼 누르는 함수
+	$(document).ready(function () {
+		$("#check-pw-btn").click(function (event) { // 확인 버튼 누르는 함수
 
 			var passwordCheckPageField = $('#passwordCheckPage'); // 비밀번호 확인 box
 			var editmyPageField = $('#editmyPage'); // 회원정보 수정 box
@@ -236,20 +236,19 @@
 			$.ajax({
 				type: "POST",
 				url: "checkPassword.do", // 서버에서 비밀번호 맞는지 검사를 처리하는 URL
+				headers: {'Content-Type': 'application/json'},
 				data: JSON.stringify({member_password: passwordCheck}),
-				contentType: "application/json",
 				dataType: "json",
-				success: function(data) {
+				success: function (data) {
 					if (data != null) { // C한테 받아온 값이 있으면 == 비밀번호가 일치하다면
-						passwordCheckPageField.classList.add("d-none"); // 비밀번호 확인 box 숨기고
-						editmyPageField.classList.remove("d-none"); // 회원정보 수정 box 나타내줘
-					}
-					else { // 받아온 값이 없다면 == 비밀번호가 맞지않다면
+						passwordCheckPageField.addClass("d-none"); // 비밀번호 확인 box 숨기고
+						editmyPageField.removeClass("d-none"); // 회원정보 수정 box 나타내줘
+					} else { // 받아온 값이 없다면 == 비밀번호가 맞지않다면
 						alert("비밀번호가 맞지 않습니다!");
 						return false;
 					}
 				},
-				error: function(error) {
+				error: function (error) {
 					console.log("응답 실패...");
 					console.log(error);
 				}
