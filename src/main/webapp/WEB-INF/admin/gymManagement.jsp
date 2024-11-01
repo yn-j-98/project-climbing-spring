@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <!--페이지네이션 외부 스크립트-->
     <script src="js/pagination.js"></script>
+
     <!-- sweetAlert JS FILE -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
@@ -40,6 +41,10 @@
 
     <!-- template Js File -->
     <script src="assets/js/kaiadmin.min.js"></script>
+
+    <!--다음 주소 API-->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
     <style>
         .preview-image {
             width: 100%;
@@ -173,7 +178,7 @@
 
 <!-- 암벽장 추가 모달-->
 <!--모달창 전송 멀티파트타입 인코딩 설정-->
-<form id="insertForm" action="gymInsert.do" method="POST" enctype="multipart/form-data">
+<form id="insertForm" action="gymInsert.do" method="POST" enctype="multipart/form-data" onsubmit="combineAddress()">
     <div class="modal fade" id="climbingGymModal" tabindex="-1" aria-labelledby="gym-modal-title" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content rounded-4">
@@ -197,18 +202,18 @@
 
                         <!-- 암벽장 주소 -->
                         <div class="row mb-2 align-items-center">
-                            <label for="gymLocation" class="form-label col-sm-3 m-0">암벽장 주소</label>
+                            <div class="col-sm-3">
+                                <label for="gym_location" class="form-label">암벽장 주소</label>
+                            </div>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" list="datalistOptions" id="gymLocation"
-                                       name="gym_location"
-                                       placeholder="암벽장 주소 입력" required>
-                                <datalist id="datalistOptions">
-                                    <option value="서울특별시">
-                                    <option value="인천광역시">
-                                    <option value="대전광역시">
-                                    <option value="대구광역시">
-                                        <%--TODO 옵션 원하는대로 설정--%>
-                                </datalist>
+                                <input type="text" id="postcode" placeholder="우편번호">
+                                <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+                                <input type="text" id="roadAddress" placeholder="도로명주소">
+                                <input type="text" id="jibunAddress" placeholder="지번주소">
+                                <span id="guide" style="color:#999;display:none"></span>
+                                <input type="text" id="detailAddress" placeholder="상세주소">
+                                <input type="text" id="extraAddress" placeholder="참고항목">
+                                <input type="hidden" id="gym_location" name="gym_location">
                             </div>
                         </div>
 
@@ -371,8 +376,75 @@
         $('body').append(form);
         form.submit();
     }
-</script>
 
+    // 주소 API
+    function combineAddress() {
+        var postcode = document.getElementById('postcode').value;
+        var roadAddress = document.getElementById('roadAddress').value;
+        var jibunAddress = document.getElementById('jibunAddress').value;
+        var detailAddress = document.getElementById('detailAddress').value;
+        var extraAddress = document.getElementById('extraAddress').value;
+
+        var combinedAddress = postcode+roadAddress+jibunAddress+detailAddress+extraAddress.trim();
+
+        document.getElementById('gym_location').value = combinedAddress;
+    }
+    //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("roadAddress").value = roadAddr;
+                document.getElementById("jibunAddress").value = data.jibunAddress;
+
+                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                if(roadAddr !== ''){
+                    document.getElementById("extraAddress").value = extraRoadAddr;
+                } else {
+                    document.getElementById("extraAddress").value = '';
+                }
+
+                var guideTextBox = document.getElementById("guide");
+                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                if(data.autoRoadAddress) {
+                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                    guideTextBox.style.display = 'block';
+
+                } else if(data.autoJibunAddress) {
+                    var expJibunAddr = data.autoJibunAddress;
+                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                    guideTextBox.style.display = 'block';
+                } else {
+                    guideTextBox.innerHTML = '';
+                    guideTextBox.style.display = 'none';
+                }
+            }
+        }).open();
+    }
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

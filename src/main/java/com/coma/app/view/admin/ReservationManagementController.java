@@ -28,7 +28,7 @@ public class ReservationManagementController {
         int pageNum = reservationDTO.getPage();
         log.info("pageNum = [{}]",pageNum);
 
-        int size = 6; // 한 페이지에 표시할 게시글 수 설정
+        int size = 10; // 한 페이지에 표시할 게시글 수 설정
         int minNum = 0; // 최소 게시글 수 초기화
 
         if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
@@ -44,37 +44,39 @@ public class ReservationManagementController {
         //=============페이지네이션=================
 
         List<ReservationDTO> datas = null;
-
-        if(reservationDTO.getSearch_keyword()==null){
+        String search_keyword = reservationDTO.getSearch_keyword();
+        if(search_keyword==null){
             log.info("처음 화면");
             reservationCount = this.reservationService.selectOneCountAdmin(reservationDTO);
             datas = this.reservationService.selectAllAdmin(reservationDTO);
         }
 
-        else if(reservationDTO.getSearch_keyword().equals("RESERVATION_MEMBER_ID")) {
+        else if(search_keyword.equals("RESERVATION_MEMBER_ID")) { // 예약자로 찾기
             log.info("Search_keyword = 예약자 = RESERVATION_MEMBER_ID");
             datas = this.reservationService.selectAllAdminSearchMemberId(reservationDTO);
             reservationCount = this.reservationService.selectOneCountSearchMemberIdAdmin(reservationDTO);
         }
 
-        else if(reservationDTO.getSearch_keyword().equals("RESERVATION_GYM_NUM")) {
+        else if(search_keyword.equals("RESERVATION_GYM_NUM")) { // 암벽장 번호로 찾기
             log.info("Search_keyword = 암벽장 번호 = RESERVATION_GYM_NUM");
             datas = this.reservationService.selectAllAdminSearchGymName(reservationDTO);
             reservationCount = this.reservationService.selectOneCountSearchGymNameAdmin(reservationDTO);
         }
 
-        else if(reservationDTO.getSearch_keyword().equals("")) {
+        else if(search_keyword.equals("")) {
             return null;
         }
         listNum = reservationCount.getTotal();
-        // 예약자명
-        //      예약한 암벽장 이름
-        //      결제한 금액
-        //      예약한 날짜
 
+        // 검색어 저장
+        String search_content = reservationDTO.getSearch_content();
+
+        // 클라이언트에 보낼 값
         model.addAttribute("datas", datas);
         model.addAttribute("total", listNum);
         model.addAttribute("page", pageNum);
+        model.addAttribute("search_keyword", search_keyword);
+        model.addAttribute("search_content", search_content);
 
 
         return "admin/reservationManagement";

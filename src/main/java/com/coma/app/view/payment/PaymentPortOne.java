@@ -5,29 +5,23 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
 
-import com.coma.app.biz.gym.GymDTO;
-import com.coma.app.biz.reservation.ReservationDAO;
-import com.coma.app.biz.reservation.ReservationDTO;
-import com.coma.app.biz.reservation.ReservationService;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.coma.app.biz.reservation.PaymentInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import com.coma.app.biz.reservation.PaymentInfoDTO;
 
-@Controller
-public class PaymentUtil {
+@Slf4j
+public class PaymentPortOne {
     // 결제 단건 조회
-    public static PaymentInfo paymentSearchOne(PaymentInfo paymentInfo) {
+    public static PaymentInfoDTO paymentSearchOne(PaymentInfoDTO paymentInfoDTO) {
         // HTTP 요청 생성
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.iamport.kr/payments/" + paymentInfo.getImp_uid()))
+                .uri(URI.create("https://api.iamport.kr/payments/" + paymentInfoDTO.getImp_uid()))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + paymentInfo.getToken())
+                .header("Authorization", "Bearer " + paymentInfoDTO.getToken())
                 .GET() // GET 요청
                 .build();
 
@@ -35,31 +29,32 @@ public class PaymentUtil {
         // HTTP 요청 보내기 및 응답 받기
         try {
             response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-            paymentInfo.setResponse(response);
+            paymentInfoDTO.setResponse(response);
             if (response != null) {
-                System.out.println("응답이 !null임");
+                log.info("response != null");
             }
             else {
-                System.out.println("응답이 null임");
+                log.info("response == null");
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return paymentInfo;
+        return paymentInfoDTO;
     }
 
     // 사전 검증 등록
-    public static boolean prepare(PaymentInfo paymentInfo) {
-
+    public static boolean prepare(PaymentInfoDTO paymentInfoDTO) {
+        // HTTP 요청 생성
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.iamport.kr/payments/prepare"))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + paymentInfo.getToken())
-                .method("POST", HttpRequest.BodyPublishers.ofString("{\"merchant_uid\":\"" + paymentInfo.getMerchant_uid() + "\",\"amount\":" + paymentInfo.getAmount() + "}"))
+                .header("Authorization", "Bearer " + paymentInfoDTO.getToken())
+                .method("POST", HttpRequest.BodyPublishers.ofString("{\"merchant_uid\":\"" + paymentInfoDTO.getMerchant_uid() + "\",\"amount\":" + paymentInfoDTO.getAmount() + "}"))
                 .build();
         HttpResponse<String> response = null;
+        // HTTP 요청 보내기 및 응답 받기
         try {
             response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
@@ -69,12 +64,12 @@ public class PaymentUtil {
             e.printStackTrace();
             return false;
         }
-        System.out.println("사전등록 : "+response.body());
+        log.info("사전등록 = [{}]",response.body());
         return true;
     }
 
     // 결제 복수조회
-    public static String paymentSearchAll(PaymentInfo paymentInfo) {
+    public static String paymentSearchAll(PaymentInfoDTO paymentInfoDTO) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.iamport.kr/payments"))
                 .header("Content-Type", "application/json")
@@ -97,50 +92,55 @@ public class PaymentUtil {
 
 
     // 사전 검증 조회
-    public static PaymentInfo prepareResult(PaymentInfo paymentInfo) {
+    public static PaymentInfoDTO prepareResult(PaymentInfoDTO paymentInfoDTO) {
         // HTTP 요청 생성
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.iamport.kr/payments/prepare/"+paymentInfo.getMerchant_uid()+"?_token="+paymentInfo.getToken()))
+                .uri(URI.create("https://api.iamport.kr/payments/prepare/"+ paymentInfoDTO.getMerchant_uid()+"?_token="+ paymentInfoDTO.getToken()))
                 .header("Content-Type", "application/json")
-                //.header("Authorization", "Bearer "+paymentInfo.getToken())
                 .method("GET", HttpRequest.BodyPublishers.ofString("{}"))
                 .build();
         HttpResponse<String> response = null;
+        // HTTP 요청 보내기 및 응답 받기
         try {
             response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            log.error("IOException occurred while sending request", e);
+            return null;
+        } catch (InterruptedException e) {
+            log.error("ParseException occurred while parsing response body", e);
+            return null;
         }
+
         JSONParser parser = new JSONParser();
+        // 금액은 -가 나올 수 없는 값이어서 -1로 변수 초기화(유효성 검사 강화)
         int amount_result = -1;
         try {
             System.out.println(response.body());
             JSONObject jsonObject = (JSONObject) parser.parse(response.body());
-
             JSONObject responseObject = (JSONObject) jsonObject.get("response");
 
             if(responseObject != null) {
                 Long amount = (Long) responseObject.get("amount");
                 amount_result = amount.intValue();
-                paymentInfo.setAmount(amount_result);
+                paymentInfoDTO.setAmount(amount_result);
             }
             else {
-                System.out.println("Response 객체가 null입니다.");
+                log.info("Response 객체가 null입니다.");
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println("사전등록조회 : "+response.body());
-        return paymentInfo;
+        log.info("사전등록조회 = [{}]",response.body());
+        return paymentInfoDTO;
     }
 
     // 결제 취소
-    public static boolean cancelPayment(PaymentInfo paymentInfo) {
+    public static boolean cancelPayment(PaymentInfoDTO paymentInfoDTO) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.iamport.kr/payments/cancel?_token="+paymentInfo.getToken()))
+                .uri(URI.create("https://api.iamport.kr/payments/cancel?_token="+ paymentInfoDTO.getToken()))
                 .header("Content-Type", "application/json")
                 //.header("Authorization", "Bearer "+paymentInfo.getToken())
-                .method("POST", HttpRequest.BodyPublishers.ofString("{\"merchant_uid\":\"" + paymentInfo.getMerchant_uid() + "\",\"checksum\":" + paymentInfo.getAmount() + "}"))
+                .method("POST", HttpRequest.BodyPublishers.ofString("{\"merchant_uid\":\"" + paymentInfoDTO.getMerchant_uid() + "\",\"checksum\":" + paymentInfoDTO.getAmount() + "}"))
                 .build();
         HttpResponse<String> response = null;
         try {
