@@ -4,13 +4,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -77,6 +71,7 @@ public class Crawling2 {
       try {
          //드라이버에 url 주입
          driver.get(default_url);
+         JavascriptExecutor js = (JavascriptExecutor) driver;
 
          //추천상품 더보기 버튼 찾기
          //WebElement button = driver.findElement(By.cssSelector(product_button));
@@ -86,7 +81,7 @@ public class Crawling2 {
 
          //암벽화 버튼 선택
          //클릭이 가능해질때까지 대기
-         while(true) {
+         for (int i = 0; i < 10; i++){
             try {
                WebElement product_rock_button = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(rock_button)));
                product_rock_button.click();
@@ -96,6 +91,7 @@ public class Crawling2 {
                   break;
                }
             }catch (Exception e) {
+
                System.err.println("암벽화페이지 버튼 없음");
             }
          }
@@ -139,6 +135,9 @@ public class Crawling2 {
                   break;                  
                }
             }catch (Exception e) {
+               //광고 삭제
+               js.executeScript("var elements = document.getElementsByClassName('adsbygoogle-noablate');\n" +
+                       "while(elements[0]) {elements[0].parentNode.removeChild(elements[0]);}");
                //오류나면 반복
             }
          }

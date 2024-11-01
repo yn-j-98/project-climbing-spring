@@ -122,6 +122,7 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -139,13 +140,13 @@
             <version>6.1.13</version>
         </dependency>
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectj.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <!--웹소켓 API-->
+        <dependency>
+            <groupId>jakarta.websocket</groupId>
+            <artifactId>jakarta.websocket-api</artifactId>
         </dependency>
 
         <!-- JavaMail API -->
