@@ -30,6 +30,7 @@ public interface MemberService {
 	boolean updateCrew(MemberDTO memberDTO);
 	boolean updateAdmin(MemberDTO memberDTO);
 	boolean updateCurrentPoint(MemberDTO memberDTO);
+	boolean updatePassword(MemberDTO memberDTO);
 
 	boolean delete(MemberDTO memberDTO);
 }
