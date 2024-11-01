@@ -3,45 +3,53 @@ package com.coma.app.view.asycnServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.coma.app.biz.reservation.ReservationDAO;
 import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.biz.reservation.ReservationService;
-import com.coma.app.view.payment.PaymentUtil;
+import com.coma.app.view.payment.PaymentPortOne;
 import com.coma.app.view.payment.TokenService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import com.coma.app.biz.reservation.PaymentInfo;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import com.coma.app.biz.reservation.PaymentInfoDTO;
 
+@Slf4j
 @RestController
 public class Payment {
 
     private ReservationService reservationService;
 
-    @RequestMapping(value = "paymentPrepare.do", method = RequestMethod.POST)
-    public void paymentPrepare (HttpServletRequest request, HttpServletResponse response) throws IOException {
+//    @RequestMapping(value = "/paymentPrepare.do", method = RequestMethod.GET)
+//    public void paymentPrepareGet (HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        log.info("사전 등록 GET paymentPrepare.do 도착");
+//    }
 
-        String merchant_uid = request.getParameter("merchant_uid");
-        int reservation_price = Integer.parseInt(request.getParameter("reservation_price"));
-        System.out.println(merchant_uid);
-        System.out.println(reservation_price);
+
+    @PostMapping(value = "/paymentPrepare.do")
+    public void paymentPrepare (HttpServletResponse response, @RequestBody PaymentInfoDTO paymentInfoDTO) throws IOException {
+        log.info("사전 등록 POST paymentPrepare.do 도착");
+
+        //생성한 식별코드와 금액 저장
+        String merchant_uid = paymentInfoDTO.getMerchant_uid();
+        int reservation_price = paymentInfoDTO.getAmount();
+        log.info("merchant_uid = [{}]", paymentInfoDTO.getMerchant_uid());
+        log.info("reservation_price = [{}]", paymentInfoDTO.getAmount());
 
         // 토큰 발행
-        PaymentInfo paymentInfo = TokenService.portOne_code();
-        System.out.println("portone token : "+paymentInfo.getToken());
+        paymentInfoDTO = TokenService.portOne_code();
+        log.info("portone token = [{}] ", paymentInfoDTO.getToken());
 
-        paymentInfo.setMerchant_uid(merchant_uid);
-        paymentInfo.setAmount(reservation_price);
+        //저장한 금액과 식별코드를 DTO에 set
+        paymentInfoDTO.setMerchant_uid(merchant_uid);
+        paymentInfoDTO.setAmount(reservation_price);
 
-        boolean flag = PaymentUtil.prepare(paymentInfo);
+        // 사전 등록
+        boolean flag = PaymentPortOne.prepare(paymentInfoDTO);
 
+        // 클라이언트에게 성공여부 전달
         PrintWriter out = response.getWriter();
         if(flag) {
             out.print("true");
@@ -51,32 +59,39 @@ public class Payment {
         }
     }
 
-    @RequestMapping(value = "paymentPrepared.do", method = RequestMethod.POST)
-    public void paymentPrepared (HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("PaymentPrepared : POST 요청 도착");
-        String merchant_uid = request.getParameter("merchant_uid");
-        System.out.println(merchant_uid);
+
+    @PostMapping(value = "/paymentPrepared.do")
+    public void paymentPrepared (HttpServletResponse response, @RequestBody PaymentInfoDTO paymentInfoDTO) throws IOException {
+        log.info("사전 등록 조회 POST PaymentPrepared.do");
+
+        //생성한 식별코드 저장
+        String merchant_uid = paymentInfoDTO.getMerchant_uid();
+        log.info("merchant_uid = [{}]",merchant_uid);
 
         // 토큰 발행
-        PaymentInfo paymentInfo = TokenService.portOne_code();
-        System.out.println("portone token : "+paymentInfo.getToken());
+        paymentInfoDTO = TokenService.portOne_code();
+        log.info("portone token = [{}]",paymentInfoDTO.getToken());
 
-        paymentInfo.setMerchant_uid(merchant_uid);
 
-        paymentInfo = PaymentUtil.prepareResult(paymentInfo);
+        // 저장한 식별코드 DTO에 set
+        paymentInfoDTO.setMerchant_uid(merchant_uid);
+
+        // 사전 등록 조회
+        paymentInfoDTO = PaymentPortOne.prepareResult(paymentInfoDTO);
+        log.info("DTO 사전등록 = [{}]",paymentInfoDTO);
 
         response.setContentType("application/json"); // JSON으로 응답 설정
         PrintWriter out = response.getWriter();
 
-        //System.out.println(paymentInfo.getAmount());
+
         String jsonResponse;
 
-        if (paymentInfo.getAmount() > 0) {
-            jsonResponse = "{\"amountRes\": " + paymentInfo.getAmount() + "}";
-            System.err.println("JSON 응답: " + jsonResponse); // JSON 응답을 로그에 출력
+        if (paymentInfoDTO.getAmount() > 0) {
+            jsonResponse = "{\"amountRes\": " + paymentInfoDTO.getAmount() + "}";
+            log.info("JSON 응답 = [{}]",jsonResponse); // JSON 응답을 로그에 출력
         } else {
             jsonResponse = "{\"amountRes\": 0}"; // JSON 형식으로 0 반환
-            System.err.println("JSON 응답: " + jsonResponse); // JSON 응답을 로그에 출력
+            log.info("JSON 응답 = [{}]",jsonResponse); // JSON 응답을 로그에 출력
         }
 
         out.print(jsonResponse);
@@ -84,21 +99,32 @@ public class Payment {
 
     }
 
-    @RequestMapping(value = "paymentValidate.do", method = RequestMethod.POST)
+
+    @PostMapping(value = "/paymentValidate.do")
     public void paymentValidate(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("POST 요청 도착");
+        log.info("결제된 후 결제 내역 조회 POST paymentValidate.do");
+
+        // 바인딩할 커맨드객체에 gym_num이 없어서 request사용
         String imp_uid = request.getParameter("imp_uid");
-        int product_num = Integer.parseInt(request.getParameter("product_num"));
+        int product_num = Integer.parseInt(request.getParameter("gym_num"));
+        log.info("imp_uid = [{}]",imp_uid);
+        log.info("product_num = [{}]",product_num);
 
+        // uid 값 담을 DTO 생성
+        PaymentInfoDTO paymentInfoDTO = new PaymentInfoDTO();
+        paymentInfoDTO.setImp_uid(imp_uid);
 
-        PaymentInfo paymentInfo = TokenService.portOne_code();
-        System.out.println("portone token : "+paymentInfo.getToken());
-        System.out.println(imp_uid);
+        // 토큰 발급
+        paymentInfoDTO = TokenService.portOne_code();
+        log.info("portone token = [{}]",paymentInfoDTO.getToken());
 
-        paymentInfo.setImp_uid(imp_uid);
+        // uid 다시 담아줌
+        paymentInfoDTO.setImp_uid(imp_uid);
+        log.info("imp_uid = [{}]",imp_uid);
 
-        paymentInfo = PaymentUtil.paymentSearchOne(paymentInfo);
-        String responseBody = paymentInfo.getResponse().body();
+        // 단건 조회
+        paymentInfoDTO = PaymentPortOne.paymentSearchOne(paymentInfoDTO);
+        String responseBody = paymentInfoDTO.getResponse().body();
         System.out.println("응답 객체: " + responseBody);
         // JSON 파싱
         JSONParser parser = new JSONParser();
@@ -106,27 +132,30 @@ public class Payment {
         boolean flag = false;
         int amount_result = 0;
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(paymentInfo.getResponse().body());
+            JSONObject jsonObject = (JSONObject) parser.parse(paymentInfoDTO.getResponse().body());
 
             // 'response' 객체 가져오기
-            JSONObject responseObject = (JSONObject) jsonObject.get("response");
+            JSONObject responseObject = (JSONObject) jsonObject.get("respo  nse");
 
             if (responseObject != null) {
                 // 필요한 값 추출
-                System.out.println(product_num);
+                log.info("gym_num = [{}]",product_num);
                 Long amount = (Long) responseObject.get("amount");
                 amount_result = amount.intValue(); // 결제 금액
                 String imp_uid1 = (String) responseObject.get("imp_uid");
                 String merchant_uid = (String) responseObject.get("merchant_uid");
                 String reservation_date = (String) responseObject.get("reservationDate");
                 int gym_num = (Integer) responseObject.get("gym_num");
-                String member_id = (String) responseObject.get("member_id");
+                String member_id = (String) responseObject.get("buyer_email");
 
                 // 결과 출력
-                System.out.println("결제된 가격: " + amount_result);
-                System.out.println("결제 고유번호: " + imp_uid1);
-                System.out.println("상점 고유번호: " + merchant_uid);
+                log.info("결제된 가격 = [{}]",amount_result);
+                log.info("결제 고유번호 = [{}]",imp_uid1);
+                log.info("결제 날짜 = [{}]",reservation_date);
+                log.info("상점 고유번호 = [{}]",merchant_uid);
+                log.info("결제자 아이디 = [{}]",member_id);
 
+                // 조회한 결제 내역 DB에 저장
                 reservationDTO = new ReservationDTO();
                 reservationDTO.setReservation_num(merchant_uid);
                 reservationDTO.setReservation_date(reservation_date);

@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>예약 상세 페이지</title>
-	<script src="js/payment.js"></script>
+<%--	<script src="js/payment.js"></script>--%>
 <!-- Fonts and icons -->
 <script src="assets/js/plugin/webfont/webfont.min.js"></script>
 <script src="https://kit.fontawesome.com/7f7b0ec58f.js"
@@ -91,7 +91,7 @@
 						<button type="button"
 							class="btn btn-black px-5 mb-3 mb-sm-0 me-0 me-sm-4"
 							onclick="window.location.href='main.do';">취소</button>
-						<button type="submit" class="btn btn-primary px-5" id="reservationbtn">예약</button>
+						<button type="submit" class="btn btn-primary px-5" id="reservation">예약</button>
 					</div>
 					</form>
 				</div>
