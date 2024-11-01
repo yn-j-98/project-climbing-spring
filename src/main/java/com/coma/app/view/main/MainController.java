@@ -65,14 +65,6 @@ public class MainController{
         List<MemberDTO> crew_rank_datas = this.memberService.selectAllTop10CrewRank(memberDTO);
         //model_crew_rank_datas에 담아서 보내주기
 
-        //model_member_rank_datas에 담아서 보내기
-        for(MemberDTO data : crew_rank_datas) {
-            String contextPath = servletContext.getContextPath();
-
-            String profilePath = contextPath + "/profile_img/" + data.getMember_crew_profile();
-            data.setMember_crew_profile(profilePath);
-        }
-
         model.addAttribute("crew_rank_datas",crew_rank_datas);
         //===================================================================
         //개인 랭킹 부분
@@ -80,14 +72,6 @@ public class MainController{
 //        memberDTO.setMember_condition("MEMBER_ALL_TOP10_RANK");//개인 랭킹 10개 컨디션
 
         List<MemberDTO> member_rank_datas = this.memberService.selectAllTop10Rank(memberDTO);
-
-        for (MemberDTO data : member_rank_datas) {
-            String profileFileName = data.getMember_profile();
-            String contextPath = servletContext.getContextPath();
-
-            String profilePath = contextPath + "/profile_img/" + profileFileName;
-            data.setMember_profile(profilePath);
-        }
 
         model.addAttribute("member_rank_datas",member_rank_datas);
         //==================================================================

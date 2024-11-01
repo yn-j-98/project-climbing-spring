@@ -89,7 +89,7 @@ public class CrewController {
         log.info("crewDTO = [{}]", crewDTO);
 
         //이미지 url 저장
-        model.addAttribute("crew_profile", makeURL(crewDTO));
+        model.addAttribute("crew_profile", crewDTO.getCrew_profile());
 
         //크루번호로 승리기록 조회
         battle_recordDTO.setBattle_record_crew_num(crewDTO.getCrew_num());
@@ -162,7 +162,7 @@ public class CrewController {
 
             // 크루 정보 + 크루 이미지 URL
             model.addAttribute("CREW", crewDTO);
-            model.addAttribute("crew_profile", makeURL(crewDTO));
+            model.addAttribute("crew_profile", crewDTO.getCrew_profile());
 
             // 해당 크루에 속한 사용자 이름 전부 출력
             memberDTO.setMember_crew_num(crew_num);
@@ -177,14 +177,4 @@ public class CrewController {
         return "views/myCrewPage";
     }
 
-    //크루 이미지 파일명으로 url 생성
-    private String makeURL(CrewDTO crewDTO) {
-        String filename = "";
-        if (crewDTO.getCrew_profile() == null) {
-            filename = "default.jpg"; // 기본 이미지
-        } else {
-            filename = crewDTO.getCrew_profile(); // 크루 이미지 받아옴
-        }
-        return servletContext.getContextPath() + "/crew_img_folder/" + filename;
-    }
 }

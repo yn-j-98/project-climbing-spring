@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class BattleDAO {
-
+	private final String UPDATE_STATUS = "UPDATE BATTLE\n" +
+			"    SET BATTLE_STATUS = ?\n" +
+			"    WHERE BATTLE_NUM = ?";
 	/* 관리자 페이지 쿼리문 */
 
 	//해당 크루전의 승리크루 정보
@@ -320,6 +322,15 @@ public class BattleDAO {
 		int result= jdbcTemplate.update(UPDATE, battleDTO.getBattle_game_date(), battleDTO.getBattle_num());
 		if(result<=0){
 			System.err.println("	[에러] com.coma.app.biz.battle UPDATE sql 실패 : update = " + UPDATE);
+			return false;
+		}
+		return true;
+	}
+	public boolean updateStatus(BattleDTO battleDTO) {
+		System.out.println("    [로그] com.coma.app.biz.battle updateStatus 시작");
+		int result= jdbcTemplate.update(UPDATE_STATUS, battleDTO.getBattle_status(), battleDTO.getBattle_num());
+		if(result<=0){
+			System.err.println("   [에러] com.coma.app.biz.battle updateStatus sql 실패 : updateStatus = " + UPDATE_STATUS);
 			return false;
 		}
 		return true;

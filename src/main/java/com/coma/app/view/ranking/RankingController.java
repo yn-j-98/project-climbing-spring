@@ -54,10 +54,10 @@ public class RankingController {
                     int grade_min = grade.getGrade_min_point();
                     int grade_max = grade.getGrade_max_point();
                     if (grade_min <= member_total_point && member_total_point <= grade_max) {
-                        data.setMember_grade_profile("/grade_folder/" + grade.getGrade_profile());
+                        data.setMember_grade_profile(grade.getGrade_profile());
                         data.setMember_grade_name(grade.getGrade_name());
                     } else if (grade_max < member_total_point) {
-                        data.setMember_grade_profile("/grade_folder/" + grade.getGrade_profile());
+                        data.setMember_grade_profile(grade.getGrade_profile());
                         data.setMember_grade_name(grade.getGrade_name());
                         break;
                     }
@@ -102,10 +102,10 @@ public class RankingController {
                     int grade_min = grade.getGrade_min_point();
                     int grade_max = grade.getGrade_max_point();
                     if (grade_min <= member_total_point && member_total_point <= grade_max) {
-                        data.setMember_grade_profile("/grade_folder/" + grade.getGrade_profile());
+                        data.setMember_grade_profile(grade.getGrade_profile());
                         data.setMember_grade_name(grade.getGrade_name());
                     } else if (grade_max < member_total_point) {
-                        data.setMember_grade_profile("/grade_folder/" + grade.getGrade_profile());
+                        data.setMember_grade_profile(grade.getGrade_profile());
                         data.setMember_grade_name(grade.getGrade_name());
                         break;
                     }

@@ -86,6 +86,9 @@ public class CrewManagementService {
 
     public boolean updateBattleRecord(Battle_recordDTO battle_recordDTO){
         boolean result = false;
+        BattleDTO battleDTO = new BattleDTO();
+        battleDTO.setBattle_num(battle_recordDTO.getBattle_record_battle_num());
+        battleDTO.setBattle_status("T");
         //승리 크루를 모두 업데이트한 후
         battle_recordDTO.setBattle_record_is_winner("T");
         if(this.battle_recordDAO.update(battle_recordDTO)){
@@ -93,6 +96,10 @@ public class CrewManagementService {
             if(this.battle_recordDAO.UPDATE_MVP(battle_recordDTO)){
                 result = true;
                 log.info("updateBattleRecord result = [{}]",result);
+
+            }
+            if(result){
+                battleDAO.updateStatus(battleDTO);
             }
         }
         log.info("updateBattleRecord result = [{}]",result);
