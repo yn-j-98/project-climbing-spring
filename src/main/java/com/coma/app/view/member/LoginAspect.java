@@ -38,19 +38,6 @@ public class LoginAspect {
         // 로그인 여부를 확인하기 위해 가져옴(로그인 O == 세션 조회 O)
         HttpSession session = request.getSession();
 
-        // Model 객체는 일반적으로 첫 번째 인수가 되므로 이를 이용
-//        Model model = null;
-//        for (Object arg : pjp.getArgs()) {
-//            if (arg instanceof Model) {
-//                model = (Model) arg;
-//                break;
-//            }
-//        }
-
-        // 로그인 체크 로직 실행
-//        loginCheckImpl.checkLogin(request, response, session, model);
-
-
             // 로그인 체크 로직 실행
             String result = loginCheckImpl.checkLogin(request, response, session);
 

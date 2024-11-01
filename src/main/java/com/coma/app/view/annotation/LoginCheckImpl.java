@@ -25,16 +25,25 @@ public class LoginCheckImpl {
             request.setAttribute("msg", "로그인 페이지로 이동합니다.");
             request.setAttribute("path", "login.do");
             return "views/info";
-        } else {
-            if (!isAdmin(loginInfo) && isCrewAbsent(loginInfo)) {
-                request.setAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
-                request.setAttribute("msg", "크루 목록 페이지로 이동합니다.");
-                request.setAttribute("path", "crewList.do");
-                return "views/info";
-            }
         }
+        else if(loginInfo[1] == null){
+            request.setAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
+            request.setAttribute("msg", "크루 가입 페이지로 이동합니다.");
+            request.setAttribute("path", "crewList.do");
+            return "views/info";
+        }
+//        else if(loginInfo[2] == null || !loginInfo[2].equals("T")){
+//            request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
+//            request.setAttribute("msg", "메인 페이지로 이동합니다.");
+//            request.setAttribute("path", "main.do");
+//            return "views/info";
+//
+//        }
+
+
         return null; // 로그인 정보가 있으면 null 반환
     }
+
 
     // 요청과 세션 객체에서 로그인 정보를 가져오는 메서드
     private String[] getLoginInformation(HttpServletRequest request, HttpSession session) {
@@ -77,33 +86,38 @@ public class LoginCheckImpl {
         }
     }
 
-    // 세션과 로그인 정보를 동기화하는 메서드
-    private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
-        // 세션의 MEMBER_ID가 null이고 배열의 첫 번째 요소가 null이 아닌 경우
-        if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
-            session.setAttribute(MEMBER_ID, loginInfo[0]);
-        }
-
-        // 세션의 CREW_CHECK가 null이고 배열의 두 번째 요소가 null이 아닌 경우
-        if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
-            session.setAttribute(CREW_CHECK, Integer.parseInt(loginInfo[1]));
-        }
-
-        // 세션의 ROLE_CHECK가 null이고 배열의 세 번째 요소가 null이 아닌 경우
-        if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
-            session.setAttribute(ROLE_CHECK, loginInfo[2]);
-        }
+//    // 세션과 로그인 정보를 동기화하는 메서드
+//    private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
+//        // 세션의 MEMBER_ID가 null이고 배열의 첫 번째 요소가 null이 아닌 경우
+//        if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
+//            session.setAttribute(MEMBER_ID, loginInfo[0]);
+//        }
+//
+//        // 세션의 CREW_CHECK가 null이고 배열의 두 번째 요소가 null이 아닌 경우
+//        if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
+//            session.setAttribute(CREW_CHECK, Integer.parseInt(loginInfo[1]));
+//        }
+//
+//        // 세션의 ROLE_CHECK가 null이고 배열의 세 번째 요소가 null이 아닌 경우
+//        if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
+//            session.setAttribute(ROLE_CHECK, loginInfo[2]);
+//        }
+//
+//    }
+// 세션과 로그인 정보를 동기화하는 메서드
+private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
+    if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
+        session.setAttribute(MEMBER_ID, loginInfo[0]);
     }
-
-    // 관리자인지 확인하는 메서드
-    private boolean isAdmin(String[] loginInfo) {
-        return "T".equals(loginInfo[2]);
+    if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
+        session.setAttribute(CREW_CHECK, Integer.parseInt(loginInfo[1]));
     }
-
-    // 크루가 없는지 확인하는 메서드
-    private boolean isCrewAbsent(String[] loginInfo) {
-        return loginInfo[1] == null;
+    if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
+        session.setAttribute(ROLE_CHECK, loginInfo[2]);
     }
+}
+
+
 
     // 로그아웃 시 세션과 쿠키를 무효화하는 메서드
     public static void logout(HttpServletRequest request, HttpServletResponse response) {
