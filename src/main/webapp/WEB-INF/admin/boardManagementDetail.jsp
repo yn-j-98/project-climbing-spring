@@ -97,9 +97,8 @@
     // DOMContentLoaded 이벤트가 발생하면 콜백 함수를 실행
     // 즉, DOM이 완전히 로드된 후에 이 코드가 실행
     $(document).ready(function () {
-                        var boardNum = $("#boardNum").val();
+        var boardNum = $("#boardNum").val();
         $("#deleteButton").click(function () {
-            var data_num = this; // 이벤트가 발생한 버튼 요소 참조
 
             sweetAlert_confirm_warning('댓글 삭제', '정말로 삭제하시겠습니까?', '삭제', '취소')
                 .then(function (replyDelete) {
