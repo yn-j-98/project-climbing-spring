@@ -14,6 +14,7 @@ function requestPay() {
     const cleanUuid = uuid.replace(/-/g, ""); // 불필요한 특수기호 삭제
     const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 
+    // const memberUuid = member_id.split('@')[0];// 사용자 이름에서 @ 앞에 아이디만 추출
     const merchant_uid = cleanUuid+currentDate; // 예약자id+주문 번호 날짜+랜덤값
     console.log("merchant_uid : "+merchant_uid);
 
@@ -25,7 +26,7 @@ function requestPay() {
     console.log("예약일 : "+reservationDate);
     const gym_name = $('#gymName').val(); // 암벽장 이름
     console.log("암벽장 이름 : "+gym_name);
-    const member_id = $('#member_id').val(); // 사용자 이름
+    const member_id = $('#member_id').val();
     console.log("멤버 아이디 : "+member_id);
     const member_point = $('#member_point').val(); // 사용자 사용한 포인트
     console.log("멤버 사용포인트 : "+member_point);
@@ -36,10 +37,11 @@ function requestPay() {
     $.ajax({
         url: "paymentPrepare.do",
         method: "POST",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             merchant_uid: merchant_uid,
-            reservation_price: reservation_price
-        } // UUID, 가격 보내서 사전 검증 Controller로 전달
+            amount: reservation_price
+        }) // UUID, 가격 보내서 사전 검증 Controller로 전달
     }).done(function(data) {
         console.log("첫 번째 응답: " + data);
         if (data === "true") {  // true라면
@@ -49,12 +51,15 @@ function requestPay() {
             $.ajax({
                 url: "paymentPrepared.do",
                 method: "POST",
+                contentType: "application/json",
                 dataType: "json",
-                data: {
-                    merchant_uid: merchant_uid // 해당 uuid 보냄
-                }
+                data: JSON.stringify({
+                    merchant_uid: merchant_uid, // 해당 uuid 보냄
+                })
+
             }).done(function(data) {
                 console.log("두 번째 응답:", data); // 응답 전체 확인
+                console.log(typeof data);
                 console.log("두 번째 응답:", data.amountRes); // 금액 확인
 
                 if (!isNaN(data.amountRes) && data.amountRes > 0) { // 결제한 금액이 있다면
@@ -80,9 +85,9 @@ function requestPay() {
         pay_method: 'card',
         amount: reservation_price,
         name: gym_name,
-        gym_num: gym_num,
-        member_id: member_id,
+        buyer_email: member_id,
         merchant_uid: merchant_uid,
+        gym_num: gym_num,
         reservationDate : reservationDate
     },
         function (rsp) {
@@ -95,7 +100,7 @@ function requestPay() {
                     // JSON 형식으로 전송
                     data: {
                         imp_uid: rsp.imp_uid,  // 포트원 결제 고유번호
-                        product_num: gym_num,
+                        gym_num: gym_num,
                         merchant_uid: rsp.merchant_uid  // 주문번호
                     }
                 }).done(function (data) {

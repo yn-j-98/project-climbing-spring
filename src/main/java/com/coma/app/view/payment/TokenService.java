@@ -1,6 +1,6 @@
 package com.coma.app.view.payment;
 
-import com.coma.app.biz.reservation.PaymentInfo;
+import com.coma.app.biz.reservation.PaymentInfoDTO;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,12 +13,12 @@ import java.net.http.HttpResponse;
 
 public class TokenService {
 
-    private final static String IMP_KEY = "key";
-    private final static String IMP_SECRET = "secret";
+    private final static String IMP_KEY = "5647450260826041";
+    private final static String IMP_SECRET = "YpS1lNenwoElzx1zMgszfeWQ8pRFnQTbUCazgFUERxwqqmEMrgNq9qO1Vb54qOA7o54AprftsR0dyYdi";
 
     // 토큰 발급 요청
-    public static PaymentInfo portOne_code() {
-        PaymentInfo paymentInfo = new PaymentInfo();
+    public static PaymentInfoDTO portOne_code() {
+        PaymentInfoDTO paymentInfoDTO = new PaymentInfoDTO();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.iamport.kr/users/getToken"))
                 .header("Content-Type", "application/json")
@@ -31,7 +31,7 @@ public class TokenService {
             System.out.println("토큰 요청 실패");
             e.printStackTrace();
         }
-        System.out.println("response.body() = ["+response.body()+"]");
+        System.out.println(response.body());
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;
         try {
@@ -42,7 +42,7 @@ public class TokenService {
         }
         JSONObject responseObject = (JSONObject) jsonObject.get("response");
         String token = (String)responseObject.get("access_token");
-        paymentInfo.setToken(token);
-        return paymentInfo;
+        paymentInfoDTO.setToken(token);
+        return paymentInfoDTO;
     }
 }

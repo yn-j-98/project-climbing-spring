@@ -20,7 +20,7 @@ public class CrewCommunityWebSocket {
 
     @OnOpen // WebSocket 연결 열기
     public void open(Session memberSession, @PathParam("member_id") String member_id) {
-        log.info("CrewCommunityWebSocket.open: 실시간 채팅 연결");
+        log.info("CrewCommunityWebSocket.open : 실시간 채팅 연결");
         sessions.add(memberSession); // 세션에 사용자 추가
         log.info(memberSession.getId());
         log.info(member_id);
@@ -41,7 +41,7 @@ public class CrewCommunityWebSocket {
     public void onClose(Session receiveSession, @PathParam("member_id") String member_id) {
         // 현재 websocket 사용자 리스트에서 현재 사용자 제거
         sessions.remove(receiveSession);
-
+        log.info("CrewCommunityWebSocket.onClose : 실시간 채팅 연결 해제");
         // 모든 클라이언트에게 퇴장 메시지 전송
         broadcastMessage(createJsonMessage(member_id, member_id + "님이 채팅방을 나갔습니다", "./img/arashmil.jpg", "코마"));
     }
@@ -52,7 +52,7 @@ public class CrewCommunityWebSocket {
                 try {
                     session.getBasicRemote().sendText(msg);
                 } catch (IOException e) {
-                    log.error("Error sending message: ", e);
+                    e.printStackTrace();
                 }
             }
         }
