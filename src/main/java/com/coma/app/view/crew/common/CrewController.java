@@ -24,9 +24,6 @@ import java.util.List;
 @Controller
 public class CrewController {
     @Autowired
-    private ServletContext servletContext;
-
-    @Autowired
     private CrewService crewService;
 
     @Autowired
