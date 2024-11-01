@@ -140,7 +140,7 @@ ALTER TABLE GYM
     ADD COLUMN GYM_ADMIN_BATTLE_VERIFIED CHAR(1) DEFAULT 'F';
 
 
---외래키 제약조건 잠금
+#외래키 제약조건 잠금
 SET FOREIGN_KEY_CHECKS = 0;
---외래키 제약조건 잠금 해제
+#외래키 제약조건 잠금 해제
 SET FOREIGN_KEY_CHECKS = 1;
