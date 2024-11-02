@@ -241,7 +241,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="CrewBattleApplication.do">
+                    <form action="CrewBattleApplication.do" method="POST">
                         <div class="form-group">
                             <input type="hidden" name="gym_num" value="${gym_num}">
                             <input type="hidden" name="battle_num" value="${battle_num}">
