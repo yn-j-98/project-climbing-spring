@@ -23,7 +23,7 @@
             </div>
             <div class="col-md-10">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="member_id" value="coma2" name="reservation_member_id" readonly/>
+                    <input type="text" class="form-control" id="member_id" value="coma2@naver.com" name="reservation_member_id" readonly/>
                 </div>
             </div>
             <div class="col-md-2 d-flex align-items-center">
