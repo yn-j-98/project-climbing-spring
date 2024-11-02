@@ -1,8 +1,10 @@
 package com.coma.app.view.mypage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import com.coma.app.view.asycnServlet.FTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,19 +38,19 @@ public class MyPageController {
 	@Autowired
 	private ReservationService reservationService;
 	@Autowired
-	private ServletContext servletContext;
+	private FTPService ftpService;
 	@Autowired
 	private HttpSession session;
 
 	@LoginCheck
 	@GetMapping("/myPage.do")
-	public String myPage(MemberDTO memberDTO, BoardDTO boardDTO,ReservationDTO reservationDTO, Model model) {
+	public String myPage(MemberDTO memberDTO, BoardDTO boardDTO,ReservationDTO reservationDTO, Model model) throws IOException {
 
 		// 로그인된 사용자의 마이 페이지 처리
 
 		// 예시로 로그인한 사용자 정보를 가져와서 모델에 추가
 		String member_id = (String) session.getAttribute("MEMBER_ID");
-
+		MultipartFile file = memberDTO.getPhotoUpload();
 
 		log.info("MyPage 로그인 정보 [{}]",member_id);
 		//------------------------------------------------------------------
@@ -57,13 +59,6 @@ public class MyPageController {
 		memberDTO.setMember_id(member_id);
 
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
-
-		//회원가입할때 무언가 문제가 발생하여 이미지가 설정되지 못했다면
-		//기본 default 이미지로 설정해야한다.
-		String filename = memberDTO != null ? memberDTO.getMember_profile() : "default.jpg";
-
-		//현재 웹 프로젝트의 경로를 반환받고 프로젝트 경로를 반환 받아옵니다.
-		memberDTO.setMember_profile("/profile_img/" + filename);
 		//내 정보 불러오는 코드 종료
 		//------------------------------------------------------------------
 
@@ -116,17 +111,14 @@ public class MyPageController {
 
 		return "views/myPage";
 	}
-	@GetMapping("/editMyPage.do")
-	public String editMyPage() {
-		return "views/editMyPage";
-	}
 	//-------------------------------
 
 
 	// DeleteMemberAction
 	@LoginCheck
 	@PostMapping("/deleteMember.do")
-	public String deleteMember(MemberDTO memberDTO, Model model, @SessionAttribute("MEMBER_ID") String member_id) {
+	public String deleteMember(MemberDTO memberDTO, Model model) throws IOException {
+		String member_id = (String)this.session.getAttribute("MEMBER_ID");
 		memberDTO.setMember_id(member_id);
 		//탈퇴전 사용자의 프로필이미지를 가져오기 위해 아이디 하나 검색하는 컨디션을 추가합니다.
 		System.out.println("*******************************************"+memberDTO.getMember_id());
@@ -135,35 +127,31 @@ public class MyPageController {
 		//delete 를 성공하지 못했다면 Mypage로 보냅니다.
 		boolean flag = this.memberService.delete(memberDTO);
 		model.addAttribute("title", "회원 탈퇴");
-		//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.
 
-			if (flag) { // 멤버 삭제에 성공했다면 로그아웃 후 메인 페이지로 이동합니다.
-				String memberProfile = memberDTO.getMember_profile();
-				if (memberProfile != null && !memberProfile.isEmpty() && !memberProfile.equals("default")) {
-					String userImgPath = servletContext.getRealPath("/profile_img/" + memberProfile);
-					File file = new File(userImgPath);
-					if (file.isFile()) {
-						boolean flagProfile = file.delete();
+		String proFile = memberDTO.getMember_profile();
 
-						log.info("프로필 삭제 여부 {}", flagProfile);
-					}
-				}
-				session.invalidate();
-				model.addAttribute("msg", "회원 탈퇴 성공!");
-				model.addAttribute("path", "main.do");
-			} else {
-				model.addAttribute("msg", "회원 탈퇴 실패...");
-				model.addAttribute("path", "myPage.do");
-			}
-		return "views/info";
+		if((proFile.contains("default.png") || proFile.contains("default.jpg"))) {
+			flag = ftpService.ftpFileDelete(memberDTO.getMember_profile());
 		}
+
+		//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.
+		if (flag) { // 멤버 삭제에 성공했다면 로그아웃 후 메인 페이지로 이동합니다.
+			session.invalidate();
+			model.addAttribute("msg", "회원 탈퇴 성공!");
+			model.addAttribute("path", "main.do");
+		} else {
+			model.addAttribute("msg", "회원 탈퇴 실패...");
+			model.addAttribute("path", "myPage.do");
+		}
+		return "views/info";
+	}
 
 
 
 	//DeleteReservationAction
 
 	@GetMapping("/deleteRerservation.do")
-	public String deleteReservation(ReservationDTO reservationDTO, Model model) {	
+	public String deleteReservation(ReservationDTO reservationDTO, Model model) {
 		boolean flag =  this.reservationService.delete(reservationDTO);
 
 		model.addAttribute("title", "예약 취소");
@@ -177,29 +165,27 @@ public class MyPageController {
 
 	@LoginCheck
 	@PostMapping("/changeMember.do")
-	public String changeMember(@RequestParam("photoUpload") MultipartFile photoUpload,
-			HttpSession session, MemberDTO memberDTO,
-			ProfileUpload profileUpload) {
+	public String changeMember(MemberDTO memberDTO) throws IOException {
 
 		String member_id = (String) session.getAttribute("MEMBER_ID");
-
 		// 바꿀 사용자 아이디를 입력해줍니다.
 		memberDTO.setMember_id(member_id);
-
 		boolean flag = false;
-
+		MultipartFile file = memberDTO.getPhotoUpload();
 		// 프로필 이미지 업로드 처리
-		String filename = profileUpload.upload(photoUpload, session); // profileUpload 주입된 인스턴스 사용
-
-		// uploadfile이 null이 아니라면 DB의 프로필 이미지를 변경합니다.
-		if (!filename.isEmpty()) {
-			System.out.println("uploadfile not null 로그 : " + filename);
-			memberDTO.setMember_profile(filename); // 저장한 프로필 이미지로 변경합니다.
-			flag = this.memberService.updateAll(memberDTO);
-		} else {
+		String filename = file.getOriginalFilename();
+			log.info("uploadFiel not null Log : [{}]", filename);
+		if ("".equals(filename)) {
 			System.out.println("uploadfile null 로그");
 			flag = this.memberService.updateWithoutProfile(memberDTO);
-
+		}
+		else {
+			log.info("uploadFiel not null Log : [{}]", filename);
+			filename = ftpService.ftpFileUpload(memberDTO.getPhotoUpload(), "profile_img", member_id); // ftpFileUpload 주입된 인스턴스 사용
+			// uploadfile이 null이 아니라면 DB의 프로필 이미지를 변경합니다.
+			log.info("Update File Name log : [{}]", filename);
+			memberDTO.setMember_profile(filename); // 저장한 프로필 이미지로 변경합니다.
+			flag = this.memberService.updateAll(memberDTO);
 		}
 
 		System.out.println("프로필 이미지 저장 로그: " + memberDTO); // 프로필 이미지 저장 로그
@@ -211,24 +197,20 @@ public class MyPageController {
 			session.setAttribute("CHANGE_CHECK", flag);
 		}
 
-		return "views/myPage";
+		return "myPage.do";
 	}
 
 
 	//ChangeMember.do
 	@LoginCheck
 	@GetMapping("/changeMember.do")
-	public String changeMember(MemberDTO memberDTO, Model model) {
+	public String changeMember(MemberDTO memberDTO, Model model) throws IOException {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 		//사용자 아이디를 model에 전달하고
 		memberDTO.setMember_id(member_id);
 		//전달해준 사용자 정보를 받아와 줍니다.
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
-
-		String profile = memberDTO.getMember_profile() != null ? memberDTO.getMember_profile() : "default.png";
-		memberDTO.setMember_profile("/profile_img/" + profile);
 		model.addAttribute("data", memberDTO);
-
 		return "views/editMyPage";
 	}
 
