@@ -94,16 +94,17 @@ public class FTPService {
 
     }
 
-    //TODO 이미지 삭제 추가해야함
+    //이미지 삭제 폴더 이름 or 파일 이름
     public boolean ftpFileDelete(String filename) throws IOException {
 
         FTPServiceConnect();
-        boolean flag = ftpClient.deleteFile(filename);
+        boolean flag = ftpClient.deleteFile(FTPService.FTP_FILE_PATH+filename);
         FTPServiceDisConnect();
 
         return flag;
     }
 
+    //이미지 업로드 멀티파트 , 이미지 폴더
     public String ftpFileUpload(MultipartFile file, String img_Folder) throws IOException {
 
         //업로드를 하기 위해 파일 이름을 받아옵니다.
@@ -130,8 +131,10 @@ public class FTPService {
         }
 
         //넘길 이미지 주소를 전달합니다.
-        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+img_name;
+        return ftpCreateFolder+img_name;
+//        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+img_name;
     }
+    //이미지 업로드 멀티파트, 이미지 폴더, 파일이름
     public String ftpFileUpload(MultipartFile file, String img_Folder, String fileName) throws IOException {
 
         //업로드를 하기 위해 파일 이름을 받아옵니다.
@@ -154,14 +157,16 @@ public class FTPService {
         boolean flag = isUpload(folderPath, img_name, file);
 
         if(flag){
-            return folderPath+"default.png";
+            return ftpCreateFolder+"default.png";
         }
 
 
         //넘길 이미지 주소를 전달합니다.
-        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+img_name;
+        return ftpCreateFolder+img_name;
+//        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+img_name;
     }
 
+    //CKEditor 이미지 업로더
     public String ftpFileUpload(MultipartFile file, String img_Folder, String FolderName,int member_folder) throws IOException {
 
         //업로드를 하기 위해 파일 이름을 받아옵니다.
@@ -193,9 +198,47 @@ public class FTPService {
 
 
         //넘길 이미지 주소를 전달합니다.
-        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+img_name;
+//        return ftpCreateFolder+img_name;
+        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+createFolder+img_name;
     }
 
+    public String ftpProfileFileUpload(MultipartFile file, String img_Folder, String FolderName,int member_folder) throws IOException {
+
+        //업로드를 하기 위해 파일 이름을 받아옵니다.
+        String localFileName = file.getOriginalFilename();
+
+        //받아온 파일의 형식만 불러와줍니다.
+        String fileForm = localFileName.substring(localFileName.lastIndexOf("."));
+
+        //이미지 저장 상위 폴더
+        String ftpCreateFolder = img_Folder+"/";
+
+        // 이미지가 업로드될 주소를 지정
+        //사용자 아이디
+        String createFolder = FolderName+"/"+member_folder+"/";
+
+        // 두 주소를 합쳐줍니다.
+        String folderPath = FTPService.FTP_FILE_PATH+ftpCreateFolder+createFolder;
+        log.info("folderPath : [{}]",folderPath);
+
+        // 랜덤 숫자를 이름으로 변경합니다.
+        String img_name = img_security()+fileForm;
+        log.info("img_name : [{}]",img_name);
+
+        boolean flag = isUpload(folderPath, img_name, file);
+
+        if(flag){
+            return "/"+ftpCreateFolder+createFolder+"default.png";
+        }
+
+
+        //넘길 이미지 주소를 전달합니다.
+//        return ftpCreateFolder+img_name;
+        return "/"+ftpCreateFolder+createFolder+img_name;
+    }
+
+    //폴더 생성 메서드
+    //폴더 이름
     public void ftpCreateFolder(String img_Folder, String FolderName, int createFolderNum) throws IOException {
 
         //이미지 저장 상위 폴더
@@ -205,16 +248,17 @@ public class FTPService {
         //사용자 아이디
         String createFolder = FolderName+"/";
 
-        String createFolderPath = FTPService.FTP_FILE_PATH+ftpCreateFolder+createFolder+createFolderNum;
-
-
+        String createFolderPath = FTPService.FTP_FILE_PATH+ftpCreateFolder+createFolder;
         //FTP 서버 접속
         FTPServiceConnect();
         log.error("ftpClient connect");
 
-        //폴더 추가
-        if(!this.ftpClient.makeDirectory(createFolderPath))log.error("ftpClient makeDirectory ROOT/test Fail");
+        //사용자 아이디 폴더 추가
+        if(!this.ftpClient.makeDirectory(createFolderPath))log.error("member makeDirectory Fail folderPath: [{}]",createFolderPath);
 
+        //게시판 폴더 추가
+        if(!this.ftpClient.makeDirectory(createFolderPath+createFolderNum))log.error("board folder create Fail folderPath: [{}]",createFolderPath+createFolderNum);
+        log.info("이미지 폴더 생성");
         //FTP 서버 종료
         FTPServiceDisConnect();
     }
@@ -266,7 +310,7 @@ public class FTPService {
             //폴더 추가
             if(!this.ftpClient.makeDirectory(folderPath)){
                 isUpload = false;
-                log.error("ftpClient makeDirectory ROOT/test Fail");
+                log.error("ftpClient makeDirectory ROOT/test Fail folderPath: [{}]",folderPath);
             }
 
             //최종 파일 위치 확인용 로그
@@ -275,7 +319,7 @@ public class FTPService {
             //파일 타입 지정
             if(!this.ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE)) {
                 isUpload = false;
-                log.error("ftpClient setFileType Fail");
+                log.error("ftpClient setFileType Fail folderPath: [{}]",folderPath);
             }
 
             //파일 데이터 전송을 위한 임시 포트 생성
@@ -286,7 +330,7 @@ public class FTPService {
             //ftp server 에 파일 적용
             if(!this.ftpClient.storeFile(folderPath+img_name,file.getInputStream())){
                 isUpload = false;
-                log.error("ftpClient storeFile Fail");
+                log.error("ftpClient storeFile Fail :  folderPath+img_name[{}] , file.getInputStream()[{}]", folderPath+img_name,file.getInputStream());
             }
 
             //FTP 서버 종료
