@@ -414,9 +414,11 @@
 						member_phone: phoneCheck
 					}),
 
-					dataType : "text", //응답데이터 형태
+					dataType : "json", //응답데이터 형태
 
 					success : function(data) { // data받는데 성공한 함수
+						console.log('data= ['+typeof data+']');
+
 						$("#check_num").click(function() { // 인증 버튼 눌렀을 때 함수
 							if (data == $('#phone_check').val()) { // 받아온 data값과 인증번호 input창 입력값이 같다면
 								phoneCheckField.classList.remove('input-error'); // input창 색깔 빨강 지우고

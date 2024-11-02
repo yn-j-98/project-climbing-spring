@@ -20,7 +20,7 @@ public class SMSPush {
 //	//cafe24 문자 api 사용가능 여부 확인 URL
 //	private String apiUrl = "https://sslsms.cafe24.com/smsSenderPhone.php";
 //	private String userAgent = "Mozilla/5.0";
-//	private String postParams = "userId=no1fc20000&passwd=14569e82136048ea492a1e37d2be82a0";
+//	private String postParams = "";
 //
 //	public void callcheck() {
 //		try {
@@ -171,7 +171,7 @@ public class SMSPush {
 			//실제로 문자를 보내면 금액이 지불되기 때문에
 			//문자 테스트를 할지 여부를 입력
 //			String testflag = base64Encode(nullcheck("Y", ""));
-			String testflag = base64Encode(nullcheck("", ""));
+			String testflag = base64Encode(nullcheck("Y", ""));
 
 			//이름을 입력 010-000-0000|홍길동
 			String destination = base64Encode(nullcheck("", ""));

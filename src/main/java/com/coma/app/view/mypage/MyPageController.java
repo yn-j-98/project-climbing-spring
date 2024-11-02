@@ -130,7 +130,7 @@ public class MyPageController {
 
 		String proFile = memberDTO.getMember_profile();
 
-		if((proFile.contains("default.png") || proFile.contains("default.jpg"))) {
+		if(!proFile.contains("default.png") || !proFile.contains("default.jpg")) {
 			flag = ftpService.ftpFileDelete(memberDTO.getMember_profile());
 		}
 
@@ -174,22 +174,25 @@ public class MyPageController {
 		MultipartFile file = memberDTO.getPhotoUpload();
 		// 프로필 이미지 업로드 처리
 		String filename = file.getOriginalFilename();
-			log.info("uploadFiel not null Log : [{}]", filename);
+			log.info("uploadFile : [{}]", filename);
 		if ("".equals(filename)) {
 			System.out.println("uploadfile null 로그");
 			flag = this.memberService.updateWithoutProfile(memberDTO);
 		}
 		else {
-			log.info("uploadFiel not null Log : [{}]", filename);
-			filename = ftpService.ftpFileUpload(memberDTO.getPhotoUpload(), "profile_img", member_id); // ftpFileUpload 주입된 인스턴스 사용
+			log.info("uploadFile not null Log : [{}]", filename);
+			//사용자 프로필 파일 생성
+			ftpService.ftpCreateFolder("profile_img",member_id,0);
+
+			filename = ftpService.ftpProfileFileUpload(memberDTO.getPhotoUpload(), "profile_img", member_id, 0); // ftpFileUpload 주입된 인스턴스 사용
 			// uploadfile이 null이 아니라면 DB의 프로필 이미지를 변경합니다.
 			log.info("Update File Name log : [{}]", filename);
 			memberDTO.setMember_profile(filename); // 저장한 프로필 이미지로 변경합니다.
 			flag = this.memberService.updateAll(memberDTO);
 		}
 
-		System.out.println("프로필 이미지 저장 로그: " + memberDTO); // 프로필 이미지 저장 로그
-		System.err.println("filename 로그" + filename);
+		log.info("프로필 이미지 저장 로그: [{}]",memberDTO);
+		log.info("filename 로그 : [{}]",filename);
 
 		// 사용자 정보를 DB에 업데이트 요청
 
@@ -197,7 +200,7 @@ public class MyPageController {
 			session.setAttribute("CHANGE_CHECK", flag);
 		}
 
-		return "myPage.do";
+		return "redirect:myPage.do";
 	}
 
 
