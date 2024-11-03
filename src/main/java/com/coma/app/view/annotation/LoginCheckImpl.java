@@ -1,14 +1,11 @@
 
 package com.coma.app.view.annotation;
 
-import com.coma.app.biz.member.MemberDTO;
-import com.coma.app.biz.member.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -22,9 +19,8 @@ public class LoginCheckImpl {
     private static final String MEMBER_ROLE = "MEMBER_ROLE"; // 회원인지 관리자인지를 나타내는 상수
 
     // 현재 요청과 응답, 세션 객체를 이용하여 로그인 정보를 검사하는 메서드
-    public String checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String checkLogin(HttpServletRequest request, HttpSession session) {
 
-        MemberDTO memberDTO = new MemberDTO();
         String[] loginInfo = getLoginInformation(request, session); // 로그인 정보를 가져옴
         synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
         log.info("loginInfo[0] {}, [1] {}, [2] {}", loginInfo[0], loginInfo[1], loginInfo[2] );
@@ -37,28 +33,23 @@ public class LoginCheckImpl {
             return "views/info";
         }
 //        else if(loginInfo[1] == null){ // 가입한 크루가 없으면
-        else if(loginInfo[1] == null || memberDTO.getMember_crew_join_date()==null && !loginInfo[2].equals("T")){ // 가입한 크루가 없으면
+        else if(loginInfo[1] == null){ // 가입한 크루가 없으면
             log.error("가입한 크루 없음");
+            log.error("loginInfo[1] {}, loginInfo[2] {}", loginInfo[1], loginInfo[2]);
             request.setAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
             request.setAttribute("msg", "크루 가입 페이지로 이동합니다.");
             request.setAttribute("path", "crewList.do");
             return "views/info";
         }
-        if(!loginInfo[2].equals("T")){
-            log.error("관리자 아님");
-            request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
-            request.setAttribute("msg", "메인 페이지로 이동합니다.");
-            request.setAttribute("path", "main.do");
-            return "views/info";
-
-        }
-//        else if(loginInfo[2] == null || !loginInfo[2].equals("T")){
+//        if(!loginInfo[2].equals("T")){
+//            log.error("관리자 아님");
 //            request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
 //            request.setAttribute("msg", "메인 페이지로 이동합니다.");
 //            request.setAttribute("path", "main.do");
 //            return "views/info";
 //
 //        }
+
 
 
         return null; // 로그인 정보가 있으면 null 반환

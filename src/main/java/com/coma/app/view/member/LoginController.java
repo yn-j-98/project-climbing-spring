@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
-import com.coma.app.view.annotation.LoginCheck;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
