@@ -276,7 +276,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="crewBattleApply.do">
+                    <form action="CrewBattleApplication.do">
                         <div class="form-group">
                             <input type="hidden" name="gym_num" value="${gym_num}">
                             <input type="hidden" name="battle_num" value="${battle_num}"> <!--추가했습니다..-->

@@ -1,32 +1,35 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mytag"%>
 <html>
 <head>
 
 <title>예약 상세 페이지</title>
+
 <!-- 결제 포트원 추가 -->
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 
-<!-- Core JS Files -->
-<script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
-<script src="../../assets/js/core/popper.min.js"></script>
-<script src="../../assets/js/core/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-
 <!-- 결제 외부 JS 추가 -->
 <script src="../../js/payment.js"></script>
+
+<!-- Core JS Files -->
+<script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="../../assets/js/core/popper.min.js"></script>
+<script src="../../assets/js/core/bootstrap.min.js"></script>
+
+<!-- CSS Files -->
+<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../assets/css/plugins.min.css" />
+<link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
+
+
 
 <!-- Fonts and icons -->
 <script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
 <script src="https://kit.fontawesome.com/7f7b0ec58f.js"
 	crossorigin="anonymous"></script>
 
-<!-- CSS Files -->
-<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="../../assets/css/plugins.min.css" />
-<link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
 
 </head>
 <body>
@@ -108,8 +111,6 @@
 			</div>
 		</div>
 	</div>
-	
-
 
 </body>
 </html>

@@ -109,7 +109,6 @@ public class GymController {
 		return "views/gymMain";
 	}
 
-	@LoginCheck
 	@PostMapping("/gymReservation.do")
 	public String gymReservation(GymDTO gymDTO, ReservationDTO reservationDTO, MemberDTO memberDTO, Model model) {
 		log.info("gymReservation.do 도착");
@@ -210,7 +209,6 @@ public class GymController {
 	}
 
 
-	@LoginCheck
 	@PostMapping("/gymReservationInfo.do")
 	public String gymReservationInfo(Model model,GymDTO gymDTO, MemberDTO memberDTO, ReservationDTO reservationDTO) {
 		log.info("gymReservationInfo.do 도착");
@@ -225,6 +223,7 @@ public class GymController {
 		//해당 기능에서 공통으로 사용할 변수 and 객체
 		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
 		int gym_num = gymDTO.getGym_num();
+		String gym_name=this.gymService.selectOne(gymDTO).getGym_name();
 		log.info("gym_num = [{}]", gym_num);
 
 //		System.err.println("사용포인트 넘어왔니"+memberDTO.getMember_use_point);
@@ -323,6 +322,7 @@ public class GymController {
 		}
 		//FIXME V에서 값 맞는지 확인하기
 		model.addAttribute("gym_num", gym_num);
+		model.addAttribute("gym_name", gym_name);
 		model.addAttribute("member_name", member_name);
 		model.addAttribute("reservation_date", gym_reservation_date);
 		model.addAttribute("reservation_cnt", reservation_cnt);
@@ -331,7 +331,6 @@ public class GymController {
 		return "views/reservation";
 	}
 
-	@LoginCheck
 	@GetMapping("/gymInfo.do")
 	public String gymInfo(Model model, GymDTO gymDTO, Battle_recordDTO battle_recordDTO, MemberDTO memberDTO, FavoriteDTO favoriteDTO) {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
