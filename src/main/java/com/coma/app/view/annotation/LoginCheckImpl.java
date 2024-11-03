@@ -1,11 +1,15 @@
 
 package com.coma.app.view.annotation;
 
+import com.coma.app.biz.crew.CrewDTO;
+import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -13,6 +17,8 @@ import org.springframework.stereotype.Component;
 public class LoginCheckImpl {
 
 
+    @Autowired
+    private MemberService memberService;
 
     private static final String MEMBER_ID = "MEMBER_ID"; // 회원 ID를 나타내는 상수
     private static final String CREW_CHECK = "CREW_CHECK"; // 크루 체크를 나타내는 상수
@@ -25,6 +31,9 @@ public class LoginCheckImpl {
         synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
         log.info("loginInfo[0] {}, [1] {}, [2] {}", loginInfo[0], loginInfo[1], loginInfo[2] );
 
+        MemberDTO memberDTO = new MemberDTO();
+        MemberDTO data = memberService.selectOneSearchMyCrew(memberDTO);
+
         if (loginInfo[0] == null) { // 로그인 정보가 없으면
             log.error("로그인 정보 없음");
             request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
@@ -32,8 +41,9 @@ public class LoginCheckImpl {
             request.setAttribute("path", "login.do");
             return "views/info";
         }
-//        else if(loginInfo[1] == null){ // 가입한 크루가 없으면
-        else if(loginInfo[1] == null){ // 가입한 크루가 없으면
+        //crew_num == null || crew_num <= 0
+        // || data.getMember_crew_num() != crew_num ||data == null
+        else if(loginInfo[1] == null|| data ==null){ // 가입한 크루가 없으면
             log.error("가입한 크루 없음");
             log.error("loginInfo[1] {}, loginInfo[2] {}", loginInfo[1], loginInfo[2]);
             request.setAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
@@ -41,14 +51,6 @@ public class LoginCheckImpl {
             request.setAttribute("path", "crewList.do");
             return "views/info";
         }
-//        if(!loginInfo[2].equals("T")){
-//            log.error("관리자 아님");
-//            request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
-//            request.setAttribute("msg", "메인 페이지로 이동합니다.");
-//            request.setAttribute("path", "main.do");
-//            return "views/info";
-//
-//        }
 
 
 
@@ -98,24 +100,6 @@ public class LoginCheckImpl {
         }
     }
 
-//    // 세션과 로그인 정보를 동기화하는 메서드
-//    private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
-//        // 세션의 MEMBER_ID가 null이고 배열의 첫 번째 요소가 null이 아닌 경우
-//        if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
-//            session.setAttribute(MEMBER_ID, loginInfo[0]);
-//        }
-//
-//        // 세션의 CREW_CHECK가 null이고 배열의 두 번째 요소가 null이 아닌 경우
-//        if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
-//            session.setAttribute(CREW_CHECK, Integer.parseInt(loginInfo[1]));
-//        }
-//
-//        // 세션의 ROLE_CHECK가 null이고 배열의 세 번째 요소가 null이 아닌 경우
-//        if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
-//            session.setAttribute(ROLE_CHECK, loginInfo[2]);
-//        }
-//
-//    }
 // 세션과 로그인 정보를 동기화하는 메서드
 private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
     log.info("세션과 로그인 정보 동기화");

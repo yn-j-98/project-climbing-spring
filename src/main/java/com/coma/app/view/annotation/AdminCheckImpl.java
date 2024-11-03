@@ -13,9 +13,9 @@ public class AdminCheckImpl {
 
     // 현재 요청과 응답, 세션 객체를 이용하여 관리자 권한을 검사하는 메서드
     public String checkAdmin(HttpServletRequest request, HttpSession session) {
-        String[] loginInfo = getLoginInformation(request, session); // 로그인 정보를 가져옴
+        String[] loginInfo = getLoginInformation(session); // 로그인 정보를 가져옴
 
-        if (loginInfo[2] == null || !loginInfo[2].equals("T")) { // 관리자 권한이 아닌 경우
+        if (!loginInfo[2].equals("T")) { // 관리자 권한이 아닌 경우
             log.error("관리자 아님");
             request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
             request.setAttribute("msg", "메인 페이지로 이동합니다.");
@@ -27,7 +27,7 @@ public class AdminCheckImpl {
     }
 
     // 요청과 세션 객체에서 로그인 정보를 가져오는 메서드
-    private String[] getLoginInformation(HttpServletRequest request, HttpSession session) {
+    private String[] getLoginInformation(HttpSession session) {
         String[] loginInfo = new String[3]; // 로그인 정보 배열 생성
         fillLoginInfoFromSession(session, loginInfo); // 세션에서 로그인 정보를 가져와 배열에 저장
         return loginInfo; // 로그인 정보 배열 반환
