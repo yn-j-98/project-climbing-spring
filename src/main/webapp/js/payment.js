@@ -111,15 +111,13 @@ function requestPay() {
                         // 결제 취소
                         location.href = "main.do"
                     }
-                }).fail(function (error) {
-                    console.error('AJAX 요청 오류:', error);
-                    console.error('에러 상태 코드:', error.status);
-                    console.error('에러 응답 텍스트:', error.responseText);
+                }).fail(function (ajaxError) {
+                    console.error('AJAX 요청 오류:', ajaxError);
+                    console.error('에러 상태 코드:', ajaxError.status);
+                    console.error('에러 응답 텍스트:', ajaxError.responseText);
                 });
             } else {
-                console.error('error', error);
-                console.error('에러 상태 코드:', error.status);
-                console.error('에러 응답 텍스트:', error.responseText);
+                console.error('결제 실패:', rsp.error_msg);
             }
         });
 };
