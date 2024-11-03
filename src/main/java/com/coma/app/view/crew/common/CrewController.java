@@ -33,7 +33,6 @@ public class CrewController {
     private MemberService memberService;
 
 
-    @LoginCheck
     @GetMapping("/crewList.do")
     public String crewList(Model model, CrewDTO crewDTO) {
         //페이지 네이션
@@ -66,7 +65,6 @@ public class CrewController {
         return "views/crewList";
     }
 
-    @LoginCheck
     @GetMapping("/crewInfo.do")
     public String crewInfo(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO) {
         /*
