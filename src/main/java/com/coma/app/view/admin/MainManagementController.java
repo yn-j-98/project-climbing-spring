@@ -11,6 +11,7 @@ import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.biz.reservation.ReservationService;
+import com.coma.app.view.annotation.AdminCheck;
 import com.coma.app.view.annotation.LoginCheck;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +45,7 @@ public class MainManagementController{
     private ObjectMapper objectMapper;
 
     // 관리자 메인
+    @AdminCheck
     @LoginCheck
     @GetMapping("/mainManagement.do")
     public String mainManagement(Model model, MemberDTO memberDTO,

@@ -7,12 +7,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 
@@ -34,16 +32,15 @@ public class LoginAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         // 로그인하지 않은 사용자 == 인증 정보가 없는 사용자
         // 를 로그인페이지로 보내기 위해 가져옴
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+        //HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
         // 로그인 여부를 확인하기 위해 가져옴(로그인 O == 세션 조회 O)
         HttpSession session = request.getSession();
 
             // 로그인 체크 로직 실행
-            String result = loginCheckImpl.checkLogin(request, response, session);
+            String result = loginCheckImpl.checkLogin(request,session);
 
             if (result != null) {
-                // 로그인 정보가 없어 리다이렉트가 필요한 경우
-                log.info("Redirect to login due to missing login information.");
+                log.info("result != null");
                 return result;
             }
 

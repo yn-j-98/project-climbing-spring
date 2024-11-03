@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
-import com.coma.app.view.annotation.LoginCheck;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,6 +61,12 @@ public class LoginController {
                 model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
                 model.addAttribute("path", "login.do");
             }
+
+        }
+        else {
+            model.addAttribute("title", "이미 로그인 되어 있습니다.");
+            model.addAttribute("msg", "메인 페이지로 이동합니다.");
+            model.addAttribute("path", "main.do");
         }
 
 
@@ -95,9 +100,17 @@ public class LoginController {
             member_crew_cookie.setMaxAge(60 * 60 * 24 * 7);
             member_role_cookie.setMaxAge(60 * 60 * 24 * 7);
 
+            member_id_cookie.setPath("/");
+            member_crew_cookie.setPath("/");
+            member_role_cookie.setPath("/");
+
             response.addCookie(member_id_cookie);
             response.addCookie(member_crew_cookie);
             response.addCookie(member_role_cookie);
+
+            log.info(" 쿠키 설정: MEMBER_ID={}", memberDTO.getMember_id());
+            log.info(" 쿠키 설정: CREW_CHECK={}", memberDTO.getMember_crew_num());
+            log.info(" 쿠키 설정: MEMBER_ROLE={}", memberDTO.getMember_role());
         }
     }
 }
