@@ -78,7 +78,7 @@ public class BoardController {
             model.addAttribute("title", "성공!");
 
             model.addAttribute("msg", "글 작성이 완료되었습니다");
-            model.addAttribute("path", "Community.do");
+            model.addAttribute("path", "community.do");
             model.addAttribute("FOLDER_NUM", null);
 
             boolean flag = this.boardService.insert(boardDTO);//글 insert
