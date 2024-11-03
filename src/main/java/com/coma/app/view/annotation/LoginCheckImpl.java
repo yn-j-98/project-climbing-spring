@@ -19,7 +19,7 @@ public class LoginCheckImpl {
 
     private static final String MEMBER_ID = "MEMBER_ID"; // 회원 ID를 나타내는 상수
     private static final String CREW_CHECK = "CREW_CHECK"; // 크루 체크를 나타내는 상수
-    private static final String ROLE_CHECK = "ROLE_CHECK"; // 회원인지 관리자인지를 나타내는 상수
+    private static final String MEMBER_ROLE = "MEMBER_ROLE"; // 회원인지 관리자인지를 나타내는 상수
 
     // 현재 요청과 응답, 세션 객체를 이용하여 로그인 정보를 검사하는 메서드
     public String checkLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -27,8 +27,10 @@ public class LoginCheckImpl {
         MemberDTO memberDTO = new MemberDTO();
         String[] loginInfo = getLoginInformation(request, session); // 로그인 정보를 가져옴
         synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
+        log.info("loginInfo[0] {}, [1] {}, [2] {}", loginInfo[0], loginInfo[1], loginInfo[2] );
 
         if (loginInfo[0] == null) { // 로그인 정보가 없으면
+            log.error("로그인 정보 없음");
             request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
             request.setAttribute("msg", "로그인 페이지로 이동합니다.");
             request.setAttribute("path", "login.do");
@@ -36,12 +38,14 @@ public class LoginCheckImpl {
         }
 //        else if(loginInfo[1] == null){ // 가입한 크루가 없으면
         else if(loginInfo[1] == null || memberDTO.getMember_crew_join_date()==null && !loginInfo[2].equals("T")){ // 가입한 크루가 없으면
+            log.error("가입한 크루 없음");
             request.setAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
             request.setAttribute("msg", "크루 가입 페이지로 이동합니다.");
             request.setAttribute("path", "crewList.do");
             return "views/info";
         }
         if(!loginInfo[2].equals("T")){
+            log.error("관리자 아님");
             request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
             request.setAttribute("msg", "메인 페이지로 이동합니다.");
             request.setAttribute("path", "main.do");
@@ -75,11 +79,12 @@ public class LoginCheckImpl {
         Cookie[] cookies = request.getCookies(); // 요청에서 쿠키 배열을 가져옴
         if (cookies != null) { // 쿠키가 null이 아니면
             for (Cookie cookie : cookies) { // 모든 쿠키를 순회
+                log.debug("fillLoginInfoFromCookies 쿠키 이름: {}, 쿠키 값: {}", cookie.getName(), cookie.getValue());
                 if (MEMBER_ID.equals(cookie.getName())) { // 쿠키 이름이 MEMBER_ID인 경우
                     loginInfo[0] = cookie.getValue(); // 배열의 첫 번째 요소에 쿠키 값을 저장
                 } else if (CREW_CHECK.equals(cookie.getName())) { // 쿠키 이름이 CREW_CHECK인 경우
                     loginInfo[1] = cookie.getValue(); // 배열의 두 번째 요소에 쿠키 값을 저장
-                } else if (ROLE_CHECK.equals(cookie.getName())) { // 쿠키 이름이 ROLE_CHECK인 경우
+                } else if (MEMBER_ROLE.equals(cookie.getName())) { // 쿠키 이름이 ROLE_CHECK인 경우
                     loginInfo[2] = cookie.getValue(); // 배열의 세 번째 요소에 쿠키 값을 저장
                 }
             }
@@ -98,7 +103,7 @@ public class LoginCheckImpl {
             }
         }
         if (loginInfo[2] == null) { // 배열의 세 번째 요소가 null인 경우
-            loginInfo[2] = (String) session.getAttribute(ROLE_CHECK); // 세션에서 ROLE_CHECK를 가져와 저장
+            loginInfo[2] = (String) session.getAttribute(MEMBER_ROLE); // 세션에서 ROLE_CHECK를 가져와 저장
         }
     }
 
@@ -122,14 +127,18 @@ public class LoginCheckImpl {
 //    }
 // 세션과 로그인 정보를 동기화하는 메서드
 private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
+    log.info("세션과 로그인 정보 동기화");
     if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
+        log.info("session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null");
         session.setAttribute(MEMBER_ID, loginInfo[0]);
     }
     if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
+        log.info("session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null");
         session.setAttribute(CREW_CHECK, Integer.parseInt(loginInfo[1]));
     }
-    if (session.getAttribute(ROLE_CHECK) == null && loginInfo[2] != null) {
-        session.setAttribute(ROLE_CHECK, loginInfo[2]);
+    if (session.getAttribute(MEMBER_ROLE) == null && loginInfo[2] != null) {
+        log.info("session.getAttribute(MEMBER_ROLE) == null && loginInfo[2] != null");
+        session.setAttribute(MEMBER_ROLE, loginInfo[2]);
     }
 }
 
@@ -145,6 +154,7 @@ private void synchronizeLoginInformation(String[] loginInfo, HttpSession session
     private static void invalidateSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // 세션이 존재하면 반환하고, 그렇지 않으면 null 반환
         if (session != null) { // 세션이 null이 아니면
+            log.info("세션 무효화 완료");
             session.invalidate(); // 세션 무효화
         }
     }
@@ -152,13 +162,16 @@ private void synchronizeLoginInformation(String[] loginInfo, HttpSession session
     // 쿠키를 무효화하는 메서드
     private static void clearCookies(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies(); // 요청에서 쿠키 배열을 가져옴
+
         if (cookies != null) { // 쿠키가 null이 아니면
             for (Cookie cookie : cookies) { // 모든 쿠키를 순회
+                log.info("쿠키 이름: {}, 쿠키 값: {}", cookie.getName(), cookie.getValue());
                 // 쿠키 이름이 MEMBER_ID 또는 CREW_CHECK 또는 ROLE_CHECK 인 경우
-                if (MEMBER_ID.equals(cookie.getName()) || CREW_CHECK.equals(cookie.getName()) || ROLE_CHECK.equals(cookie.getName())) {
+                if (MEMBER_ID.equals(cookie.getName()) || CREW_CHECK.equals(cookie.getName()) || MEMBER_ROLE.equals(cookie.getName())) {
                     cookie.setMaxAge(0); // 쿠키를 무효화 (만료 시간 0 설정)
                     cookie.setPath("/"); // 전체 경로에 적용
                     response.addCookie(cookie); // 응답에 추가
+                    log.info("쿠키 무효화: {}", cookie.getName());
                 }
             }
         }

@@ -83,7 +83,7 @@
 					<div class="row">
 						<div class="col">
 							<span>자동 로그인</span>
-							<input type="checkbox" class="ms-2" name="auto_login" value="checkLogin">
+							<input type="checkbox" class="ms-2" name="VIEW_AUTO_LOGIN" value="checkLogin">
 						</div>
 					</div>
 					<div class="row pt-3">

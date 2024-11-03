@@ -42,8 +42,7 @@ public class LoginAspect {
             String result = loginCheckImpl.checkLogin(request, response, session);
 
             if (result != null) {
-                // 로그인 정보가 없어 리다이렉트가 필요한 경우
-                log.info("Redirect to login due to missing login information.");
+                log.info("result != null");
                 return result;
             }
 
