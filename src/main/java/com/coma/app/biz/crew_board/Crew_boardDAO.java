@@ -11,15 +11,14 @@ import java.util.List;
 
 @Repository
 public class Crew_boardDAO {
-	// 특정 크루 채팅창 전체 출력
+	// 크루커뮤니티 채팅 최신 10개 출력
 	private final String ALL_CREW_BOARD = "SELECT CB.CREW_BOARD_NUM, CB.CREW_BOARD_WRITER_ID, " +
-			"CB.CREW_BOARD_CONTENT, C.CREW_NUM, " +
+			"CB.CREW_BOARD_CONTENT," +
 			"M.MEMBER_PROFILE, M.MEMBER_NAME " +
 			"FROM CREW_BOARD CB " +
 			"JOIN MEMBER M ON M.MEMBER_ID = CB.CREW_BOARD_WRITER_ID " +
-			"JOIN CREW C ON M.MEMBER_CREW_NUM = C.CREW_NUM " +
-			"WHERE CB.CREW_NUM = ? " +
-			"ORDER BY CB.CREW_BOARD_NUM DESC";
+			"ORDER BY CB.CREW_BOARD_NUM DESC"+
+			" LIMIT 10";
 
 	// 크루 게시판 글 작성
 	private final String INSERT = "INSERT INTO CREW_BOARD(CREW_BOARD_WRITER_ID, CREW_BOARD_CONTENT) " +
@@ -64,7 +63,7 @@ public class Crew_boardDAO {
 	public List<Crew_boardDTO> selectAll(Crew_boardDTO crewBoardDTO) {
 		System.out.println("com.coma.app.biz.crew_board.Crew_boardDAO.selectAll 시작");
 		List<Crew_boardDTO> result = null;
-		Object[] args = {crewBoardDTO.getCrew_num()};
+		Object[] args = {};
 		try {
 			result = jdbcTemplate.query(ALL_CREW_BOARD, args, new CrewBoardRowMapper());
 		} catch (Exception e) {
@@ -85,7 +84,7 @@ class CrewBoardRowMapper implements RowMapper<Crew_boardDTO> {
 		try {
 			crewBoardDTO.setCrew_board_num(resultSet.getInt("CREW_BOARD_NUM"));
 		} catch (Exception e) {
-			System.err.println("Board_num = 0");
+			System.err.println("CREW_BOARD_NUM = 0");
 			crewBoardDTO.setCrew_board_num(0);
 		}
 		try {
