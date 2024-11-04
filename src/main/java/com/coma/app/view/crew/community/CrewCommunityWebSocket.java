@@ -42,16 +42,21 @@ public class CrewCommunityWebSocket {
         for (Session user : chat_room) {
             log.info("chat_room의 사용자아이디 = [{}]", user.getId());
         }
-
-        List<Crew_boardDTO> datas = crew_boardService.selectAll(new Crew_boardDTO());
-        if (!(datas.isEmpty() || datas == null)) {
-            for (int i = datas.size() - 1; i >= 0; i--) {
-                broadcastMessage(createJsonMessage(datas.get(i).getCrew_board_writer_id(),
-                        datas.get(i).getCrew_board_content(),
-                        datas.get(i).getCrew_board_writer_profile(),
-                        datas.get(i).getCrew_board_writer_name()));
-                log.info("selectAll 결과 data = [{}]", datas.get(i));
+        try {
+            List<Crew_boardDTO> datas = crew_boardService.selectAllNEW10(new Crew_boardDTO());
+            if (!(datas.isEmpty() || datas == null)) {
+                for (int i = datas.size() - 1; i >= 0; i--) {
+                    broadcastMessage(createJsonMessage(datas.get(i).getCrew_board_writer_id(),
+                            datas.get(i).getCrew_board_content(),
+                            datas.get(i).getCrew_board_writer_profile(),
+                            datas.get(i).getCrew_board_writer_name()));
+                    log.info("selectAll 결과 data = [{}]", datas.get(i));
+                }
             }
+        } catch (Exception e) {
+            //어떤 예외가 발생하더라도 웹소켓 연결 유지
+            e.printStackTrace();
+            return;
         }
 
         // 모든 클라이언트에게 입장 메시지 전송
@@ -67,8 +72,10 @@ public class CrewCommunityWebSocket {
             Crew_boardDTO crew_boardDTO = objectMapper.readValue(msg, Crew_boardDTO.class);
             // 메시지를 DB에 저장
             crew_boardService.insert(crew_boardDTO);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e){
+            //어떤 예외가 발생하더라도 웹소켓 연결 유지
             e.printStackTrace();
+            return;
         }
 
         // 모든 클라이언트에게 메시지 전송
