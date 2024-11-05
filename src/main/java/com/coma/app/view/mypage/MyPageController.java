@@ -128,9 +128,8 @@ public class MyPageController {
 
 		log.info("memberDTO[{}]",memberDTO);
 		String proFile = memberDTO.getMember_profile();
-
-		if(!proFile.contains("default.png") || !proFile.contains("default.jpg")) {
-			flag = ftpService.ftpFileDelete(memberDTO.getMember_profile());
+		if(!proFile.contains("default")) {
+			flag = ftpService.ftpFileDelete(proFile);
 		}
 		log.info("deleteMember.flag[{}]", flag);
 		//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.

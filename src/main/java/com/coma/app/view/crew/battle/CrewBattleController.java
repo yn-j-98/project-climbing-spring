@@ -117,8 +117,7 @@ public class CrewBattleController {
         battleDTO.setBattle_crew_num(crew_num);
         BattleDTO my_battle = this.battleService.selectOneSearchMemberBattle(battleDTO);
         log.info("이미지 = [{}]", battleDTO.getBattle_gym_profile());
-        model.addAttribute("my_battle", battleDTO);//내크루전 정보
-
+        model.addAttribute("my_battle", my_battle);//내크루전 정보
         //전체 크루전 목록 출력 + 페이지네이션
         battleDTO.setBattle_min_num(minBoard);
         List<BattleDTO> battle_datas = this.battleService.selectAllActive(battleDTO);
