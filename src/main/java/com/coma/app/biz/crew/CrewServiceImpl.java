@@ -17,6 +17,9 @@ public class CrewServiceImpl implements CrewService{
 	}
 
 	@Override
+	public List<CrewDTO> selectAllAdmin(CrewDTO crewDTO) { return this.crewDAO.selectAllAdmin(crewDTO); }
+
+	@Override
 	public CrewDTO selectOne(CrewDTO crewDTO) {
 		return this.crewDAO.selectOne(crewDTO);
 	}

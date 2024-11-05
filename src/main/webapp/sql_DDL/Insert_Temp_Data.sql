@@ -1,55 +1,127 @@
-/*DELETE MEMBER;
 --멤버 테이블 샘플 데이터*/
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('no1fc@naver.com','남상도','1234','010-4301-7553','서울특별시',0,0,1,'2024-08-24');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma@naver.com','코마_샘플1','1234','010-0000-0000','서울특별시',4000,4000,1,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE,MEMBER_PROFILE) 
-VALUES('coma1@naver.com','코마_샘플2','1234','010-0000-0000','서울특별시',1000,14000,1,'2024-09-15','coma1@naver.com.jpg');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma2@naver.com','코마_샘플3','1234','010-0000-0000','서울특별시',500,2000,1,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE,MEMBER_PROFILE) 
-VALUES('coma3@naver.com','코마_샘플4','1234','010-0000-0000','서울특별시',4000,7000,2,'2024-09-15','coma3@naver.com.jpg');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma4@naver.com','코마_샘플5','1234','010-0000-0000','서울특별시',2000,5000,2,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma5@naver.com','코마_샘플6','1234','010-0000-0000','서울특별시',5000,6000,2,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE,MEMBER_PROFILE) 
-VALUES('coma6@naver.com','코마_샘플7','1234','010-0000-0000','서울특별시',4000,8000,3,'2024-09-15','coma6@naver.com.jpg');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma7@naver.com','코마_샘플8','1234','010-0000-0000','서울특별시',100,100,3,'2024-09-15');
+INSERT INTO MEMBER (
+    MEMBER_ID,
+    MEMBER_NAME,
+    MEMBER_PASSWORD,
+    MEMBER_PHONE,
+    MEMBER_REGISTRATION_DATE,
+    MEMBER_PROFILE,
+    MEMBER_CURRENT_POINT,
+    MEMBER_TOTAL_POINT,
+    MEMBER_CREW_NUM,
+    MEMBER_CREW_JOIN_DATE,
+    MEMBER_LOCATION,
+    MEMBER_ROLE
+) VALUES
+      ('coma@naver.com', '코마', '1234', '010-6456-5678', '2024-01-01 10:00:00', '/default.jpg', 100, 500, 7, '2024-01-01 10:00:00', '서울', 'F'),
+      ('admin@naver.com', '관리자', '1234', '010-0101-0001', '2024-01-01 09:00:00', '/default.jpg', 0, 0, 0, NULL, '서울', 'T'),
+      ('alice@example.com', '이은정', '1234', '010-1234-5678', '2024-07-01 10:00:00', '/default.jpg', 100, 500, 1, '2024-07-01 10:00:00', '서울', 'F'),
+      ('bob@example.com', '김민수', '1234', '010-2345-6789', '2024-07-10 11:00:00', '/default.jpg', 150, 600, 2, '2024-07-10 11:00:00', '서울', 'F'),
+      ('charlie@example.com', '박지훈', '1234', '010-3456-7890', '2024-08-15 12:00:00', '/default.jpg', 200, 700, 1, '2024-08-15 12:00:00', '서울', 'F'),
+      ('diana@example.com', '정유진', '1234', '010-4567-8901', '2024-09-02 13:00:00', '/default.jpg', 250, 800, 1, '2024-09-02 13:00:00', '서울', 'F'),
+      ('edward@example.com', '김태현', '1234', '010-5678-9012', '2024-09-15 14:00:00', '/default.jpg', 300, 900, 3, '2024-09-15 14:00:00', '서울', 'F'),
+      ('fiona@example.com', '최수영', '1234', '010-6789-0123', '2024-10-05 15:00:00', '/default.jpg', 350, 1000, 1, '2024-10-05 15:00:00', '서울', 'F'),
+      ('george@example.com', '강지민', '1234', '010-7890-1234', '2024-10-20 16:00:00', '/default.jpg', 400, 1100, 2, '2024-10-20 16:00:00', '서울', 'F'),
+      ('hannah@example.com', '김혜진', '1234', '010-8901-2345', '2024-11-01 17:00:00', '/default.jpg', 450, 1200, 1, '2024-11-01 17:00:00', '서울', 'F'),
+      ('ian@example.com', '이상훈', '1234', '010-9012-3456', '2024-10-30 18:00:00', '/default.jpg', 500, 1300, 1, '2024-10-30 18:00:00', '서울', 'F'),
+      ('jack@example.com', '박재형', '1234', '010-0123-4567', '2024-10-15 19:00:00', '/default.jpg', 550, 1400, 3, '2024-10-15 19:00:00', '서울', 'F'),
+      ('kim@example.com', '이소영', '1234', '010-1234-5678', '2024-09-25 20:00:00', '/default.jpg', 600, 1500, 1, '2024-09-25 20:00:00', '서울', 'F'),
+      ('liam@example.com', '유경민', '1234', '010-2345-6789', '2024-08-30 21:00:00', '/default.jpg', 650, 1600, 2, '2024-08-30 21:00:00', '서울', 'F'),
+      ('monica@example.com', '이은비', '1234', '010-3456-7890', '2024-10-12 22:00:00', '/default.jpg', 700, 1700, 1, '2024-10-12 22:00:00', '서울', 'F'),
+      ('nina@example.com', '김진아', '1234', '010-4567-8901', '2024-11-03 23:00:00', '/default.jpg', 750, 1800, 1, '2024-11-03 23:00:00', '서울', 'F'),
+      ('oscar@example.com', '박상훈', '1234', '010-5678-9012', '2024-07-20 09:00:00', '/default.jpg', 800, 1900, 3, '2024-07-20 09:00:00', '서울', 'F'),
+      ('peter@example.com', '최지원', '1234', '010-6789-0123', '2024-10-25 10:00:00', '/default.jpg', 850, 2000, 1, '2024-10-25 10:00:00', '서울', 'F'),
+      ('quinn@example.com', '홍유진', '1234', '010-7890-1234', '2024-09-05 11:00:00', '/default.jpg', 900, 2100, 2, '2024-09-05 11:00:00', '서울', 'F'),
+      ('ross@example.com', '이상호', '1234', '010-8901-2345', '2024-08-18 12:00:00', '/default.jpg', 950, 2200, 1, '2024-08-18 12:00:00', '서울', 'F'),
+      ('steve@example.com', '최강욱', '1234', '010-9012-3456', '2024-07-30 13:00:00', '/default.jpg', 1000, 2300, 1, '2024-07-30 13:00:00', '서울', 'F'),
+      ('tony@example.com', '김영수', '1234', '010-0123-4567', '2024-08-22 14:00:00', '/default.jpg', 1050, 2400, 3, '2024-08-22 14:00:00', '서울', 'F'),
+      ('uma@example.com', '정다은', '1234', '010-1234-5678', '2024-09-10 15:00:00', '/default.jpg', 1100, 2500, 1, '2024-09-10 15:00:00', '서울', 'F'),
+      ('victor@example.com', '박철호', '1234', '010-2345-6789', '2024-10-02 16:00:00', '/default.jpg', 1150, 2600, 2, '2024-10-02 16:00:00', '서울', 'F'),
+      ('winnie@example.com', '배유나', '1234', '010-3456-7890', '2024-11-03 17:00:00', '/default.jpg', 1200, 2700, 1, '2024-11-03 17:00:00', '서울', 'F'),
+      ('xena@example.com', '유진서', '1234', '010-4567-8901', '2024-07-05 18:00:00', '/default.jpg', 1250, 2800, 1, '2024-07-05 18:00:00', '서울', 'F'),
+      ('yoda@example.com', '이창호', '1234', '010-5678-9012', '2024-11-02 19:00:00', '/default.jpg', 1300, 2900, 3, '2024-11-02 19:00:00', '서울', 'F'),
+      ('zorro@example.com', '김준호', '1234', '010-6789-0123', '2024-10-30 20:00:00', '/default.jpg', 1350, 3000, 1, '2024-10-30 20:00:00', '서울', 'F'),
+      ('albus@example.com', '박상민', '1234', '010-7890-1234', '2024-09-28 21:00:00', '/default.jpg', 1400, 3100, 2, '2024-09-28 21:00:00', '서울', 'F'),
+      ('bella@example.com', '김소정', '1234', '010-8901-2345', '2024-08-28 22:00:00', '/default.jpg', 1450, 3200, 1, '2024-08-28 22:00:00', '서울', 'F');
 
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma8@naver.com','코마_샘플9','1234','010-0000-0000','서울특별시',100,100,4,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma9@naver.com','코마_샘플10','1234','010-0000-0000','서울특별시',0,0,4,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma10@naver.com','코마_샘플11','1234','010-0000-0000','서울특별시',0,0,5,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE) 
-VALUES('coma11@naver.com','코마_샘플12','1234','010-0000-0000','서울특별시',0,0,6,'2024-09-15');
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE)
-VALUES('yena0925@naver.com','예나짱','1234','010-4278-0927','서울특별시',0,0,6,'2024-09-15');
 
-INSERT INTO MEMBER(MEMBER_ID,MEMBER_NAME,MEMBER_PASSWORD,MEMBER_PHONE,MEMBER_LOCATION,MEMBER_CURRENT_POINT,MEMBER_TOTAL_POINT,MEMBER_CREW_NUM,MEMBER_CREW_JOIN_DATE, MEMBER_ROLE)
-VALUES('admin@naver.com','관리자','1234','010-4278-0927','서울특별시',0,0,1,'2024-08-24', 'T');
-
-/*
---select * from MEMBER
-
-DELETE CREW;
 --크루 테이블 샘플 데이터*/
-INSERT INTO CREW(CREW_NUM, CREW_NAME, CREW_MAX_MEMBER_SIZE, CREW_LEADER, CREW_PROFILE) 
-VALUES (1,'샘플크루1', 10, 'coma@naver.com', 'sample.jpg');
-INSERT INTO CREW(CREW_NUM, CREW_NAME, CREW_MAX_MEMBER_SIZE, CREW_LEADER, CREW_PROFILE) 
-VALUES (2,'샘플크루2', 10, 'coma3@naver.com', 'sample2.jpg');
-INSERT INTO CREW(CREW_NUM, CREW_NAME, CREW_MAX_MEMBER_SIZE, CREW_LEADER, CREW_PROFILE) 
-VALUES (3,'샘플크루3', 20, 'coma6@naver.com', 'sample3.jpg');
-INSERT INTO CREW(CREW_NUM, CREW_NAME, CREW_MAX_MEMBER_SIZE, CREW_LEADER, CREW_PROFILE) 
-VALUES (4,'샘플크루4', 10, 'coma8@naver.com', 'sample.jpg');
-INSERT INTO CREW(CREW_NUM, CREW_NAME, CREW_MAX_MEMBER_SIZE, CREW_LEADER, CREW_PROFILE) 
-VALUES (5,'샘플크루5', 10, 'coma10@naver.com', 'sample.jpg');
-/*
-DELETE GRADE;
+INSERT INTO CREW (
+    CREW_NAME,
+    CREW_DESCRIPTION,
+    CREW_MAX_MEMBER_SIZE,
+    CREW_LEADER,
+    CREW_BATTLE_STATUS,
+    CREW_PROFILE
+) VALUES
+('클라이밍 워리어', '자연의 벽을 정복하고 새로운 정상에 도전하는 클라이머들의 모임.', 20, 'alice@example.com', 'F', '/default.jpg'),
+('암벽 수호자', '안전과 협력을 최우선으로 하며 함께 암벽을 오르는 팀.', 20, 'bob@example.com', 'F', '/default.jpg'),
+('탐험가 클라이머', '미지의 루트를 개척하며 새로운 경로를 발견하는 암벽가들.', 20, 'charlie@example.com', 'F', '/default.jpg'),
+('마운틴 마스터', '클라이밍 기술의 달인으로, 도전을 두려워하지 않는 리더들.', 20, 'diana@example.com', 'F', '/default.jpg'),
+('정상 정복자', '각종 산악 활동을 즐기며 정상 정복을 목표로 하는 팀.', 20, 'edward@example.com', 'F', '/default.jpg'),
+('안전우선', '클라이밍 중의 부상 예방과 치유를 전문으로 하는 팀.', 20, 'fiona@example.com', 'F', '/default.jpg'),
+('코마', '코드 마스터의 길, 코드 마운틴을 정복', 20, 'coma@naver.com', 'F', '/coma.jpg');
+
+
+--암벽장 테이블 샘플 데이터*/
+
+INSERT INTO GYM (GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION) VALUES
+('볼더하이웨이클라이밍짐', '/gym_img/default.jpg', '초보자부터 전문가까지 즐길 수 있는 다양한 난이도의 암벽 코스를 제공합니다.', '서울 강남구 논현로86길 20'),
+('더클라임 클라이밍 짐앤샵 강남점', '/gym_img/default.jpg', '실내에서 안전하게 암벽 등반을 체험할 수 있는 최고의 공간입니다.', '서울 강남구 테헤란로8길 21'),
+('클라이밍파크 강남점', '/gym_img/default.jpg', '암벽 등반을 통한 체력 향상과 스트레스 해소가 가능한 곳입니다.', '서울 강남구 강남대로 364'),
+('손상원 클라이밍짐 강남역점', '/gym_img/default.jpg', '다양한 코스와 세심한 지도 아래 체험할 수 있는 암벽장입니다.', '서울 서초구 강남대로 331'),
+('무중력 클라이밍', '/gym_img/default.jpg', '실내 암벽에서의 도전 정신을 키울 수 있는 독특한 경험을 제공합니다.', '서울 강남구 논현로 563'),
+('클라이밍파크 신논현점', '/gym_img/default.jpg', '초보자부터 숙련자까지 자신의 수준에 맞는 코스를 제공하는 암벽장입니다.', '서울 강남구 강남대로 468'),
+('돌나무클라이밍', '/gym_img/default.jpg', '편안한 분위기에서 전문가의 지도 아래 체험할 수 있는 암벽장입니다.', '서울 강남구 강남대로118길'),
+('더클라임 논현점', '/gym_img/default.jpg', '다양한 난이도의 암벽을 경험하고 도전할 수 있는 멀티 기능의 공간입니다.', '서울 서초구 강남대로 519'),
+('역삼 클라이밍 랩', '/gym_img/default.jpg', '실내 암벽과 트릭을 통해 다양한 장애물을 극복할 수 있는 암벽장입니다.', '서울 강남구 테헤란로30길 49'),
+('클라이밍파크 한티점', '/gym_img/default.jpg', '기초부터 고급까지 체계적으로 암벽 등반을 배울 수 있는 곳입니다.', '서울 강남구 선릉로 324');
+
+
+--예약 테이블 샘플 데이터*/
+INSERT INTO RESERVATION (RESERVATION_NUM, RESERVATION_DATE, RESERVATION_GYM_NUM, RESERVATION_MEMBER_ID, RESERVATION_PRICE) VALUES
+('R0001', '2024-08-03 10:15:00', 3, 'alice@example.com', 17000),
+('R0002', '2024-08-15 12:30:00', 5, 'george@example.com', 18000),
+('R0003', '2024-08-20 14:45:00', 8, 'ian@example.com', 16000),
+('R0004', '2024-08-25 17:00:00', 2, 'kim@example.com', 19000),
+('R0005', '2024-09-01 09:00:00', 10, 'hannah@example.com', 15000),
+('R0006', '2024-09-03 11:30:00', 4, 'fiona@example.com', 17000),
+('R0007', '2024-09-08 13:00:00', 6, 'edward@example.com', 16000),
+('R0008', '2024-09-12 10:30:00', 7, 'charlie@example.com', 18000),
+('R0009', '2024-09-18 15:15:00', 1, 'bob@example.com', 20000),
+('R0010', '2024-09-25 18:00:00', 9, 'jack@example.com', 19000),
+('R0011', '2024-09-30 20:30:00', 3, 'george@example.com', 17000),
+('R0012', '2024-10-02 14:00:00', 5, 'ian@example.com', 16000),
+('R0013', '2024-10-05 11:45:00', 2, 'alice@example.com', 19000),
+('R0014', '2024-10-08 12:30:00', 4, 'fiona@example.com', 18000),
+('R0015', '2024-10-12 09:00:00', 6, 'kim@example.com', 17000),
+('R0016', '2024-10-15 16:15:00', 7, 'bob@example.com', 16000),
+('R0017', '2024-10-18 14:30:00', 8, 'charlie@example.com', 15000),
+('R0018', '2024-10-22 10:00:00', 9, 'hannah@example.com', 19000),
+('R0019', '2024-10-25 13:00:00', 10, 'jack@example.com', 20000),
+('R0020', '2024-10-28 19:45:00', 3, 'bob@example.com', 18000),
+('R0021', '2024-11-01 11:00:00', 5, 'fiona@example.com', 17000),
+('R0022', '2024-11-04 17:30:00', 2, 'george@example.com', 16000),
+('R0023', '2024-11-04 15:00:00', 1, 'alice@example.com', 15000),
+('R0024', '2024-08-10 09:15:00', 4, 'kim@example.com', 19000),
+('R0025', '2024-08-17 13:45:00', 7, 'hannah@example.com', 17000),
+('R0026', '2024-08-22 18:00:00', 6, 'jack@example.com', 16000),
+('R0027', '2024-08-28 11:30:00', 9, 'bob@example.com', 18000),
+('R0028', '2024-09-05 14:00:00', 10, 'george@example.com', 17000),
+('R0029', '2024-09-09 16:30:00', 8, 'ian@example.com', 16000),
+('R0030', '2024-09-14 10:45:00', 3, 'alice@example.com', 15000),
+('R0031', '2024-09-20 12:30:00', 5, 'charlie@example.com', 19000),
+('R0032', '2024-09-23 17:15:00', 4, 'kim@example.com', 20000),
+('R0033', '2024-09-27 19:00:00', 2, 'fiona@example.com', 18000),
+('R0034', '2024-10-01 11:00:00', 6, 'jack@example.com', 16000),
+('R0035', '2024-10-04 10:00:00', 1, 'bob@example.com', 17000),
+('R0036', '2024-10-07 13:00:00', 9, 'hannah@example.com', 15000),
+('R0037', '2024-10-10 15:30:00', 10, 'charlie@example.com', 18000),
+('R0038', '2024-10-14 19:00:00', 7, 'george@example.com', 19000),
+('R0039', '2024-10-18 12:15:00', 5, 'alice@example.com', 17000),
+('R0040', '2024-10-21 11:30:00', 4, 'bob@example.com', 16000);
+
+
 --등급 테이블 샘플 데이터*/
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
 VALUES('bedge1.png','5A',0,1000);
@@ -75,8 +147,8 @@ DELETE BATTLE;
 크루전 테이블 샘플 데이터*/
 INSERT INTO BATTLE(BATTLE_GYM_NUM,BATTLE_REGISTRATION_DATE,BATTLE_GAME_DATE)
 VALUES (1,'2024-09-07','2024-09-21');
-INSERT INTO BATTLE(BATTLE_GYM_NUM,BATTLE_REGISTRATION_DATE)
-VALUES (2,'2024-09-07');
+INSERT INTO BATTLE(BATTLE_GYM_NUM,BATTLE_REGISTRATION_DATE,BATTLE_GAME_DATE)
+VALUES (2,'2024-11-04','2024-11-16');
 INSERT INTO BATTLE(BATTLE_GYM_NUM,BATTLE_REGISTRATION_DATE,BATTLE_GAME_DATE)
 VALUES (3,'2024-09-07','2024-09-27');
 INSERT INTO BATTLE(BATTLE_GYM_NUM,BATTLE_REGISTRATION_DATE,BATTLE_GAME_DATE)
@@ -96,18 +168,18 @@ INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM)
 VALUES (4,3);
 
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM,BATTLE_RECORD_IS_WINNER,BATTLE_RECORD_MVP_ID)
-VALUES (1,1,'F','coma1@naver.com');
+VALUES (1,1,'F','alice@example.com');
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM,BATTLE_RECORD_IS_WINNER,BATTLE_RECORD_MVP_ID)
-VALUES (1,2,'F','coma1@naver.com');
+VALUES (1,2,'F','alice@example.com');
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM,BATTLE_RECORD_IS_WINNER,BATTLE_RECORD_MVP_ID)
-VALUES (1,3,'T','coma1@naver.com');
+VALUES (1,3,'T','alice@example.com');
 
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM,BATTLE_RECORD_IS_WINNER,BATTLE_RECORD_MVP_ID)
-VALUES (5,1,'T','coma5@naver.com');
+VALUES (5,1,'T','alice@example.com');
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM,BATTLE_RECORD_IS_WINNER,BATTLE_RECORD_MVP_ID)
-VALUES (5,2,'F','coma5@naver.com');
+VALUES (5,2,'F','alice@example.com');
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM,BATTLE_RECORD_IS_WINNER,BATTLE_RECORD_MVP_ID)
-VALUES (5,3,'F','coma5@naver.com');
+VALUES (5,3,'F','alice@example.com');
 
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM)
 VALUES (3,4);
@@ -117,111 +189,87 @@ VALUES (6,5);
 /*
 DELETE BOARD;
 --BOARD 샘플 데이터*/
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (15, '클라이밍 장비 추천', '등반 장비를 추천합니다.', 0, '서울특별시', 'coma@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (16, '클라이밍 장비 추천', '등반 기술을 연습하는 법을 알아보세요.', 0, '전라남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (17, '암벽 등반 초보자 가이드', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '광주광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (18, '클라이밍 장비 추천', '초보자를 위한 가이드를 제공합니다.', 0, '대전광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (19, '등반 기술 배우기', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '서울특별시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (20, '암벽 등반 초보자 가이드', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (21, '자연 속 암벽 등반', '실내 클라이밍 체험 후기를 공유합니다.', 0, '광주광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (22, '등반 기술 배우기', '최고의 등반 기술을 배워보세요.', 0, '충청남도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (23, '등반 기술 배우기', '최고의 등반 기술을 배워보세요.', 0, '전라남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (24, '암벽 등반 대회 준비하기', '등반 장비를 추천합니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (25, '등반 파트너 찾기', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (26, '암벽 등반 초보자 가이드', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '인천광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (27, '클라이밍 장비 추천', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (28, '등반 파트너 찾기', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '인천광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (29, '암벽 등반 초보자 가이드', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '세종특별자치도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (30, '실내 클라이밍 체험기', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '전라남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (31, '암벽 등반 초보자 가이드', '등반 기술을 연습하는 법을 알아보세요.', 0, '충청북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (32, '등반 파트너 찾기', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '경상북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (33, '클라이밍의 이점', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '충청남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (34, '클라이밍 장비 추천', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '서울특별시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (35, '암벽 등반 초보자 가이드', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '전라북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (36, '암벽 등반 대회 준비하기', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '충청남도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (37, '클라이밍의 이점', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '경상남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (38, '자연 속 암벽 등반', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '충청북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (39, '클라이밍의 이점', '초보자를 위한 가이드를 제공합니다.', 0, '경상북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (40, '실내 클라이밍 체험기', '초보자를 위한 가이드를 제공합니다.', 0, '충청남도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (41, '클라이밍의 이점', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '경상남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (42, '암벽 등반 초보자 가이드', '초보자를 위한 가이드를 제공합니다.', 0, '경상북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (43, '암벽 등반 팁', '최고의 등반 기술을 배워보세요.', 0, '경상북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (44, '클라이밍 장비 추천', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '경기도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (45, '암벽 등반 초보자 가이드', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '서울특별시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (46, '암벽 등반 초보자 가이드', '실내 클라이밍 체험 후기를 공유합니다.', 0, '부산광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (47, '클라이밍 장비 추천', '등반 기술을 연습하는 법을 알아보세요.', 0, '대구광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (48, '실내 클라이밍 체험기', '등반 기술을 연습하는 법을 알아보세요.', 0, '세종특별자치도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (49, '클라이밍의 이점', '등반 기술을 연습하는 법을 알아보세요.', 0, '강원도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (50, '암벽 등반 팁', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '대전광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (51, '암벽 등반 초보자 가이드', '초보자를 위한 가이드를 제공합니다.', 0, '서울특별시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (52, '실내 클라이밍 체험기', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '충청북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (53, '암벽 등반 대회 준비하기', '등반 장비를 추천합니다.', 0, '부산광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (54, '등반 기술 배우기', '등반 장비를 추천합니다.', 0, '경기도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (55, '최고의 클라이밍 루트', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '전라남도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (56, '등반 파트너 찾기', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '충청남도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (57, '클라이밍 장비 추천', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '대전광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (58, '등반 기술 배우기', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '경상남도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (59, '등반 기술 배우기', '초보자를 위한 가이드를 제공합니다.', 0, '경상북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (60, '클라이밍 장비 추천', '실내 클라이밍 체험 후기를 공유합니다.', 0, '경상남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (61, '암벽 등반 대회 준비하기', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '대구광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (62, '등반 기술 배우기', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '세종특별자치도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (63, '자연 속 암벽 등반', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '부산광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (64, '등반 파트너 찾기', '등반 장비를 추천합니다.', 0, '광주광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (65, '자연 속 암벽 등반', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '대구광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (66, '자연 속 암벽 등반', '최고의 등반 기술을 배워보세요.', 0, '충청남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (67, '클라이밍의 이점', '등반 장비를 추천합니다.', 0, '대구광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (68, '등반 파트너 찾기', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '인천광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (69, '암벽 등반 팁', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '전라북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (70, '자연 속 암벽 등반', '등반 장비를 추천합니다.', 0, '울산광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (71, '암벽 등반 팁', '최고의 등반 기술을 배워보세요.', 0, '광주광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (72, '등반 기술 배우기', '등반 장비를 추천합니다.', 0, '강원도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (73, '등반 기술 배우기', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '경기도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (74, '암벽 등반 대회 준비하기', '최고의 등반 기술을 배워보세요.', 0, '인천광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (75, '암벽 등반 팁', '등반 기술을 연습하는 법을 알아보세요.', 0, '전라남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (76, '암벽 등반 초보자 가이드', '등반 장비를 추천합니다.', 0, '광주광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (77, '최고의 클라이밍 루트', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '부산광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (78, '최고의 클라이밍 루트', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '울산광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (79, '암벽 등반 초보자 가이드', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '전라북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (80, '암벽 등반 팁', '초보자를 위한 가이드를 제공합니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (81, '등반 파트너 찾기', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '부산광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (82, '클라이밍의 이점', '등반 기술을 연습하는 법을 알아보세요.', 0, '서울특별시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (83, '암벽 등반 팁', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '대구광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (84, '암벽 등반 대회 준비하기', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '전라남도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (85, '최고의 클라이밍 루트', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '광주광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (86, '등반 기술 배우기', '초보자를 위한 가이드를 제공합니다.', 0, '전라북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (87, '자연 속 암벽 등반', '실내 클라이밍 체험 후기를 공유합니다.', 0, '울산광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (88, '최고의 클라이밍 루트', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '경상남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (89, '등반 파트너 찾기', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (90, '실내 클라이밍 체험기', '등반 기술을 연습하는 법을 알아보세요.', 0, '경상북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (91, '등반 기술 배우기', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '광주광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (92, '실내 클라이밍 체험기', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '서울특별시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (93, '실내 클라이밍 체험기', '등반할 때 좋은 파트너를 찾는 방법을 설명합니다.', 0, '대전광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (94, '등반 기술 배우기', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '부산광역시', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (95, '실내 클라이밍 체험기', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '충청남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (96, '등반 기술 배우기', '최고의 등반 기술을 배워보세요.', 0, '경상북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (97, '암벽 등반 팁', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '부산광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (98, '실내 클라이밍 체험기', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '경상북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (99, '클라이밍의 이점', '등반 장비를 추천합니다.', 0, '경상북도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (100, '암벽 등반 초보자 가이드', '암벽 등반 대회 준비를 위한 팁입니다.', 0, '부산광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (101, '최고의 클라이밍 루트', '자연에서 암벽 등반을 즐기는 방법입니다.', 0, '광주광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (102, '암벽 등반 대회 준비하기', '최고의 등반 기술을 배워보세요.', 0, '경상북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (103, '암벽 등반 대회 준비하기', '초보자를 위한 가이드를 제공합니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (104, '클라이밍 장비 추천', '초보자를 위한 가이드를 제공합니다.', 0, '부산광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (105, '실내 클라이밍 체험기', '등반 장비를 추천합니다.', 0, '경기도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (106, '등반 기술 배우기', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '대전광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (107, '클라이밍 장비 추천', '등반 기술을 연습하는 법을 알아보세요.', 0, '강원도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (108, '클라이밍의 이점', '최고의 등반 기술을 배워보세요.', 0, '세종특별자치도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (109, '암벽 등반 초보자 가이드', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '전라남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (110, '클라이밍의 이점', '실내 클라이밍 체험 후기를 공유합니다.', 0, '광주광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (111, '암벽 등반 팁', '최고의 등반 기술을 배워보세요.', 0, '경상남도', 'coma3@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (112, '등반 파트너 찾기', '클라이밍이 주는 건강상의 이점을 소개합니다.', 0, '서울특별시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (113, '등반 파트너 찾기', '등반 장비를 추천합니다.', 0, '충청북도', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (114, '암벽 등반 팁', '등반 장비를 추천합니다.', 0, '대구광역시', 'coma2@naver.com');
-INSERT INTO BOARD (BOARD_NUM, BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES (115, '등반 기술 배우기', '대한민국에서 최고로 평가받는 클라이밍 루트입니다.', 0, '충청북도', 'coma2@naver.com');
+INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_WRITER_ID) VALUES
+('암벽 등반 초보자 가이드', '초보자를 위한 등반 시작 가이드를 소개합니다.', 0, '서울특별시', 'alice@example.com'),
+('클라이밍 장비 추천', '등반 장비를 추천합니다.', 0, '서울특별시', 'bob@example.com'),
+('등반 파트너 찾기', '혼자서 등반하기 어려운 분들을 위한 파트너 찾기 방법.', 0, '서울특별시', 'charlie@example.com'),
+('암벽 등반의 기본', '암벽 등반을 시작하는 데 필요한 기본 지식을 공유합니다.', 0, '서울특별시', 'diana@example.com'),
+('장비 점검 및 유지 관리', '등반 장비의 점검 및 유지 보수 방법에 대해 다룹니다.', 0, '서울특별시', 'edward@example.com'),
+('등반 대회 준비 팁', '클라이밍 대회를 준비하는 팁을 소개합니다.', 0, '서울특별시', 'fiona@example.com'),
+('국내 암벽 등반 코스', '국내에서 추천하는 인기 있는 암벽 등반 코스를 소개합니다.', 0, '서울특별시', 'george@example.com'),
+('암벽 등반 운동법', '효과적인 등반을 위한 운동법과 훈련을 소개합니다.', 0, '서울특별시', 'hannah@example.com'),
+('클라이밍 대회 후기', '최근에 참가한 클라이밍 대회의 후기를 작성합니다.', 0, '서울특별시', 'ian@example.com'),
+('초보자를 위한 클라이밍 용어 정리', '클라이밍 초보자가 알아야 할 기본 용어들을 정리해봤습니다.', 0, '서울특별시', 'jack@example.com'),
+('겨울철 클라이밍 안전 수칙', '겨울철에 클라이밍을 할 때 유의해야 할 안전 수칙.', 0, '서울특별시', 'kim@example.com'),
+('상급자용 클라이밍 기술', '상급자 클라이밍 기술을 배우고 싶다면?', 0, '서울특별시', 'alice@example.com'),
+('등반 체력 훈련법', '등반 체력 향상을 위한 다양한 훈련법을 소개합니다.', 0, '서울특별시', 'bob@example.com'),
+('암벽 등반에서 중요한 점', '암벽 등반 시 가장 중요한 점에 대해 설명합니다.', 0, '서울특별시', 'charlie@example.com'),
+('클라이밍 사고 예방', '등반 중 사고를 예방하는 방법에 대해 알아봅니다.', 0, '서울특별시', 'diana@example.com'),
+('클라이밍 초보자가 피해야 할 실수', '등반 초보자가 자주 하는 실수를 피할 수 있는 팁.', 0, '서울특별시', 'edward@example.com'),
+('암벽 등반의 다양한 종류', '암벽 등반의 다양한 종류와 각각의 특징에 대해 다룹니다.', 0, '서울특별시', 'fiona@example.com'),
+('등반 장비 사용법', '클라이밍 장비의 올바른 사용법에 대해 알려드립니다.', 0, '서울특별시', 'george@example.com'),
+('클라이밍 대회 준비 체크리스트', '대회 준비를 위한 체크리스트를 제공합니다.', 0, '서울특별시', 'hannah@example.com'),
+('클라이밍 용어 사전', '등반을 하면서 필요한 용어들을 사전 형식으로 정리합니다.', 0, '서울특별시', 'ian@example.com'),
+('국내 암벽 등반 대회 일정', '국내에서 열리는 암벽 등반 대회의 일정을 안내합니다.', 0, '서울특별시', 'jack@example.com'),
+('등반 전 워밍업 방법', '효과적인 워밍업 방법으로 부상을 예방하세요.', 0, '서울특별시', 'kim@example.com'),
+('암벽 등반에서 필요한 기본 기술', '암벽 등반 시 반드시 필요한 기술들을 알려드립니다.', 0, '서울특별시', 'alice@example.com'),
+('암벽 등반 중 안전장비 착용법', '안전하게 등반을 즐기기 위한 장비 착용법.', 0, '서울특별시', 'bob@example.com'),
+('중급자 클라이밍 기술', '중급자를 위한 클라이밍 기술을 소개합니다.', 0, '서울특별시', 'charlie@example.com'),
+('자주 묻는 클라이밍 Q&A', '클라이밍 초보자들이 자주 묻는 질문과 그에 대한 답변.', 0, '서울특별시', 'diana@example.com'),
+('암벽 등반 루트 추천', '서울에 있는 추천 루트를 소개합니다.', 0, '서울특별시', 'edward@example.com'),
+('초보자 필수 클라이밍 장비', '초보자가 준비해야 할 필수 장비를 추천합니다.', 0, '서울특별시', 'fiona@example.com'),
+('암벽 등반의 심리적 준비', '등반 시 심리적으로 준비해야 할 점에 대해 설명합니다.', 0, '서울특별시', 'george@example.com'),
+('체력 관리와 등반 성과', '체력 관리가 클라이밍 성과에 미치는 영향을 다룹니다.', 0, '서울특별시', 'hannah@example.com'),
+('등반 후 회복법', '등반 후 필요한 회복법을 소개합니다.', 0, '서울특별시', 'ian@example.com'),
+('암벽 등반 코스별 난이도 비교', '다양한 암벽 등반 코스를 난이도별로 비교합니다.', 0, '서울특별시', 'jack@example.com'),
+('겨울철 암벽 등반 장비', '겨울철 등반 시 필요한 장비에 대해 알아봅니다.', 0, '서울특별시', 'kim@example.com'),
+('초보자도 할 수 있는 간단한 트릭', '초보자도 쉽게 할 수 있는 간단한 등반 트릭을 소개합니다.', 0, '서울특별시', 'alice@example.com'),
+('암벽 등반 후 스트레칭', '효과적인 스트레칭 방법으로 등반 후 근육을 이완시키세요.', 0, '서울특별시', 'bob@example.com'),
+('기본 암벽 등반 기법', '암벽 등반을 잘하기 위한 기본 기법을 배워봅시다.', 0, '서울특별시', 'charlie@example.com'),
+('여름철 암벽 등반 팁', '여름철에 등반할 때 유의해야 할 점들을 소개합니다.', 0, '서울특별시', 'diana@example.com'),
+('단기 등반 훈련 프로그램', '효과적인 단기 훈련 프로그램을 소개합니다.', 0, '서울특별시', 'edward@example.com'),
+('경쟁적 클라이밍의 재미', '경쟁적인 클라이밍 대회에서 얻을 수 있는 재미와 보람에 대해 이야기합니다.', 0, '서울특별시', 'fiona@example.com');
 
-INSERT INTO REPLY (REPLY_NUM, REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES (1,'TEST',15,'coma@naver.com');
-INSERT INTO REPLY (REPLY_NUM, REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES (2,'TEST',15,'coma1@naver.com');
-INSERT INTO REPLY (REPLY_NUM, REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES (3,'TEST',15,'coma@naver.com');
-INSERT INTO REPLY (REPLY_NUM, REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES (4,'TEST',15,'coma@naver.com');
-INSERT INTO REPLY (REPLY_NUM, REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES (5,'TEST',15,'coma1@naver.com');
-INSERT INTO REPLY (REPLY_NUM, REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES (6,'TEST',15,'coma2@naver.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+('암벽장에 가면 입장료가 어떻게 되나요?', 1, 'coma@naver.com'),
+('초보자를 위한 벽 높이는 어느 정도가 적당한가요?', 2, 'bob@example.com'),
+('암벽장에 처음 가는데 필요한 장비는 무엇인가요?', 3, 'alice@example.com'),
+('벽이 너무 어려워서 어떻게 해야 할지 모르겠어요. 조언 부탁드려요.', 4, 'diana@example.com'),
+('암벽장에서 발판이 미끄러운데 어떻게 해야 할까요?', 5, 'charlie@example.com'),
+('암벽장에 몇 시간 정도 연습해야 실력이 늘까요?', 6, 'hannah@example.com'),
+('암벽장에 가면 대부분 혼자 가나요, 아니면 그룹으로 가나요?', 7, 'fiona@example.com'),
+('올바른 스트레칭 방법을 알려주세요. 부상 예방이 중요한 것 같아서요.', 8, 'edward@example.com'),
+('암벽장을 자주 가는 것이 중요한가요, 아니면 가끔 가도 괜찮을까요?', 9, 'george@example.com'),
+('등반 초보인데 한 번 가면 몇 번 정도 도전해야 실력을 느낄 수 있나요?', 10, 'jack@example.com'),
+('암벽장에서 안전하게 등반하려면 어떤 점을 주의해야 할까요?', 11, 'kim@example.com'),
+('암벽장에 꼭 필요한 장비는 무엇인가요?', 12, 'bob@example.com'),
+('등반 연습을 하는데 스태미너가 부족해서 힘들어요. 어떻게 하면 좋을까요?', 13, 'alice@example.com'),
+('고급자용 루트는 어떻게 다루어야 할까요?', 14, 'charlie@example.com'),
+('암벽장에서 바닥에 떨어질 위험을 줄이려면 어떻게 해야 하나요?', 15, 'diana@example.com'),
+('초보자도 할 수 있는 기본적인 클라이밍 루트가 있나요?', 16, 'fiona@example.com'),
+('암벽장에 있는 루트들이 다 어려운가요? 쉬운 루트도 있나요?', 17, 'hannah@example.com'),
+('등반 전후로 해야 하는 준비운동과 정리 운동은 어떤 것이 있을까요?', 18, 'george@example.com'),
+('실내 암벽장에서 사용할 로프는 어떤 것을 사용해야 할까요?', 19, 'edward@example.com'),
+('암벽장을 자주 가는 것이 실력 향상에 도움이 되나요?', 20, 'jack@example.com'),
+('초보자가 사용할 수 있는 안전 장비는 무엇이 있을까요?', 21, 'kim@example.com'),
+('암벽장에 갈 때 적절한 옷차림은 어떻게 해야 하나요?', 22, 'coma@naver.com'),
+('등반 중에는 어떤 호흡법이 좋을까요?', 23, 'bob@example.com'),
+('처음 클라이밍을 시도하는데, 정신적 준비가 필요할까요?', 24, 'alice@example.com'),
+('암벽장에서 미끄러지지 않도록 손과 발을 잘 쓰는 팁이 있을까요?', 25, 'diana@example.com'),
+('암벽장에서 발생할 수 있는 부상에 대한 예방 방법을 알고 싶어요.', 26, 'charlie@example.com'),
+('클라이밍 실력을 빠르게 키우는 팁이 있을까요?', 27, 'fiona@example.com'),
+('실내 암벽장에서 외부 환경(날씨 등)의 영향을 받나요?', 28, 'hannah@example.com'),
+('암벽장에서는 어떤 운동이 실력을 키우는 데 도움이 될까요?', 29, 'george@example.com'),
+('암벽장에 가면 체력 소모가 많은데, 체력 관리 방법이 있을까요?', 30, 'edward@example.com'),
+('어떤 종류의 장비를 빌려서 사용해도 괜찮을까요?', 31, 'jack@example.com'),
+('초보자라도 즐길 수 있는 재미있는 코스가 있을까요?', 32, 'kim@example.com'),
+('암벽장에서 주의해야 할 규칙들이 있을까요?', 33, 'coma@naver.com'),
+('암벽장 가기 전에 준비할 사항들이 있을까요?', 34, 'bob@example.com'),
+('암벽장 갈 때 준비물을 체크리스트로 알려주실 수 있나요?', 35, 'alice@example.com'),
+('체력적으로 힘들어지면 어떤 방법으로 휴식을 취해야 할까요?', 36, 'diana@example.com'),
+('암벽장 이용 시 꼭 알아둬야 할 안전 수칙은 무엇인가요?', 37, 'charlie@example.com'),
+('고난이도 루트를 도전하려면 어떤 준비가 필요할까요?', 38, 'hannah@example.com'),
+('암벽장에서는 신발을 어떻게 고르는 것이 좋을까요?', 39, 'fiona@example.com'),
+('암벽장 갈 때 음식과 음료는 어떻게 준비하는 것이 좋을까요?', 40, 'edward@example.com');
+
