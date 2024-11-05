@@ -17,11 +17,15 @@ public class Crew_boardService {
 
 
     public List<Crew_boardDTO> selectAllNEW10(Crew_boardDTO crew_boardDTO) {
-
-        return crew_boardDAO.selectAllNEW10(crew_boardDTO);
+        //Content Delivery Network 주입
+        String cdn = "https://comapro.cdn1.cafe24.com";
+        List<Crew_boardDTO> datas =  crew_boardDAO.selectAllNEW10(crew_boardDTO);
+        for (Crew_boardDTO data : datas) {
+            data.setCrew_board_writer_profile(cdn + data.getCrew_board_writer_profile());
+        }
+        return datas;
     }
 
-    @Transactional
     public void insert(Crew_boardDTO crew_boardDTO) {
         boolean flag = crew_boardDAO.insert(crew_boardDTO);
         if (flag) {

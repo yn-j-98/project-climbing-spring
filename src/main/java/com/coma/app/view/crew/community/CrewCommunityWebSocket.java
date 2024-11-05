@@ -12,6 +12,7 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
@@ -21,8 +22,12 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
-@ServerEndpoint(value = "/chat/{member_id}", configurator = SpringConfigurator.class)
+@ServerEndpoint(value = "/chat/{member_id}",configurator = SpringConfigurator.class)
 public class CrewCommunityWebSocket {
+    //SpringConfigurator는 Spring 컨텍스트를 사용하여 WebSocket 엔드포인트 인스턴스를 생성하는 기능 제공
+    //스프링의 DI 주입 기능 제공
+    //@ServerEndpoint와 SpringConfigurator를 함께 사용하면,
+    // SpringConfigurator가 WebSocket 엔드포인트 클래스가 Spring의 ApplicationContext 내에서 관리되는 빈(Bean)으로 동작하게 만듭
 
     @Autowired
     private Crew_boardService crew_boardService;
