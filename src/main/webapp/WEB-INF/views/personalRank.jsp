@@ -56,7 +56,7 @@
 							<div class="row">
 								<div class="col-2 d-flex flex-column align-items-center justify-content-center">
 									<p class="m-0">크루 등급</p>
-									<img class="w-25" src="${member.member_grade_profile}" alt="계급">
+									<img class="w-25" src="https://comapro.cdn1.cafe24.com${member.member_grade_profile}" alt="계급">
 									<p class="m-0">${member.member_grade_name}</p>
 								</div>
 								<div class="col-7 d-flex align-items-center">

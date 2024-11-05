@@ -75,7 +75,7 @@
 					<h4>크루명 ${CREW.crew_name}</h4>
 					<div class="card card-stats card-round pt-3 px-5 pb-5">
 						<!-- 크루 사진 이미지 -->
-						<img src="${crew_profile}" class="crew-image "
+						<img src="https://comapro.cdn1.cafe24.com${crew_profile}" class="crew-image "
 							alt="내가 가입한 크루 사진" />
 					</div>
 				</div>

@@ -108,7 +108,7 @@
 						<a href="store.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary">
-									<img src="/img/icons/icon_shoe.png" alt="icon_shoe" class="w-100 h-100">
+									<img src="https://comapro.cdn1.cafe24.com/icons/icon_shoe.png" alt="icon_shoe" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
@@ -126,7 +126,7 @@
 						<a href="gymMain.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary">
-									<img src="/img/icons/icon_moutain.jpg" alt="icon_moutain" class="w-100 h-100">
+									<img src="https://comapro.cdn1.cafe24.com/icons/icon_moutain.jpg" alt="icon_moutain" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
@@ -144,7 +144,7 @@
 						<a href="crewList.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary">
-									<img src="/img/icons/icon_crew.jpg" alt="icon_crew" class="w-100 h-100">
+									<img src="https://comapro.cdn1.cafe24.com/icons/icon_crew.jpg" alt="icon_crew" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
@@ -162,7 +162,7 @@
 						<a href="location.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary">
-									<img src="/img/icons/icon_community.jpg" alt="icon_community" class="w-100 h-100">
+									<img src="https://comapro.cdn1.cafe24.com/icons/icon_community.jpg" alt="icon_community" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
@@ -180,7 +180,7 @@
 						<a href="crewBattle.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary">
-									<img src="/img/icons/icon_battle.jpg" alt="icon_battle" class="w-100 h-100">
+									<img src="https://comapro.cdn1.cafe24.com/icons/icon_battle.jpg" alt="icon_battle" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
@@ -198,7 +198,7 @@
 						<a href="personalRank.do" class="d-block">
 							<button type="button" class="btn text-dark p-3 text-center">
 								<span class="display-6 text-primary">
-									<img src="/img/icons/icon_ranking.jpg" alt="icon_ranking" class="w-100 h-100">
+									<img src="https://comapro.cdn1.cafe24.com/icons/icon_ranking.jpg" alt="icon_ranking" class="w-100 h-100">
 								</span>
 							</button>
 						</a>
