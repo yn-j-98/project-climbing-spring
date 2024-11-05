@@ -206,7 +206,7 @@ public class Battle_recordDAO{
 		}
 		return true;
 	}
-	public boolean UPDATE_MVP(Battle_recordDTO battle_recordDTO) {
+	public boolean updateMvp(Battle_recordDTO battle_recordDTO) {
 		System.out.println("	[로그] com.coma.app.biz.battle_record.UPDATE_MVP 시작");
 		int result = jdbcTemplate.update(UPDATE_MVP,battle_recordDTO.getBattle_record_mvp_id(),battle_recordDTO.getBattle_record_battle_num());
 		if(result <= 0){

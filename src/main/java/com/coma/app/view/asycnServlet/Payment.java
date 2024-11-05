@@ -3,7 +3,10 @@ package com.coma.app.view.asycnServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberServiceImpl;
 import com.coma.app.biz.reservation.ReservationDTO;
+import com.coma.app.biz.reservation.ReservationInsertService;
 import com.coma.app.biz.reservation.ReservationService;
 import com.coma.app.view.payment.PaymentPortOne;
 import com.coma.app.view.payment.TokenService;
@@ -22,6 +25,10 @@ import com.coma.app.biz.reservation.PaymentInfoDTO;
 public class Payment {
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private ReservationInsertService reservationInsertService;
+    @Autowired
+    private MemberServiceImpl memberService;
 
     @PostMapping(value = "/paymentPrepare.do")
     public void paymentPrepare (HttpServletResponse response, @RequestBody PaymentInfoDTO paymentInfoDTO) throws IOException {
@@ -32,6 +39,35 @@ public class Payment {
         int reservation_price = paymentInfoDTO.getAmount();
         log.info("merchant_uid = [{}]", paymentInfoDTO.getMerchant_uid());
         log.info("reservation_price = [{}]", paymentInfoDTO.getAmount());
+
+        // 유효성 검사를 위한 값 저장
+        int reservation_gym_num=paymentInfoDTO.getReservation_gym_num();
+        log.info("reservation_gym_num = [{}]",reservation_gym_num);
+        String reservation_date=paymentInfoDTO.getReservation_date();
+        log.info("reservation_date = [{}]",reservation_date);
+        String reservation_member_id = paymentInfoDTO.getReservation_member_id();
+        log.info("reservation_member_id = [{}]",reservation_member_id);
+
+        // 비교를 위해 값 세팅
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setReservation_gym_num(reservation_gym_num);
+        reservationDTO.setReservation_date(reservation_date);
+        reservationDTO.setReservation_member_id(reservation_member_id);
+        log.info("reservationDTO = [{}]",reservationDTO);
+
+        // 이미 해당날짜에 예약했는지 비교
+        reservationDTO = this.reservationService.selectOneReservation(reservationDTO);
+        log.info("reservation_Check = [{}]",reservationDTO);
+
+        // 클라이언트에게 성공여부 전달
+        PrintWriter out = response.getWriter();
+
+        //요청 값이 null 이 아니라면 해당 날짜에 이미 예약되어있는 사용자 이므로
+        if(reservationDTO != null) {
+            log.debug("reservation_check !=null 도착~~~~~~");
+            out.print("false");
+            return;
+        }
 
         // 토큰 발행
         paymentInfoDTO = TokenService.portOne_code();
@@ -44,8 +80,6 @@ public class Payment {
         // 사전 등록
         boolean flag = PaymentPortOne.prepare(paymentInfoDTO);
 
-        // 클라이언트에게 성공여부 전달
-        PrintWriter out = response.getWriter();
         if(flag) {
             out.print("true");
         }
@@ -101,11 +135,11 @@ public class Payment {
 
         // 바인딩할 커맨드객체에 gym_num이 없어서 request사용
         String imp_uid = request.getParameter("imp_uid");
-        String reservation_date = request.getParameter("reservation_date");
         int product_num = Integer.parseInt(request.getParameter("gym_num"));
+        int member_point = Integer.parseInt(request.getParameter("member_point"));
         log.info("imp_uid = [{}]",imp_uid);
         log.info("product_num = [{}]",product_num);
-        log.info("reservation_date = [{}]",reservation_date);
+        log.info("member_point = [{}]",member_point);
 
         // uid 값 담을 DTO 생성
         PaymentInfoDTO paymentInfoDTO = new PaymentInfoDTO();
@@ -139,6 +173,7 @@ public class Payment {
                 Long amount = (Long) responseObject.get("amount");
                 amount_result = amount.intValue(); // 결제 금액
                 String imp_uid1 = (String) responseObject.get("imp_uid");
+                String reservation_date = request.getParameter("reservation_date");
                 String merchant_uid = (String) responseObject.get("merchant_uid");
                 String member_id = (String) responseObject.get("buyer_email");
 
@@ -162,8 +197,17 @@ public class Payment {
                 reservationDTO.setReservation_gym_num(reservation_gym_num);
                 reservationDTO.setReservation_member_id(member_id);
                 reservationDTO.setReservation_price(amount_result);
-                System.out.println("170도착 reservationDTO = ["+reservationDTO+"]");
-                flag = reservationService.insert(reservationDTO);
+
+                // 현재 포인트 가져옴
+                MemberDTO memberDTO = new MemberDTO();
+                memberDTO.setMember_id(member_id);
+
+                memberDTO=this.memberService.selectOneSearchId(memberDTO);
+                int use_point=memberDTO.getMember_current_point() - member_point;
+                memberDTO.setMember_current_point(use_point);
+                System.out.println("memberDTO = ["+memberDTO+"]");
+                System.out.println("reservationDTO = ["+reservationDTO+"]");
+                flag = this.reservationInsertService.insert(reservationDTO,memberDTO);
             } else {
                 System.out.println("Response 객체가 null입니다.");
                 flag = false;

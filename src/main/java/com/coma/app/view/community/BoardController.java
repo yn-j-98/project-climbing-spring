@@ -121,7 +121,7 @@ public class BoardController {
     }
 
     @LoginCheck
-    @GetMapping(value = "/boardUpdate.do")
+    @PostMapping(value = "/boardUpdate.do")
     public String boardUpdate(HttpRequest request, HttpSession session, Model model, BoardDTO boardDTO) {
 
 
@@ -153,7 +153,7 @@ public class BoardController {
     /* 뷰에서 전달받은 지역 값을 실제 지역명으로 변환하는 함수
      */
     @LoginCheck
-    @PostMapping("/boardUpdate.do")
+    @GetMapping("/boardUpdate.do")
     public String boardUpdatePage(Model model, BoardDTO boardDTO) {
 
             //사용자가 선택한 글번호를 받아서

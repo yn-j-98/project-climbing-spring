@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.coma.app.biz.reservation.PaymentInfoDTO;
 import com.coma.app.view.asycnServlet.FTPService;
+import com.coma.app.view.payment.PaymentPortOne;
+import com.coma.app.view.payment.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -117,7 +120,6 @@ public class MyPageController {
 		String member_id = (String)this.session.getAttribute("MEMBER_ID");
 		memberDTO.setMember_id(member_id);
 		//탈퇴전 사용자의 프로필이미지를 가져오기 위해 아이디 하나 검색하는 컨디션을 추가합니다.
-		System.out.println("*******************************************"+memberDTO.getMember_id());
 		//탈퇴전 사용자의 프로필이미지를 가져와 줍니다.
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
 		//delete 를 성공하지 못했다면 Mypage로 보냅니다.
@@ -143,18 +145,50 @@ public class MyPageController {
 	}
 
 
-	@GetMapping("/deleteRerservation.do")
-	public String deleteReservation(ReservationDTO reservationDTO, Model model) {
-		boolean flag =  this.reservationService.delete(reservationDTO);
 
-		model.addAttribute("title", "예약 취소");
-		if(flag){
-			model.addAttribute("msg", "예약 취소 완료");
+
+	@GetMapping("/deleteReservation.do")
+	public String deleteReservation(ReservationDTO reservationDTO, Model model) {
+		log.info("deleteReservation.do 도착");
+
+		model.addAttribute("title","실패");
+		model.addAttribute("msg","예약 삭제가 실패했습니다 관리자에게 문의 해주세요");
+		model.addAttribute("path","main.do");
+
+		// front에서 받아온 reservation_num으로 db데이터 가져옴
+		ReservationDTO reservation_data = this.reservationService.selectOne(reservationDTO);
+		log.info("reservation_data = [{}]",reservation_data);
+
+		PaymentInfoDTO paymentInfoDTO = new PaymentInfoDTO();
+
+		// 포트원에서 조회할 고유식별번호
+		String merchant_uid=reservationDTO.getReservation_num();
+		log.info("merchant_uid = [{}]",merchant_uid);
+
+		// 고유식별번호 set
+		paymentInfoDTO.setMerchant_uid(merchant_uid);
+
+		// 토큰 발급
+		paymentInfoDTO = TokenService.portOne_code();
+		paymentInfoDTO.setMerchant_uid(merchant_uid);
+
+		// 비교할 가격 set
+		log.info("reservation_price = [{}]",reservation_data.getReservation_price());
+		paymentInfoDTO.setAmount(reservation_data.getReservation_price());
+
+		// 포트원 환불 진행
+		boolean flag = PaymentPortOne.cancelPayment(paymentInfoDTO);
+		log.info("포트원 환불 여부 =[{}]",flag);
+
+		if(flag) { // 환불 성공
+			flag =  this.reservationService.delete(reservationDTO);
+			if(flag) { // db삭제 실패
+				model.addAttribute("title","성공");
+				model.addAttribute("msg","예약취소를 성공했습니다");
+				model.addAttribute("path","main.do");
+			}
 		}
-		else {
-			model.addAttribute("msg","예약 취소 실패");
-		}
-		model.addAttribute("path", "myPage.do");
+
 		return "views/info";
 	}
 

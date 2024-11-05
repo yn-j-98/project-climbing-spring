@@ -156,8 +156,7 @@
 <script>
     $(document).ready(function () {
         const memberId = "${MEMBER_ID}"; // 로그인된 사용자 ID
-        <%--const memberProfile = "${data.member_profile}"; //로그인 사용자 이미지--%>
-        const memberProfile = "https://comapro.cdn1.cafe24.com/gym_img/d428d070622.jpg"; //로그인 사용자 이미지
+        const memberProfile = "https://comapro.cdn1.cafe24.com${data.member_profile}"; //로그인 사용자 이미지
         const memberName = "${data.member_name}"; // 사용자 이름
         let socket = new WebSocket("ws://localhost:8089/chat/" + memberId);
 

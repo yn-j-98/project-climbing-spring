@@ -20,6 +20,7 @@ public class CrewDTO {
 	private int total;  //현재 크루 개수
 	private int crew_current_member_size; //크루의 현재 인원수
 	private int crew_min_num;
+	private int crew_battle_num;
 
 	private int page; //크루의 현재 인원수
 }

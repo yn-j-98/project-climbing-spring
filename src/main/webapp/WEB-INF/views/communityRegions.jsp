@@ -8,24 +8,29 @@
 	<meta charset="UTF-8">
 	<title>커뮤니티</title>
 	<!-- Fonts and icons -->
-	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
+	<script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
 	<script src="https://kit.fontawesome.com/7f7b0ec58f.js"
 			crossorigin="anonymous"></script>
 
 	<!-- CSS Files -->
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="assets/css/plugins.min.css" />
-	<link rel="stylesheet" href="assets/css/kaiadmin.css" />
+	<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../assets/css/plugins.min.css" />
+	<link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
 
 	<!--   Core JS Files   -->
-	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
+	<script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
 
 	<%-- pagination Js File --%>
-	<script src="/js/pagination.js"></script>
+	<script src="../../js/pagination.js"></script>
+
+	<!--   Core JS Files   -->
+	<script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
+	<script src="../../assets/js/core/popper.min.js"></script>
+	<script src="../../assets/js/core/bootstrap.min.js"></script>
 </head>
 <body>
 <!-- GNB 커스텀 태그 -->
-<mytag:gnb member_id="${MEMBER_ID}" ></mytag:gnb>
+<mytag:gnb member_id="${MEMBER_ID}" />
 
 <!-- container start -->
 <div class="container">
@@ -132,10 +137,7 @@
 	<!-- container end -->
 </div>
 
-<!--   Core JS Files   -->
-<script src="assets/js/core/jquery-3.7.1.min.js"></script>
-<script src="assets/js/core/popper.min.js"></script>
-<script src="assets/js/core/bootstrap.min.js"></script>
+
 </body>
 
 </html>

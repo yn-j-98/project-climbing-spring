@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface CrewService {
 	List<CrewDTO> selectAll(CrewDTO crewDTO);
+	List<CrewDTO> selectAllAdmin(CrewDTO crewDTO);
 
 	CrewDTO selectOne(CrewDTO crewDTO);
 	CrewDTO selectOneCount(CrewDTO crewDTO);

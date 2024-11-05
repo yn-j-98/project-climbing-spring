@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+								"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.coma.app.biz.favorite.FavoriteDTO" alias="favorite" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="mappings/favorite-mapping.xml" />
+	</mappers>
+</configuration>

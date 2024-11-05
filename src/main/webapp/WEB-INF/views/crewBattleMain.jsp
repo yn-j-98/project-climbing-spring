@@ -9,14 +9,19 @@
 	<title>코마 : 크루전 개최</title>
 
 	<!-- Fonts and icons -->
-	<script src="assets/js/plugin/webfont/webfont.min.js"></script>
+	<script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
 	<script src="https://kit.fontawesome.com/7f7b0ec58f.js"
 			crossorigin="anonymous"></script>
 
 	<!-- CSS Files -->
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="assets/css/plugins.min.css" />
-	<link rel="stylesheet" href="assets/css/kaiadmin.css" />
+	<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../assets/css/plugins.min.css" />
+	<link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
+
+	<!--   Core JS Files   -->
+	<script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
+	<script src="../../assets/js/core/popper.min.js"></script>
+	<script src="../../assets/js/core/bootstrap.min.js"></script>
 
 	<style>
 		.clickable-card {
@@ -32,13 +37,9 @@
 </head>
 
 <body>
-<!--   Core JS Files   -->
-<script src="assets/js/core/jquery-3.7.1.min.js"></script>
-<script src="assets/js/core/popper.min.js"></script>
-<script src="assets/js/core/bootstrap.min.js"></script>
 
 <!-- GNB 커스텀 태그 -->
-<mytag:gnb member_id="${MEMBER_ID}"></mytag:gnb>
+<mytag:gnb member_id="${MEMBER_ID}"/>
 
 <!-- container start -->
 <div class="container">
@@ -96,7 +97,7 @@
 										<!-- 암벽장 사진 -->
 										<div class="mb-3">
 											<h4>암벽장 사진 :</h4>
-											<img src="${my_battle.battle_gym_profile}" alt="암벽장 사진" class="img-fluid" style="max-width: 100%; height: auto;" />
+											<img src="https://comapro.cdn1.cafe24.com/gym_img/${my_battle.battle_gym_profile}" alt="암벽장 사진" class="img-fluid" style="max-width: 100%; height: auto;" />
 										</div>
 										<!-- 크루전 개최한 장소명 -->
 										<a href="crewBattleDetail.do?battle_num=${my_battle.battle_num}">
@@ -130,7 +131,7 @@
 				<c:forEach var="battle" items="${battle_datas}">
 					<div class="col-md-4 mb-3">
 						<div class="card">
-							<img src="${battle.battle_gym_profile}" class="card-img-top" alt="암벽장 사진">
+							<img src="https://comapro.cdn1.cafe24.com/${battle.battle_gym_profile}" class="card-img-top" alt="암벽장 사진">
 							<div class="card-body clickable-card">
 								<a href="crewBattleDetail.do?battle_num=${battle.battle_num}">
 									<h5 class="card-title">${battle.battle_gym_name}</h5>

@@ -99,8 +99,8 @@ public class CrewManagementController {
 
         //update 여부를 확인하여 view 로 정보를 전달합니다.
         if(!crewManagementService.updateBattleRecord(battle_recordDTO)){
-             title = "크루전 정보 등록 실패";
-             msg = "서버 오류로 크루전 등록에 실패했습니다.";
+            title = "크루전 정보 등록 실패";
+            msg = "서버 오류로 크루전 등록에 실패했습니다.";
         }
 
         model.addAttribute("title", title);

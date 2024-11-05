@@ -5,12 +5,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Page Not Found</title>
-<link rel="stylesheet" href="../COMA_PROJECT_CONTROLLER/css/error.css">
+<link rel="stylesheet" href="../css/error.css">
 </head>
 <body>
   <div class="error-image-container">
-    <a href="../COMA_PROJECT_CONTROLLER/MAINPAGEACTION.do">
-    <img src="/COMA_PROJECT_CONTROLLER/images/404error.jpg" alt="404 Error" class="error-image">
+    <a href="../main.do">
+    <img src="https://comapro.cdn1.cafe24.com/404error.jpg" alt="404 Error" class="error-image">
     </a>
   </div>
 </body>

@@ -30,10 +30,7 @@ $(document).ready(function() {
 
     // 비밀번호 전송
     $("#sendPasswordBtn").on('click', function() {
-        console.log("dddddddddd");
         var username = document.getElementById('username').value; // 공백 제거
-        num = parseInt(Math.random() * 100000); // 임시 비밀번호 생성
-        console.log("생성된 비밀번호 : " + num);
 
         $.ajax({
             url: "sendMail.do",

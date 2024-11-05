@@ -41,6 +41,11 @@ public class Battle_recordServiceImpl implements Battle_recordService{
 	}
 
 	@Override
+	public boolean updateMvp(Battle_recordDTO battle_recordDTO) {
+		return this.battle_recordDAO.updateMvp(battle_recordDTO);
+	}
+
+	@Override
 	public boolean delete(Battle_recordDTO battle_recordDTO) {
 		return this.battle_recordDAO.delete(battle_recordDTO);
 	}

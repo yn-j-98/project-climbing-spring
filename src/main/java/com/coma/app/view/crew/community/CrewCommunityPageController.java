@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class CrewCommunityPageController {
@@ -23,8 +24,9 @@ public class CrewCommunityPageController {
     @LoginCheck
     @CrewCheck
     @GetMapping("/crewCommunity.do")
-    public String showCrewCommunityPage(Model model, MemberDTO memberDTO) {
-        String member_id = (String)session.getAttribute("MEMBER_ID");
+    public String showCrewCommunityPage(Model model,
+                                        @SessionAttribute(value = "MEMBER_ID", required = false) String member_id,
+                                        MemberDTO memberDTO) {
         memberDTO.setMember_id(member_id);
         MemberDTO data = memberService.selectOneSearchId(memberDTO);
         model.addAttribute("data", data);
