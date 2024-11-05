@@ -6,7 +6,7 @@ import com.coma.app.biz.battle_record.Battle_recordDAO;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.crew.CrewDAO;
 import com.coma.app.biz.crew.CrewDTO;
-import com.coma.app.biz.member.MemberDAO;
+import com.coma.app.biz.member.MemberDAO3;
 import com.coma.app.biz.member.MemberDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class CrewManagementService {
     CrewDAO crewDAO;
 
     @Autowired
-    MemberDAO memberDAO;
+    MemberDAO3 memberDAO;
 
 
     public List<BattleDTO> selectAll(BattleDTO battleDTO){

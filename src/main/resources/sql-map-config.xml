@@ -4,9 +4,15 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.coma.app.biz.favorite.FavoriteDTO" alias="favorite" />
+		<typeAlias type="com.coma.app.biz.member.MemberDTO" alias="member" />
 	</typeAliases>
-	
+
+
+
+
+
 	<mappers>
 		<mapper resource="mappings/favorite-mapping.xml" />
+		<mapper resource="mappings/member-mapping.xml" />
 	</mappers>
 </configuration>
