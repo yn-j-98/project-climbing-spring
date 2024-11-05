@@ -33,7 +33,7 @@
 					<div class="row">
 						<div class="col-12 d-flex justify-content-center">
 							<div class="avatar avatar-xxl">
-								<img src="${MEMBERDATA.member_profile}"
+								<img src="https://comapro.cdn1.cafe24.com${MEMBERDATA.member_profile}"
 									 class="avatar-img rounded-circle" alt="profile image" />
 							</div>
 						</div>
@@ -142,14 +142,14 @@
 								</tr>
 								<c:forEach var="reservation_data" items="${reservation_datas}">
 									<c:choose>
-										<c:when test="${reservation_data.reservation_num >0}">
+										<c:when test="${not empty reservation_data}">
 											<tr>
 												<td>${reservation_data.reservation_date}</td>
 												<td>${reservation_data.reservation_gym_name}</td>
 												<td>${reservation_data.reservation_price}</td>
 												<td></td>
 												<td align="right">
-													<button class="btn btn-danger" onclick="deleteReservation(${reservation_data.reservation_num})">
+													<button class="btn btn-danger" onclick="deleteReservation('${reservation_data.reservation_num}')">
 														예약 취소
 													</button>
 												</td>

@@ -16,17 +16,27 @@ public class GymPaymentController {
     @Autowired
     private HttpSession session;
 
-    @LoginCheck
     @RequestMapping("/paymentSuccess.do")
-    public String PaymentDo(Model model) {
+    public String PaymentSuccess(Model model) {
         // 예약
         log.info("paymentSuccess.do 시작");
 
         model.addAttribute("title","성공");
-        model.addAttribute("msg","성공적으로 예약되었습니다");
+        model.addAttribute("msg","성공적으로 예약되었습니다 예약취소시 포인트는 반환되지 않습니다!");
         model.addAttribute("path","main.do");
 
-        System.out.println("MakeReservationAction 끝");
+        return "views/info";
+    }
+
+    @RequestMapping("/paymentFailed.do")
+    public String PaymentFailed(Model model) {
+        // 예약
+        log.info("paymentFailed.do 시작");
+
+        model.addAttribute("title","실패");
+        model.addAttribute("msg","해당날짜에 이미 예약하셨습니다");
+        model.addAttribute("path","main.do");
+
         return "views/info";
     }
 }
