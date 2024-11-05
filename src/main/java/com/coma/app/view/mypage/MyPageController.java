@@ -127,9 +127,8 @@ public class MyPageController {
 		model.addAttribute("title", "회원 탈퇴");
 
 		String proFile = memberDTO.getMember_profile();
-
-		if(!proFile.contains("default.png") || !proFile.contains("default.jpg")) {
-			flag = ftpService.ftpFileDelete(memberDTO.getMember_profile());
+		if(!proFile.contains("default")) {
+			flag = ftpService.ftpFileDelete(proFile);
 		}
 
 		//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.

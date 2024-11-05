@@ -122,32 +122,24 @@ public class BoardController {
 
     @LoginCheck
     @PostMapping(value = "/boardUpdate.do")
-    public String boardUpdate(HttpRequest request, HttpSession session, Model model, BoardDTO boardDTO) {
+    public String boardUpdate(HttpSession session, Model model, BoardDTO boardDTO) {
 
+        String title = "게시글 수정";
+        String msg = "게시글이 수정되었습니다.";
+        String path = "myPage.do";
 
-        String member_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
-        System.out.println("로그인 확인: " + member_id);
+        boardDTO.setBoard_location(location(boardDTO.getBoard_location()));
 
-        // 만약 로그인 정보가 없다면
-        if (member_id == null) {
-
-            return "redirect:login.do";
-
-        } else {
-            // 로그인이 되어있다면
-            // 업데이트 가능
-            // 내용 받기
-            // 번호 받기
-
-            //세션을 불러와서
-
-            boardDTO.setBoard_location(location(boardDTO.getBoard_location()));
-
-            boolean updateFlag = this.boardService.updateContentTitle(boardDTO); // 업데이트
-
+        if(!this.boardService.updateContentTitle(boardDTO)) {
+            msg = "게시긓 수정을 실패했습니다.";
+            path = "boardUpdate.do?board_num=" + boardDTO.getBoard_num();
         }
 
-        return "views/myPage";
+        model.addAttribute("title", title);
+        model.addAttribute("msg", msg);
+        model.addAttribute("path", path);
+
+        return "views/info";
     }
 
     /* 뷰에서 전달받은 지역 값을 실제 지역명으로 변환하는 함수
@@ -218,8 +210,7 @@ public class BoardController {
         memberDTO = this.memberService.selectOneSearchId(memberDTO); // 프로필 사진을 보여주기 위해 member selectOne
         System.out.println("BoardController.content.memberDTO [" + memberDTO + "]");
 
-        String filename = memberDTO.getMember_profile();
-        model.addAttribute("member_profile", servletContext.getContextPath() + "/profile_img/" + filename);
+        model.addAttribute("member_profile", memberDTO.getMember_profile());
 
 
         int board_cnt = boardDTO.getBoard_cnt() + 1; // 조회수 증가

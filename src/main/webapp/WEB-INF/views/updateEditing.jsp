@@ -67,7 +67,7 @@
             </div>
          </div>
          <!-- C에게 보낼 값 설정 FORM -->
-         <form action="BOARDUPDATEACTION.do" method="POST"
+         <form action="boardUpdate.do" method="POST"
             name="updateediting">
             <div class="row">
                <div
@@ -156,7 +156,7 @@
    <script type="text/javascript">
     function cancelEditing( ){
     	// 취소버튼을 누르면 메인페이지 C로 이동
-    	window.location.href = 'mypage.do';
+    	window.location.href = 'myPage.do';
     }
       
       

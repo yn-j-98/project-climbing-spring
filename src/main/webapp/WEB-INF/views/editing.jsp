@@ -180,7 +180,7 @@
     }
 
     function cancelEditing() {
-        window.location.href = 'MainCommunityPage.do';
+        window.location.href = 'community.do';
     }
 
     // 페이지 로드 시 초기 바이트 수 업데이트

@@ -98,7 +98,8 @@ public class FTPService {
     public boolean ftpFileDelete(String filename) throws IOException {
 
         FTPServiceConnect();
-        boolean flag = ftpClient.deleteFile(FTPService.FTP_FILE_PATH+filename);
+        boolean flag = ftpClient.deleteFile("/www"+filename);
+        log.info("ftp file delete : [{}]",flag);
         FTPServiceDisConnect();
 
         return flag;
