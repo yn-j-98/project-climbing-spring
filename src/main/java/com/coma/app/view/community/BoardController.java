@@ -161,7 +161,7 @@ public class BoardController {
 
 //            boardDTO.setBoard_condition("BOARD_ONE_WRITER_ID");
             //model 에 전달하여 글 내용을 받아오고
-            boardDTO = this.boardService.selectOneWriterId(boardDTO);
+            boardDTO = this.boardService.selectOne(boardDTO);
 
             //만약 데이터가 null 이라면 mypage.do 로 전달
             if (boardDTO == null) {
@@ -178,13 +178,13 @@ public class BoardController {
 
                 System.out.println("BoardController.BoardLocation : [" + boardDTO.getBoard_location() + "]");
 
-                model.addAttribute("BOARD_NUM", boardDTO.getBoard_num());
-                model.addAttribute("BOARD_TITLE", boardDTO.getBoard_title());
-                model.addAttribute("BOARD_LOCATION", location(boardDTO.getBoard_location()));
+                model.addAttribute("board_num", boardDTO.getBoard_num());
+                model.addAttribute("board_title", boardDTO.getBoard_title());
+                model.addAttribute("board_location", location(boardDTO.getBoard_location()));
 
 
                 String content = boardDTO.getBoard_content();
-                model.addAttribute("BOARD_CONTENT", content);
+                model.addAttribute("board_content", content);
 
                 try {
                     //글 내용에서 img 태그가 있다면 해당 이미지 폴더의 번호만 가져오는 로직

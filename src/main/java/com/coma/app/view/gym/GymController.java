@@ -362,11 +362,6 @@ public class GymController {
 		gym_num = data.getGym_num();
 		gym_name = data.getGym_name();
 		gym_profile = data.getGym_profile();
-		if(gym_profile != null){
-			if(!data.getGym_profile().contains("http")){
-				gym_profile = "https://" + gym_profile;
-			}
-		}
 		gym_description = data.getGym_description();
 		gym_location = data.getGym_location();
 		gym_price = data.getGym_price();

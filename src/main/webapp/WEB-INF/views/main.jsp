@@ -232,7 +232,7 @@
 										        <div class="swiper-slide">
 										            <div class="d-flex ">
 										                <h1>${status.index + 1}</h1>
-										                <img class="w-100 h-100" src="${crew.member_crew_profile}" alt="crew logo"/>
+										                <img class="w-100 h-100" src="https://comapro.cdn1.cafe24.com${crew.member_crew_profile}" alt="crew logo"/>
 										            </div>
 										            <h3 class="pt-5">${crew.member_crew_name}</h3>
 										        </div>
@@ -257,7 +257,7 @@
 										        <div class="swiper-slide">
 										            <div class="d-flex ">
 										                <h1>${status.index + 1}</h1>
-										                <img class="w-100 h-100" src="${member.member_profile}" alt="profile"/>
+										                <img class="w-100 h-100" src="https://comapro.cdn1.cafe24.com${member.member_profile}" alt="profile"/>
 										            </div>
 										            <h3 class="pt-5">${member.member_name}</h3>
 										        </div>
