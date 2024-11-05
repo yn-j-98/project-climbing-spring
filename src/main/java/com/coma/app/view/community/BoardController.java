@@ -141,12 +141,8 @@ public class BoardController {
 
             //세션을 불러와서
 
-//			System.out.println(board_content);
-
-            //board_num, board_content, board_location, board_title
             boardDTO.setBoard_location(location(boardDTO.getBoard_location()));
 
-//            boardDTO.setBoard_condition("BOARD_UPDATE_CONTENT_TITLE"); // 글 수정 컨디션
             boolean updateFlag = this.boardService.updateContentTitle(boardDTO); // 업데이트
 
         }
@@ -170,9 +166,9 @@ public class BoardController {
             //만약 데이터가 null 이라면 mypage.do 로 전달
             if (boardDTO == null) {
 
-                model.addAttribute("title", "죄송합니다");
+                model.addAttribute("title", "죄송합니다.");
 
-                model.addAttribute("path", "mypage.do");
+                model.addAttribute("path", "myPage.do");
                 model.addAttribute("msg", "없는 게시글입니다.");
                 return "views/info";
 

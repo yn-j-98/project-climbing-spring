@@ -42,6 +42,7 @@ public class GymController {
 	@Autowired
 	private ServletContext servletContext;
 
+	@LoginCheck
 	@GetMapping("/gymReservation.do")
 	public String gymReservation() {
 		return "views/reservation";
@@ -109,7 +110,7 @@ public class GymController {
 		return "views/gymMain";
 	}
 
-	@LoginCheck
+
 	@PostMapping("/gymReservation.do")
 	public String gymReservation(GymDTO gymDTO, ReservationDTO reservationDTO, MemberDTO memberDTO, Model model) {
 		log.info("gymReservation.do 도착");
@@ -331,7 +332,6 @@ public class GymController {
 		return "views/reservation";
 	}
 
-	@LoginCheck
 	@GetMapping("/gymInfo.do")
 	public String gymInfo(Model model, GymDTO gymDTO, Battle_recordDTO battle_recordDTO, MemberDTO memberDTO, FavoriteDTO favoriteDTO) {
 		String member_id = (String) session.getAttribute("MEMBER_ID");

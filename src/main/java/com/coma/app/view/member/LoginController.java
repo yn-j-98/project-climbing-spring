@@ -36,12 +36,12 @@ public class LoginController {
 
         if (member_id == null) {
             memberDTO = this.memberService.selectOneSearchIdPassword(memberDTO);
+
             if (memberDTO != null) {
                 // 로그인 성공 시 세션에 회원 정보 저장
                 session.setAttribute("MEMBER_ID", memberDTO.getMember_id());
                 session.setAttribute("CREW_CHECK", memberDTO.getMember_crew_num());
                 session.setAttribute("MEMBER_ROLE", memberDTO.getMember_role());
-                setCookies(memberDTO, response, request); // 쿠키 설정 메서드 호출
 
                 if (memberDTO.getMember_role().equals("T")) {
                     model.addAttribute("title", "관리자로 로그인 성공!");
@@ -52,23 +52,20 @@ public class LoginController {
                     model.addAttribute("title", "로그인 성공!");
                     model.addAttribute("msg", "메인 페이지로 이동합니다.");
                     model.addAttribute("path", "main.do");
-
                 }
-
 
             } else {
                 model.addAttribute("title", "로그인 실패!");
                 model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
                 model.addAttribute("path", "login.do");
             }
-
         }
+
         else {
             model.addAttribute("title", "이미 로그인 되어 있습니다.");
             model.addAttribute("msg", "메인 페이지로 이동합니다.");
             model.addAttribute("path", "main.do");
         }
-
 
         return "views/info";
     }
@@ -82,35 +79,5 @@ public class LoginController {
         model.addAttribute("path", "main.do");
 
         return "views/info";
-    }
-
-    // 쿠키 설정 메서드
-    private void setCookies(MemberDTO memberDTO, HttpServletResponse response, HttpServletRequest request) {
-
-        String auto = request.getParameter("VIEW_AUTO_LOGIN"); // 자동 로그인 체크
-        log.info("auto : {}", auto);
-
-        if (auto != null) { // 자동 로그인 체크되어있다면
-            Cookie member_id_cookie = new Cookie("MEMBER_ID", memberDTO.getMember_id());
-            Cookie member_crew_cookie = new Cookie("CREW_CHECK", String.valueOf(memberDTO.getMember_crew_num()));
-            Cookie member_role_cookie = new Cookie("MEMBER_ROLE", memberDTO.getMember_role());
-
-
-            member_id_cookie.setMaxAge(60 * 60 * 24 * 7); // 쿠키 유효 시간 설정 (7일)
-            member_crew_cookie.setMaxAge(60 * 60 * 24 * 7);
-            member_role_cookie.setMaxAge(60 * 60 * 24 * 7);
-
-            member_id_cookie.setPath("/");
-            member_crew_cookie.setPath("/");
-            member_role_cookie.setPath("/");
-
-            response.addCookie(member_id_cookie);
-            response.addCookie(member_crew_cookie);
-            response.addCookie(member_role_cookie);
-
-            log.info(" 쿠키 설정: MEMBER_ID={}", memberDTO.getMember_id());
-            log.info(" 쿠키 설정: CREW_CHECK={}", memberDTO.getMember_crew_num());
-            log.info(" 쿠키 설정: MEMBER_ROLE={}", memberDTO.getMember_role());
-        }
     }
 }

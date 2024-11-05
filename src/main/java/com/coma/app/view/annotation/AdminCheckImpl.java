@@ -15,7 +15,7 @@ public class AdminCheckImpl {
     public String checkAdmin(HttpServletRequest request, HttpSession session) {
         String[] loginInfo = getLoginInformation(session); // 로그인 정보를 가져옴
 
-        if (!loginInfo[2].equals("T")) { // 관리자 권한이 아닌 경우
+        if (!"T".equals(loginInfo[2])) { // 관리자 권한이 아닌 경우
             log.error("관리자 아님");
             request.setAttribute("title", "페이지 접근 실패: 권한이 없습니다.");
             request.setAttribute("msg", "메인 페이지로 이동합니다.");

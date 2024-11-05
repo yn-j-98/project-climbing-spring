@@ -2,6 +2,7 @@ package com.coma.app.view.admin;
 
 import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.gym.GymService;
+import com.coma.app.view.annotation.AdminCheck;
 import com.coma.app.view.annotation.LoginCheck;
 import com.coma.app.view.asycnServlet.FTPService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class GymManagementController {
     @Autowired
     private FTPService ftpService;
 
-    @LoginCheck
+    @AdminCheck
     @GetMapping("/gymManagement.do")
     public String gymManagement(Model model, GymDTO gymDTO) {
         /*
@@ -35,7 +36,7 @@ public class GymManagementController {
     - 암벽장 관리 리스트
         - 암벽장 사진 	암벽장 이름 	암벽장 장소 	암벽장 가격 	암벽장 소개
         	↑
-    SELECTALL (아마도)
+    SELECTALL
     */
         String search_keyword =  gymDTO.getSearch_keyword();
         int listNum = 0;
@@ -88,7 +89,7 @@ public class GymManagementController {
         return "admin/gymManagement";
     }
 
-    @LoginCheck
+    @AdminCheck
     @PostMapping("/gymInsert.do")
     public String gymInsert(Model model, GymDTO gymDTO) throws IOException {
         String infoPath = "gymManagement.do";
@@ -120,7 +121,7 @@ public class GymManagementController {
         return "views/info";
     }
 
-    @LoginCheck
+    @AdminCheck
     @PostMapping("/gymManagementReq.do")
     public String gymManagementReq(Model model, GymDTO gymDTO) {
 

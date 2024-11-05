@@ -3,6 +3,7 @@ package com.coma.app.view.admin;
 
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
+import com.coma.app.view.annotation.AdminCheck;
 import com.coma.app.view.annotation.LoginCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +22,12 @@ public class UserManagementController {
     @Autowired
     private MemberService memberService;
 
-    @LoginCheck
+    @AdminCheck
     @GetMapping("/userManagement.do")
     public String userManagement(Model model, MemberDTO memberDTO) {
 
-        // 세션에서 관리자 ID 가져오기
-//        String member_id = (String) session.getAttribute("MEMBER_ID");
-
         //-----------------------------------------------------------------------------
-        // !★!★!★!★!★!★!★!★ TODO Impl (컨디션값) 참고하기!★!★!★!★!★!★!★!★!★!★!★!★
         //		페이지네이션
-
         int page = memberDTO.getPage();
         int size = 10; // 한 페이지에 표시할 게시글 수
         if (page <= 0) { // 페이지가 0일 때 (npe방지)
@@ -52,9 +48,6 @@ public class UserManagementController {
             if (search_keyword.equals("MEMBERID")) {
                 log.info("memberDTO [{}]",memberDTO);
                 datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
-//            // TODO 삭제해야되는가?
-//        } else if (search_keyword.equals("member_name")) {
-//            search_datas = this.memberService.selectAllSearchNameAdmin(memberDTO);
 
             } else if (search_keyword.equals("DATE")) {
                 datas = this.memberService.selectAllSearchDateAdmin(memberDTO);
@@ -74,6 +67,7 @@ public class UserManagementController {
         return "admin/userManagement";
     }
 
+    @AdminCheck
     @GetMapping("/userManagementDetail.do")
     public String userManagementDetailGet(Model model, MemberDTO memberDTO) {
         String path = "admin/userManagementDetail";
@@ -97,6 +91,7 @@ public class UserManagementController {
     }
 
     // 회원 관리 -개인 상세
+    @AdminCheck
     @PostMapping("/userManagementDetail.do")
     public String userManagementDetailPost(Model model, MemberDTO memberDTO) {
 
@@ -111,7 +106,7 @@ public class UserManagementController {
             msg = "회원정보 수정 실패";
         }
         // role 로그
-        System.out.println("userManagementDetail - role =" + (memberDTO.getMember_role()));
+        log.info("userManagementDetail - role = {} ", memberDTO.getMember_role());
         model.addAttribute("title", title);
         model.addAttribute("msg", msg);
         model.addAttribute("path", infoPath);
@@ -119,7 +114,7 @@ public class UserManagementController {
         return "views/info";
     }
 
-    @LoginCheck
+    @AdminCheck
     @PostMapping("adminDeleteMember.do")
     public String adminDeleteMember(Model model, MemberDTO memberDTO) {
         String path = "userManagement.do";

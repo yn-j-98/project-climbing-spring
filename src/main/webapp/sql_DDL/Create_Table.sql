@@ -4,10 +4,10 @@ CREATE TABLE MEMBER (
                         MEMBER_PASSWORD VARCHAR(100) NOT NULL,
                         MEMBER_PHONE VARCHAR(50) NOT NULL,
                         MEMBER_REGISTRATION_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        MEMBER_PROFILE VARCHAR(2048) DEFAULT 'default.jpg',
+                        MEMBER_PROFILE VARCHAR(2048) DEFAULT '/default.jpg',
                         MEMBER_CURRENT_POINT INT DEFAULT 0,
                         MEMBER_TOTAL_POINT INT DEFAULT 0,
-                        MEMBER_CREW_NUM INT DEFAULT NULL,
+                        MEMBER_CREW_NUM INT DEFAULT 0,
                         MEMBER_CREW_JOIN_DATE DATE DEFAULT NULL,
                         MEMBER_LOCATION VARCHAR(100) NOT NULL,
                         MEMBER_ROLE CHAR(1) DEFAULT 'F'
@@ -16,7 +16,7 @@ CREATE TABLE MEMBER (
 CREATE TABLE GYM (
                      GYM_NUM INT PRIMARY KEY AUTO_INCREMENT,
                      GYM_NAME VARCHAR(100) NOT NULL,
-                     GYM_PROFILE VARCHAR(2048),
+                     GYM_PROFILE VARCHAR(2048) DEFAULT '/gym_img/default.jpg',
                      GYM_DESCRIPTION TEXT,
                      GYM_LOCATION VARCHAR(100) NOT NULL,
                      GYM_RESERVATION_CNT INT DEFAULT 10 NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE CREW (
                       CREW_MAX_MEMBER_SIZE INT NOT NULL,
                       CREW_LEADER VARCHAR(100) NOT NULL,
                       CREW_BATTLE_STATUS CHAR(1) DEFAULT 'F',
-                      CREW_PROFILE VARCHAR(2048) DEFAULT NULL
+                      CREW_PROFILE VARCHAR(2048) DEFAULT '/crew_img/default.jpg'
 );
 
 CREATE TABLE BOARD (

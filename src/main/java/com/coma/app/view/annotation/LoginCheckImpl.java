@@ -1,10 +1,7 @@
 
 package com.coma.app.view.annotation;
 
-import com.coma.app.biz.crew.CrewDTO;
-import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginCheckImpl {
 
-
     @Autowired
     private MemberService memberService;
 
@@ -27,12 +23,9 @@ public class LoginCheckImpl {
     // 현재 요청과 응답, 세션 객체를 이용하여 로그인 정보를 검사하는 메서드
     public String checkLogin(HttpServletRequest request, HttpSession session) {
 
-        String[] loginInfo = getLoginInformation(request, session); // 로그인 정보를 가져옴
+        String[] loginInfo = getLoginInformation(session); // 로그인 정보를 가져옴
         synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
-        log.info("loginInfo[0] {}, [1] {}, [2] {}", loginInfo[0], loginInfo[1], loginInfo[2] );
-
-        MemberDTO memberDTO = new MemberDTO();
-        MemberDTO data = memberService.selectOneSearchMyCrew(memberDTO);
+        log.info("loginInfo[0] {}, [1] {}, [2] {}", loginInfo[0], loginInfo[1], loginInfo[2]);
 
         if (loginInfo[0] == null) { // 로그인 정보가 없으면
             log.error("로그인 정보 없음");
@@ -41,47 +34,15 @@ public class LoginCheckImpl {
             request.setAttribute("path", "login.do");
             return "views/info";
         }
-        //crew_num == null || crew_num <= 0
-        // || data.getMember_crew_num() != crew_num ||data == null
-        else if(loginInfo[1] == null|| data ==null){ // 가입한 크루가 없으면
-            log.error("가입한 크루 없음");
-            log.error("loginInfo[1] {}, loginInfo[2] {}", loginInfo[1], loginInfo[2]);
-            request.setAttribute("title", "페이지 접근 실패: 가입한 크루가 없습니다.");
-            request.setAttribute("msg", "크루 가입 페이지로 이동합니다.");
-            request.setAttribute("path", "crewList.do");
-            return "views/info";
-        }
-
-
-
         return null; // 로그인 정보가 있으면 null 반환
     }
 
-
     // 요청과 세션 객체에서 로그인 정보를 가져오는 메서드
-    private String[] getLoginInformation(HttpServletRequest request, HttpSession session) {
+    private String[] getLoginInformation(HttpSession session) {
         // 로그인 정보 배열 [MEMBER_ID, CREW_CHECK, ROLE_CHECK]
         String[] loginInfo = new String[3]; // 로그인 정보 배열 생성
-        fillLoginInfoFromCookies(request, loginInfo); // 쿠키에서 로그인 정보를 가져와 배열에 저장
         fillLoginInfoFromSession(session, loginInfo); // 세션에서 로그인 정보를 가져와 배열에 저장
         return loginInfo; // 로그인 정보 배열 반환
-    }
-
-    // 쿠키에서 로그인 정보를 가져와 배열에 저장하는 메서드
-    private void fillLoginInfoFromCookies(HttpServletRequest request, String[] loginInfo) {
-        Cookie[] cookies = request.getCookies(); // 요청에서 쿠키 배열을 가져옴
-        if (cookies != null) { // 쿠키가 null이 아니면
-            for (Cookie cookie : cookies) { // 모든 쿠키를 순회
-                log.debug("fillLoginInfoFromCookies 쿠키 이름: {}, 쿠키 값: {}", cookie.getName(), cookie.getValue());
-                if (MEMBER_ID.equals(cookie.getName())) { // 쿠키 이름이 MEMBER_ID인 경우
-                    loginInfo[0] = cookie.getValue(); // 배열의 첫 번째 요소에 쿠키 값을 저장
-                } else if (CREW_CHECK.equals(cookie.getName())) { // 쿠키 이름이 CREW_CHECK인 경우
-                    loginInfo[1] = cookie.getValue(); // 배열의 두 번째 요소에 쿠키 값을 저장
-                } else if (MEMBER_ROLE.equals(cookie.getName())) { // 쿠키 이름이 ROLE_CHECK인 경우
-                    loginInfo[2] = cookie.getValue(); // 배열의 세 번째 요소에 쿠키 값을 저장
-                }
-            }
-        }
     }
 
     // 세션 배열 값 저장 [0] - MEMBER_ID, [1] - CREW_CHECK, [2] - ROLE_CHECK
@@ -100,29 +61,26 @@ public class LoginCheckImpl {
         }
     }
 
-// 세션과 로그인 정보를 동기화하는 메서드
-private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
-    log.info("세션과 로그인 정보 동기화");
-    if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
-        log.info("session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null");
-        session.setAttribute(MEMBER_ID, loginInfo[0]);
+    // 세션과 로그인 정보를 동기화하는 메서드
+    private void synchronizeLoginInformation(String[] loginInfo, HttpSession session) {
+        log.info("세션과 로그인 정보 동기화");
+        if (session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null) {
+            log.info("session.getAttribute(MEMBER_ID) == null && loginInfo[0] != null");
+            session.setAttribute(MEMBER_ID, loginInfo[0]);
+        }
+        if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
+            log.info("session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null");
+            session.setAttribute(CREW_CHECK, Integer.parseInt(loginInfo[1]));
+        }
+        if (session.getAttribute(MEMBER_ROLE) == null && loginInfo[2] != null) {
+            log.info("session.getAttribute(MEMBER_ROLE) == null && loginInfo[2] != null");
+            session.setAttribute(MEMBER_ROLE, loginInfo[2]);
+        }
     }
-    if (session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null) {
-        log.info("session.getAttribute(CREW_CHECK) == null && loginInfo[1] != null");
-        session.setAttribute(CREW_CHECK, Integer.parseInt(loginInfo[1]));
-    }
-    if (session.getAttribute(MEMBER_ROLE) == null && loginInfo[2] != null) {
-        log.info("session.getAttribute(MEMBER_ROLE) == null && loginInfo[2] != null");
-        session.setAttribute(MEMBER_ROLE, loginInfo[2]);
-    }
-}
 
-
-
-    // 로그아웃 시 세션과 쿠키를 무효화하는 메서드
+    // 로그아웃 시 세션을 무효화하는 메서드
     public static void logout(HttpServletRequest request, HttpServletResponse response) {
         invalidateSession(request); // 세션 무효화
-        clearCookies(request, response); // 쿠키 무효화
     }
 
     // 세션을 무효화하는 메서드
@@ -131,24 +89,6 @@ private void synchronizeLoginInformation(String[] loginInfo, HttpSession session
         if (session != null) { // 세션이 null이 아니면
             log.info("세션 무효화 완료");
             session.invalidate(); // 세션 무효화
-        }
-    }
-
-    // 쿠키를 무효화하는 메서드
-    private static void clearCookies(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies(); // 요청에서 쿠키 배열을 가져옴
-
-        if (cookies != null) { // 쿠키가 null이 아니면
-            for (Cookie cookie : cookies) { // 모든 쿠키를 순회
-                log.info("쿠키 이름: {}, 쿠키 값: {}", cookie.getName(), cookie.getValue());
-                // 쿠키 이름이 MEMBER_ID 또는 CREW_CHECK 또는 ROLE_CHECK 인 경우
-                if (MEMBER_ID.equals(cookie.getName()) || CREW_CHECK.equals(cookie.getName()) || MEMBER_ROLE.equals(cookie.getName())) {
-                    cookie.setMaxAge(0); // 쿠키를 무효화 (만료 시간 0 설정)
-                    cookie.setPath("/"); // 전체 경로에 적용
-                    response.addCookie(cookie); // 응답에 추가
-                    log.info("쿠키 무효화: {}", cookie.getName());
-                }
-            }
         }
     }
 }

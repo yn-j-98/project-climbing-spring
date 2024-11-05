@@ -30,7 +30,6 @@ public class JoinController {
 			log.info("memberDTO [{}]",memberDTO);
 			model.addAttribute("member_id",memberDTO.getMember_id());
 		}
-
 		return "views/join";
 	}
 	//---------------------------
@@ -45,19 +44,19 @@ public class JoinController {
 		// 만약 로그인 정보가 있다면
 		if (member_id != null) {
 			// main 페이지로 전달해줍니다.
-			return "redirect:main.do"; // 리다이렉트 경로를 반환
+			return "redirect:main.do";
 		}
 		else {
 			boolean flag = this.memberService.insert(memberDTO);
 			model.addAttribute("title", "회원 가입");
 			if(flag) {
-				System.err.println("회원가입 성공 로그");
+				log.info("회원가입 성공 로그");
 				model.addAttribute("msg", "회원가입 성공!");
 				model.addAttribute("path", "main.do");
 			}
 			//실패했다면 실패 내용을 전달해준다.
 			else {
-				System.err.println("회원가입 실패 로그");
+				log.info("회원가입 실패 로그");
 				model.addAttribute("msg", "회원가입 실패..");
 				model.addAttribute("path", "join.do");
 			}

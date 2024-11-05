@@ -64,11 +64,11 @@ public class MyPageController {
 
 		//------------------------------------------------------------------
 		//관리자 권한이 있다면 신규 등록한 아이디 출력 시작
-		if(memberDTO.getMember_role().equals("T")) {
-			//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
-			List<MemberDTO> member_list = this.memberService.selectAllNew(memberDTO);
-			model.addAttribute("member_list", member_list);
-		}
+//		if(memberDTO.getMember_role().equals("T")) {
+//			//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
+//			List<MemberDTO> member_list = this.memberService.selectAllNew(memberDTO);
+//			model.addAttribute("member_list", member_list);
+//		}
 		//관리자 권한이 있다면 신규 등록한 아이디 출력 종료
 		//------------------------------------------------------------------
 		int page = memberDTO.getPage();
@@ -78,7 +78,7 @@ public class MyPageController {
 		}
 		int min_num = (page - 1) * size;
 
-		System.out.println("min = " + min_num);
+		log.info("min = {}", min_num);
 
 		memberDTO.setMember_min_num(min_num);
 		//사용자가 입력한 글 목록 출력 후 전달 시작
@@ -111,11 +111,7 @@ public class MyPageController {
 
 		return "views/myPage";
 	}
-	//-------------------------------
 
-
-	// DeleteMemberAction
-	@LoginCheck
 	@PostMapping("/deleteMember.do")
 	public String deleteMember(MemberDTO memberDTO, Model model) throws IOException {
 		String member_id = (String)this.session.getAttribute("MEMBER_ID");
@@ -147,23 +143,21 @@ public class MyPageController {
 	}
 
 
-
-	//DeleteReservationAction
-
 	@GetMapping("/deleteRerservation.do")
 	public String deleteReservation(ReservationDTO reservationDTO, Model model) {
 		boolean flag =  this.reservationService.delete(reservationDTO);
 
 		model.addAttribute("title", "예약 취소");
-		model.addAttribute("msg", "예약 취소 완료");
-		if (!flag) {
+		if(flag){
+			model.addAttribute("msg", "예약 취소 완료");
+		}
+		else {
 			model.addAttribute("msg","예약 취소 실패");
 		}
 		model.addAttribute("path", "myPage.do");
 		return "views/info";
 	}
 
-	@LoginCheck
 	@PostMapping("/changeMember.do")
 	public String changeMember(MemberDTO memberDTO) throws IOException {
 
@@ -196,16 +190,14 @@ public class MyPageController {
 
 		// 사용자 정보를 DB에 업데이트 요청
 
-		if (!flag) {
-			session.setAttribute("CHANGE_CHECK", flag);
-		}
+//		if (!flag) {
+//			session.setAttribute("CHANGE_CHECK", flag);
+//		}
 
 		return "redirect:myPage.do";
 	}
 
 
-	//ChangeMember.do
-	@LoginCheck
 	@GetMapping("/changeMember.do")
 	public String changeMember(MemberDTO memberDTO, Model model) throws IOException {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
