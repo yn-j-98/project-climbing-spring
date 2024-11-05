@@ -61,7 +61,9 @@ public class ReservationManagementController {
         else if(search_keyword.equals("RESERVATION_MEMBER_ID")) { // 예약자로 찾기
             log.info("Search_keyword = 예약자 = RESERVATION_MEMBER_ID");
             datas = this.reservationService.selectAllAdminSearchMemberId(reservationDTO);
+            log.info("datas = [{}]",datas);
             reservationCount = this.reservationService.selectOneCountSearchMemberIdAdmin(reservationDTO);
+            log.info("reservationCount = [{}]",reservationCount);
         }
 
         else if(search_keyword.equals("RESERVATION_GYM_NUM")) { // 암벽장 번호로 찾기
@@ -96,8 +98,8 @@ public class ReservationManagementController {
         log.info("reservationManagement.do POST 도착");
 
         model.addAttribute("title","실패");
-        model.addAttribute("msg","예약 삭제가 실패했습니다 관리자에게 문의 해주세요");
-        model.addAttribute("path","main.do");
+        model.addAttribute("msg","예약 취소를 실패했습니다");
+        model.addAttribute("path","reservationManagement.do");
 
         // front에서 받아온 reservation_num으로 db데이터 가져옴
         ReservationDTO reservation_data = this.reservationService.selectOne(reservationDTO);
