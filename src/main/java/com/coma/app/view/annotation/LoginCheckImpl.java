@@ -24,7 +24,7 @@ public class LoginCheckImpl {
     public String checkLogin(HttpServletRequest request, HttpSession session) {
 
         String[] loginInfo = getLoginInformation(session); // 로그인 정보를 가져옴
-        synchronizeLoginInformation(loginInfo, session); // 세션과 쿠키 간의 로그인 정보를 동기화
+        synchronizeLoginInformation(loginInfo, session); // 세션의 로그인 정보를 동기화
         log.info("loginInfo[0] {}, [1] {}, [2] {}", loginInfo[0], loginInfo[1], loginInfo[2]);
 
         if (loginInfo[0] == null) { // 로그인 정보가 없으면

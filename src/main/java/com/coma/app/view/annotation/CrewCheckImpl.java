@@ -16,6 +16,7 @@ public class CrewCheckImpl {
         String[] loginInfo = getLoginInformation(session);
 
         CrewDTO crewDTO = new CrewDTO();
+        loginInfo[1] = loginInfo[1] == null ? "0" : loginInfo[1];
         crewDTO.setCrew_num(Integer.parseInt(loginInfo[1]));
         if(loginInfo[1] == null || crewDTO.getCrew_num()<=0){ // 가입한 크루가 없으면
             log.error("가입한 크루 없음");
@@ -26,7 +27,7 @@ public class CrewCheckImpl {
             return "views/info";
         }
 
-        return "views/info";
+        return null;
     }
     private String[] getLoginInformation(HttpSession session) {
         String[] loginInfo = new String[3];
@@ -35,7 +36,7 @@ public class CrewCheckImpl {
     }
 
     private void fillLoginInfoFromSession(HttpSession session, String[] loginInfo) {
-        loginInfo[2] = (String) session.getAttribute(CREW_CHECK);
+        loginInfo[1] = session.getAttribute(CREW_CHECK)+"";
     }
 }
 

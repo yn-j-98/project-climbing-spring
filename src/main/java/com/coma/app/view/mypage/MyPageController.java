@@ -151,19 +151,19 @@ public class MyPageController {
 	public String deleteReservation(ReservationDTO reservationDTO, Model model) {
 		log.info("deleteReservation.do 도착");
 
-		model.addAttribute("title","실패");
-		model.addAttribute("msg","예약 삭제가 실패했습니다 관리자에게 문의 해주세요");
-		model.addAttribute("path","main.do");
+		model.addAttribute("title", "실패");
+		model.addAttribute("msg", "예약 삭제가 실패했습니다 관리자에게 문의 해주세요");
+		model.addAttribute("path", "main.do");
 
 		// front에서 받아온 reservation_num으로 db데이터 가져옴
 		ReservationDTO reservation_data = this.reservationService.selectOne(reservationDTO);
-		log.info("reservation_data = [{}]",reservation_data);
+		log.info("reservation_data = [{}]", reservation_data);
 
 		PaymentInfoDTO paymentInfoDTO = new PaymentInfoDTO();
 
 		// 포트원에서 조회할 고유식별번호
-		String merchant_uid=reservationDTO.getReservation_num();
-		log.info("merchant_uid = [{}]",merchant_uid);
+		String merchant_uid = reservationDTO.getReservation_num();
+		log.info("merchant_uid = [{}]", merchant_uid);
 
 		// 고유식별번호 set
 		paymentInfoDTO.setMerchant_uid(merchant_uid);
@@ -173,19 +173,19 @@ public class MyPageController {
 		paymentInfoDTO.setMerchant_uid(merchant_uid);
 
 		// 비교할 가격 set
-		log.info("reservation_price = [{}]",reservation_data.getReservation_price());
+		log.info("reservation_price = [{}]", reservation_data.getReservation_price());
 		paymentInfoDTO.setAmount(reservation_data.getReservation_price());
 
 		// 포트원 환불 진행
 		boolean flag = PaymentPortOne.cancelPayment(paymentInfoDTO);
-		log.info("포트원 환불 여부 =[{}]",flag);
+		log.info("포트원 환불 여부 =[{}]", flag);
 
-		if(flag) { // 환불 성공
-			flag =  this.reservationService.delete(reservationDTO);
-			if(flag) { // db삭제 실패
-				model.addAttribute("title","성공");
-				model.addAttribute("msg","예약취소를 성공했습니다");
-				model.addAttribute("path","main.do");
+		if (flag) { // 환불 성공
+			flag = this.reservationService.delete(reservationDTO);
+			if (flag) { // db삭제 실패
+				model.addAttribute("title", "성공");
+				model.addAttribute("msg", "예약취소를 성공했습니다");
+				model.addAttribute("path", "main.do");
 			}
 		}
 

@@ -48,9 +48,9 @@ public class CrewManagementController {
         // 크루전 번호, 암벽장 이름, 크루전 진행 날짜, 크루전 생성일
         List<BattleDTO> datas = crewManagementService.selectAll(battleDTO);
         if(datas.isEmpty() || datas == null) {
-            model.addAttribute("title", "알수 없는 오류 발생");
+            model.addAttribute("title", "크루전 없음");
             model.addAttribute("msg", "");
-            model.addAttribute("path", "crewManagement.do");
+            model.addAttribute("path", "mainManagement.do");
             return "views/info";
         }
         log.info("datas = [{}]", datas);
