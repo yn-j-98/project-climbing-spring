@@ -66,6 +66,7 @@ public class CrewManagementController {
     @GetMapping("/crewManagementDetail.do")
     public String crewManagementDetail(Model model, BattleDTO battleDTO) {
         log.info("crewManagementDetail.battle_num = [{}]", battleDTO.getBattle_num());
+        log.info("crewManagementDetail.battle_game_date = [{}]", battleDTO.getBattle_game_date());
         // 크루전 정보 - 암벽장
         // 암벽장 명 , 게임일, 승리한 크루, MVP
         BattleDTO data = this.crewManagementService.selectOneSearchWinner(battleDTO);
@@ -73,7 +74,7 @@ public class CrewManagementController {
 
         // 참여 크루
         // 크루명 / 크루장 / 크루원 수
-        List<BattleDTO> datas = crewManagementService.selectAllSearchPariticipants(battleDTO);
+        List<BattleDTO> datas = this.crewManagementService.selectAllSearchPariticipants(battleDTO);
         model.addAttribute("datas", datas);
 
         return "admin/crewManagementDetail";
@@ -91,7 +92,7 @@ public class CrewManagementController {
         String msg = "크루전 등록에 성공했습니다.";
 
         //승리크루 크루이름을 전달해 크루 번호를 받아옵니다.
-        CrewDTO battle_record_winner_crew_num = crewManagementService.battleRecord(crewDTO);
+        CrewDTO battle_record_winner_crew_num = this.crewManagementService.battleRecord(crewDTO);
         log.info("battle_record_winner_crew_num : [{}]", battle_record_winner_crew_num);
 
         //받아온 mvp 이름을 추가하여 model 에 전달합니다.

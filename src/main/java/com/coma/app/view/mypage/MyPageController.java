@@ -126,11 +126,12 @@ public class MyPageController {
 		boolean flag = this.memberService.delete(memberDTO);
 		model.addAttribute("title", "회원 탈퇴");
 
+		log.info("memberDTO[{}]",memberDTO);
 		String proFile = memberDTO.getMember_profile();
 		if(!proFile.contains("default")) {
 			flag = ftpService.ftpFileDelete(proFile);
 		}
-
+		log.info("deleteMember.flag[{}]", flag);
 		//멤버 삭제에 성공했다면 logout 페이지로 넘어갑니다.
 		if (flag) { // 멤버 삭제에 성공했다면 로그아웃 후 메인 페이지로 이동합니다.
 			session.invalidate();
@@ -140,6 +141,7 @@ public class MyPageController {
 			model.addAttribute("msg", "회원 탈퇴 실패...");
 			model.addAttribute("path", "myPage.do");
 		}
+
 		return "views/info";
 	}
 

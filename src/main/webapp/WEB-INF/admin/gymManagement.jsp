@@ -367,7 +367,7 @@
         var form = $('<form/>', {
             //TODO .do 입력
             action: 'gymManagement.do',
-            method: 'POST',
+            method: 'GET',
             style: 'display: none;'
         });
         form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: search_keyword}));

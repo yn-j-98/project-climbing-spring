@@ -72,8 +72,8 @@
                             <div class="form-floating">
                                 <%--TODO 컨디션 안쓴다면 ID 변경--%>
                                 <select class="form-select" id="search_keyword">
-                                    <option ${search_keywoard == "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
-                                    <option ${search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
+                                    <option ${param.search_keywoard =="BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
+                                    <option ${param.search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
                                 </select>
                                 <label for="search_keyword">검색할 목록</label>
                             </div>
@@ -204,25 +204,25 @@
                 });
         });
 
-        // //검색 동기
-        // $('#search').click(function () {
-        //     var board_search_content = $('#search_content').val();
-        //     var board_search_keyword = $('#search_keyword').val();//문자열 값으로 변환
-        //     console.log("board_search_content = [" + board_search_content + "]");
-        //     console.log("board_search_keyword = [" + board_search_keyword + "]");
-        //
-        //     var form = $('<form/>', {
-        //         //TODO .do 입력
-        //         action: 'boardManagement.do',
-        //         method: 'POST',
-        //         style: 'display: none;'
-        //     });
-        //     form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: board_search_keyword}));
-        //     form.append($('<input/>', {type: 'hidden', name: 'search_content', value: board_search_content}));
-        //     // 문서에 form 추가
-        //     $('body').append(form);
-        //     form.submit();
-        // });
+        //검색 동기
+        $('#search').click(function () {
+            var board_search_content = $('#search_content').val();
+            var board_search_keyword = $('#search_keyword').val();//문자열 값으로 변환
+            console.log("board_search_content = [" + board_search_content + "]");
+            console.log("board_search_keyword = [" + board_search_keyword + "]");
+
+            var form = $('<form/>', {
+                //TODO .do 입력
+                action: 'boardManagement.do',
+                method: 'GET',
+                style: 'display: none;'
+            });
+            form.append($('<input/>', {type: 'hidden', name: 'search_keyword', value: board_search_keyword}));
+            form.append($('<input/>', {type: 'hidden', name: 'search_content', value: board_search_content}));
+            // 문서에 form 추가
+            $('body').append(form);
+            form.submit();
+        });
 
         //글 내용 클릭시 상세페이지로 이동
         $('.board-detail').each(function () {
