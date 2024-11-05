@@ -1,3 +1,5 @@
+#외래키 제약조건 잠금
+SET FOREIGN_KEY_CHECKS = 0;
 /*DELETE MEMBER;
 --멤버 테이블 샘플 데이터*/
 INSERT INTO MEMBER (
@@ -55,13 +57,13 @@ INSERT INTO CREW (
     CREW_BATTLE_STATUS,
     CREW_PROFILE
 ) VALUES
-('클라이밍 워리어', '자연의 벽을 정복하고 새로운 정상에 도전하는 클라이머들의 모임.', 20, 'alice@example.com', 'F', '/default.jpg'),
-('암벽 수호자', '안전과 협력을 최우선으로 하며 함께 암벽을 오르는 팀.', 20, 'bob@example.com', 'F', '/default.jpg'),
-('탐험가 클라이머', '미지의 루트를 개척하며 새로운 경로를 발견하는 암벽가들.', 20, 'charlie@example.com', 'F', '/default.jpg'),
-('마운틴 마스터', '클라이밍 기술의 달인으로, 도전을 두려워하지 않는 리더들.', 20, 'diana@example.com', 'F', '/default.jpg'),
-('정상 정복자', '각종 산악 활동을 즐기며 정상 정복을 목표로 하는 팀.', 20, 'edward@example.com', 'F', '/default.jpg'),
-('안전우선', '클라이밍 중의 부상 예방과 치유를 전문으로 하는 팀.', 20, 'fiona@example.com', 'F', '/default.jpg'),
-('코마', '코드 마스터의 길, 코드 마운틴을 정복', 20, 'coma@naver.com', 'F', '/coma.jpg');
+('클라이밍 워리어', '자연의 벽을 정복하고 새로운 정상에 도전하는 클라이머들의 모임.', 20, 'alice@example.com', 'F', '/crew_img/default.jpg'),
+('암벽 수호자', '안전과 협력을 최우선으로 하며 함께 암벽을 오르는 팀.', 20, 'bob@example.com', 'F', '/crew_img/default.jpg'),
+('탐험가 클라이머', '미지의 루트를 개척하며 새로운 경로를 발견하는 암벽가들.', 20, 'charlie@example.com', 'F', '/crew_img/default.jpg'),
+('마운틴 마스터', '클라이밍 기술의 달인으로, 도전을 두려워하지 않는 리더들.', 20, 'diana@example.com', 'F', '/crew_img/default.jpg'),
+('정상 정복자', '각종 산악 활동을 즐기며 정상 정복을 목표로 하는 팀.', 20, 'edward@example.com', 'F', '/crew_img/default.jpg'),
+('안전우선', '클라이밍 중의 부상 예방과 치유를 전문으로 하는 팀.', 20, 'fiona@example.com', 'F', '/crew_img/default.jpg'),
+('코마', '코드 마스터의 길, 코드 마운틴을 정복', 20, 'coma@naver.com', 'F', '/crew_img/coma.jpg');
 
 
 /*암벽장 테이블 샘플 데이터*/
@@ -125,23 +127,23 @@ INSERT INTO RESERVATION (RESERVATION_NUM, RESERVATION_DATE, RESERVATION_GYM_NUM,
 
 /*등급 테이블 샘플 데이터*/
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge1.png','5A',0,1000);
+VALUES('/grade_img/bedge1.png','5A',0,1000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge2.png','5B',1001,2000);
+VALUES('/grade_img/bedge2.png','5B',1001,2000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge3.png','5C',2001,3000);
+VALUES('/grade_img/bedge3.png','5C',2001,3000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge4.png','6A',3001,4000);
+VALUES('/grade_img/bedge4.png','6A',3001,4000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge5.png','6B',4001,5000);
+VALUES('/grade_img/bedge5.png','6B',4001,5000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge6.png','6C',5001,6000);
+VALUES('/grade_img/bedge6.png','6C',5001,6000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge7.png','7A',6001,7000);
+VALUES('/grade_img/bedge7.png','7A',6001,7000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge8.png','7B',7001,8000);
+VALUES('/grade_img/bedge8.png','7B',7001,8000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
-VALUES('bedge9.png','7C',8001,9000);
+VALUES('/grade_img/bedge9.png','7C',8001,9000);
 
 /*
 DELETE BATTLE;
@@ -231,46 +233,122 @@ INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_
 ('단기 등반 훈련 프로그램', '효과적인 단기 훈련 프로그램을 소개합니다.', 0, '서울특별시', 'edward@example.com'),
 ('경쟁적 클라이밍의 재미', '경쟁적인 클라이밍 대회에서 얻을 수 있는 재미와 보람에 대해 이야기합니다.', 0, '서울특별시', 'fiona@example.com');
 
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 가면 입장료가 어떻게 되나요?', 1, 'coma@naver.com');
 
 INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
-('암벽장에 가면 입장료가 어떻게 되나요?', 1, 'coma@naver.com'),
-('초보자를 위한 벽 높이는 어느 정도가 적당한가요?', 2, 'bob@example.com'),
-('암벽장에 처음 가는데 필요한 장비는 무엇인가요?', 3, 'alice@example.com'),
-('벽이 너무 어려워서 어떻게 해야 할지 모르겠어요. 조언 부탁드려요.', 4, 'diana@example.com'),
-('암벽장에서 발판이 미끄러운데 어떻게 해야 할까요?', 5, 'charlie@example.com'),
-('암벽장에 몇 시간 정도 연습해야 실력이 늘까요?', 6, 'hannah@example.com'),
-('암벽장에 가면 대부분 혼자 가나요, 아니면 그룹으로 가나요?', 7, 'fiona@example.com'),
-('올바른 스트레칭 방법을 알려주세요. 부상 예방이 중요한 것 같아서요.', 8, 'edward@example.com'),
-('암벽장을 자주 가는 것이 중요한가요, 아니면 가끔 가도 괜찮을까요?', 9, 'george@example.com'),
-('등반 초보인데 한 번 가면 몇 번 정도 도전해야 실력을 느낄 수 있나요?', 10, 'jack@example.com'),
-('암벽장에서 안전하게 등반하려면 어떤 점을 주의해야 할까요?', 11, 'kim@example.com'),
-('암벽장에 꼭 필요한 장비는 무엇인가요?', 12, 'bob@example.com'),
-('등반 연습을 하는데 스태미너가 부족해서 힘들어요. 어떻게 하면 좋을까요?', 13, 'alice@example.com'),
-('고급자용 루트는 어떻게 다루어야 할까요?', 14, 'charlie@example.com'),
-('암벽장에서 바닥에 떨어질 위험을 줄이려면 어떻게 해야 하나요?', 15, 'diana@example.com'),
-('초보자도 할 수 있는 기본적인 클라이밍 루트가 있나요?', 16, 'fiona@example.com'),
-('암벽장에 있는 루트들이 다 어려운가요? 쉬운 루트도 있나요?', 17, 'hannah@example.com'),
-('등반 전후로 해야 하는 준비운동과 정리 운동은 어떤 것이 있을까요?', 18, 'george@example.com'),
-('실내 암벽장에서 사용할 로프는 어떤 것을 사용해야 할까요?', 19, 'edward@example.com'),
-('암벽장을 자주 가는 것이 실력 향상에 도움이 되나요?', 20, 'jack@example.com'),
-('초보자가 사용할 수 있는 안전 장비는 무엇이 있을까요?', 21, 'kim@example.com'),
-('암벽장에 갈 때 적절한 옷차림은 어떻게 해야 하나요?', 22, 'coma@naver.com'),
-('등반 중에는 어떤 호흡법이 좋을까요?', 23, 'bob@example.com'),
-('처음 클라이밍을 시도하는데, 정신적 준비가 필요할까요?', 24, 'alice@example.com'),
-('암벽장에서 미끄러지지 않도록 손과 발을 잘 쓰는 팁이 있을까요?', 25, 'diana@example.com'),
-('암벽장에서 발생할 수 있는 부상에 대한 예방 방법을 알고 싶어요.', 26, 'charlie@example.com'),
-('클라이밍 실력을 빠르게 키우는 팁이 있을까요?', 27, 'fiona@example.com'),
-('실내 암벽장에서 외부 환경(날씨 등)의 영향을 받나요?', 28, 'hannah@example.com'),
-('암벽장에서는 어떤 운동이 실력을 키우는 데 도움이 될까요?', 29, 'george@example.com'),
-('암벽장에 가면 체력 소모가 많은데, 체력 관리 방법이 있을까요?', 30, 'edward@example.com'),
-('어떤 종류의 장비를 빌려서 사용해도 괜찮을까요?', 31, 'jack@example.com'),
-('초보자라도 즐길 수 있는 재미있는 코스가 있을까요?', 32, 'kim@example.com'),
-('암벽장에서 주의해야 할 규칙들이 있을까요?', 33, 'coma@naver.com'),
-('암벽장 가기 전에 준비할 사항들이 있을까요?', 34, 'bob@example.com'),
-('암벽장 갈 때 준비물을 체크리스트로 알려주실 수 있나요?', 35, 'alice@example.com'),
-('체력적으로 힘들어지면 어떤 방법으로 휴식을 취해야 할까요?', 36, 'diana@example.com'),
-('암벽장 이용 시 꼭 알아둬야 할 안전 수칙은 무엇인가요?', 37, 'charlie@example.com'),
-('고난이도 루트를 도전하려면 어떤 준비가 필요할까요?', 38, 'hannah@example.com'),
-('암벽장에서는 신발을 어떻게 고르는 것이 좋을까요?', 39, 'fiona@example.com'),
-('암벽장 갈 때 음식과 음료는 어떻게 준비하는 것이 좋을까요?', 40, 'edward@example.com');
+    ('초보자를 위한 벽 높이는 어느 정도가 적당한가요?', 2, 'bob@example.com');
 
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 처음 가는데 필요한 장비는 무엇인가요?', 3, 'alice@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('벽이 너무 어려워서 어떻게 해야 할지 모르겠어요. 조언 부탁드려요.', 4, 'diana@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서 발판이 미끄러운데 어떻게 해야 할까요?', 5, 'charlie@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 몇 시간 정도 연습해야 실력이 늘까요?', 6, 'hannah@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 가면 대부분 혼자 가나요, 아니면 그룹으로 가나요?', 7, 'fiona@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('올바른 스트레칭 방법을 알려주세요. 부상 예방이 중요한 것 같아서요.', 8, 'edward@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장을 자주 가는 것이 중요한가요, 아니면 가끔 가도 괜찮을까요?', 9, 'george@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('등반 초보인데 한 번 가면 몇 번 정도 도전해야 실력을 느낄 수 있나요?', 10, 'jack@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서 안전하게 등반하려면 어떤 점을 주의해야 할까요?', 11, 'kim@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 꼭 필요한 장비는 무엇인가요?', 12, 'bob@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('등반 연습을 하는데 스태미너가 부족해서 힘들어요. 어떻게 하면 좋을까요?', 13, 'alice@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('고급자용 루트는 어떻게 다루어야 할까요?', 14, 'charlie@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서 바닥에 떨어질 위험을 줄이려면 어떻게 해야 하나요?', 15, 'diana@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('초보자도 할 수 있는 기본적인 클라이밍 루트가 있나요?', 16, 'fiona@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 있는 루트들이 다 어려운가요? 쉬운 루트도 있나요?', 17, 'hannah@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('등반 전후로 해야 하는 준비운동과 정리 운동은 어떤 것이 있을까요?', 18, 'george@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('실내 암벽장에서 사용할 로프는 어떤 것을 사용해야 할까요?', 19, 'edward@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장을 자주 가는 것이 실력 향상에 도움이 되나요?', 20, 'jack@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('초보자가 사용할 수 있는 안전 장비는 무엇이 있을까요?', 21, 'kim@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 갈 때 적절한 옷차림은 어떻게 해야 하나요?', 22, 'coma@naver.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('등반 중에는 어떤 호흡법이 좋을까요?', 23, 'bob@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('처음 클라이밍을 시도하는데, 정신적 준비가 필요할까요?', 24, 'alice@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서 미끄러지지 않도록 손과 발을 잘 쓰는 팁이 있을까요?', 25, 'diana@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서 발생할 수 있는 부상에 대한 예방 방법을 알고 싶어요.', 26, 'charlie@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('클라이밍 실력을 빠르게 키우는 팁이 있을까요?', 27, 'fiona@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('실내 암벽장에서 외부 환경(날씨 등)의 영향을 받나요?', 28, 'hannah@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서는 어떤 운동이 실력을 키우는 데 도움이 될까요?', 29, 'george@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에 가면 체력 소모가 많은데, 체력 관리 방법이 있을까요?', 30, 'edward@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('어떤 종류의 장비를 빌려서 사용해도 괜찮을까요?', 31, 'jack@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('초보자라도 즐길 수 있는 재미있는 코스가 있을까요?', 32, 'kim@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서 주의해야 할 규칙들이 있을까요?', 33, 'coma@naver.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장 가기 전에 준비할 사항들이 있을까요?', 34, 'bob@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장 갈 때 준비물을 체크리스트로 알려주실 수 있나요?', 35, 'alice@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('체력적으로 힘들어지면 어떤 방법으로 휴식을 취해야 할까요?', 36, 'diana@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장 이용 시 꼭 알아둬야 할 안전 수칙은 무엇인가요?', 37, 'charlie@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('고난이도 루트를 도전하려면 어떤 준비가 필요할까요?', 38, 'hannah@example.com');
+
+INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
+    ('암벽장에서는 신발을 어떻게 고르는 것이 좋을까요?', 39, 'fiona@example.com');
+
+#외래키 제약조건 잠금 해제
+SET FOREIGN_KEY_CHECKS = 1;
