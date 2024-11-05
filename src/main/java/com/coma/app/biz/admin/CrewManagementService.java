@@ -80,6 +80,7 @@ public class CrewManagementService {
         return this.crewDAO.selectOneName(crewDTO);
     }
     public BattleDTO selectOneSearchWinner(BattleDTO battleDTO){
+        System.out.println("com.coma.app.biz.crewManagementService.selectOneSearchWinner = ["+battleDTO+"]");
         return battleDAO.selectOneSearchWinner(battleDTO);
     }
     public List<BattleDTO> selectAllSearchPariticipants(BattleDTO battleDTO){

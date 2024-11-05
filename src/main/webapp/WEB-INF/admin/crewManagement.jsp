@@ -88,7 +88,7 @@
           <c:forEach items="${datas}" var="data">
             <tr class="battle-table-tr">
               <th scope="row" class="battle_num">${data.battle_num}</th>
-              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.do?battle_num=${data.battle_num}">${data.battle_gym_name}</a></td>
+              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.do?battle_num=${data.battle_num}&battle_game_date=${data.battle_game_date}">${data.battle_gym_name}</a></td>
               <td class="battle_game_date">${data.battle_game_date}</td>
               <td class="battle_registration_date">${data.battle_registration_date}</td>
               <input type="hidden" class="battle_isGame" value="${data.battle_status}"/>
