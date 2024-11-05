@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FavoriteDAO">
+    <insert id="insert">
+        INSERT INTO FAVORITE(FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM)
+        VALUES(#{favorite_member_id},#{favorite_gym_num})
+        </insert>
+
+    <select id="selectOne" resultType="favorite">
+        SELECT FAVORITE_NUM, FAVORITE_MEMBER_ID, FAVORITE_GYM_NUM
+        FROM FAVORITE WHERE FAVORITE_MEMBER_ID = #{favorite_member_id}
+                        AND FAVORITE_GYM_NUM = #{favorite_gym_num}
+    </select>
+
+        <delete id="delete"> DELETE FROM FAVORITE WHERE FAVORITE_MEMBER_ID = #{favorite_member_id}
+    AND FAVORITE_GYM_NUM = #{favorite_gym_num}
+    </delete>
+
+        </mapper>
