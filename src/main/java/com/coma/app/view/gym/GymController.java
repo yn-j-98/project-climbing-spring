@@ -42,6 +42,7 @@ public class GymController {
 	@Autowired
 	private ServletContext servletContext;
 
+	@LoginCheck
 	@GetMapping("/gymReservation.do")
 	public String gymReservation() {
 		return "views/reservation";
@@ -109,6 +110,7 @@ public class GymController {
 		return "views/gymMain";
 	}
 
+	@LoginCheck
 	@PostMapping("/gymReservation.do")
 	public String gymReservation(GymDTO gymDTO, ReservationDTO reservationDTO, MemberDTO memberDTO, Model model) {
 		log.info("gymReservation.do 도착");
@@ -209,6 +211,7 @@ public class GymController {
 	}
 
 
+	@LoginCheck
 	@PostMapping("/gymReservationInfo.do")
 	public String gymReservationInfo(Model model,GymDTO gymDTO, MemberDTO memberDTO, ReservationDTO reservationDTO) {
 		log.info("gymReservationInfo.do 도착");

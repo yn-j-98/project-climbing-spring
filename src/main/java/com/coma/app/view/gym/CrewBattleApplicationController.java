@@ -30,7 +30,6 @@ public class CrewBattleApplicationController {
 	@Autowired
 	private HttpSession session;
 
-	@LoginCheck
 	@PostMapping("/CrewBattleApplication.do")
 	public String CrewBattleApplication(CrewDTO crewDTO, GymDTO gymDTO, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO, Model model) {
 		log.info("CrewBattleApplication.do 도착");
@@ -41,7 +40,6 @@ public class CrewBattleApplicationController {
 		log.info("gymDTO.getGym_num 확인 로그 = [{}]",gymDTO.getGym_num());
 		String error_message = "잘못된 요청";
 
-		// LoginCheck Session값 저장
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 		String crewCheck = (String) session.getAttribute("CREW_CHECK");
 		int crew_check = Integer.parseInt(crewCheck);

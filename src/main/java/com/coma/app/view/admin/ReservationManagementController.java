@@ -7,6 +7,7 @@ import com.coma.app.biz.reservation.ReservationInsertService;
 import com.coma.app.biz.reservation.ReservationService;
 import com.coma.app.view.payment.PaymentPortOne;
 import com.coma.app.view.payment.TokenService;
+import com.coma.app.view.annotation.AdminCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+
 @Slf4j
 @Controller
 public class ReservationManagementController {
@@ -22,8 +24,7 @@ public class ReservationManagementController {
     @Autowired
     private ReservationService reservationService;
 
-
-
+    @AdminCheck
     @GetMapping("/reservationManagement.do")
     // 예약 관리
     public String reservationManagement(Model model, ReservationDTO reservationDTO) {
@@ -89,6 +90,7 @@ public class ReservationManagementController {
     }
 
     // 예약 삭제
+    @AdminCheck
     @PostMapping("/reservationManagement.do")
     public String reservationDeleteManagement(Model model, ReservationDTO reservationDTO) {
         log.info("reservationManagement.do POST 도착");

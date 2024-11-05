@@ -79,13 +79,13 @@
 							</div>
 						</div>
 					</div>
-					<!-- 자동로그인 input -->
+					<%--<!-- 자동로그인 input -->
 					<div class="row">
 						<div class="col">
 							<span>자동 로그인</span>
 							<input type="checkbox" class="ms-2" name="VIEW_AUTO_LOGIN" value="checkLogin">
 						</div>
-					</div>
+					</div>--%>
 					<div class="row pt-3">
 						<div class="col-12">
 							<button type="submit" class="btn btn-primary w-100">로그인</button>

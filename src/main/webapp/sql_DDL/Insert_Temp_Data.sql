@@ -1,3 +1,4 @@
+/*DELETE MEMBER;
 --멤버 테이블 샘플 데이터*/
 INSERT INTO MEMBER (
     MEMBER_ID,
@@ -45,7 +46,7 @@ INSERT INTO MEMBER (
       ('bella@example.com', '김소정', '1234', '010-8901-2345', '2024-08-28 22:00:00', '/default.jpg', 1450, 3200, 1, '2024-08-28 22:00:00', '서울', 'F');
 
 
---크루 테이블 샘플 데이터*/
+/*크루 테이블 샘플 데이터*/
 INSERT INTO CREW (
     CREW_NAME,
     CREW_DESCRIPTION,
@@ -63,7 +64,7 @@ INSERT INTO CREW (
 ('코마', '코드 마스터의 길, 코드 마운틴을 정복', 20, 'coma@naver.com', 'F', '/coma.jpg');
 
 
---암벽장 테이블 샘플 데이터*/
+/*암벽장 테이블 샘플 데이터*/
 
 INSERT INTO GYM (GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION) VALUES
 ('볼더하이웨이클라이밍짐', '/gym_img/default.jpg', '초보자부터 전문가까지 즐길 수 있는 다양한 난이도의 암벽 코스를 제공합니다.', '서울 강남구 논현로86길 20'),
@@ -78,7 +79,7 @@ INSERT INTO GYM (GYM_NAME, GYM_PROFILE, GYM_DESCRIPTION, GYM_LOCATION) VALUES
 ('클라이밍파크 한티점', '/gym_img/default.jpg', '기초부터 고급까지 체계적으로 암벽 등반을 배울 수 있는 곳입니다.', '서울 강남구 선릉로 324');
 
 
---예약 테이블 샘플 데이터*/
+/*예약 테이블 샘플 데이터*/
 INSERT INTO RESERVATION (RESERVATION_NUM, RESERVATION_DATE, RESERVATION_GYM_NUM, RESERVATION_MEMBER_ID, RESERVATION_PRICE) VALUES
 ('R0001', '2024-08-03 10:15:00', 3, 'alice@example.com', 17000),
 ('R0002', '2024-08-15 12:30:00', 5, 'george@example.com', 18000),
@@ -122,7 +123,7 @@ INSERT INTO RESERVATION (RESERVATION_NUM, RESERVATION_DATE, RESERVATION_GYM_NUM,
 ('R0040', '2024-10-21 11:30:00', 4, 'bob@example.com', 16000);
 
 
---등급 테이블 샘플 데이터*/
+/*등급 테이블 샘플 데이터*/
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
 VALUES('bedge1.png','5A',0,1000);
 INSERT INTO GRADE(GRADE_PROFILE,GRADE_NAME,GRADE_MIN_POINT,GRADE_MAX_POINT)
