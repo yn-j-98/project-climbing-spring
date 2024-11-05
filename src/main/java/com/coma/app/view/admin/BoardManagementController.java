@@ -57,7 +57,7 @@ public class BoardManagementController {
             datas = boardService.selectAllSearchTitle(boardDTO);
         }
 
-        log.info("boardManagement min_num = {}, page={}, total={}", min_num,page,list_num);
+        log.info("boardManagement min_num = [{}], page=[{}], total=[{}]", min_num,page,list_num);
 
         //-----------------------------------------------------------------------------
 

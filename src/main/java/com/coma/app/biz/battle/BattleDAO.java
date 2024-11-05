@@ -16,7 +16,7 @@ public class BattleDAO {
 			"    WHERE BATTLE_NUM = ?";
 	/* 관리자 페이지 쿼리문 */
 
-	//해당 크루전의 승리크루 정보
+	//TODO해당 크루전의 승리크루 정보
 	private final String ONE_SEARCH_WINNER = "SELECT\n" +
 			"    B.BATTLE_NUM,\n" +
 			"    G.GYM_NAME,\n" +
@@ -32,8 +32,9 @@ public class BattleDAO {
 			"JOIN\n" +
 			"    CREW C ON C.CREW_NUM = BR.BATTLE_RECORD_CREW_NUM\n" +
 			"WHERE\n" +
-			"    B.BATTLE_NUM = ?\n" +
-			"    AND BR.BATTLE_RECORD_IS_WINNER = 'T'";
+			"    BR.BATTLE_RECORD_IS_WINNER = 'T'"+
+			"    AND B.BATTLE_NUM = ?\n" +
+			"    AND B.BATTLE_GAME_DATE = ?";
 
 	// 해당 크루전의 모든 참여 크루 정보
 	private final String ALL_SEARCH_PARTICIPANTS = "SELECT" +
@@ -568,12 +569,14 @@ public class BattleDAO {
 	}
 	//해당 크루전의 승리크루 정보
 	public BattleDTO selectOneSearchWinner(BattleDTO battleDTO){
-		System.out.println("    [로그] com.coma.app.biz.battle.selectAllCrewMemberName 시작");
+		System.out.println("    [로그] com.coma.app.biz.battle.selectOneSearchWinner 시작");
+		System.out.println("com.coma.app.biz.battle.selectOneSearchWinner = ["+battleDTO+"]");
 		BattleDTO result = null;
+		Object[] args = new Object[]{battleDTO.getBattle_num(),battleDTO.getBattle_game_date()};
 		try{
-			result = jdbcTemplate.queryForObject(ONE_SEARCH_WINNER,new BattleRowMapperOneSearchWinner(),battleDTO.getBattle_num());
+			result = jdbcTemplate.queryForObject(ONE_SEARCH_WINNER,args,new BattleRowMapperOneSearchWinner());
 		}catch (Exception e) {
-			System.err.println("	[에러] com.coma.app.biz.battle.selectAllCrewMemberName Sql문 실패 : All_CREW_MEMBER_NAME = " + All_CREW_MEMBER_NAME);
+			System.err.println("	[에러] com.coma.app.biz.battle.selectOneSearchWinner Sql문 실패 : ONE_SEARCH_WINNER = " + ONE_SEARCH_WINNER);
 			e.printStackTrace();
 		}
 		return result;
@@ -581,12 +584,12 @@ public class BattleDAO {
 
 	// 해당 크루전의 모든 참여 크루 정보
 	public List<BattleDTO> selectAllSearchPariticipants(BattleDTO battleDTO){
-		System.out.println("    [로그] com.coma.app.biz.battle.selectAllCrewMemberName 시작");
+		System.out.println("    [로그] com.coma.app.biz.battle.selectAllSearchPariticipants 시작");
 		List<BattleDTO> result = null;
 		try{
 			result = jdbcTemplate.query(ALL_SEARCH_PARTICIPANTS,new BattleRowMapperAllSearchParticipants(),battleDTO.getBattle_num());
 		}catch (Exception e) {
-			System.err.println("	[에러] com.coma.app.biz.battle.selectAllCrewMemberName Sql문 실패 : All_CREW_MEMBER_NAME = " + All_CREW_MEMBER_NAME);
+			System.err.println("	[에러] com.coma.app.biz.battle.selectAllSearchPariticipants Sql문 실패 : ALL_SEARCH_PARTICIPANTS = " + ALL_SEARCH_PARTICIPANTS);
 			e.printStackTrace();
 		}
 		return result;
