@@ -9,13 +9,13 @@
 <title>코마 : 게시글확인 </title>
 
 <!-- Fonts and icons -->
-<script src="assets/js/plugin/webfont/webfont.min.js"></script>
+<script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
 <script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
 
 <!-- CSS Files -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="assets/css/plugins.min.css" />
-<link rel="stylesheet" href="assets/css/kaiadmin.css" />
+<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../assets/css/plugins.min.css" />
+<link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
 
 <style type="text/css">
 
@@ -27,7 +27,7 @@ figure.image_resized img {
 </head>
 <body>
 	<!-- GNB 커스텀 태그 -->
-	<mytag:gnb member_id="${MEMBER_ID}" ></mytag:gnb>
+	<mytag:gnb member_id="${MEMBER_ID}" />
 	
 	<!-- container start -->
 	<div class="container">
@@ -40,7 +40,7 @@ figure.image_resized img {
 			<div class="row border-bottom border-dark pb-3">
 				<div class="col-md-1 d-flex justify-content-end align-items-center">
 					<div class="avatar avatar-sm">
-						<img src="${member_profile}" alt="profile" class="avatar-img rounded-circle" />
+						<img src="https://comapro.cdn1.cafe24.com/${member_profile}" alt="profile" class="avatar-img rounded-circle" />
 					</div>
 				</div>
 				<div class="col-md-11 d-flex align-items-center">

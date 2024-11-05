@@ -68,7 +68,7 @@
 					<div class="row my-3">
 						<div class="col-12 d-flex justify-content-center">
 							<div class="avatar avatar-xxl">
-								<img src="${data.member_profile}" alt="profile"
+								<img src="https://comapro.cdn1.cafe24.com${data.member_profile}" alt="profile"
 									 class="avatar-img rounded-circle" id="previewImage">
 							</div>
 						</div>

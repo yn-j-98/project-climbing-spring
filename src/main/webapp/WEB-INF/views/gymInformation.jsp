@@ -84,7 +84,7 @@
                                         id="favorite">❤️
                                 </button>
                             </c:if>
-                            <img src="${gym_profile}" alt=""
+                            <img src="https://comapro.cdn1.cafe24.com${gym_profile}" alt=""
                                  class="w-50 position-absolute z-0 " style="margin-left:300px">
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                                         <c:forEach var="data" items="${battle_record_datas}" begin="0" end="3">
                                             <div class="col-3 d-flex flex-column align-items-center">
                                                 <div class="avatar avatar-xl">
-                                                    <img src="${data.battle_record_crew_profile}" alt="..."
+                                                    <img src="https://comapro.cdn1.cafe24.com${data.battle_record_crew_profile}" alt="..."
                                                          class="avatar-img rounded-circle">
                                                 </div>
                                                 <small>${data.battle_record_crew_name}</small>
