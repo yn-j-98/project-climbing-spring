@@ -143,7 +143,3 @@ ALTER TABLE MEMBER
 
 
 
-#외래키 제약조건 잠금
-SET FOREIGN_KEY_CHECKS = 0;
-#외래키 제약조건 잠금 해제
-SET FOREIGN_KEY_CHECKS = 1;
