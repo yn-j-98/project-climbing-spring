@@ -34,7 +34,7 @@ public class UserManagementController {
             page = 1;
         }
         int min_num = (page - 1) * size;
-
+        int total = 0;
         log.info("min_num = {}", min_num);
 
         memberDTO.setMember_min_num(min_num);
@@ -45,15 +45,22 @@ public class UserManagementController {
         String search_keyword = memberDTO.getSearch_keyword();
 
         if(search_keyword != null){
+            //아이디로 검색
             if (search_keyword.equals("MEMBERID")) {
                 log.info("memberDTO [{}]",memberDTO);
                 datas = this.memberService.selectAllSearchIdAdmin(memberDTO);
-
-            } else if (search_keyword.equals("DATE")) {
-                datas = this.memberService.selectAllSearchDateAdmin(memberDTO);
+                total = this.memberService.selectOneSearchIdCountAdmin(memberDTO).getTotal();
             }
-        } else {
+            //가입 날짜로 검색
+            else if (search_keyword.equals("DATE")) {
+                datas = this.memberService.selectAllSearchDateAdmin(memberDTO);
+                total = this.memberService.selectOneSearchDateCountAdmin(memberDTO).getTotal();
+            }
+        }
+        //전체 출력
+        else {
             datas = this.memberService.selectAllSearchAdmin(memberDTO);
+                total = this.memberService.selectOneSearchCountAdmin(memberDTO).getTotal();
         }
         // datas 로그
         log.info("UserManagementController datas {} " , datas);
@@ -62,7 +69,7 @@ public class UserManagementController {
         model.addAttribute("search_keyword", search_keyword);
         model.addAttribute("search_content", memberDTO.getSearch_content());
         model.addAttribute("page", page);
-        model.addAttribute("size", size);
+        model.addAttribute("total", total);
 
         return "admin/userManagement";
     }
