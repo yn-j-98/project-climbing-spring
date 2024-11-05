@@ -60,7 +60,7 @@
    <bean id="loginCheckImpl" class="com.coma.app.view.annotation.LoginCheckImpl" />
 -->
 
-   <tx:advice transaction-manager="txManager" id="txAdviceDelete">
+   <tx:advice transaction-manager="txManager" id="txAdvice">
       <tx:attributes>
          <tx:method name="select*" read-only="true"/>
          <tx:method name="*"/>
@@ -69,7 +69,12 @@
 
    <aop:config>
       <aop:pointcut id="txPointcut" expression="execution(* com.coma.app.biz.reservation.ReservationInsertService.insert(..))"/>
-      <aop:advisor advice-ref="txAdviceDelete" pointcut-ref="txPointcut"/>
+      <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
    </aop:config>
-    
+
+   <aop:config>
+      <aop:pointcut id="crew_board_tx" expression="execution(* com.coma.app.biz.crew_board.Crew_boardService.insert(..))"/>
+      <aop:advisor advice-ref="txAdvice" pointcut-ref="crew_board_tx"/>
+   </aop:config>
+
 </beans>

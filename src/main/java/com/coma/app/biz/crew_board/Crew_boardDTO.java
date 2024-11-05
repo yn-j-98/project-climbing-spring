@@ -15,6 +15,5 @@ public class Crew_boardDTO {
 	//DTO에만 존재하는 데이터
 	private String crew_board_writer_profile;	//작성자 프로필 이미지
 	private String crew_board_writer_name;		//작성자 이름
-	private int crew_num;               //크루 번호
 }
 
