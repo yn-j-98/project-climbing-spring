@@ -5,7 +5,6 @@ import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
-import com.coma.app.biz.crew.CrewService;
 import com.coma.app.biz.member.MemberDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +70,12 @@ public class CrewManagementController {
         // 참여 크루
         // 크루명 / 크루장 / 크루원 수
         List<BattleDTO> datas = crewManagementService.selectAllSearchPariticipants(battleDTO);
+
+
+
+
+        // update selectall battle record 넘겨
+
         model.addAttribute("datas", datas);
 
         return "admin/crewManagementDetail";
@@ -95,8 +100,8 @@ public class CrewManagementController {
 
         //update 여부를 확인하여 view 로 정보를 전달합니다.
         if(!crewManagementService.updateBattleRecord(battle_recordDTO)){
-             title = "크루전 정보 등록 실패";
-             msg = "서버 오류로 크루전 등록에 실패했습니다.";
+            title = "크루전 정보 등록 실패";
+            msg = "서버 오류로 크루전 등록에 실패했습니다.";
         }
 
         model.addAttribute("title", title);
@@ -123,8 +128,6 @@ public class CrewManagementController {
 		승리 크루 크루명 (크루전 진행한 크루의 크루명 selectall 검색해야하기때문에)
 		크루전 MVP
 		↑ INSERT
-
-
 		 */
 
         return null;

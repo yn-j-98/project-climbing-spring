@@ -12,5 +12,6 @@ public interface Battle_recordService {
 	Battle_recordDTO selectOneCountCrew(Battle_recordDTO battle_recordDTO);
 	boolean insert(Battle_recordDTO battle_recordDTO);
 	boolean update(Battle_recordDTO battle_recordDTO);
+	boolean updateMvp(Battle_recordDTO battle_recordDTO);
 	boolean delete(Battle_recordDTO battle_recordDTO);
 }

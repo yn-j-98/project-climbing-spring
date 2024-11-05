@@ -60,16 +60,36 @@
    <bean id="loginCheckImpl" class="com.coma.app.view.annotation.LoginCheckImpl" />
 -->
 
-   <tx:advice transaction-manager="txManager" id="txAdviceDelete">
+   <!-- 트랜잭션 어드바이스 정의 -->
+   <tx:advice transaction-manager="txManager" id="txAdvice">
       <tx:attributes>
          <tx:method name="select*" read-only="true"/>
          <tx:method name="*"/>
       </tx:attributes>
    </tx:advice>
 
+   <!-- AOP 설정 -->
    <aop:config>
+      <!-- 첫 번째 포인트컷 정의: ReservationInsertService.insert 메서드에 적용 -->
       <aop:pointcut id="txPointcut" expression="execution(* com.coma.app.biz.reservation.ReservationInsertService.insert(..))"/>
-      <aop:advisor advice-ref="txAdviceDelete" pointcut-ref="txPointcut"/>
+      <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
    </aop:config>
+
+   <aop:config>
+      <!-- 두 번째 포인트컷 정의: CrewManagementService.updateBattleRecord 메서드에 적용 -->
+      <aop:pointcut id="updatePointcut" expression="execution(* com.coma.app.biz.admin.CrewManagementService.updateBattleRecord(..))"/>
+      <aop:advisor advice-ref="txAdvice" pointcut-ref="updatePointcut"/>
+   </aop:config>
+
+
+   <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" ref="ds"/>
+      <property name="configLocation" value="classpath:sql-map-config.xml"/>
+   </bean>
+
+
+   <bean id="mybatis" class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg ref="sqlSession"/>
+   </bean>
     
 </beans>

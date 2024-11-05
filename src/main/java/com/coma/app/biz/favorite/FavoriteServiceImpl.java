@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class FavoriteServiceImpl implements FavoriteService{
 
 	@Autowired
-	FavoriteDAO favoriteDAO;
+	FavoriteDAO3 favoriteDAO;
 	
 	@Override
 	public List<FavoriteDTO> selectAll(FavoriteDTO favoriteDTO) {

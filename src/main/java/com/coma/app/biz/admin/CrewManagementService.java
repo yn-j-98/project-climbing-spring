@@ -60,16 +60,19 @@ public class CrewManagementService {
         log.info("selectAllService = [{}]",datas);
         return datas;
     }
-    public List<MemberDTO> mvpMember(CrewDTO crewDTO){
+    public List<MemberDTO> mvpMember(MemberDTO memberDTO){
         //크루 이름으로 크루를 찾고
-        int crew_num = crewDAO.selectOneName(crewDTO).getCrew_num();
+
         //크루pk로 크루원들 전부 출력
-        MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setMember_crew_num(crew_num);
         List<MemberDTO> datas = memberDAO.selectAllSearchCrewMemberName(memberDTO);
         log.info("mvpMemberService = [{}]",datas);
         return datas;
     }
+
+    public CrewDTO searchCrew(CrewDTO crewDTO){
+        return crewDAO.selectOneName(crewDTO);
+    }
+
 
     public CrewDTO battleRecord(CrewDTO crewDTO){
         //크루 이름을 받아와 크루 번호를 찾습니다.
@@ -85,24 +88,34 @@ public class CrewManagementService {
 
 
     public boolean updateBattleRecord(Battle_recordDTO battle_recordDTO){
-        boolean result = false;
+        boolean result;
         BattleDTO battleDTO = new BattleDTO();
         battleDTO.setBattle_num(battle_recordDTO.getBattle_record_battle_num());
         battleDTO.setBattle_status("T");
         //승리 크루를 모두 업데이트한 후
         battle_recordDTO.setBattle_record_is_winner("T");
-        if(this.battle_recordDAO.update(battle_recordDTO)){
-            //나머지 크루에 MVP 만 저장해둡니다.
-            if(this.battle_recordDAO.UPDATE_MVP(battle_recordDTO)){
-                result = true;
-                log.info("updateBattleRecord result = [{}]",result);
+        result=this.battle_recordDAO.update(battle_recordDTO);
 
-            }
-            if(result){
-                battleDAO.updateStatus(battleDTO);
-            }
+        log.info("battle_recordDAO.update result = [{}]",result);
+
+            result = this.battle_recordDAO.updateMvp(battle_recordDTO);
+            log.info("battle_recordDAO.updateMvp result = [{}]", result);
+
+        log.info("battle_recordDAO.updateMvp result = [{}]",result);
+
+        CrewDTO crewDTO = new CrewDTO();
+        crewDTO.setCrew_battle_num(battle_recordDTO.getBattle_record_battle_num());
+        List<CrewDTO> datas=this.crewDAO.selectAllAdmin(crewDTO);
+
+        int cnt=1;
+        for(CrewDTO data:datas){
+            result=this.crewDAO.updateBattleFalse(data);
+            log.info("{}번째 crewDAO.updateBattleFalse result = [{}]",cnt,result);
+            cnt++;
         }
-        log.info("updateBattleRecord result = [{}]",result);
+
+        result=battleDAO.updateStatus(battleDTO);
+        log.info("battleDAO.updateStatus result = [{}]",result);
         return result;
     }
 }
