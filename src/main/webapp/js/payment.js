@@ -10,7 +10,8 @@ function requestPay() {
     var IMP = window.IMP; // imp 객체를 가져온다.
     IMP.init("imp87461252"); // 고객사 식별 코드
 
-    let uuid = self.crypto.randomUUID(); // 랜덤 uuid생성
+    // let uuid = self.crypto.randomUUID(); // 랜덤 uuid생성 // 기존 배포전 uuid 생성 방법
+    let uuid = generateUUID(); // 랜덤 uuid생성 // 기존 배포전 uuid 생성 방법
     const cleanUuid = uuid.replace(/-/g, ""); // 불필요한 특수기호 삭제
     const currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 
@@ -40,7 +41,10 @@ function requestPay() {
         contentType: "application/json",
         data: JSON.stringify({
             merchant_uid: merchant_uid,
-            amount: reservation_price
+            amount: reservation_price,
+            reservation_date: reservationDate,
+            reservation_gym_num: gym_num,
+            reservation_member_id: member_id
         }) // UUID, 가격 보내서 사전 검증 Controller로 전달
     }).done(function(data) {
         console.log("첫 번째 응답: " + data);
@@ -75,6 +79,7 @@ function requestPay() {
 
         } else {
             console.log("사전 검증 등록 실패");
+            location.href = "paymentFailed.do"
         }
     }).fail(function(error) {
         console.log("사전 검증 등록 AJAX 오류:", error);
@@ -85,8 +90,8 @@ function requestPay() {
         pay_method: 'card',
         amount: reservation_price,
         name: gym_name,
-        buyer_email: member_id,
-        merchant_uid: merchant_uid
+        merchant_uid: merchant_uid,
+        buyer_email: member_id
     },
         function (rsp) {
             if (rsp.success) {
@@ -100,6 +105,7 @@ function requestPay() {
                         imp_uid: rsp.imp_uid,  // 포트원 결제 고유번호
                         gym_num: gym_num,
                         reservation_date : reservationDate,
+                        member_point : member_point,
                         merchant_uid: rsp.merchant_uid  // 주문번호
                     }
                 }).done(function (data) {
@@ -107,9 +113,8 @@ function requestPay() {
                         // 결제 API 성공시 로직
                             location.href = "paymentSuccess.do"
                     } else {
-                        alert("검증 실패");
                         // 결제 취소
-                        location.href = "main.do"
+                        location.href = "paymentFailed.do"
                     }
                 }).fail(function (ajaxError) {
                     console.error('AJAX 요청 오류:', ajaxError);
@@ -122,8 +127,24 @@ function requestPay() {
         });
 };
 
+// 배포에서 사용할 uuid 생성 함수
+function generateUUID() {
+    // 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'라는 문자열을 템플릿으로 사용하여 UUID를 생성합니다.
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        // 0부터 15까지의 무작위 정수를 생성합니다.
+        // Math.random()은 0 이상 1 미만의 부동 소수점 난수를 반환합니다.
+        // 여기에 16을 곱해서 0에서 16 사이의 숫자를 만든 뒤, | 0 연산자로 정수 부분만 취합니다.
+        var r = Math.random() * 16 | 0,
+            // 'x'인 경우에는 r 값을 그대로 사용하고, 'y'인 경우에는 특정 비트 조작을 가합니다.
+            // r & 0x3는 하위 2비트만 남기고, 0x8 (8진수 10)과 OR 연산을 수행합니다.
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        // 최종 계산된 값을 16진수 문자열로 변환합니다.
+        return v.toString(16);
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     // 버튼 클릭 시 requestPay 함수 호출
     document.getElementById('reservationbutton').addEventListener('click', requestPay);
 });
+

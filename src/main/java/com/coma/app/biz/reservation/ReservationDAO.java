@@ -80,10 +80,6 @@ public class ReservationDAO {
 			+ "	R.RESERVATION_PRICE\r\n"
 			+ "FROM\r\n"
 			+ "	RESERVATION R\r\n"
-			+ "JOIN\r\n"
-			+ "	MEMBER M\r\n"
-			+ "ON \r\n"
-			+ "	R.RESERVATION_MEMBER_ID = M.MEMBER_ID\r\n"
 			+ "WHERE\r\n"
 			+ "	R.RESERVATION_MEMBER_ID = ? AND R.RESERVATION_GYM_NUM = ? AND R.RESERVATION_DATE = ?";
 

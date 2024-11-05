@@ -9,19 +9,19 @@
 <title>코마 : 크루전 개최 내용</title>
 
 <!-- Fonts and icons -->
-<script src="assets/js/plugin/webfont/webfont.min.js"></script>
+<script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
 <script src="https://kit.fontawesome.com/7f7b0ec58f.js"
 	crossorigin="anonymous"></script>
 
 <!-- CSS Files -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="assets/css/plugins.min.css" />
-<link rel="stylesheet" href="assets/css/kaiadmin.css" />
+<link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../../assets/css/plugins.min.css" />
+<link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
 
 </head>
 <body>
 	<!-- GNB 커스텀 태그 -->
-	<mytag:gnb member_id="${MEMBER_ID}"></mytag:gnb>
+	<mytag:gnb member_id="${MEMBER_ID}"/>
 
 	<!-- container start -->
 	<div class="container">

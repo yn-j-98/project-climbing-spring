@@ -81,15 +81,18 @@
       <aop:advisor advice-ref="txAdvice" pointcut-ref="updatePointcut"/>
    </aop:config>
 
+    <aop:config>
+        <aop:pointcut id="crew_board_tx" expression="execution(* com.coma.app.biz.crew_board.Crew_boardService.insert(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="crew_board_tx"/>
+    </aop:config>
 
    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
       <property name="dataSource" ref="ds"/>
       <property name="configLocation" value="classpath:sql-map-config.xml"/>
    </bean>
 
-
    <bean id="mybatis" class="org.mybatis.spring.SqlSessionTemplate">
       <constructor-arg ref="sqlSession"/>
    </bean>
-    
+
 </beans>
