@@ -6,7 +6,7 @@ import com.coma.app.biz.board.BoardDAO;
 import com.coma.app.biz.board.BoardDTO;
 import com.coma.app.biz.gym.GymDAO;
 import com.coma.app.biz.gym.GymDTO;
-import com.coma.app.biz.member.MemberDAO;
+import com.coma.app.biz.member.MemberDAO3;
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.reservation.ReservationDAO;
 import com.coma.app.biz.reservation.ReservationDTO;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class MainManagementService {
 
     @Autowired
-    private MemberDAO memberDAO;
+    private MemberDAO3 memberDAO;
     @Autowired
     private GymDAO gymDAO;
     @Autowired

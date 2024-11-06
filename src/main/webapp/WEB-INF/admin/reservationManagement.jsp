@@ -71,8 +71,8 @@
                                 <div class="form-floating">
                                     <%--TODO 컨디션 안쓴다면 ID 변경--%>
                                     <select class="form-select" id="search_keyword">
-                                        <option ${search_keyword == "RESERVATION_MEMBER_ID" ? "selected":''} value="RESERVATION_MEMBER_ID">예약자</option>
-                                        <option ${search_keyword == "RESERVATION_GYM_NUM" ? "selected":''} value="RESERVATION_GYM_NUM">암벽장</option>
+                                        <option ${search_keyword eq "RESERVATION_MEMBER_ID" ? "selected":''} value="RESERVATION_MEMBER_ID">예약자</option>
+                                        <option ${search_keyword eq "RESERVATION_GYM_NUM" ? "selected":''} value="RESERVATION_GYM_NUM">암벽장</option>
                                     </select>
                                     <label for="search_keyword">검색할 목록</label>
                                 </div>

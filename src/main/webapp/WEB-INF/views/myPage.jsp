@@ -18,6 +18,11 @@
 	<link rel="stylesheet" href="assets/css/plugins.min.css" />
 	<link rel="stylesheet" href="assets/css/kaiadmin.css" />
 
+	<!-- sweetAlert JS FILE -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+	<script src="js/sweetAlert_modal.js"></script>
+
 </head>
 
 <body>
@@ -55,8 +60,8 @@
 						</div>
 						<div class="col-md-6 text-center">
 							<form id="deleteMember" action="deleteMember.do" method="POST">
-							<button class="btn btn-danger" onclick="confirmDeleteMember()">회원
-								탈퇴</button>
+								<button class="btn btn-danger" id="deleteMemberButton">회원
+									탈퇴</button>
 							</form>
 						</div>
 					</div>
@@ -173,30 +178,48 @@
 		<!-- container end -->
 	</div>
 </div>
-	<!--   Core JS Files   -->
-	<script src="assets/js/core/jquery-3.7.1.min.js"></script>
-	<script src="assets/js/core/popper.min.js"></script>
-	<script src="assets/js/core/bootstrap.min.js"></script>
+<!--   Core JS Files   -->
+<script src="assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="assets/js/core/popper.min.js"></script>
+<script src="assets/js/core/bootstrap.min.js"></script>
 
-	<script type="text/javascript">
-		function confirmDeleteMember() {
-			if (confirm('정말 회원 탈퇴를 하시겠습니까?')) {
-				location.href = 'deleteMember.do';
+<script type="text/javascript">
+	$(document).ready(function() {
+		const deleteButton = $("#deleteMember");
+		const reservation = '${reservation_datas}';
+
+		$('#deleteMemberButton').on('click', e => {
+			e.preventDefault();
+			if(reservation == null || reservation == '[]'){
+				sweetAlert_confirm_error('회원 탈퇴','정말 회원 탈퇴 하시겠습니까?','탈퇴','취소').then(function(result){
+					if(result){
+						deleteButton.submit();
+					}
+				});
 			}
-		}
+			else{
+				sweetAlert_error('탈퇴 불가','예약 내역이 존재합니다.');
+			}
+		});
 
-		function deleteBoard(boardNum){
-			if(confirm('정말 삭제하시겠습니까?')){
+	});
+
+	function deleteBoard(boardNum){
+		sweetAlert_confirm_error('게시글 삭제','정말 삭제 하시겠습니까?','삭제','취소').then(function(result){
+			if(result){
 				location.href='boardDelete.do?board_num='+boardNum;
 			}
-		}
-		function deleteReservation(reservationNum) {
-			if(confirm('정말 삭제하시겠습니까?')){
+		});
+	}
+	function deleteReservation(reservationNum) {
+		sweetAlert_confirm_error('예약 취소','예약 취소 하시겠습니까?','예약취소','닫기').then(function(result){
+			if(result){
 				location.href='deleteReservation.do?reservation_num='+reservationNum;
 			}
-		}
+		});
+	}
 
-	</script>
+</script>
 </body>
 
 </html>

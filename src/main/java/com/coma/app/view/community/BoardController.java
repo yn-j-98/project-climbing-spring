@@ -123,32 +123,24 @@ public class BoardController {
 
     @LoginCheck
     @PostMapping(value = "/boardUpdate.do")
-    public String boardUpdate(HttpRequest request, HttpSession session, Model model, BoardDTO boardDTO) {
+    public String boardUpdate(HttpSession session, Model model, BoardDTO boardDTO) {
 
+        String title = "게시글 수정";
+        String msg = "게시글이 수정되었습니다.";
+        String path = "myPage.do";
 
-        String member_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
-        System.out.println("로그인 확인: " + member_id);
+        boardDTO.setBoard_location(location(boardDTO.getBoard_location()));
 
-        // 만약 로그인 정보가 없다면
-        if (member_id == null) {
-
-            return "redirect:login.do";
-
-        } else {
-            // 로그인이 되어있다면
-            // 업데이트 가능
-            // 내용 받기
-            // 번호 받기
-
-            //세션을 불러와서
-
-            boardDTO.setBoard_location(location(boardDTO.getBoard_location()));
-
-            boolean updateFlag = this.boardService.updateContentTitle(boardDTO); // 업데이트
-
+        if(!this.boardService.updateContentTitle(boardDTO)) {
+            msg = "게시긓 수정을 실패했습니다.";
+            path = "boardUpdate.do?board_num=" + boardDTO.getBoard_num();
         }
 
-        return "views/myPage";
+        model.addAttribute("title", title);
+        model.addAttribute("msg", msg);
+        model.addAttribute("path", path);
+
+        return "views/info";
     }
 
     /* 뷰에서 전달받은 지역 값을 실제 지역명으로 변환하는 함수
@@ -162,7 +154,7 @@ public class BoardController {
 
 //            boardDTO.setBoard_condition("BOARD_ONE_WRITER_ID");
             //model 에 전달하여 글 내용을 받아오고
-            boardDTO = this.boardService.selectOneWriterId(boardDTO);
+            boardDTO = this.boardService.selectOne(boardDTO);
 
             //만약 데이터가 null 이라면 mypage.do 로 전달
             if (boardDTO == null) {
@@ -179,13 +171,13 @@ public class BoardController {
 
                 System.out.println("BoardController.BoardLocation : [" + boardDTO.getBoard_location() + "]");
 
-                model.addAttribute("BOARD_NUM", boardDTO.getBoard_num());
-                model.addAttribute("BOARD_TITLE", boardDTO.getBoard_title());
-                model.addAttribute("BOARD_LOCATION", location(boardDTO.getBoard_location()));
+                model.addAttribute("board_num", boardDTO.getBoard_num());
+                model.addAttribute("board_title", boardDTO.getBoard_title());
+                model.addAttribute("board_location", location(boardDTO.getBoard_location()));
 
 
                 String content = boardDTO.getBoard_content();
-                model.addAttribute("BOARD_CONTENT", content);
+                model.addAttribute("board_content", content);
 
                 try {
                     //글 내용에서 img 태그가 있다면 해당 이미지 폴더의 번호만 가져오는 로직
@@ -219,8 +211,7 @@ public class BoardController {
         memberDTO = this.memberService.selectOneSearchId(memberDTO); // 프로필 사진을 보여주기 위해 member selectOne
         System.out.println("BoardController.content.memberDTO [" + memberDTO + "]");
 
-        String filename = memberDTO.getMember_profile();
-        model.addAttribute("member_profile", servletContext.getContextPath() + "/profile_img/" + filename);
+        model.addAttribute("member_profile", memberDTO.getMember_profile());
 
 
         int board_cnt = boardDTO.getBoard_cnt() + 1; // 조회수 증가

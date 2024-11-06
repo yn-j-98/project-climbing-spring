@@ -89,7 +89,7 @@ public class CrewController {
 
     @LoginCheck
     @GetMapping("/crewJoin.do")
-    public String crewJoin(Model model, CrewDTO crewDTO, HttpSession session) {
+    public String crewJoin(Model model, CrewDTO crewDTO, HttpSession session, MemberDTO memberDTO) {
         log.info("crewJoin.crew_num = [{}]", crewDTO.getCrew_num());
         //얼럿창 info 데이터
         String title = "";
@@ -101,13 +101,11 @@ public class CrewController {
         int crew_num = crewDTO.getCrew_num();
 
         //세션의 로그인된 사용자 아이디로 사용자가 속한 크루번호 출력
-        MemberDTO memberDTO = new MemberDTO();
         memberDTO.setMember_id(member_id);
         MemberDTO data = memberService.selectOneSearchMyCrew(memberDTO);
-        log.info("data = [{}]", data);
-        log.info("data crew num = [{}]",data.getMember_crew_num());
         // 크루 가입 유효성 검사
-        if (data.getMember_crew_num() >= 1) {
+        if (data.getMember_crew_num() > 0) {
+            log.info("crewJoin.crew_num[{}]", data.getMember_crew_num());
             model.addAttribute("title","크루 가입 실패");
             model.addAttribute("msg","이미 소속된 크루가 있습니다.");
             model.addAttribute("path","crewList.do");

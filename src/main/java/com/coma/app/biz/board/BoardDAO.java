@@ -224,7 +224,7 @@ public class BoardDAO {
 	//게시글 내용, 제목 변경 BOARD_CONTENT, BOARD_TITLE, BOARD_NUM FIXME
 	public boolean updateContentTitle(BoardDTO boardDTO) {
 		System.out.println("board.BoardDAO.updateContentTitle 시작");
-		int result = jdbcTemplate.update(UPDATE_CONTENT_TITLE,boardDTO.getBoard_content().replace("'", "\'"),boardDTO.getBoard_title().replace("'", "\'"),boardDTO.getBoard_location().replace("'", "\'"));
+		int result = jdbcTemplate.update(UPDATE_CONTENT_TITLE,boardDTO.getBoard_content().replace("'", "\'"),boardDTO.getBoard_title().replace("'", "\'"),boardDTO.getBoard_location().replace("'", "\'"),boardDTO.getBoard_num());
 		if(result <= 0){
 			System.err.println("	[에러]com.coma.app.biz.board.boardDAO.updateContentTitle sql 실패 : UPDATE = " + UPDATE_CONTENT_TITLE );
 			return false;

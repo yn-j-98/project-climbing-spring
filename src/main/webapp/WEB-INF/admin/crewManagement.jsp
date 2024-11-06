@@ -28,6 +28,10 @@
   <%-- ajax Js File--%>
   <script src="../../js/crewManagementAjax.js"></script>
 
+  <!-- DatePicker Js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/locales/bootstrap-datepicker.ko.min.js" integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/datepicker.js"></script>
+
 </head>
 <body class="user-select-none">
 <mytag:admin_gnb member_id="${MEMBER_ID}"></mytag:admin_gnb>
@@ -49,10 +53,10 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="col-md-2 ms-auto">
           <select class="form-select form-control" id="search_keyword" name="search_keyword">
-            <option value="NUM" ${search_keyword = 'NUM' ? 'selected' : ''}>크루전 번호</option>
-            <option value="MEMBERNAME" ${search_keyword = 'MEMBERNAME' ? 'selected' : ''}>암벽장 이름</option>
-            <option value="MEMBERID" ${search_keyword = 'MEMBERID' ? 'selected' : ''}>경기 날짜</option>
-            <option value="DATE" ${search_keyword = 'DATE' ? 'selected' : ''}>크루전 생성일</option>
+            <option value="NUM" ${search_keyword eq 'NUM' ? 'selected' : ''}>크루전 번호</option>
+            <option value="MEMBERNAME" ${search_keyword eq 'MEMBERNAME' ? 'selected' : ''}>암벽장 이름</option>
+            <option value="MEMBERID" ${search_keyword eq 'MEMBERID' ? 'selected' : ''}>경기 날짜</option>
+            <option value="DATE" ${search_keyword eq 'DATE' ? 'selected' : ''}>크루전 생성일</option>
           </select>
         </div>
         <div class="col-md-7">
@@ -88,7 +92,7 @@
           <c:forEach items="${datas}" var="data">
             <tr class="battle-table-tr">
               <th scope="row" class="battle_num">${data.battle_num}</th>
-              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.do?battle_num=${data.battle_num}">${data.battle_gym_name}</a></td>
+              <td><a class="submenu text-dark gym_name" href="crewManagementDetail.do?battle_num=${data.battle_num}&battle_game_date=${data.battle_game_date}">${data.battle_gym_name}</a></td>
               <td class="battle_game_date">${data.battle_game_date}</td>
               <td class="battle_registration_date">${data.battle_registration_date}</td>
               <input type="hidden" class="battle_isGame" value="${data.battle_status}"/>
