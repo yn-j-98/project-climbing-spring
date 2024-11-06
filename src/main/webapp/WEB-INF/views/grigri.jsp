@@ -333,7 +333,7 @@
                             <img src="/img/grigri/junyeol.jpeg" alt="junyeol image"/>
                         </div>
                         <div class="text-box">
-                            <a href="/https://github.com/junyeol" class="w-100 h-100 d-block ">
+                            <a href="https://github.com/junyeol" class="w-100 h-100 d-block ">
                                 <h4>이준열</h4>
                                 <p>열정적인 개발자</p>
                             </a>
