@@ -24,12 +24,10 @@ public class ReplyController {
     @PostMapping("/reply.do")
     public String Reply(HttpSession session, Model model, ReplyDTO replyDTO) {
         // 댓글 달기
-//		int reply_board_num = Integer.parseInt(request.getParameter("board_id")); // 댓글 작성할 게시글 번호
         log.info("board_num : [{}]",replyDTO.getReply_board_num());
         String info_path = "content.do?board_num=" + replyDTO.getReply_board_num();
 
         // 로그인 정보가 있는지 확인
-
         String member_id = (String) session.getAttribute("MEMBER_ID");
         log.info("member_id : [{}]", member_id );
 
@@ -46,7 +44,8 @@ public class ReplyController {
                 model.addAttribute("msg", "댓글 작성을 실패하였습니다.");
             }
             else {
-                System.out.println("board_num"+replyDTO.getReply_board_num());
+                log.info("Reply.board_num : [{}]", replyDTO.getReply_board_num());
+
                 model.addAttribute("title", "성공");
                 model.addAttribute("msg", "댓글 작성을 성공하였습니다.");
             }
@@ -66,8 +65,6 @@ public class ReplyController {
         // 댓글 삭제
         String reply_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
 
-        System.out.println("사용자 ID: " + reply_id);
-
         log.info("board_num : [{}]", replyDTO.getReply_board_num());
         log.info("reply_id : [{}]", reply_id);
         replyDTO.setReply_board_num(boardDTO.getBoard_num());
@@ -75,17 +72,10 @@ public class ReplyController {
 
         boolean deleteReply = this.replyService.delete(replyDTO); // 댓글 삭제
 
-        if(deleteReply) {
+        if(deleteReply) {//댓글 삭제 성공
             model.addAttribute("msg", "댓글 삭제를 성공하였습니다.");
         }
-        else {
-
-            model.addAttribute("msg", "댓글 삭제를 실패했습니다.");
-            model.addAttribute("path", "login.do");
-
-        }
         model.addAttribute("path", info_path);
-
 
         return "views/info";
 
@@ -99,17 +89,15 @@ public class ReplyController {
         // 댓글 업데이트 가능
         String reply_writer_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
 
+        log.info("replyUpdate.reply_id : [{}]", reply_writer_id);
 
-        System.out.println("사용자 ID: " + reply_writer_id);
-
-
-        boolean updateResult = this.replyService.update(replyDTO); // 업데이트
+        boolean updateResult = this.replyService.update(replyDTO); // 댓글 업데이트
 
         if(updateResult) {
             model.addAttribute("msg", "댓글 수정을 성공하였습니다.");
         }
+        //업데이트 실패시
         else {
-
             model.addAttribute("msg", "댓글 수정을 실패하였습니다.");
         }
 
