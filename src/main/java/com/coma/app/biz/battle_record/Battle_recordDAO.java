@@ -190,7 +190,7 @@ public class Battle_recordDAO{
 
 	public boolean insert(Battle_recordDTO battle_recordDTO) {
 		System.out.println("	[로그] com.coma.app.biz.battle_record.insert 시작");
-		int result = jdbcTemplate.update(INSERT, battle_recordDTO.getBattle_record_num(), battle_recordDTO.getBattle_record_crew_num());
+		int result = jdbcTemplate.update(INSERT, battle_recordDTO.getBattle_record_battle_num(), battle_recordDTO.getBattle_record_crew_num());
 		if(result<=0){
 			System.err.println("	[에러]com.coma.app.biz.battle_record.insert sql 실패 : insert = " + INSERT );
 			return false;

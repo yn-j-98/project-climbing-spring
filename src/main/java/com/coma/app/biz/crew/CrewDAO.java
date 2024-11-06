@@ -46,12 +46,11 @@ public class CrewDAO {
 
 	// 크루의 참여상태 확인 // TODO 크루전 신청 페이지 추가(2024.11.01)
 	private final String ONE_BATTLE_STATUS = "SELECT\n" +
-			"	COUNT(*) AS CREW_TOTAL\n" +
+			"	CREW_BATTLE_STATUS\n" +
 			"FROM\n" +
 			"	CREW\n" +
 			"WHERE\n" +
-			"	CREW_BATTLE_STATUS = 'T'\n" +
-			"AND CREW_NUM = ?";
+			"CREW_NUM = ?";
 
 	// 크루 참여상태 참여로 변경 // TODO 크루전 신청 페이지 추가(2024.11.01)
 	private final String UPDATE_BATTLE_STATUS_TRUE = "UPDATE\n" +
@@ -307,10 +306,10 @@ class CrewRowMapperOneCount implements RowMapper<CrewDTO> {
 		log.info("검색 성공");
 		CrewDTO crewDTO = new CrewDTO();
 		try{
-			crewDTO.setTotal(resultSet.getInt("CREW_TOTAL"));
+			crewDTO.setCrew_battle_status(resultSet.getString("CREW_BATTLE_STATUS"));
 		}catch(Exception e){
-			System.err.println("Crew_total = 0");
-			crewDTO.setTotal(0);
+			System.err.println("CREW_BATTLE_STATUS = ??????");
+			crewDTO.setCrew_battle_status("F");
 		}
 		return crewDTO;
 	}
