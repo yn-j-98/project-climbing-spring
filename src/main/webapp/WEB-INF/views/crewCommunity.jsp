@@ -158,7 +158,7 @@
         const memberId = "${MEMBER_ID}"; // 로그인된 사용자 ID
         const memberProfile = "https://comapro.cdn1.cafe24.com${data.member_profile}"; //로그인 사용자 이미지
         const memberName = "${data.member_name}"; // 사용자 이름
-        let socket = new WebSocket("ws://localhost:8089/chat/" + memberId);
+        let socket = new WebSocket("ws://localhost:8088/chat/" + memberId);
 
         socket.onopen = function () {
             console.log("웹소켓 연결 성공");

@@ -21,16 +21,14 @@ public class LoginAPIController {
     private MemberService memberService;
 
     @Autowired
-    private HttpSession session; // 세션을 자동으로 주입
+    private HttpSession session;
 
     @PostMapping("/loginAPI.do")
     public @ResponseBody String loginAPI(@RequestBody MemberDTO memberDTO) {
         log.info("memberDATA {}",memberDTO);
         log.info("loginAPI.do start");
         // 해당 사용자의 아이디가 있는지 확인
-//        memberDTO.setMember_id(api_id);
         MemberDTO apiMemberID = this.memberService.selectOneSearchId(memberDTO);
-
 
         // 만약 있으면 세션 값에 저장해서 로그인 진행
         if (apiMemberID != null) {
@@ -43,9 +41,7 @@ public class LoginAPIController {
         }
         // 만약 없으면 회원가입 페이지로 넘겨서 회원가입할 수 있도록 한다.
         else {
-            //log.info("LoginAPIController memberDTO NULL 로그 VIEW 에서 넘겨준 회원 아이디 : " + memberDTO.getMember_id());
             return memberDTO.getMember_id(); // 회원가입을 위한 아이디 반환
-
 
         }
     }

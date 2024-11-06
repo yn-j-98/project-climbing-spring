@@ -1,16 +1,12 @@
 package com.coma.app.view.aspect;
 
-import com.coma.app.view.annotation.AdminCheckImpl;
+import com.coma.app.view.annotation.AdminCheckService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -21,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 public class AdminAspect {
 
     @Autowired
-    private AdminCheckImpl adminCheckImpl;
+    private AdminCheckService adminCheckService;
 
     @Autowired
     private HttpServletRequest request;
@@ -34,12 +30,8 @@ public class AdminAspect {
     public Object checkAdmin(ProceedingJoinPoint pjp) throws Throwable {
         log.info("@around Admin Advice 시작");
 
-        // 사용자의 요청 정보를 검사 & 처리를 위해 필요해서 가져옴
-//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-//        HttpSession session = request.getSession();
-
         // 관리자 권한 체크 로직 실행
-        String result = adminCheckImpl.checkAdmin(request, session);
+        String result = adminCheckService.checkAdmin(request, session);
 
         if (result != null) {
             log.info("result != null");

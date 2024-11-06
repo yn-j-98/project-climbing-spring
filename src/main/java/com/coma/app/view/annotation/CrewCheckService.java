@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class CrewCheckImpl {
+public class CrewCheckService {
 
     private static final String CREW_CHECK = "CREW_CHECK";
 

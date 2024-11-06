@@ -3,7 +3,6 @@ package com.coma.app.view.annotation;
 
 import com.coma.app.biz.member.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class LoginCheckImpl {
+public class LoginCheckService {
 
     @Autowired
     private MemberService memberService;
@@ -79,7 +78,7 @@ public class LoginCheckImpl {
     }
 
     // 로그아웃 시 세션을 무효화하는 메서드
-    public static void logout(HttpServletRequest request, HttpServletResponse response) {
+    public static void logout(HttpServletRequest request) {
         invalidateSession(request); // 세션 무효화
     }
 
