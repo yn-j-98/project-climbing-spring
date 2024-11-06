@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.coma.app.biz.battle.BattleDTO;
@@ -30,7 +31,9 @@ public class CrewBattleApplicationController {
 	@Autowired
 	private HttpSession session;
 
-	@PostMapping("/CrewBattleApplication.do")
+
+	@LoginCheck
+	@GetMapping("/CrewBattleApplication.do")
 	public String CrewBattleApplication(CrewDTO crewDTO, GymDTO gymDTO, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO, Model model) {
 		log.info("CrewBattleApplication.do 도착");
 

@@ -103,13 +103,12 @@ public class CrewController {
         //세션의 로그인된 사용자 아이디로 사용자가 속한 크루번호 출력
         memberDTO.setMember_id(member_id);
         MemberDTO data = memberService.selectOneSearchMyCrew(memberDTO);
-
         // 크루 가입 유효성 검사
         if (data.getMember_crew_num() > 0) {
             log.info("crewJoin.crew_num[{}]", data.getMember_crew_num());
-            title = "크루 가입 실패";
-            msg = "이미 소속된 크루가 있습니다.";
-            path = "crewList.do";
+            model.addAttribute("title","크루 가입 실패");
+            model.addAttribute("msg","이미 소속된 크루가 있습니다.");
+            model.addAttribute("path","crewList.do");
             return "views/info";
         }
 

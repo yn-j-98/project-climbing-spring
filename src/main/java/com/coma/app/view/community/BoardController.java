@@ -48,6 +48,7 @@ public class BoardController {
         return "redirect:myPage.do";
     }
 
+    @LoginCheck
     @PostMapping("/boardInsert.do")
     public String boardInsert(HttpSession session, Model model, BoardDTO boardDTO) {
 
