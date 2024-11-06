@@ -7,7 +7,6 @@ import com.coma.app.biz.member.MemberServiceImpl;
 import com.coma.app.biz.reply.ReplyDTO;
 import com.coma.app.biz.reply.ReplyServiceImpl;
 import com.coma.app.view.annotation.AdminCheck;
-import com.coma.app.view.annotation.LoginCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,15 +43,16 @@ public class BoardManagementController {
         boardDTO.setBoard_min_num(min_num);
         List<BoardDTO> datas = null;
         int list_num = 0;
+        // 검색 조건에 따라 게시글 목록 조회
         if(boardDTO.getSearch_content() == null){
             list_num = boardService.selectOneCount(boardDTO).getTotal();
             datas = boardService.selectAll(boardDTO);
         }
-        else if("BOARD_WRITER_ID".equals(search_keyword)){
+        else if("BOARD_WRITER_ID".equals(search_keyword)){ // ID
             list_num = boardService.selectOneSearchIdCount(boardDTO).getTotal();
             datas = boardService.selectAllSearchPatternId(boardDTO);
         }
-        else if("BOARD_TITLE".equals(search_keyword)){
+        else if("BOARD_TITLE".equals(search_keyword)){ // 제목
             list_num = boardService.selectOneSearchTitleCount(boardDTO).getTotal();
             datas = boardService.selectAllSearchTitle(boardDTO);
         }
@@ -94,6 +94,7 @@ public class BoardManagementController {
         model.addAttribute("path", "boardManagement.do");
         return "views/info";
     }
+
     @AdminCheck
     @GetMapping("/boardManagementDetail.do")
     public String boardManagementDetail(ReplyDTO replyDTO, BoardDTO boardDTO, MemberDTO memberDTO, Model model) {

@@ -135,7 +135,7 @@
                         <div class="card h-90">
                             <div class="row g-0 d-flex flex-column">
                                 <div class="col mt-2">
-                                    <img src="${gym.gym_profile}" class="card-img figure-img img-fluid rounded"
+                                    <img src="https://comapro.cdn1.cafe24.com${gym.gym_profile}" class="card-img figure-img img-fluid rounded"
                                          alt="${gym.gym_name} 사진">
                                 </div>
                                 <div class="col">
@@ -206,10 +206,9 @@
                                 <label for="gym_location" class="form-label">암벽장 주소</label>
                             </div>
                             <div class="col-sm-9">
-                                <input type="text" id="postcode" placeholder="우편번호">
-                                <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-                                <input type="text" id="roadAddress" placeholder="도로명주소">
-                                <input type="text" id="jibunAddress" placeholder="지번주소">
+                                <input type="button" onclick="execDaumPostcode()" value="주소 찾기" class="btn btn-info w-100 mb-2" ><br>
+                                <input type="text" id="roadAddress" placeholder="도로명주소" class="mb-2">
+                                <input type="text" id="jibunAddress" placeholder="지번주소" class="mb-2">
                                 <span id="guide" style="color:#999;display:none"></span>
                                 <input type="text" id="detailAddress" placeholder="상세주소">
                                 <input type="text" id="extraAddress" placeholder="참고항목">
@@ -379,13 +378,12 @@
 
     // 주소 API
     function combineAddress() {
-        var postcode = document.getElementById('postcode').value;
         var roadAddress = document.getElementById('roadAddress').value;
         var jibunAddress = document.getElementById('jibunAddress').value;
         var detailAddress = document.getElementById('detailAddress').value;
         var extraAddress = document.getElementById('extraAddress').value;
 
-        var combinedAddress = postcode+roadAddress+jibunAddress+detailAddress+extraAddress.trim();
+        var combinedAddress = roadAddress+jibunAddress+detailAddress+extraAddress.trim();
 
         document.getElementById('gym_location').value = combinedAddress;
     }
@@ -415,7 +413,6 @@
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('postcode').value = data.zonecode;
                 document.getElementById("roadAddress").value = roadAddr;
                 document.getElementById("jibunAddress").value = data.jibunAddress;
 

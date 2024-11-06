@@ -120,7 +120,7 @@
           </h2>
           <div id="gym_aria_controls${status.index}" class="accordion-collapse collapse" aria-labelledby="gym_aria_labelledby${status.index}" data-bs-parent="#gym_data_bs_parent${status.index}">
             <div class="accordion-body">
-              <img src="https://${battle_data.battle_gym_profile}" alt="GymImg" class="GymImg"/>
+              <img src="https://comapro.cdn1.cafe24.com${battle_data.battle_gym_profile}" alt="GymImg" class="GymImg"/>
             </div>
           </div>
         </div>

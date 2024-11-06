@@ -97,7 +97,7 @@
 										<!-- 암벽장 사진 -->
 										<div class="mb-3">
 											<h4>암벽장 사진 :</h4>
-											<img src="https://comapro.cdn1.cafe24.com/gym_img/${my_battle.battle_gym_profile}" alt="암벽장 사진" class="img-fluid" style="max-width: 100%; height: auto;" />
+											<img src="https://comapro.cdn1.cafe24.com${my_battle.battle_gym_profile}" alt="암벽장 사진" class="img-fluid" style="max-width: 100%; height: auto;" />
 										</div>
 										<!-- 크루전 개최한 장소명 -->
 										<a href="crewBattleDetail.do?battle_num=${my_battle.battle_num}">
