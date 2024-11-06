@@ -1,5 +1,7 @@
 package com.coma.app.view.admin;
 
+import com.coma.app.biz.battle.BattleDTO;
+import com.coma.app.biz.battle.BattleServiceImpl;
 import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.gym.GymService;
 import com.coma.app.view.annotation.AdminCheck;
@@ -27,6 +29,8 @@ public class GymManagementController {
 
     @Autowired
     private FTPService ftpService;
+    @Autowired
+    private BattleServiceImpl battleService;
 
     @AdminCheck
     @GetMapping("/gymManagement.do")
@@ -123,25 +127,40 @@ public class GymManagementController {
 
     @AdminCheck
     @PostMapping("/gymManagementReq.do")
-    public String gymManagementReq(Model model, GymDTO gymDTO) {
+    public String gymManagementReq(Model model, GymDTO gymDTO, BattleDTO battleDTO) {
 
         String infoPath = "gymManagement.do";
         String title = "크루전이 등록되었습니다.";
         String msg = "";
 
+        battleDTO.setBattle_gym_num(gymDTO.getGym_num());
+
+        boolean flag=false;
+
+        if(this.battleService.selectOneSearchBattleAdmin(battleDTO)==null) {
+            flag=this.battleService.insertFirst(battleDTO);
+            if(!flag) {
+                System.out.println("battle insert 오류");
+            }
+        }
+
         if("T".equals(gymDTO.getGym_admin_battle_verified())){
             title = "이미 크루전이 등록되어 있는 암벽장입니다.";
         }
+        else if("F".equals(gymDTO.getGym_admin_battle_verified())){
+            gymDTO.setGym_admin_battle_verified("T");
+            log.info("GymDTO [{}]",gymDTO);
 
-        gymDTO.setGym_admin_battle_verified("T");
-        log.info("GymDTO [{}]",gymDTO);
-
-
-        //암벽장 번호, 암벽장 크루전 등록 여부를 받습니다.
-        if(!gymService.updateAdminBattleVerified(gymDTO)){
-            title = "크루전 등록 실패";
-
-            msg = "Server 오류로 크루전에 등록에 실패하였습니디.";
+            //암벽장 번호, 암벽장 크루전 등록 여부를 받습니다.
+            if(!gymService.updateAdminBattleVerified(gymDTO)){
+                title = "크루전 등록 실패";
+                msg = "Server 오류로 크루전에 등록에 실패하였습니디.";
+            }
+        }
+        else{
+            log.info("battle_verified = [{}]",gymDTO.getGym_admin_battle_verified());
+            title = "잘못된 요청";
+            msg = "전달된 데이터 : "+gymDTO.getGym_admin_battle_verified();
         }
 
         model.addAttribute("title", title);
