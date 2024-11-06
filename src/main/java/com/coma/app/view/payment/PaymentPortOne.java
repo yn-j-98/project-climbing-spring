@@ -115,7 +115,7 @@ public class PaymentPortOne {
         // 금액은 -가 나올 수 없는 값이어서 -1로 변수 초기화(유효성 검사 강화)
         int amount_result = -1;
         try {
-            System.out.println(response.body());
+            log.info("response = [{}]",response.body());
             JSONObject jsonObject = (JSONObject) parser.parse(response.body());
             JSONObject responseObject = (JSONObject) jsonObject.get("response");
 
@@ -149,7 +149,7 @@ public class PaymentPortOne {
             e.printStackTrace();
             return false;
         }
-        System.out.println(response.body());
+        log.info("response = [{}]",response.body());
         return true;
     }
 

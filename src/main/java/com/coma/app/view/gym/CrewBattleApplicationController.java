@@ -102,7 +102,6 @@ public class CrewBattleApplicationController {
 			}
 			else if(battle_data == null) {
 				//개최되어 있지 않은 크루전 번호라면
-				//error_message : 크루전 개최에 실패하였습니다. (사유 : 없는 크루전)
 				model.addAttribute("msg", "크루전 개최에 실패하였습니다. (사유 : 없는 크루전)");
 				model.addAttribute("path", error_path);
 				log.info("크루전 없음 로그 = [{}]",error_path);
@@ -110,7 +109,6 @@ public class CrewBattleApplicationController {
 			}
 
 			if(!flag) {
-				//false: error_message 크루전 개최에 실패하였습니다. (사유 : 게임일 등록 실패)
 				model.addAttribute("msg", "크루전 개최에 실패하였습니다. (사유 : 게임일 등록 실패)");
 				model.addAttribute("path", error_path);
 				return path;
@@ -131,7 +129,7 @@ public class CrewBattleApplicationController {
 			log.info("crew_data(크루전 등록 여부확인) = [{}]",battle_status);
 
 			// 이미 참여중인 크루전이 한개 이상 있다면 오류메시지
-			if(!battle_status) { // if(crew_data.getTotal()>=1) - 기존 로직
+			if(!battle_status) {
 				model.addAttribute("msg", "크루전을 이미 등록했습니다. (사유 : 크루전 등록 중복)");
 				model.addAttribute("path", error_path);
 

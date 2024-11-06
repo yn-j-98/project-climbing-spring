@@ -1,6 +1,6 @@
 package com.coma.app.view.aspect;
 
-import com.coma.app.view.annotation.CrewCheckImpl;
+import com.coma.app.view.annotation.CrewCheckService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +10,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
 @Aspect
@@ -20,7 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class CrewAspect {
 
     @Autowired
-    private CrewCheckImpl crewCheckImpl;
+    private CrewCheckService crewCheckService;
 
     @Autowired
     private HttpServletRequest request;
@@ -32,9 +30,7 @@ public class CrewAspect {
         log.info("@around Crew Advice 시작");
 
         // 사용자의 요청 정보를 검사 & 처리를 위해 필요해서 가져옴
-//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-//        HttpSession session = request.getSession();
-        String result = crewCheckImpl.checkCrew(request,session);
+        String result = crewCheckService.checkCrew(request,session);
 
         if (result != null) {
             log.info("result != null");

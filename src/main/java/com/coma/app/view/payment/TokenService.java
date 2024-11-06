@@ -1,6 +1,7 @@
 package com.coma.app.view.payment;
 
 import com.coma.app.biz.reservation.PaymentInfoDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Slf4j
 public class TokenService {
 
     private final static String IMP_KEY = "5647450260826041";
@@ -28,7 +30,7 @@ public class TokenService {
         try {
             response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            System.out.println("토큰 요청 실패");
+            log.info("토큰 요청 실패");
             e.printStackTrace();
         }
         System.out.println(response.body());
@@ -37,7 +39,7 @@ public class TokenService {
         try {
             jsonObject = (JSONObject) parser.parse(response.body());
         } catch (ParseException e) {
-            System.out.println("json 변환 실패");
+            log.info("json 변환 실패");
             e.printStackTrace();
         }
         JSONObject responseObject = (JSONObject) jsonObject.get("response");
