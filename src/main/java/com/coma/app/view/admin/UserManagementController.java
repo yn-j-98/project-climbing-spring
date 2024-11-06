@@ -129,7 +129,7 @@ public class UserManagementController {
         if(!memberService.delete(memberDTO)){
             title = "서버 오류";
             msg = "회원삭제 실패";
-        };
+        }
         log.info("path [{}]",path);
         log.info("title [{}]",title);
         log.info("msg [{}]",msg);

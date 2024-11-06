@@ -5,7 +5,6 @@ import com.coma.app.biz.admin.CrewManagementService;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
-import com.coma.app.biz.crew.CrewService;
 import com.coma.app.biz.member.MemberDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
