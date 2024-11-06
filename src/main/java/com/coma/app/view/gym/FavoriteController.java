@@ -28,15 +28,13 @@ public class FavoriteController {
 
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 
-		System.out.println("com.coma.app.view.gym.gymFavorite 비동기 로그");
+		log.info("com.coma.app.view.gym.gymFavorite 비동기 로그");
 		log.info("좋아요 암벽장 : [{}]",favoriteDTO.getFavorite_gym_num());
 		log.info("로그인한 사용자 : [{}]",member_id);
 		//------------------------------------------------------------
 		//좋아요 여부를 확인하는 로직 시작
-		//TODO (암벽장 번호 / 사용자 아이디) Favorite DTO에 값을 추가해줍니다.
 		favoriteDTO.setFavorite_member_id(member_id);
 
-		//TODO Favorite selectOne 으로 여부를 확인해줍니다.
 		FavoriteDTO data_favorite = this.favoriteService.selectOne(favoriteDTO);
 		log.info("data_favorite = [{}]",data_favorite);
 

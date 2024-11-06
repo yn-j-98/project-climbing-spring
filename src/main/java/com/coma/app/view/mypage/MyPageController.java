@@ -1,6 +1,5 @@
 package com.coma.app.view.mypage;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.coma.app.biz.board.BoardDTO;
@@ -25,9 +22,8 @@ import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.biz.reservation.ReservationService;
 import com.coma.app.view.annotation.LoginCheck;
-import com.coma.app.view.function.ProfileUpload;
 
-import jakarta.servlet.ServletContext;
+
 import jakarta.servlet.http.HttpSession;
 
 @Slf4j
@@ -64,16 +60,7 @@ public class MyPageController {
 		memberDTO = this.memberService.selectOneSearchId(memberDTO);
 		//내 정보 불러오는 코드 종료
 		//------------------------------------------------------------------
-
-		//------------------------------------------------------------------
-		//관리자 권한이 있다면 신규 등록한 아이디 출력 시작
-//		if(memberDTO.getMember_role().equals("T")) {
-//			//사용자 정보 이름, 전화번호, 아이디, 프로필 이미지, 권한 전달
-//			List<MemberDTO> member_list = this.memberService.selectAllNew(memberDTO);
-//			model.addAttribute("member_list", member_list);
-//		}
-		//관리자 권한이 있다면 신규 등록한 아이디 출력 종료
-		//------------------------------------------------------------------
+		// 페이지네이션
 		int page = memberDTO.getPage();
 		int size = 10; // 한 페이지에 표시할 게시글 수
 		if (page <= 0) { // 페이지가 0일 때 (npe방지)
@@ -86,13 +73,10 @@ public class MyPageController {
 		memberDTO.setMember_min_num(min_num);
 		//사용자가 입력한 글 목록 출력 후 전달 시작
 		boardDTO.setBoard_writer_id(member_id);
-		//boardDTO.setSearch_keyword(member_id);
-		//이후 구현 예정
 		//사용자가 입력한 글 목록 출력 후 전달 종료
 		//------------------------------------------------------------------
 		// 내 게시글 불러오는 코드 시작
 		List<BoardDTO> boardList = this.boardService.selectAllSearchMatchId(boardDTO);
-
 		// 내 게시글 불러오는 코드 종료
 		//------------------------------------------------------------------
 		//내 예약정보 불러오는 코드 시작
@@ -106,7 +90,6 @@ public class MyPageController {
 		//사용자 정보를 MEMBERDATA에 담아서 View로 전달
 		//내 게시글 정보를 BOARD에 담아서 View로 전달
 		//내 예약 정보를 model_reservation_datas 에 담아서 View로 전달
-
 
 		model.addAttribute("MEMBERDATA", memberDTO);
 		model.addAttribute("BOARD", boardList);
@@ -144,9 +127,6 @@ public class MyPageController {
 
 		return "views/info";
 	}
-
-
-
 
 	@LoginCheck
 	@GetMapping("/deleteReservation.do")
@@ -226,10 +206,6 @@ public class MyPageController {
 		log.info("filename 로그 : [{}]",filename);
 
 		// 사용자 정보를 DB에 업데이트 요청
-
-//		if (!flag) {
-//			session.setAttribute("CHANGE_CHECK", flag);
-//		}
 
 		return "redirect:myPage.do";
 	}

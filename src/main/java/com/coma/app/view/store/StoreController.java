@@ -2,6 +2,7 @@ package com.coma.app.view.store;
 
 import java.util.ArrayList;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +13,9 @@ import com.coma.app.biz.product.ProductDTO;
 
 import jakarta.servlet.ServletContext;
 
+@Slf4j
 @Controller
 public class StoreController {
-
 
 	@Autowired
 	private ServletContext context;
@@ -39,9 +40,10 @@ public class StoreController {
 			}
 			int min_num = (page - 1) * size;
 
-			System.out.println("min = " + min_num);
 
 			productDTO.setProduct_min_num(min_num);
+			log.info("min_num = {}" , min_num);
+
 			int total = datas.size();
 
 			int max_num = page * size;
@@ -55,7 +57,6 @@ public class StoreController {
 			// Model에 데이터 전달
 			model.addAttribute("page", page); // 현재 페이지 번호
 			model.addAttribute("total", total); // 상품 총 개수
-			// FIXME V파트 modelProductDatas-> ProductDatas 확인하기
 			model.addAttribute("ProductDatas", ProductDatas); // 해당 페이지의 상품 목록
 		}
 		return "views/store";

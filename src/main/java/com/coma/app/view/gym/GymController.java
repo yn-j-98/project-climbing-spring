@@ -52,10 +52,7 @@ public class GymController {
 	@GetMapping("/gymMain.do")
 	public String gymMain(GymDTO gymDTO, Model model) {
 		log.info("gymMain.do 도착");
-		//boolean flag_Redirect = false; // 값을 전달해야하게 때문에 forward 방식으로 전달해야한다.
-		//---------------------------------------------------------------------------
-		//해당 페이지에서 공통으로 사용할 변수 and 객체
-		//View에서 전달해주는 (페이지 번호)변수
+
 		//---------------------------------------------------------------------------
 		//페이지 네이션을 위해 암벽장 전체 개수를 요청 selectOne
 		//페이지 네이션을 위한 페이지 개수를 구하는 로직을 구현
@@ -100,7 +97,6 @@ public class GymController {
 		//암벽장 리스트를 View로 전달
 		model.addAttribute("gym_datas", gym_datas);
 		//암벽장 전체 개수를 View로 전달
-		//FIXME V에서 앞에 model 빼야지 작동함
 		model.addAttribute("total", gym_total.getTotal());
 		log.info("total = [{}]", gym_total.getTotal());
 		//암벽장 페이지 페이지 번호를 전달.
@@ -121,12 +117,10 @@ public class GymController {
 		//------------------------------------------------------------
 		//해당 기능에서 공통으로 사용할 변수 and 객체
 		//View에서 전달해주는 (암벽장 번호 / 예약일 / 사용한 포인트 / 암벽장 가격)변수
-		//FIXME usepoint 확인
 		int reservation_use_point = reservationDTO.getReservation_use_point();
 		//예약금액 변수
 		int reservation_price = 0;
 		//View에서 이동할 페이지 변수
-		//TODO 확인 V에서 GYMNUM 확인
 		String view_path = "gymInfo.do?gym_num="+reservationDTO.getReservation_gym_num();
 		//------------------------------------------------------------
 		//사용자가 해당 암벽장에 예약한 정보가 있는지 확인하기 위한 로직 시작
@@ -210,7 +204,6 @@ public class GymController {
 		return path;
 	}
 
-
 	@LoginCheck
 	@PostMapping("/gymReservationInfo.do")
 	public String gymReservationInfo(Model model,GymDTO gymDTO, MemberDTO memberDTO, ReservationDTO reservationDTO) {
@@ -219,7 +212,6 @@ public class GymController {
 
 		String member_id = (String) session.getAttribute("MEMBER_ID");
 
-		//FIXME reservation_date M에서
 		String gym_reservation_date = reservationDTO.getReservation_date();
 		log.info("gym_reservation_date = [{}]", gym_reservation_date);
 		//------------------------------------------------------------
@@ -229,17 +221,9 @@ public class GymController {
 		String gym_name=this.gymService.selectOne(gymDTO).getGym_name();
 		log.info("gym_num = [{}]", gym_num);
 
-//		System.err.println("사용포인트 넘어왔니"+memberDTO.getMember_use_point);
-//		int reservation_use_point=0;
-//		if(memberDTO.getMember_use_point!=null) {
-//			reservation_use_point = memberDTO.getMember_use_point;
-//		}
 		log.info("reservation_use_point = [{}]", reservationDTO.getReservation_use_point());
 		int reservation_use_point=reservationDTO.getReservation_use_point();
-//		if(memberDTO.getMember_use_point!=null) {
-//			reservation_use_point = memberDTO.getMember_use_point;
-//		}
-		//TODO gym_price Int 변환 확인하기
+
 		int gym_price = gymDTO.getGym_price();
 		//최대 사용 포인트
 		int max_Point = 5000;
@@ -265,9 +249,7 @@ public class GymController {
 			}
 			//(사용자 아이디)을 MemberDTO에 추가합니다.
 			memberDTO.setMember_id(member_id);
-			//TODO 사용자의 현재 포인트를 SelectOne으로 요청하고
 			MemberDTO member_point = this.memberService.selectOneSearchId(memberDTO);
-			//TODO 해당 사용자의 현재 포인트 - 사용 포인트를 use_Point 변수에 추가
 
 			int use_Point = member_point.getMember_current_point() - reservation_use_point;
 			//use_Point 값이
@@ -316,14 +298,13 @@ public class GymController {
 			//------------------------------------------------------------
 		}
 		else {
-			System.out.println("member_id 없음");
+			log.info("member_id 없음");
 			//error_message : 예약이 불가능한 날짜입니다.
 			model.addAttribute("msg", "로그인 후 사용 가능합니다.");
 			//path : 암벽장 페이지
 			model.addAttribute("path", "login.do"); //TODO 암벽장 페이지 작성해야함
 			return error_path;
 		}
-		//FIXME V에서 값 맞는지 확인하기
 		model.addAttribute("gym_num", gym_num);
 		model.addAttribute("gym_name", gym_name);
 		model.addAttribute("member_name", member_name);
@@ -355,7 +336,7 @@ public class GymController {
 		//---------------------------------------------------------------------------
 		//암벽장 정보 로직 시작
 		//View에서 전달해준 암벽장 번호를 gym DTO에 저장하고
-		System.out.println("암벽장 PK : "+ gym_num);
+		log.info("암벽장 PK : [{}]",gym_num);
 		//gym selectOne으로 Model에 암벽장정보를 요청합니다.
 		//데이터 : 암벽장 번호 / 암벽장 이름 / 암벽장 사진 / 암벽장 설명 / 암벽장 주소 / 암벽장 가격
 		GymDTO data = this.gymService.selectOne(gymDTO);
@@ -399,7 +380,6 @@ public class GymController {
 			if(member_data != null) {
 				member_current_point = member_data.getMember_current_point();
 				//View로 사용 가능 포인트 전달
-				//FIXME V에서 앞에 Gym 빼야지 작동함
 				model.addAttribute("gym_member_current_point", member_current_point);
 			}
 
@@ -423,7 +403,6 @@ public class GymController {
 		}//if(member_id != null) { 종료
 		//---------------------------------------------------------------------------	
 		//View로 암벽장 승리 크루 전달 model_battle_record_datas
-		//FIXME V에서 앞에 model 빼야지 작동함
 		model.addAttribute("battle_record_datas", battle_record_datas);
 		//View로 암벽장 정보 전달 
 		model.addAttribute("gym_num", gym_num);
@@ -433,7 +412,6 @@ public class GymController {
 		model.addAttribute("gym_location", gym_location);
 		model.addAttribute("gym_price", gym_price);
 		//View로 암벽장 크루전 정보 전달
-		// FIXME V 확인하기
 		model.addAttribute("gym_battle_num", Gym_battle_num);
 		model.addAttribute("gym_battle_game_date", Gym_battle_game_date);
 		//View로 좋아요 여부 전달 model_favorite
