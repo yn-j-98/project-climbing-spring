@@ -135,7 +135,7 @@
                         <div class="card h-90">
                             <div class="row g-0 d-flex flex-column">
                                 <div class="col mt-2">
-                                    <img src="${gym.gym_profile}" class="card-img figure-img img-fluid rounded"
+                                    <img src="https://comapro.cdn1.cafe24.com${gym.gym_profile}" class="card-img figure-img img-fluid rounded"
                                          alt="${gym.gym_name} 사진">
                                 </div>
                                 <div class="col">
