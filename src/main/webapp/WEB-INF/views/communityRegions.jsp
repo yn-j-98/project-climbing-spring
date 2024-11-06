@@ -61,9 +61,9 @@
 							<div class="form-group">
 								<select name="search_keyword"
 										class="form-select form-control-lg">
-									<option value="SEARCH_TITLE">글 제목</option>
-									<option value="SEARCH_WRITER">작성자</option>
-									<option value="SEARCH_ID">아이디</option>
+									<option ${search_keyword eq "SEARCH_TITLE" ? "selected":''} value="SEARCH_TITLE">글 제목</option>
+									<option ${search_keyword eq "SEARCH_WRITER" ? "selected":''} value="SEARCH_WRITER">작성자</option>
+									<option ${search_keyword eq "SEARCH_ID" ? "selected":''} value="SEARCH_ID">아이디</option>
 								</select>
 							</div>
 

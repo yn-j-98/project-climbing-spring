@@ -24,32 +24,29 @@ public class ReplyController {
     @PostMapping("/reply.do")
     public String Reply(HttpSession session, Model model, ReplyDTO replyDTO) {
         // 댓글 달기
-        log.info("board_num : [{}]",replyDTO.getReply_board_num());
-        String info_path = "content.do?board_num=" + replyDTO.getReply_board_num();
+        // 댓글 작성 후 해당 글 보는 페이지로 이동하기 위해 글 번호를 get 방식으로 전달
+        log.info("board_num : [{}]", replyDTO.getReply_board_num());
+        String info_path = "content.do?board_num=" + replyDTO.getReply_board_num(); // 댓글 작성 후 이동할 경로
 
         // 로그인 정보가 있는지 확인
         String member_id = (String) session.getAttribute("MEMBER_ID");
-        log.info("member_id : [{}]", member_id );
+        log.info("member_id : [{}]", member_id);
 
-            // 댓글 작성
+        // 댓글 작성
+        replyDTO.setReply_writer_id(member_id); // 댓글 작성자 설정
 
-            replyDTO.setReply_writer_id(member_id); // 댓글 작성자
-
-            boolean insertResult = this.replyService.insert(replyDTO); // 댓글 삽입
+        boolean insertResult = this.replyService.insert(replyDTO); // 댓글 insert
 
         log.info("insertResult : [{}]", insertResult);
-            if(!insertResult) {
-
-                model.addAttribute("title", "실패");
-                model.addAttribute("msg", "댓글 작성을 실패하였습니다.");
-            }
-            else {
-                log.info("Reply.board_num : [{}]", replyDTO.getReply_board_num());
-
-                model.addAttribute("title", "성공");
-                model.addAttribute("msg", "댓글 작성을 성공하였습니다.");
-            }
-        model.addAttribute("path", info_path);
+        if (!insertResult) {
+            model.addAttribute("title", "실패");
+            model.addAttribute("msg", "댓글 작성을 실패하였습니다.");
+        } else {
+            log.info("Reply.board_num : [{}]", replyDTO.getReply_board_num());
+            model.addAttribute("title", "성공");
+            model.addAttribute("msg", "댓글 작성을 성공하였습니다.");
+        }
+        model.addAttribute("path", info_path); // 댓글 작성 후
 
         return "views/info";
     }
@@ -58,24 +55,23 @@ public class ReplyController {
     @LoginCheck
     @GetMapping("/replyDelete.do")
     public String boardDelete(HttpSession session, Model model, BoardDTO boardDTO, ReplyDTO replyDTO) {
-
-
-        String info_path = "content.do?board_num=" + replyDTO.getReply_board_num();
+        // 댓글 삭제 후 해당 글 보는 페이지로 이동하기 위해 글 번호를 get 방식으로 전달
+        String info_path = "content.do?board_num=" + replyDTO.getReply_board_num(); // 댓글 삭제 후 이동
 
         // 댓글 삭제
-        String reply_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
+        String reply_id = (String) session.getAttribute("MEMBER_ID"); // 세션에서 사용자 아이디 가져오기
 
         log.info("board_num : [{}]", replyDTO.getReply_board_num());
         log.info("reply_id : [{}]", reply_id);
-        replyDTO.setReply_board_num(boardDTO.getBoard_num());
-        replyDTO.setReply_writer_id(reply_id); // 사용자 아이디
+        replyDTO.setReply_board_num(boardDTO.getBoard_num()); // 삭제할 댓글이 속한 게시판 번호
+        replyDTO.setReply_writer_id(reply_id); // 삭제하려는 댓글의 작성자 아이디
 
         boolean deleteReply = this.replyService.delete(replyDTO); // 댓글 삭제
 
-        if(deleteReply) {//댓글 삭제 성공
+        if (deleteReply) { // 댓글 삭제 성공
             model.addAttribute("msg", "댓글 삭제를 성공하였습니다.");
         }
-        model.addAttribute("path", info_path);
+        model.addAttribute("path", info_path); // 삭제 후
 
         return "views/info";
 
@@ -84,27 +80,26 @@ public class ReplyController {
     @LoginCheck
     @PostMapping("/replyUpdate.do")
     public String replyUpdate(HttpSession session, Model model, BoardDTO boardDTO, ReplyDTO replyDTO) {
-//    // 댓글 수정 후 해당 글 보는 페이지로 이동하기 위해 글 번호를 get 방식으로 전달
+        // 댓글 수정 후 해당 글 보는 페이지로 이동하기 위해 글 번호를 get 방식으로 전달
         String info_path = "content.do?board_num=" + replyDTO.getReply_board_num();
+
         // 댓글 업데이트 가능
-        String reply_writer_id = (String) session.getAttribute("MEMBER_ID"); // 세션에 있는 사용자의 아이디
+        String reply_writer_id = (String) session.getAttribute("MEMBER_ID"); // 세션에서 사용자 아이디 가져오기
 
         log.info("replyUpdate.reply_id : [{}]", reply_writer_id);
 
         boolean updateResult = this.replyService.update(replyDTO); // 댓글 업데이트
 
-        if(updateResult) {
+        if (updateResult) {
             model.addAttribute("msg", "댓글 수정을 성공하였습니다.");
-        }
-        //업데이트 실패시
-        else {
+        } else {
             model.addAttribute("msg", "댓글 수정을 실패하였습니다.");
         }
 
-        model.addAttribute("path", info_path);
+        model.addAttribute("path", info_path); // 수정 후
 
         return "views/info";
     }
 
-
 }
+
