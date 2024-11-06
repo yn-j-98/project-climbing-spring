@@ -187,6 +187,7 @@ VALUES (3,4);
 
 INSERT INTO BATTLE_RECORD(BATTLE_RECORD_BATTLE_NUM,BATTLE_RECORD_CREW_NUM)
 VALUES (6,5);
+
 /*
 DELETE BOARD;
 --BOARD 샘플 데이터*/
@@ -231,7 +232,6 @@ INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, BOARD_CNT, BOARD_LOCATION, BOARD_
 ('단기 등반 훈련 프로그램', '효과적인 단기 훈련 프로그램을 소개합니다.', 0, '서울특별시', 'edward@example.com'),
 ('경쟁적 클라이밍의 재미', '경쟁적인 클라이밍 대회에서 얻을 수 있는 재미와 보람에 대해 이야기합니다.', 0, '서울특별시', 'fiona@example.com');
 
-
 INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
 ('암벽장에 가면 입장료가 어떻게 되나요?', 1, 'coma@naver.com'),
 ('초보자를 위한 벽 높이는 어느 정도가 적당한가요?', 2, 'bob@example.com'),
@@ -273,4 +273,3 @@ INSERT INTO REPLY (REPLY_CONTENT, REPLY_BOARD_NUM, REPLY_WRITER_ID) VALUES
 ('고난이도 루트를 도전하려면 어떤 준비가 필요할까요?', 38, 'hannah@example.com'),
 ('암벽장에서는 신발을 어떻게 고르는 것이 좋을까요?', 39, 'fiona@example.com'),
 ('암벽장 갈 때 음식과 음료는 어떻게 준비하는 것이 좋을까요?', 40, 'edward@example.com');
-

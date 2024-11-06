@@ -104,12 +104,13 @@ public class CrewController {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setMember_id(member_id);
         MemberDTO data = memberService.selectOneSearchMyCrew(memberDTO);
-
+        log.info("data = [{}]", data);
+        log.info("data crew num = [{}]",data.getMember_crew_num());
         // 크루 가입 유효성 검사
-        if (data.getMember_crew_num() > 0) {
-            title = "크루 가입 실패";
-            msg = "이미 소속된 크루가 있습니다.";
-            path = "crewList.do";
+        if (data.getMember_crew_num() >= 1) {
+            model.addAttribute("title","크루 가입 실패");
+            model.addAttribute("msg","이미 소속된 크루가 있습니다.");
+            model.addAttribute("path","crewList.do");
             return "views/info";
         }
 

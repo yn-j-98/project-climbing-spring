@@ -147,6 +147,7 @@ public class MyPageController {
 
 
 
+	@LoginCheck
 	@GetMapping("/deleteReservation.do")
 	public String deleteReservation(ReservationDTO reservationDTO, Model model) {
 		log.info("deleteReservation.do 도착");
@@ -192,6 +193,7 @@ public class MyPageController {
 		return "views/info";
 	}
 
+	@LoginCheck
 	@PostMapping("/changeMember.do")
 	public String changeMember(MemberDTO memberDTO) throws IOException {
 
@@ -232,6 +234,7 @@ public class MyPageController {
 	}
 
 
+	@LoginCheck
 	@GetMapping("/changeMember.do")
 	public String changeMember(MemberDTO memberDTO, Model model) throws IOException {
 		String member_id = (String) session.getAttribute("MEMBER_ID");
