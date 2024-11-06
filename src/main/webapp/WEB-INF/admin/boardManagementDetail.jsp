@@ -76,8 +76,7 @@
                             <p class="comment-text">${reply.reply_content}</p>
                         </div>
                         <div class="col-1">
-                            <button class="btn btn-icon btn-clean me-0" type="button" id="deleteButton"
-                            ">
+                            <button class="btn btn-icon btn-clean me-0" type="button" id="deleteButton">
                             <input id="replyNum" type="hidden" name="reply_num" value="${reply.reply_num}">
                             삭제
                             </button>

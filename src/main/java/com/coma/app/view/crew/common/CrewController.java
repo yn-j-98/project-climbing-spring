@@ -9,7 +9,6 @@ import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
 import com.coma.app.view.annotation.CrewCheck;
 import com.coma.app.view.annotation.LoginCheck;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,5 +169,4 @@ public class CrewController {
 
         return "views/myCrewPage";
     }
-
 }
