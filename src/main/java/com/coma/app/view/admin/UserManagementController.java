@@ -4,7 +4,6 @@ package com.coma.app.view.admin;
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
 import com.coma.app.view.annotation.AdminCheck;
-import com.coma.app.view.annotation.LoginCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,8 +37,8 @@ public class UserManagementController {
         log.info("min_num = {}", min_num);
 
         memberDTO.setMember_min_num(min_num);
-//		필터검색 ACTION
-//		회원이름, 회원 아이디, 가입날짜
+        // 필터검색 ACTION
+        // 회원이름, 회원 아이디, 가입날짜
         List<MemberDTO> datas = null;
 
         String search_keyword = memberDTO.getSearch_keyword();
@@ -60,7 +59,7 @@ public class UserManagementController {
         //전체 출력
         else {
             datas = this.memberService.selectAllSearchAdmin(memberDTO);
-                total = this.memberService.selectOneSearchCountAdmin(memberDTO).getTotal();
+            total = this.memberService.selectOneSearchCountAdmin(memberDTO).getTotal();
         }
         // datas 로그
         log.info("UserManagementController datas {} " , datas);
@@ -112,8 +111,7 @@ public class UserManagementController {
             title = "Server Error";
             msg = "회원정보 수정 실패";
         }
-        // role 로그
-        log.info("userManagementDetail - role = {} ", memberDTO.getMember_role());
+
         model.addAttribute("title", title);
         model.addAttribute("msg", msg);
         model.addAttribute("path", infoPath);
@@ -131,7 +129,7 @@ public class UserManagementController {
         if(!memberService.delete(memberDTO)){
             title = "서버 오류";
             msg = "회원삭제 실패";
-        };
+        }
         log.info("path [{}]",path);
         log.info("title [{}]",title);
         log.info("msg [{}]",msg);

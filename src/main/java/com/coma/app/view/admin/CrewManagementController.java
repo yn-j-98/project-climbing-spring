@@ -3,10 +3,7 @@ package com.coma.app.view.admin;
 import com.coma.app.biz.admin.CrewManagementService;
 import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
-import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
-import com.coma.app.biz.crew.CrewService;
-import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.view.annotation.AdminCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +17,6 @@ import java.util.List;
 @Slf4j
 @Controller
 public class CrewManagementController {
-
-
-    @Autowired
-    private Battle_recordService battle_recordService;
 
     @Autowired
     private CrewManagementService crewManagementService;
@@ -46,7 +39,9 @@ public class CrewManagementController {
 
         // 검색 키워드
         // 크루전 번호, 암벽장 이름, 크루전 진행 날짜, 크루전 생성일
+        // 크루전 정보 조회
         List<BattleDTO> datas = crewManagementService.selectAll(battleDTO);
+        // 크루전 정보가 없는 경우
         if(datas.isEmpty() || datas == null) {
             model.addAttribute("title", "크루전 없음");
             model.addAttribute("msg", "");
@@ -69,11 +64,13 @@ public class CrewManagementController {
         log.info("crewManagementDetail.battle_game_date = [{}]", battleDTO.getBattle_game_date());
         // 크루전 정보 - 암벽장
         // 암벽장 명 , 게임일, 승리한 크루, MVP
+        // 크루전 상세 정보 조회
         BattleDTO data = this.crewManagementService.selectOneSearchWinner(battleDTO);
         model.addAttribute("data", data);
 
         // 참여 크루
         // 크루명 / 크루장 / 크루원 수
+        // 참여 크루 정보 조회
         List<BattleDTO> datas = this.crewManagementService.selectAllSearchPariticipants(battleDTO);
         model.addAttribute("datas", datas);
 

@@ -12,7 +12,6 @@ import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.biz.reservation.ReservationService;
 import com.coma.app.view.annotation.AdminCheck;
-import com.coma.app.view.annotation.LoginCheck;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -52,9 +50,6 @@ public class MainManagementController{
 
         // 차트js
         // 통계 데이터 가져오기
-
-        // !★!★!★!★!★!★!★!★ TODO Impl (컨디션값) 참고하기!★!★!★!★!★!★!★!★!★!★!★!★
-        //		사용자- 관리자  count*,암벽장 count*,예약 수 count*,게시판 수 count(*),크루전 수 c*
         String managementTotal = mainManagementService.getManagementTotalDate(memberDTO,gymDTO,reservationDTO,boardDTO,battleDTO);
         log.info("managementTotal_json [{}]",managementTotal);
         //		월별 가입자 수 count(꺾은선그래프)
@@ -74,7 +69,6 @@ public class MainManagementController{
         log.info("region_gym [{}]",region_gym);
 
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO MODEL이 끝나면 주석풀기
         //		최신글 5개  제목 + 내용만 대시보드
 		List<BoardDTO> board_datas = this.boardService.selectAllRecentBoard5(boardDTO);
         log.info("board_datas [{}]",board_datas);

@@ -5,7 +5,6 @@ import com.coma.app.biz.admin.CrewManagementService;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
-import com.coma.app.biz.crew.CrewService;
 import com.coma.app.biz.member.MemberDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +19,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-public class CrewAsyncController {
+public class CrewAsyncController { // 크루전 관리 비동기
 
     @Autowired
     private Battle_recordService battle_recordService;
@@ -50,10 +49,9 @@ public class CrewAsyncController {
         memberDTO.setMember_crew_num(crew_num);
         List<MemberDTO> datas = crewManagementService.mvpMember(memberDTO);
         log.info("mvpMemberService = [{}]",datas);
-
-
         log.info("datas = {}",datas);
 
+        // 멤버 목록을 JSON 형식으로 변환
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(datas);
     }
