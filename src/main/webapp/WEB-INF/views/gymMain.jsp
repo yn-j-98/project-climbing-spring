@@ -148,23 +148,24 @@
 
 	// 페이지네이션 생성 함수
 	function renderpagination(currentPage, _totalCount) {
+		const totalSize = 6;
 		// 현재 게시물의 전체 개수가 6개 이하면 pagination을 숨깁니다.
-		if (_totalCount <= 5) return;
+		if (_totalCount <= totalSize) return;
 
 		// 총 페이지 수 계산 (전체 게시물 수를 한 페이지에 보여줄 게시물 수로 나눈 값의 올림)
-		const totalPage = Math.ceil(_totalCount / 5);
+		const totalPage = Math.ceil(_totalCount / totalSize);
 
 		// 현재 페이지 그룹 계산 (현재 페이지를 6으로 나눈 값의 올림)
-		const pageGroup = Math.ceil(currentPage / 5);
+		const pageGroup = Math.ceil(currentPage / totalSize);
 
 		// 현재 페이지 그룹에서의 마지막 페이지 계산
-		let last = pageGroup * 5;
+		let last = pageGroup * totalSize;
 
 		// 마지막 페이지가 총 페이지 수를 초과하지 않도록 조정
 		if (last > totalPage) last = totalPage;
 
 		// 현재 페이지 그룹에서의 첫 번째 페이지 계산
-		const first = last - (5 - 1) <= 0 ? 1 : last - (5 - 1);
+		const first = last - (totalSize - 1) <= 0 ? 1 : last - (totalSize - 1);
 
 		// 다음 그룹의 첫 페이지 계산
 		const next = last + 1;

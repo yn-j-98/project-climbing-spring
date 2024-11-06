@@ -15,8 +15,10 @@ public interface BattleService {
 	BattleDTO selectOneSearchBattle(BattleDTO battleDTO);
 	BattleDTO selectOneCountActive(BattleDTO battleDTO);
 	BattleDTO selectOneCountActiveBattle(BattleDTO battleDTO);
+	BattleDTO selectOneSearchBattleAdmin(BattleDTO battleDTO);
 
 	boolean insert(BattleDTO battleDTO);
+	boolean insertFirst(BattleDTO battleDTO);
 	boolean InsertBattleModal(BattleDTO battleDTO);
 	boolean update(BattleDTO battleDTO);
 	boolean delete(BattleDTO battleDTO);

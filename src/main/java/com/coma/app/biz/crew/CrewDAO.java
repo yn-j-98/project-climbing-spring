@@ -32,6 +32,15 @@ public class CrewDAO {
 			"    CREW_NUM DESC\n" +
 			"LIMIT ?, ?";
 
+	//해당 배틀에 참가한 모든 크루 출력 // TODO 크루전 관리자 페이지 추가(2024.11.05)
+	private final String ALL_ADMIN = "SELECT C.CREW_NUM\n" +
+			"FROM CREW C\n" +
+			"LEFT JOIN BATTLE_RECORD BR\n" +
+			"ON C.CREW_NUM = BR.BATTLE_RECORD_CREW_NUM\n" +
+			"LEFT JOIN BATTLE B\n" +
+			"ON BR.BATTLE_RECORD_BATTLE_NUM = B.BATTLE_NUM\n" +
+			"WHERE B.BATTLE_NUM = ? AND C.CREW_BATTLE_STATUS = 'T'\n";
+
 	//크루 총 개수
 	private final String ONE_COUNT = "SELECT COUNT(*) AS CREW_TOTAL FROM CREW";
 
@@ -173,6 +182,18 @@ public class CrewDAO {
 		}
 		return result;
 	}
+
+	//해당 배틀에 참가한 모든 크루 출력 // TODO 크루전 관리자 페이지 추가(2024.11.05)
+	public List<CrewDTO> selectAllAdmin(CrewDTO crewDTO){
+		List<CrewDTO> result = null;
+		Object[] args = {crewDTO.getCrew_battle_num()};
+		try {
+			result = jdbcTemplate.query(ALL_ADMIN, args, new CrewRowMapperAllAdmin());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
 
 @Slf4j
@@ -301,47 +322,62 @@ class CrewRowMapperOneCountCurrentMemberSize implements RowMapper<CrewDTO> {
 	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
 		log.info("검색 성공");
 		CrewDTO crewDTO = new CrewDTO();
+		try {
+			crewDTO.setCrew_num(resultSet.getInt("CREW_NUM"));
+		} catch (Exception e) {
+			System.err.println("Crew_num = 0");
+			crewDTO.setCrew_num(0);
+		}
+		try {
+			crewDTO.setCrew_name(resultSet.getString("CREW_NAME"));
+		} catch (Exception e) {
+			System.err.println("setCrew_name = null");
+			crewDTO.setCrew_name(null);
+		}
+		try {
+			crewDTO.setCrew_max_member_size(resultSet.getInt("CREW_MAX_MEMBER_SIZE"));
+		} catch (Exception e) {
+			System.err.println("setCrew_max_member_size = 0");
+			crewDTO.setCrew_max_member_size(0);
+		}
+		try {
+			crewDTO.setCrew_leader(resultSet.getString("CREW_LEADER"));
+		} catch (Exception e) {
+			System.err.println("setCrew_leader = null");
+			crewDTO.setCrew_leader(null);
+		}
+		try {
+			crewDTO.setCrew_battle_status(resultSet.getString("CREW_BATTLE_STATUS"));
+		} catch (Exception e) {
+			System.err.println("setCrew_battle_status = null");
+			crewDTO.setCrew_battle_status(null);
+		}
+		try {
+			crewDTO.setCrew_profile(resultSet.getString("CREW_PROFILE"));
+		} catch (Exception e) {
+			System.err.println("setCrew_profile = null");
+			crewDTO.setCrew_profile(null);
+		}
+		try {
+			crewDTO.setCrew_current_member_size(resultSet.getInt("CREW_CURRENT_MEMBER_SIZE"));
+		} catch (Exception e) {
+			System.err.println("Crew_current_member_size = 0");
+			crewDTO.setCrew_current_member_size(0);
+		}
+		return crewDTO;
+	}
+}
+
+@Slf4j
+class CrewRowMapperAllAdmin implements RowMapper<CrewDTO> {
+	@Override
+	public CrewDTO mapRow(ResultSet resultSet, int i) throws SQLException {
+		CrewDTO crewDTO = new CrewDTO();
 		try{
 			crewDTO.setCrew_num(resultSet.getInt("CREW_NUM"));
 		}catch(Exception e){
 			System.err.println("Crew_num = 0");
 			crewDTO.setCrew_num(0);
-		}
-		try{
-			crewDTO.setCrew_name(resultSet.getString("CREW_NAME"));
-		}catch(Exception e){
-			System.err.println("setCrew_name = null");
-			crewDTO.setCrew_name(null);
-		}
-		try{
-			crewDTO.setCrew_max_member_size(resultSet.getInt("CREW_MAX_MEMBER_SIZE"));
-		}catch(Exception e){
-			System.err.println("setCrew_max_member_size = 0");
-			crewDTO.setCrew_max_member_size(0);
-		}
-		try{
-			crewDTO.setCrew_leader(resultSet.getString("CREW_LEADER"));
-		}catch(Exception e){
-			System.err.println("setCrew_leader = null");
-			crewDTO.setCrew_leader(null);
-		}
-		try{
-			crewDTO.setCrew_battle_status(resultSet.getString("CREW_BATTLE_STATUS"));
-		}catch(Exception e){
-			System.err.println("setCrew_battle_status = null");
-			crewDTO.setCrew_battle_status(null);
-		}
-		try{
-			crewDTO.setCrew_profile(resultSet.getString("CREW_PROFILE"));
-		}catch (Exception e){
-			System.err.println("setCrew_profile = null");
-			crewDTO.setCrew_profile(null);
-		}
-		try{
-			crewDTO.setCrew_current_member_size(resultSet.getInt("CREW_CURRENT_MEMBER_SIZE"));
-		}catch (Exception e){
-			System.err.println("Crew_current_member_size = 0");
-			crewDTO.setCrew_current_member_size(0);
 		}
 		return crewDTO;
 	}

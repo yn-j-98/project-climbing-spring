@@ -119,7 +119,7 @@ public class GymDAO {
 
 	//승인,비승인된 암벽장 중 이름 검색 카운트 // TODO 암벽장 관리 페이지
 	private final String ALL_ADMIN_VERIFIED_COUNT = "SELECT \n" +
-			"    COUNT(*) AS GYM_COUNT \n" +
+			"    COUNT(*) AS GYM_TOTAL \n" +
 			"FROM \n" +
 			"    gym\n" +
 			"WHERE \n" +
@@ -128,7 +128,7 @@ public class GymDAO {
 
 	// 전체 암벽장 중 이름 검색 카운트 // TODO 암벽장 관리 페이지
 	private final String ALL_ADMIN_SEARCH_COUNT = "SELECT \n" +
-			"    COUNT(*) AS GYM_COUNT \n" +
+			"    COUNT(*) AS GYM_TOTAL \n" +
 			"FROM \n" +
 			"    gym\n" +
 			"WHERE \n" +

@@ -6,6 +6,7 @@ import com.coma.app.biz.battle.BattleService;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
+import com.coma.app.view.annotation.CrewCheck;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
 import lombok.extern.slf4j.Slf4j;
@@ -89,41 +90,22 @@ public class CrewBattleController {
     }
 
     @LoginCheck
+    @CrewCheck
     @GetMapping("/crewBattle.do")
-    public String crewBattle(Model model, BattleDTO battleDTO, @SessionAttribute("MEMBER_ID") String member_id, @SessionAttribute("CREW_CHECK") Integer crew_num) {
+    public String crewBattle(Model model, BattleDTO battleDTO,
+                             @SessionAttribute(value = "MEMBER_ID",required = false) String member_id,
+                             @SessionAttribute(value = "CREW_CHECK",required = false) Integer crew_num) {
         log.info("crewBattle.session.member_id = [{}]", member_id);
         log.info("crewBattle.session.crew_num = [{}]", crew_num);
-        /*
-         * 페이지네이션을 하기위해 뷰에게서 page_num을 받아오고
-         * 페이지네이션 계산 후
-         * memberDTO와 DAO 생성
-         * DTO에 member_id를 set해주고
-         * 내 크루를 찾기위해 selectOne
-         * 컨디션은 MEMBER_SEARCH_MY_CREW
-         *
-         * battleDTO와 DAO 생성
-         * DTO에 battle_crew_num을 set해주고
-         * 내 크루 크루전을 찾기위해 selectOne
-         * 컨디션은 VATTLE_SEARCH_MEMBER_BATTLE
-         *
-         * battleDTO를 따로 하나 더 생성해서
-         * 크루전 목록  selectAll
-         * min_num과 max_num을 set
-         * 컨디션은 BATTLE_ALL_ACTIVE
-         *
-         * battleDTO 또 하나 더 생성해서
-         * 크루전 총 개수 selectOne
-         * 컨디션은 BATTLE_ONE_COUNT_ACTIVE
-         */
         int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
         int minBoard = 1; // 최소 게시글 수 초기화
 
-        if (crew_num == null || crew_num <= 0) {
+        /*if (crew_num == null || crew_num <= 0) {
             model.addAttribute("title", "페이지 접근 실패");
             model.addAttribute("msg", "가입된 크루가 없습니다");
             model.addAttribute("path", "crewList.do");
             return "views/info";
-        }
+        }*/
         int pageNum = battleDTO.getPage(); //자동바인딩
         if (pageNum <= 0) { // 페이지가 0일 때 (npe방지)
             pageNum = 1;
@@ -135,8 +117,7 @@ public class CrewBattleController {
         battleDTO.setBattle_crew_num(crew_num);
         BattleDTO my_battle = this.battleService.selectOneSearchMemberBattle(battleDTO);
         log.info("이미지 = [{}]", battleDTO.getBattle_gym_profile());
-        model.addAttribute("my_battle", battleDTO);//내크루전 정보
-
+        model.addAttribute("my_battle", my_battle);//내크루전 정보
         //전체 크루전 목록 출력 + 페이지네이션
         battleDTO.setBattle_min_num(minBoard);
         List<BattleDTO> battle_datas = this.battleService.selectAllActive(battleDTO);

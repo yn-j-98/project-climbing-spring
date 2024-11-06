@@ -7,6 +7,7 @@ import com.coma.app.biz.crew.CrewDTO;
 import com.coma.app.biz.crew.CrewService;
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberService;
+import com.coma.app.view.annotation.CrewCheck;
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
@@ -65,19 +66,9 @@ public class CrewController {
         return "views/crewList";
     }
 
+
     @GetMapping("/crewInfo.do")
     public String crewInfo(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO) {
-        /*
-         * 크루 상세보기 페이지
-         * 뷰에게 크루 번호를 받아옵니다
-         * crewDTO와 DAO를 생성해서 받아온 크루번호를 DTO에 set해서
-         * crew selectOne 크루의 정보을 불러옵니다.
-         * memverDTO와 DAO를 생성해서 선택한 크루의 인원을
-         * selectOne해줍니다.
-         * model_battle_record_datas라는
-         * ArrayList를 생성해서 승리목록을 뷰에게 전달합니다.
-         * crewDTO(크루의 정보)또한 뷰에게 전달합니다.
-         */
 
         //해당 크루 정보 + 현재 크루원 숫자
         crewDTO = this.crewService.selectOneCountCurretMemberSize(crewDTO);
@@ -98,7 +89,7 @@ public class CrewController {
 
     @LoginCheck
     @GetMapping("/crewJoin.do")
-    public String crewJoin(Model model, CrewDTO crewDTO, HttpSession session) {
+    public String crewJoin(Model model, CrewDTO crewDTO, HttpSession session, MemberDTO memberDTO) {
         log.info("crewJoin.crew_num = [{}]", crewDTO.getCrew_num());
         //얼럿창 info 데이터
         String title = "";
@@ -110,15 +101,14 @@ public class CrewController {
         int crew_num = crewDTO.getCrew_num();
 
         //세션의 로그인된 사용자 아이디로 사용자가 속한 크루번호 출력
-        MemberDTO memberDTO = new MemberDTO();
         memberDTO.setMember_id(member_id);
         MemberDTO data = memberService.selectOneSearchMyCrew(memberDTO);
-
         // 크루 가입 유효성 검사
-        if (data.getMember_crew_num() == crew_num) {
-            model.addAttribute("title", "크루 가입 실패");
-            model.addAttribute("msg", "이미 소속된 크루가 있습니다.");
-            model.addAttribute("path", "crewList.do");
+        if (data.getMember_crew_num() > 0) {
+            log.info("crewJoin.crew_num[{}]", data.getMember_crew_num());
+            model.addAttribute("title","크루 가입 실패");
+            model.addAttribute("msg","이미 소속된 크루가 있습니다.");
+            model.addAttribute("path","crewList.do");
             return "views/info";
         }
 
@@ -146,8 +136,10 @@ public class CrewController {
     }
 
     @LoginCheck
+    @CrewCheck
     @GetMapping("/crew.do")
-    public String crewPage(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO, MemberDTO memberDTO, @SessionAttribute("CREW_CHECK") Integer crew_num) {
+    public String crewPage(Model model, CrewDTO crewDTO, Battle_recordDTO battle_recordDTO, MemberDTO memberDTO,
+                           @SessionAttribute(value = "CREW_CHECK",required = false) Integer crew_num) {
         log.info("crewPage.crew_num = [{}]", crew_num);
 
 
@@ -155,12 +147,12 @@ public class CrewController {
         crewDTO.setCrew_num(crew_num);
         crewDTO = this.crewService.selectOne(crewDTO);
 
-//        if (crewDTO == null) {
-//            model.addAttribute("title", "크루 정보 없음");
-//            model.addAttribute("msg", "해당 크루의 정보를 찾을 수 없습니다.");
-//            model.addAttribute("path", "crewList.do");
-//            return "views/info";
-//        }
+        if (crewDTO == null) {
+            model.addAttribute("title", "크루 정보 없음");
+            model.addAttribute("msg", "해당 크루의 정보를 찾을 수 없습니다.");
+            model.addAttribute("path", "crewList.do");
+            return "views/info";
+        }
 
         // 크루 정보 + 크루 이미지 URL
         model.addAttribute("CREW", crewDTO);

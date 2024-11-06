@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MemberDAO">
+    <insert id="insert">
+        INSERT INTO MEMBER(MEMBER_ID, MEMBER_NAME, MEMBER_PASSWORD, MEMBER_PHONE, MEMBER_LOCATION)
+        VALUES (#{member_id}, #{member_name}, #{member_password}, #{member_phone}, #{member_location})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM MEMBER WHERE MEMBER_ID = #{member_id}
+    </delete>
+
+    <update id="updateAll">
+        UPDATE MEMBER
+        SET
+            MEMBER_PASSWORD = #{member_password},
+            MEMBER_PROFILE = #{member_profile},
+            MEMBER_PHONE = #{member_phone},
+            MEMBER_LOCATION = #{member_location}
+        WHERE MEMBER_ID = #{member_id}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE MEMBER
+        SET
+            MEMBER_PASSWORD = #{member_password}
+        WHERE MEMBER_ID = #{member_id}
+    </update>
+
+    <update id="updateWithoutProfile">
+        UPDATE MEMBER
+        SET
+            MEMBER_PASSWORD = #{member_password},
+            MEMBER_PHONE = #{member_phone},
+            MEMBER_LOCATION = #{member_location}
+        WHERE MEMBER_ID = #{member_id}
+    </update>
+
+    <update id="updateCrew">
+        UPDATE MEMBER
+        SET
+            MEMBER_CREW_NUM = #{member_crew_num},
+            MEMBER_CREW_JOIN_DATE = NOW()
+        WHERE MEMBER_ID = #{member_id}
+    </update>
+
+    <update id="updateAdmin">
+        UPDATE MEMBER SET MEMBER_PASSWORD = #{member_password},
+                          MEMBER_NAME = #{member_name},
+                          MEMBER_CURRENT_POINT = #{member_current_point},
+                          MEMBER_LOCATION = #{member_location},
+                          MEMBER_CREW_NUM = #{member_crew_num},
+                          MEMBER_PHONE = #{member_phone},
+                          MEMBER_ROLE = #{member_role}
+        WHERE MEMBER_ID = #{member_id}
+    </update>
+
+    <update id="updateCurrentPoint">
+        UPDATE MEMBER SET MEMBER_CURRENT_POINT = #{member_current_point} WHERE MEMBER_ID = #{member_id}
+    </update>
+
+    <select id="selectAllNew" resultType="Member">
+        SELECT
+            MEMBER_ID,
+            MEMBER_PASSWORD,
+            MEMBER_NAME,
+            MEMBER_PHONE,
+            MEMBER_PROFILE,
+            MEMBER_REGISTRATION_DATE,
+            MEMBER_CURRENT_POINT,
+            MEMBER_TOTAL_POINT,
+            MEMBER_CREW_NUM,
+            MEMBER_CREW_JOIN_DATE,
+            MEMBER_LOCATION,
+            MEMBER_ROLE
+        FROM MEMBER
+        WHERE MEMBER_REGISTRATION_DATE >= DATE_ADD(SYSDATE(), INTERVAL -7 DAY)
+          AND MEMBER_ROLE = 'F'
+    </select>
+
+    <select id="selectAllTop10CrewRank" resultType="Member">
+        SELECT
+            C.CREW_PROFILE AS MEMBER_CREW_PROFILE,
+            C.CREW_NAME AS MEMBER_CREW_NAME,
+            SUM(M.MEMBER_TOTAL_POINT) AS MEMBER_CREW_RANK
+        FROM
+            MEMBER M
+                JOIN
+            CREW C ON M.MEMBER_CREW_NUM = C.CREW_NUM
+        GROUP BY
+            C.CREW_PROFILE,
+            C.CREW_NAME
+        ORDER BY
+            MEMBER_CREW_RANK DESC
+            LIMIT 10
+    </select>
+
+    <select id="selectAllTop10Rank" resultType="Member">
+        SELECT
+            MEMBER_NAME,
+            MEMBER_PROFILE
+        FROM
+            MEMBER
+        ORDER BY
+            MEMBER_TOTAL_POINT DESC
+            LIMIT 10
+    </select>
+
+    <select id="selectAllSearchCrewMemberName" resultType="Member">
+        SELECT
+            MEMBER_NAME
+        FROM
+            MEMBER M
+                JOIN
+            CREW C ON C.CREW_NUM = M.MEMBER_CREW_NUM
+        WHERE
+            CREW_NUM = #{member_crew_num}
+    </select>
+
+    <select id="selectAllCrewRank" resultType="Member">
+        SELECT
+            C.CREW_NUM AS MEMBER_CREW_NUM,
+            C.CREW_NAME AS MEMBER_CREW_NAME,
+            C.CREW_LEADER AS MEMBER_CREW_LEADER,
+            COUNT(M.MEMBER_ID) AS MEMBER_CREW_CURRENT_SIZE,
+            SUM(M.MEMBER_TOTAL_POINT) AS MEMBER_TOTAL_POINT
+        FROM
+            CREW C
+                JOIN
+            MEMBER M
+            ON
+                M.MEMBER_CREW_NUM = C.CREW_NUM
+        GROUP BY
+            C.CREW_NUM,
+            C.CREW_NAME,
+            C.CREW_LEADER
+        ORDER BY
+            MEMBER_TOTAL_POINT DESC
+            LIMIT #{member_min_num}, #{page}
+    </select>
+
+    <select id="selectAllMonthCountAdmin" resultType="Member">
+        SELECT
+            DATE_FORMAT(MEMBER_REGISTRATION_DATE, '%Y-%m') AS MEMBER_RESERVATION_MONTH,
+            COUNT(*) AS TOTAL
+        FROM
+            MEMBER
+        GROUP BY
+            MEMBER_RESERVATION_MONTH
+        ORDER BY
+            MEMBER_RESERVATION_MONTH
+    </select>
+
+    <select id="selectAllSearchAdmin" resultType="Member">
+        SELECT
+            MEMBER_ID,
+            MEMBER_NAME,
+            MEMBER_REGISTRATION_DATE
+        FROM
+            MEMBER
+                LIMIT #{member_min_num}, 10
+    </select>
+
+    <select id="selectAllSearchIdAdmin" resultType="Member">
+        SELECT
+            MEMBER_ID,
+            MEMBER_NAME,
+            MEMBER_REGISTRATION_DATE
+        FROM
+            MEMBER
+        WHERE
+            MEMBER_ID = #{member_id}
+        ORDER BY
+            MEMBER_ID
+            LIMIT #{member_min_num}, 10
+    </select>
+
+    <select id="selectAllSearchDateAdmin" resultType="Member">
+        SELECT
+            MEMBER_ID,
+            MEMBER_NAME,
+            MEMBER_REGISTRATION_DATE
+        FROM
+            MEMBER
+        WHERE
+            MEMBER_REGISTRATION_DATE LIKE CONCAT('%', #{search_content}, '%')
+        ORDER BY
+            MEMBER_ID
+            LIMIT #{member_min_num}, 10
+    </select>
+
+    <select id="selectOneSearchMyCrew" resultType="Member">
+        SELECT
+            M.MEMBER_CREW_NUM
+        FROM
+            MEMBER M
+                LEFT JOIN
+            CREW C
+            ON
+                M.MEMBER_CREW_NUM = C.CREW_NUM
+        WHERE
+            MEMBER_ID = #{member_id}
+    </select>
+
+    <select id="selectOneCountAdmin" resultType="Member">
+        SELECT COUNT(*) AS TOTAL
+        FROM MEMBER
+        WHERE MEMBER_ROLE = 'F'
+    </select>
+
+    <select id="selectOneSearchCountAdmin" resultType="Member">
+        SELECT COUNT(*) AS TOTAL
+        FROM MEMBER
+    </select>
+
+    <select id="selectOneSearchIdCountAdmin" resultType="Member">
+        SELECT COUNT(*) AS TOTAL
+        FROM MEMBER
+        WHERE MEMBER_ID = #{member_id}
+    </select>
+
+    <select id="selectOneSearchDateCountAdmin" resultType="Member">
+        SELECT COUNT(*) AS TOTAL
+        FROM MEMBER
+        WHERE MEMBER_REGISTRATION_DATE LIKE CONCAT('%', #{search_content}, '%')
+    </select>
+
+    <select id="selectOneSearchId" resultType="Member">
+        SELECT MEMBER_ID,
+               MEMBER_PASSWORD,
+               MEMBER_NAME,
+               MEMBER_PHONE,
+               MEMBER_PROFILE,
+               MEMBER_REGISTRATION_DATE,
+               MEMBER_CURRENT_POINT,
+               MEMBER_TOTAL_POINT,
+               MEMBER_CREW_NUM,
+               MEMBER_CREW_JOIN_DATE,
+               MEMBER_LOCATION,
+               MEMBER_ROLE
+        FROM MEMBER
+        WHERE MEMBER_ID = #{member_id}
+    </select>
+
+    <select id="selectOneSearchIdPassword" resultType="Member">
+        SELECT MEMBER_ID,
+               MEMBER_PASSWORD,
+               MEMBER_NAME,
+               MEMBER_PHONE,
+               MEMBER_PROFILE,
+               MEMBER_REGISTRATION_DATE,
+               MEMBER_CURRENT_POINT,
+               MEMBER_TOTAL_POINT,
+               MEMBER_CREW_NUM,
+               MEMBER_CREW_JOIN_DATE,
+               MEMBER_LOCATION,
+               MEMBER_ROLE
+        FROM MEMBER
+        WHERE MEMBER_ID = #{member_id} AND MEMBER_PASSWORD = #{member_password}
+    </select>
+
+    <select id="selectAllSearchCrew" resultType="Member">
+        SELECT MEMBER_ID,
+               MEMBER_PASSWORD,
+               MEMBER_NAME,
+               MEMBER_PHONE,
+               MEMBER_PROFILE,
+               MEMBER_REGISTRATION_DATE,
+               MEMBER_CURRENT_POINT,
+               MEMBER_TOTAL_POINT,
+               MEMBER_CREW_NUM,
+               MEMBER_CREW_JOIN_DATE,
+               MEMBER_LOCATION,
+               MEMBER_ROLE
+        FROM MEMBER
+        WHERE MEMBER_CREW_NUM = #{member_crew_num}
+    </select>
+
+    <select id="selectAllSearchRank" resultType="Member">
+        SELECT MEMBER_ID,
+               MEMBER_PASSWORD,
+               MEMBER_NAME,
+               MEMBER_PHONE,
+               MEMBER_PROFILE,
+               MEMBER_REGISTRATION_DATE,
+               MEMBER_CURRENT_POINT,
+               MEMBER_TOTAL_POINT,
+               MEMBER_CREW_NUM,
+               MEMBER_CREW_JOIN_DATE,
+               MEMBER_LOCATION,
+               MEMBER_ROLE
+        FROM MEMBER
+        WHERE MEMBER_ROLE = 'F'
+        ORDER BY MEMBER_TOTAL_POINT DESC
+            LIMIT #{member_min_num}, #{page}
+    </select>
+</mapper>

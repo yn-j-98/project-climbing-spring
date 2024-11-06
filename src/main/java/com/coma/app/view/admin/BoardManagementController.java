@@ -6,6 +6,7 @@ import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberServiceImpl;
 import com.coma.app.biz.reply.ReplyDTO;
 import com.coma.app.biz.reply.ReplyServiceImpl;
+import com.coma.app.view.annotation.AdminCheck;
 import com.coma.app.view.annotation.LoginCheck;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class BoardManagementController {
     @Autowired
     private MemberServiceImpl memberService;
 
-    @LoginCheck
+    @AdminCheck
     @GetMapping("/boardManagement.do")
     public String boardManagement(Model model,BoardDTO boardDTO) {
 
@@ -56,7 +57,7 @@ public class BoardManagementController {
             datas = boardService.selectAllSearchTitle(boardDTO);
         }
 
-        log.info("boardManagement min_num = {}, page={}, total={}", min_num,page,list_num);
+        log.info("boardManagement min_num = [{}], page=[{}], total=[{}]", min_num,page,list_num);
 
         //-----------------------------------------------------------------------------
 
@@ -69,6 +70,7 @@ public class BoardManagementController {
         return "admin/boardManagement";
     }
     // 게시판 관리
+    @AdminCheck
     @PostMapping("/boardManagement.do")
     public String boardManagement(@RequestParam(value = "board_num_list", required = false) List<Integer> board_num_list, Model model, BoardDTO boardDTO) {
         boolean flag = true;
@@ -92,7 +94,7 @@ public class BoardManagementController {
         model.addAttribute("path", "boardManagement.do");
         return "views/info";
     }
-
+    @AdminCheck
     @GetMapping("/boardManagementDetail.do")
     public String boardManagementDetail(ReplyDTO replyDTO, BoardDTO boardDTO, MemberDTO memberDTO, Model model) {
         int board_num = boardDTO.getBoard_num();
@@ -121,6 +123,7 @@ public class BoardManagementController {
         return "admin/boardManagementDetail";
     }
 
+    @AdminCheck
     @PostMapping("/boardManagementDetail.do")
     public String boardManagementDetail(Model model, ReplyDTO replyDTO) {
         log.info("PostMapping.boardManagementDetail 시작");

@@ -42,6 +42,7 @@ public class GymController {
 	@Autowired
 	private ServletContext servletContext;
 
+	@LoginCheck
 	@GetMapping("/gymReservation.do")
 	public String gymReservation() {
 		return "views/reservation";
@@ -62,7 +63,7 @@ public class GymController {
 		int page = gymDTO.getPage();
 		log.info("page = [{}]", page);
 
-		int size = 10; // 한 페이지에 표시할 게시글 수
+		int size = 6; // 한 페이지에 표시할 게시글 수
 		if (page <= 0) { // 페이지가 0일 때 (npe방지)
 			page = 1;
 		}
@@ -109,6 +110,7 @@ public class GymController {
 		return "views/gymMain";
 	}
 
+	@LoginCheck
 	@PostMapping("/gymReservation.do")
 	public String gymReservation(GymDTO gymDTO, ReservationDTO reservationDTO, MemberDTO memberDTO, Model model) {
 		log.info("gymReservation.do 도착");
@@ -209,6 +211,7 @@ public class GymController {
 	}
 
 
+	@LoginCheck
 	@PostMapping("/gymReservationInfo.do")
 	public String gymReservationInfo(Model model,GymDTO gymDTO, MemberDTO memberDTO, ReservationDTO reservationDTO) {
 		log.info("gymReservationInfo.do 도착");
@@ -359,11 +362,6 @@ public class GymController {
 		gym_num = data.getGym_num();
 		gym_name = data.getGym_name();
 		gym_profile = data.getGym_profile();
-		if(gym_profile != null){
-			if(!data.getGym_profile().contains("http")){
-				gym_profile = "https://" + gym_profile;
-			}
-		}
 		gym_description = data.getGym_description();
 		gym_location = data.getGym_location();
 		gym_price = data.getGym_price();

@@ -39,12 +39,19 @@ public class CrewAsyncController {
     }
 
     @PostMapping("/mvpMember.do")
-    public @ResponseBody String mvpMember(@RequestBody CrewDTO crewDTO) throws JsonProcessingException {
+    public @ResponseBody String mvpMember(@RequestBody CrewDTO crewDTO, MemberDTO memberDTO) throws JsonProcessingException {
 
         log.info("mvpMember.crewDTO = {}",crewDTO);
         //크루 이름으로 크루를 찾고
+
+        int crew_num = crewManagementService.searchCrew(crewDTO).getCrew_num();
         //크루pk로 크루원들 전부 출력
-       List<MemberDTO> datas = crewManagementService.mvpMember(crewDTO);
+
+        memberDTO.setMember_crew_num(crew_num);
+        List<MemberDTO> datas = crewManagementService.mvpMember(memberDTO);
+        log.info("mvpMemberService = [{}]",datas);
+
+
         log.info("datas = {}",datas);
 
         ObjectMapper mapper = new ObjectMapper();

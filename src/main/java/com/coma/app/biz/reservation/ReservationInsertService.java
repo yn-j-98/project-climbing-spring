@@ -1,6 +1,7 @@
 package com.coma.app.biz.reservation;
 
-import com.coma.app.biz.member.MemberDAO;
+
+import com.coma.app.biz.member.MemberDAO3;
 import com.coma.app.biz.member.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ public class ReservationInsertService {
     ReservationDAO reservationDAO;
 
     @Autowired
-    MemberDAO memberDAO;
+    MemberDAO3 memberDAO;
 
     public boolean insert(ReservationDTO reservationDTO, MemberDTO memberDTO) {
 

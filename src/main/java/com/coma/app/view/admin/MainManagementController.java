@@ -46,7 +46,6 @@ public class MainManagementController{
 
     // 관리자 메인
     @AdminCheck
-    @LoginCheck
     @GetMapping("/mainManagement.do")
     public String mainManagement(Model model, MemberDTO memberDTO,
                                  GymDTO gymDTO, BoardDTO boardDTO, BattleDTO battleDTO, ReservationDTO reservationDTO) throws JsonProcessingException {
