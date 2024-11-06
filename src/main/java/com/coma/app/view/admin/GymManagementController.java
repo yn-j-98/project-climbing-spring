@@ -5,7 +5,6 @@ import com.coma.app.biz.battle.BattleServiceImpl;
 import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.gym.GymService;
 import com.coma.app.view.annotation.AdminCheck;
-import com.coma.app.view.annotation.LoginCheck;
 import com.coma.app.view.asycnServlet.FTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +25,16 @@ public class GymManagementController {
 
     @Autowired
     private GymService gymService;
-
     @Autowired
     private FTPService ftpService;
     @Autowired
     private BattleServiceImpl battleService;
 
+    // 암벽장 관리 페이지
     @AdminCheck
     @GetMapping("/gymManagement.do")
     public String gymManagement(Model model, GymDTO gymDTO) {
-        /*
-    - 암벽장 관리 페이지
-    - 암벽장 관리 리스트
-        - 암벽장 사진 	암벽장 이름 	암벽장 장소 	암벽장 가격 	암벽장 소개
-        	↑
-    SELECTALL
-    */
+
         String search_keyword =  gymDTO.getSearch_keyword();
         int listNum = 0;
         int page = gymDTO.getPage();
@@ -54,8 +47,11 @@ public class GymManagementController {
         List<GymDTO> datas = null;
         //페이지 네이션을 위한 값
         gymDTO.setGym_min_num(min_num);
+        // 검색 키워드에 따른 검색 처리
+        // 검색 키워드가 없다면
         if (search_keyword == null) {
             listNum = this.gymService.selectOneCount(gymDTO).getTotal();
+            // 전체 암벽장 조회
             datas = this.gymService.selectAllAdmin(gymDTO);
             log.debug("if (search_keyword == null) end");
         }
@@ -93,20 +89,15 @@ public class GymManagementController {
         return "admin/gymManagement";
     }
 
+    // 암벽장 추가
     @AdminCheck
     @PostMapping("/gymInsert.do")
     public String gymInsert(Model model, GymDTO gymDTO) throws IOException {
         String infoPath = "gymManagement.do";
         String title = "성공!";
         String msg = "암벽장이 등록되었습니다";
-       /*
-    - 암벽장 추가하기
-        - 암벽장 이름
-    암벽장 장소
-    암벽장 가격
-    암벽장 소개
-    암벽장 사진 (파일 업로드)
-    */
+
+        // 파일 업로드
         MultipartFile file = gymDTO.getGym_file();
         String fileName = ftpService.ftpFileUpload(file,"gym_img");
         log.info("파일명 : [{}]",fileName);
@@ -125,6 +116,7 @@ public class GymManagementController {
         return "views/info";
     }
 
+    // 크루전 등록 승인 / 취소
     @AdminCheck
     @PostMapping("/gymManagementReq.do")
     public String gymManagementReq(Model model, GymDTO gymDTO, BattleDTO battleDTO) {
@@ -137,6 +129,7 @@ public class GymManagementController {
 
         boolean flag=false;
 
+        // 크루전 등록 여부 확인
         if(this.battleService.selectOneSearchBattleAdmin(battleDTO)==null) {
             flag=this.battleService.insertFirst(battleDTO);
             if(!flag) {
@@ -144,10 +137,13 @@ public class GymManagementController {
             }
         }
 
+        // 이미 크루전이 등록되어 있는 암벽장의 크루전을 개최하려고 시도한 경우
         if("T".equals(gymDTO.getGym_admin_battle_verified())){
             title = "이미 크루전이 등록되어 있는 암벽장입니다.";
         }
+        // 크루전 개최 등록시
         else if("F".equals(gymDTO.getGym_admin_battle_verified())){
+            // 권한 변경 ( 등록된 크루전 - T )
             gymDTO.setGym_admin_battle_verified("T");
             log.info("GymDTO [{}]",gymDTO);
 
