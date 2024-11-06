@@ -26,7 +26,7 @@ public class CommunityController{
     @GetMapping(value="/community.do")
     public String community(BoardDTO boardDTO, Model model) {
 
-        int pageNum = boardDTO.getPage();//요거 필요
+        int pageNum = boardDTO.getPage();//페이지
         int boardSize = 10; // 한 페이지에 표시할 게시글 수 설정
         int minBoard = 1; // 최소 게시글 수 초기화
 
@@ -49,9 +49,7 @@ public class CommunityController{
         boardDTO.setBoard_min_num(minBoard);
         if(search_Keyword != null) {
             // 글 검색 부분
-//            SEARCH_TITLE">글 제목</option>
-//                    <option value="SEARCH_WRITER">작성자</option>
-//									<option value="SEARCH_ID
+
             if(search_Keyword.equals("SEARCH_ID")) {
                 // 아이디로 검색했을 때
 //                boardDTO.setSearch_content("BOARD_ONE_SEARCH_ID_COUNT");
@@ -65,7 +63,6 @@ public class CommunityController{
                 log.info("community.title : [{}]", boardDTO.getSearch_content());
 
                 //boardDTO.setBoard_condition("BOARD_ALL_SEARCH_PATTERN_ID"); // 아이디검색 컨디션
-
                 // 게시글 목록 조회
                 boardList = this.boardService.selectAllSearchPatternId(boardDTO); // 설정된 조건으로 게시글 목록 조회
 
@@ -171,12 +168,12 @@ public class CommunityController{
         log.info("location.keyword : [{}]", boardDTO.getSearch_keyword());
         log.info("location.boardDTO : [{}]", boardDTO);
 
-        if(boardDTO.getSearch_content() == null) {
+        if(boardDTO.getSearch_content() == null) {//null check
             boardDTO.setSearch_content("");
             log.info("location.search_content : [{}]", boardDTO.getSearch_content());
         }
 
-        // 게시글 검색
+        // 게시글 제목 검색
         List<BoardDTO> datas = boardService.selectAllSearchTitle(boardDTO);
         log.info("datas = [{}]", datas);
 
@@ -186,9 +183,9 @@ public class CommunityController{
         log.info("location.boardCount : [{}]", boardCount);
 
         // 모델에 필요한 데이터를 추가
-        model.addAttribute("page", pageNum);
-        model.addAttribute("total", listNum);
-        model.addAttribute("BOARD", datas);
+        model.addAttribute("page", pageNum);//페이지
+        model.addAttribute("total", listNum);//총 개수
+        model.addAttribute("BOARD", datas);//글 정보
 
         return "views/localCommunity"; // 결과 페이지 반환
     }

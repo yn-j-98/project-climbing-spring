@@ -23,16 +23,21 @@ public class ReplyServiceImpl implements ReplyService{
 
 	@Override
 	public boolean insert(ReplyDTO replyDTO) {
-		if(replyDTO.getReply_writer_id() == null) {
+		if (replyDTO.getReply_writer_id() == null || replyDTO.getReply_content() == null || replyDTO.getReply_content().trim().isEmpty()) {
 			return false;
 		}
 		return this.replyDAO.insert(replyDTO);
 	}
 
+
 	@Override
 	public boolean update(ReplyDTO replyDTO) {
+		if (replyDTO.getReply_content() == null || replyDTO.getReply_content().trim().isEmpty()) {
+			return false;
+		}
 		return this.replyDAO.update(replyDTO);
 	}
+
 
 	@Override
 	public boolean delete(ReplyDTO replyDTO) {
