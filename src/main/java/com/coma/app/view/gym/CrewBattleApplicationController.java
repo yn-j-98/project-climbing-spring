@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.coma.app.biz.battle.BattleDTO;
@@ -31,30 +30,28 @@ public class CrewBattleApplicationController {
 	@Autowired
 	private HttpSession session;
 
-
 	@LoginCheck
-	@GetMapping("/CrewBattleApplication.do")
+	@PostMapping("/CrewBattleApplication.do")
 	public String CrewBattleApplication(CrewDTO crewDTO, GymDTO gymDTO, BattleDTO battleDTO, Battle_recordDTO battle_recordDTO, Model model) {
 		log.info("CrewBattleApplication.do 도착");
 
 		String path = "views/info"; // view에서 알려줄 예정 alert 창 띄우기 위한 JavaScript 페이지
 
-		String error_path = "GymInfo.do?gym_num=" + gymDTO.getGym_num();
+		String error_path = "gymInfo.do?gym_num=" + gymDTO.getGym_num();
 		log.info("gymDTO.getGym_num 확인 로그 = [{}]",gymDTO.getGym_num());
 		String error_message = "잘못된 요청";
 
 		String member_id = (String) session.getAttribute("MEMBER_ID");
-		String crewCheck = (String) session.getAttribute("CREW_CHECK");
-		int crew_check = Integer.parseInt(crewCheck);
+		int crewCheck = (Integer) session.getAttribute("CREW_CHECK");
 
-		log.info("crew_check 확인 로그 = [{}]",crew_check);
+		log.info("crew_check 확인 로그 = [{}]",crewCheck);
 
 		//------------------------------------------------------------
 		if(member_id != null) {
 			//------------------------------------------------------------
 			//암벽장에 크루전을 신청하는 사용자가 크루장인지 확인 로직 시작
 			//(사용자 아이디 / 크루 번호) 를 Crew DTO에 추가합니다.
-			crewDTO.setCrew_num(crew_check);
+			crewDTO.setCrew_num(crewCheck);
 			//Crew selectOne으로 해당 사용자가 크루장인지 확인합니다.
 			CrewDTO crew_leader = this.crewService.selectOne(crewDTO);
 			boolean flag_crew_leader = false;
@@ -71,7 +68,7 @@ public class CrewBattleApplicationController {
 				log.info("flag_crew_leader false 로그");
 				model.addAttribute("msg", "크루전은 크루장만 개최하실 수 있습니다.");
 				model.addAttribute("path", error_path);
-					
+
 				return path;
 			}
 			//암벽장에 크루전을 신청하는 사용자가 크루장인지 확인 로직 종료
@@ -80,6 +77,7 @@ public class CrewBattleApplicationController {
 			//크루전 개최 되어있는지 확인하기 위한 로직 시작
 			//(크루전 번호) 을 Battle DTO에 추가합니다.
 			//Battle selectOne으로 해당 크루전이 개최되어 있는지 확인합니다.
+			log.info("battle_num = [{}]",battleDTO.getBattle_num());
 			BattleDTO battle_data = this.battleService.selectOneSearchBattle(battleDTO);
 			boolean flag = false;
 			//개최되어 있다면 게임일을 확인해줍니다.
@@ -92,7 +90,7 @@ public class CrewBattleApplicationController {
 				battleDTO.setBattle_game_date(gymDTO.getGym_battle_game_date());
 				log.info("개최날짜 = [{}]",gymDTO.getGym_battle_game_date());
 
-				flag = this.battleService.insert(battleDTO);
+				flag = this.battleService.update(battleDTO);
 				if(!flag) {
 					model.addAttribute("msg", "크루전 개최에 실패하였습니다. (사유 : 개최 오류)");
 					model.addAttribute("path", error_path);
@@ -120,10 +118,10 @@ public class CrewBattleApplicationController {
 			//크루전 개최 되어있는지 확인하기 위한 로직 종료
 			//------------------------------------------------------------
 			//크루전 등록 로직 시작
-			battle_recordDTO.setBattle_record_crew_num(crew_check);
+			battle_recordDTO.setBattle_record_crew_num(crewCheck);
 
 			//크루전 등록 여부 확인
-			crewDTO.setCrew_num(crew_check);
+			crewDTO.setCrew_num(crewCheck);
 
 			//크루전 등록 여부 확인을 위해 selectOne 해서 비교한다.
 			CrewDTO crew_data = this.crewService.selectOneBattleStatus(crewDTO);

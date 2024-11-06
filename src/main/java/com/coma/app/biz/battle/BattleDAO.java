@@ -254,6 +254,10 @@ public class BattleDAO {
 			"WHERE\n" +
 			"    B.BATTLE_NUM = ?";
 
+	private final String INSERT_FIRST ="INSERT "
+			+ "INTO BATTLE(BATTLE_GYM_NUM)\n "
+			+ "VALUES (?)";
+
 	//활성화 되있는 크루전 정보 BATTLE_NUM // TODO
 	private final String ONE_SEARCH_BATTLE = "SELECT\n"
 			+ "  	B.BATTLE_NUM,\n"
@@ -261,13 +265,18 @@ public class BattleDAO {
 			+ "  	B.BATTLE_GAME_DATE\n"
 			+ "FROM\n"
 			+ "		BATTLE B\n"
-			+ "JOIN\r\n"
-			+ "		BATTLE_RECORD BR\r\n"
-			+ "ON\r\n"
-			+ "		B.BATTLE_NUM = BR.BATTLE_RECORD_BATTLE_NUM\r\n"
 			+ "WHERE\n"
 			+ "  	B.BATTLE_NUM = ? AND\n"
-			+ " 	BR.BATTLE_RECORD_MVP_ID IS NULL";
+			+ " 	B.BATTLE_STATUS='F'";
+
+	//활성화 되있는 크루전 정보 BATTLE_NUM // TODO
+	private final String ONE_SEARCH_BATTLE_ADMIN = "SELECT\n"
+			+ "  	B.BATTLE_NUM\n"
+			+ "FROM\n"
+			+ "		BATTLE B\n"
+			+ "WHERE\n"
+			+ "  	BATTLE_GYM_NUM = ? AND\n"
+			+ " 	BATTLE_STATUS='T'";
 
 	//해당 암벽장에서 실행된 크루전 전부 출력 BATTLE_GYM_NUM
 	private final String ALL_GYM_BATTLE = "SELECT\r\n"
@@ -299,7 +308,7 @@ public class BattleDAO {
 			"LIMIT 4";
 
 	//게임날짜 업데이트 BATTLE_GAME_DATE, BATTLE_NUM
-	private final String UPDATE = "UPDATE BATTLE SET BATTLE_GAME_DATE = ? WHERE BATTLE_NUM = ?";
+	private final String UPDATE = "UPDATE BATTLE SET BATTLE_GAME_DATE = ?, BATTLE_STATUS = 'T' WHERE BATTLE_NUM = ?";
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -309,6 +318,14 @@ public class BattleDAO {
 		int result= jdbcTemplate.update(INSERT, battleDTO.getBattle_gym_num(), battleDTO.getBattle_game_date());
 		if(result<=0){
 			System.err.println("	[에러] com.coma.app.biz.battle INSERT sql 실패 : insert = " + INSERT);
+			return false;
+		}
+		return true;
+	}
+
+	public boolean insertFirst(BattleDTO battleDTO) {
+		int result= jdbcTemplate.update(INSERT_FIRST, battleDTO.getBattle_gym_num());
+		if(result<=0){
 			return false;
 		}
 		return true;
@@ -357,6 +374,19 @@ public class BattleDAO {
 			result =  jdbcTemplate.queryForObject(SEARCH_MEMBER_BATTLE, args, new BattleRowMapperOneSearchMemberBattle());
 		}catch(Exception e){
 			System.err.println("	[에러] com.coma.app.biz.battle.selectOneSearchMemberBattle Sql문 실패 : SEARCH_MEMBER_BATTLE = " + SEARCH_MEMBER_BATTLE);
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	//특정 사용자가 참여한 크루전 찾기
+	public BattleDTO selectOneSearchBattleAdmin(BattleDTO battleDTO){
+		BattleDTO result = null;
+		Object[] args = new Object[]{battleDTO.getBattle_gym_num()};
+		try {
+			result =  jdbcTemplate.queryForObject(ONE_SEARCH_BATTLE_ADMIN, args, new BattleRowMapperOneSearchAdmin());
+		}catch(Exception e){
+			System.err.println("	[에러] com.coma.app.biz.battle.selectOneSearchBattleAdmin Sql문 실패 : ONE_SEARCH_BATTLE_ADMIN = " + ONE_SEARCH_BATTLE_ADMIN);
 			e.printStackTrace();
 		}
 		return result;
@@ -1031,6 +1061,21 @@ class BattleRowMapperAllSearchParticipants implements RowMapper<BattleDTO> {
 		} catch (Exception e) {
 			System.err.println("Battle_member_name = null");
 			battleDTO.setBattle_member_name(null);
+		}
+		return battleDTO;
+	}
+}
+
+class BattleRowMapperOneSearchAdmin implements RowMapper<BattleDTO> {
+	@Override
+	public BattleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		System.out.println("com.coma.app.biz.battle.BattleRowMapperOneSearchAdmin 검색 성공");
+		BattleDTO battleDTO = new BattleDTO();
+		try {
+			battleDTO.setBattle_num(rs.getInt("BATTLE_NUM"));
+		} catch (Exception e) {
+			System.err.println("Battle_num = null");
+			battleDTO.setBattle_num(0);
 		}
 		return battleDTO;
 	}

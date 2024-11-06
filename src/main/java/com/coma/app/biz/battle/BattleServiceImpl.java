@@ -53,9 +53,15 @@ public class BattleServiceImpl implements BattleService{
 	public BattleDTO selectOneCountActiveBattle(BattleDTO battleDTO) {return this.battleDAO.selectOneCountActiveBattle(battleDTO);}
 
 	@Override
+	public BattleDTO selectOneSearchBattleAdmin(BattleDTO battleDTO) { return this.battleDAO.selectOneSearchBattleAdmin(battleDTO);	}
+
+	@Override
 	public boolean insert(BattleDTO battleDTO) {
 		return this.battleDAO.insert(battleDTO);
 	}
+
+	@Override
+	public boolean insertFirst(BattleDTO battleDTO) { return this.battleDAO.insertFirst(battleDTO);	}
 
 	@Override
 	public boolean InsertBattleModal(BattleDTO battleDTO) {return this.battleDAO.InsertBattleModal(battleDTO);}

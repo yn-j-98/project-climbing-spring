@@ -244,7 +244,7 @@
                     <form action="CrewBattleApplication.do" method="POST">
                         <div class="form-group">
                             <input type="hidden" name="gym_num" value="${gym_num}">
-                            <input type="hidden" name="battle_num" value="${battle_num}">
+                            <input type="hidden" name="battle_num" value="${gym_battle_num}">
                             신청 날짜 : <input type="text" id="crewMatchDatepicker" name="gym_battle_game_date" required>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary" id="crewMatch-btn">개최 신청</button>
@@ -276,10 +276,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="CrewBattleApplication.do">
+                    <form action="CrewBattleApplication.do" method="POST">
                         <div class="form-group">
                             <input type="hidden" name="gym_num" value="${gym_num}">
-                            <input type="hidden" name="battle_num" value="${battle_num}"> <!--추가했습니다..-->
+                            <input type="hidden" name="battle_num" value="${gym_battle_num}"> <!--추가했습니다..-->
                             개최일 : <input type="text" name="gym_battle_game_date" value="${gym_battle_game_date}"
                                          readonly>
                             <!-- 추후에 상금은 관리자 페이지에서 설정 가능하게 구현 -->
