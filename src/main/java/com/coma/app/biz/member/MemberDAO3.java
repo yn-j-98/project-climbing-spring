@@ -129,7 +129,7 @@ public class MemberDAO3 {
 
     public MemberDTO selectOneSearchDateCountAdmin(MemberDTO memberDTO) {
 
-        return mybatis.selectOne("MemberDAO.selectOneSearchIdCountAdmin", memberDTO);
+        return mybatis.selectOne("MemberDAO.selectOneSearchDateCountAdmin", memberDTO);
 
     }
 
@@ -141,7 +141,7 @@ public class MemberDAO3 {
 
     public List<MemberDTO> selectAllCrewRank(MemberDTO memberDTO) {
 
-        return mybatis.selectList("MemberDAO.selectAllSearchRank", memberDTO);
+        return mybatis.selectList("MemberDAO.selectAllCrewRank", memberDTO);
 
     }
 
