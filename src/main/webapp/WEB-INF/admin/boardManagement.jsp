@@ -72,8 +72,8 @@
                             <div class="form-floating">
                                 <%--TODO 컨디션 안쓴다면 ID 변경--%>
                                 <select class="form-select" id="search_keyword">
-                                    <option ${param.search_keywoard =="BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
-                                    <option ${param.search_keywoard == "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
+                                    <option ${search_keyword eq "BOARD_WRITER_ID" ? "selected":''} value="BOARD_WRITER_ID">아이디</option>
+                                    <option ${search_keyword eq "BOARD_TITLE" ? "selected":''} value="BOARD_TITLE">제목</option>
                                 </select>
                                 <label for="search_keyword">검색할 목록</label>
                             </div>

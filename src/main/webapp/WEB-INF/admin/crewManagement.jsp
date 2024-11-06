@@ -7,26 +7,30 @@
 <head>
   <title>관리자 : 크루전 관리</title>
   <!-- Fonts and icons -->
-  <script src="../../assets/js/plugin/webfont/webfont.min.js"></script>
+  <script src="assets/js/plugin/webfont/webfont.min.js"></script>
   <script src="https://kit.fontawesome.com/7f7b0ec58f.js" crossorigin="anonymous"></script>
 
   <!-- CSS Files -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="../../assets/css/plugins.min.css" />
-  <link rel="stylesheet" href="../../assets/css/kaiadmin.css" />
+  <link rel="stylesheet" href="assets/css/plugins.min.css" />
+  <link rel="stylesheet" href="assets/css/kaiadmin.css" />
 
   <!--   Core JS Files   -->
-  <script src="../../assets/js/core/jquery-3.7.1.min.js"></script>
+  <script src="assets/js/core/jquery-3.7.1.min.js"></script>
+  <!-- jQuery UI CSS 포함 -->
+  <link href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css" rel="stylesheet">
+  <!-- jQuery UI 라이브러리 포함 -->
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
   <!-- template Js File -->
-  <script src="../../assets/js/kaiadmin.min.js"></script>
+  <script src="assets/js/kaiadmin.min.js"></script>
 
   <%-- pagination Js File --%>
-  <script src="../../js/pagination.js"></script>
+  <script src="js/pagination.js"></script>
 
   <%-- ajax Js File--%>
-  <script src="../../js/crewManagementAjax.js"></script>
+  <script src="js/crewManagementAjax.js"></script>
 
   <!-- DatePicker Js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/locales/bootstrap-datepicker.ko.min.js" integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

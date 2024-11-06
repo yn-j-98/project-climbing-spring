@@ -130,6 +130,7 @@ public class CommunityController{
         log.info("boardList[{}]", boardList);
 
         model.addAttribute("BOARD", boardList); // 조회된 게시글 목록을 요청 객체에 저장
+        model.addAttribute("search_keyword", search_Keyword);
         model.addAttribute("total", listNum); // 전체 글 개수
         model.addAttribute("page", pageNum); // 현재 페이지 번호
 
@@ -141,12 +142,14 @@ public class CommunityController{
     @GetMapping("/location.do")
     public String local(Model model, BoardDTO boardDTO) {
 
-        String Search_keyword = boardDTO.getSearch_keyword();
+        String search_keyword = boardDTO.getSearch_keyword();
 
-        String location = locationMap(Search_keyword); // 지역명 매핑
+        model.addAttribute("search_keyword", search_keyword);
+
+        String location = locationMap(search_keyword); // 지역명 매핑
         boardDTO.setSearch_keyword(location); // 지역명 검색어 설정
 
-        log.info("location.Location : [{}]", Search_keyword);
+        log.info("location.Location : [{}]", search_keyword);
 
 
         int pageNum = boardDTO.getPage(); // 현재 페이지 번호

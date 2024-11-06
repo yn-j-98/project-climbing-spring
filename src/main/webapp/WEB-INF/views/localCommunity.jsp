@@ -61,10 +61,10 @@
 							<div class="form-group">
 								<select name="search_keyword"
 										class="form-select form-control-lg">
-									<option value="SEOUL">서울</option>
-									<option value="GYEONGGI">경기</option>
-									<option value="INCHEON">인천</option>
-									<option value="CHUNGNAM">충남</option>
+									<option  ${search_keyword eq "SEOUL" ? "selected":''} value="SEOUL">서울</option>
+									<option ${search_keyword eq "GYEONGGI" ? "selected":''} value="GYEONGGI">경기</option>
+									<option ${search_keyword eq "INCHEON" ? "selected":''} value="INCHEON">인천</option>
+									<option ${search_keyword eq "CHUNGNAM" ? "selected":''} value="CHUNGNAM">충남</option>
 								</select>
 							</div>
 
