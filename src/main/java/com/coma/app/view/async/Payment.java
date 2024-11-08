@@ -1,4 +1,4 @@
-package com.coma.app.view.asycnServlet;
+package com.coma.app.view.async;
 
 import java.io.IOException;
 import java.io.PrintWriter;

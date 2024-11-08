@@ -1,3 +1,4 @@
+/*
 package com.coma.app.view.function;
 
 import java.io.File;
@@ -46,3 +47,4 @@ public class CKEditorDeleteFile {
 		//----------------------------------------------------------------------------
 	}
 }
+*/

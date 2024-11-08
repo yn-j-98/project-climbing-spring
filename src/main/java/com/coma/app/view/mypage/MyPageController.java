@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.coma.app.biz.reservation.PaymentInfoDTO;
-import com.coma.app.view.asycnServlet.FTPService;
+import com.coma.app.view.async.FTPService;
 import com.coma.app.view.payment.PaymentPortOne;
 import com.coma.app.view.payment.TokenService;
 import lombok.extern.slf4j.Slf4j;

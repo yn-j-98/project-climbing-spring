@@ -5,7 +5,7 @@ import com.coma.app.biz.battle.BattleServiceImpl;
 import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.biz.gym.GymService;
 import com.coma.app.view.annotation.AdminCheck;
-import com.coma.app.view.asycnServlet.FTPService;
+import com.coma.app.view.async.FTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
