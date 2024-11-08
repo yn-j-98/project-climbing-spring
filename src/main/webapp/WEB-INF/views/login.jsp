@@ -197,9 +197,10 @@
 
 	// 이 로그인 API를 사용할 페이지의 주소를 설정
 	// 이 주소는 네이버 로그인 API에서 검증하는 페이지 주소
-	naver_id_login
-			.setDomain("http://localhost:8088/login.do");
+	/*naver_id_login
+			.setDomain("http://localhost:8088/login.do");*/
 
+	naver_id_login.setDomain("http://comapro.kr/login.do");
 	// 로그인 요청에 사용할 상태 값을 설정
 	naver_id_login.setState(state);
 
