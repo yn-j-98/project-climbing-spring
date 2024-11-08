@@ -276,7 +276,7 @@ public class BattleDAO {
             + "		BATTLE B\n"
             + "WHERE\n"
             + "  	BATTLE_GYM_NUM = ? AND\n"
-            + " 	BATTLE_STATUS='T'";
+            + " 	BATTLE_STATUS='F'";
 
     //해당 암벽장에서 실행된 크루전 전부 출력 BATTLE_GYM_NUM
     private final String ALL_GYM_BATTLE = "SELECT\r\n"
@@ -308,7 +308,7 @@ public class BattleDAO {
             "LIMIT 4";
 
     //게임날짜 업데이트 BATTLE_GAME_DATE, BATTLE_NUM
-    private final String UPDATE = "UPDATE BATTLE SET BATTLE_GAME_DATE = ?, BATTLE_STATUS = 'T' WHERE BATTLE_NUM = ?";
+    private final String UPDATE = "UPDATE BATTLE SET BATTLE_GAME_DATE = ? WHERE BATTLE_NUM = ?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
