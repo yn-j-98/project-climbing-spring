@@ -1,21 +1,19 @@
 package com.coma.app.view.gym;
 
-import com.coma.app.biz.gym.GymDTO;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import com.coma.app.biz.battle.BattleDTO;
 import com.coma.app.biz.battle.BattleService;
 import com.coma.app.biz.battle_record.Battle_recordDTO;
 import com.coma.app.biz.battle_record.Battle_recordService;
 import com.coma.app.biz.crew.CrewDTO;
 import com.coma.app.biz.crew.CrewService;
+import com.coma.app.biz.gym.GymDTO;
 import com.coma.app.view.annotation.LoginCheck;
-
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @Controller

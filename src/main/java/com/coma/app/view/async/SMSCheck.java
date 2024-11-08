@@ -1,13 +1,12 @@
 package com.coma.app.view.async;
 
-import java.util.Random;
-
+import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.view.function.SMSPush;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coma.app.biz.member.MemberDTO;
-import com.coma.app.view.function.SMSPush;
+import java.util.Random;
 
 @RestController
 public class SMSCheck {

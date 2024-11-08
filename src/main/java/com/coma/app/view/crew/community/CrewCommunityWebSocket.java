@@ -2,7 +2,6 @@ package com.coma.app.view.crew.community;
 
 import com.coma.app.biz.crew_board.Crew_boardDTO;
 import com.coma.app.biz.crew_board.Crew_boardService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -12,8 +11,6 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import java.io.IOException;

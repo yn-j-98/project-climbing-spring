@@ -1,10 +1,8 @@
 package com.coma.app.view.async;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import com.coma.app.biz.member.MemberDTO;
 import com.coma.app.biz.member.MemberServiceImpl;
+import com.coma.app.biz.reservation.PaymentInfoDTO;
 import com.coma.app.biz.reservation.ReservationDTO;
 import com.coma.app.biz.reservation.ReservationInsertService;
 import com.coma.app.biz.reservation.ReservationService;
@@ -17,8 +15,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import com.coma.app.biz.reservation.PaymentInfoDTO;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Slf4j
 @RestController

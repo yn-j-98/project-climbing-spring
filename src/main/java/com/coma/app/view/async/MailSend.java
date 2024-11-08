@@ -1,25 +1,19 @@
 package com.coma.app.view.async;
 
-import java.sql.Date;
-import java.util.Properties;
-
-import javax.mail.Address;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
-import lombok.extern.slf4j.Slf4j; // 로깅을 위한 라이브러리
+import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberService;
+import com.coma.app.view.function.GoogleAuthentication;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coma.app.biz.member.MemberDTO;
-import com.coma.app.biz.member.MemberService;
-import com.coma.app.view.function.GoogleAuthentication;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.sql.Date;
+import java.util.Properties;
 
 @Slf4j
 @RestController

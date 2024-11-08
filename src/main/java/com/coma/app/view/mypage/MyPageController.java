@@ -1,12 +1,17 @@
 package com.coma.app.view.mypage;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.coma.app.biz.board.BoardDTO;
+import com.coma.app.biz.board.BoardService;
+import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberService;
 import com.coma.app.biz.reservation.PaymentInfoDTO;
+import com.coma.app.biz.reservation.ReservationDTO;
+import com.coma.app.biz.reservation.ReservationService;
+import com.coma.app.view.annotation.LoginCheck;
 import com.coma.app.view.async.FTPService;
 import com.coma.app.view.payment.PaymentPortOne;
 import com.coma.app.view.payment.TokenService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,16 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.coma.app.biz.board.BoardDTO;
-import com.coma.app.biz.board.BoardService;
-import com.coma.app.biz.member.MemberDTO;
-import com.coma.app.biz.member.MemberService;
-import com.coma.app.biz.reservation.ReservationDTO;
-import com.coma.app.biz.reservation.ReservationService;
-import com.coma.app.view.annotation.LoginCheck;
-
-
-import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Controller

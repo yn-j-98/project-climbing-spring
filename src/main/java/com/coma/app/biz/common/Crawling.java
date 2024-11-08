@@ -1,24 +1,18 @@
 package com.coma.app.biz.common;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.coma.app.biz.board.BoardDTO;
+import com.coma.app.biz.gym.GymDTO;
+import com.coma.app.biz.product.ProductDTO;
 import jakarta.annotation.PreDestroy;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.coma.app.biz.board.BoardDTO;
-import com.coma.app.biz.gym.GymDTO;
-import com.coma.app.biz.product.ProductDTO;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Crawling {
