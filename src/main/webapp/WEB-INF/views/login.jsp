@@ -182,7 +182,7 @@
 	// 에서 데이터를 가져왔다고 보면 됨
 
 	var naver_id_login = new naver_id_login( // 네이버 로그인을 위한 객체 생성
-			"kQSIom2rw1yt29HcbNc8", // 내 client ID: 네이버 개발자 센터에서 발급받은 클라이언트 ID
+			"", // 내 client ID: 네이버 개발자 센터에서 발급받은 클라이언트 ID
 			"http://localhost:8088/login.do" // 내 callback url: 로그인 후 보여질 URL
 	);
 
@@ -248,7 +248,7 @@
 
 	// 카카오 로그인 시작
 	// 카카오 developers에서 발급받은 내 client ID
-	Kakao.init('f68644c7e9866ef898677d5e1a260265');
+	Kakao.init('');
 	// 로그 (true/false로 콘솔창에 출력됨)
 	console.log('Kakao SDK 초기화 여부:', Kakao.isInitialized());
 

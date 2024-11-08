@@ -171,7 +171,7 @@ public class SMSPush {
 			//실제로 문자를 보내면 금액이 지불되기 때문에
 			//문자 테스트를 할지 여부를 입력
 //			String testflag = base64Encode(nullcheck("Y", ""));
-			String testflag = base64Encode(nullcheck("Y", ""));
+			String testflag = base64Encode(nullcheck("", ""));
 
 			//이름을 입력 010-000-0000|홍길동
 			String destination = base64Encode(nullcheck("", ""));

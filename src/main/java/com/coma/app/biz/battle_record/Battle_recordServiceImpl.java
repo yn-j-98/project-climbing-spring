@@ -1,9 +1,9 @@
 package com.coma.app.biz.battle_record;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("battle_recordService")
 public class Battle_recordServiceImpl implements Battle_recordService{

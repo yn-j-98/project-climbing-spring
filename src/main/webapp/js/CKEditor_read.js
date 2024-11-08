@@ -1,6 +1,6 @@
 //editorConfig.js에서 CKEditor 설정 정보 불러오기
-import { editorConfig, setContentsLength, setTextLength, setImgLength } from 'editorConfig';
-import { ClassicEditor } from 'CKEditor';
+import {editorConfig, setContentsLength, setImgLength, setTextLength} from 'editorConfig';
+import {ClassicEditor} from 'CKEditor';
 
 //CKEditor 생성
 console.log('CKEditor 생성');

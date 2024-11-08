@@ -1,10 +1,9 @@
 package com.coma.app.biz.member;
 
-import java.util.List;
-
-import com.coma.app.biz.board.BoardDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {

@@ -1,12 +1,10 @@
 package com.coma.app.biz.crew_board;
 
-import java.util.List;
-
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service("crew_boardService")

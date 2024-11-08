@@ -1,13 +1,10 @@
 package com.coma.app.biz.common;
 
-import java.util.ArrayList;
-
-import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.board.BoardDTO;
-import com.coma.app.biz.gym.GymService;
+import com.coma.app.biz.board.BoardService;
 import com.coma.app.biz.gym.GymDTO;
+import com.coma.app.biz.gym.GymService;
 import com.coma.app.biz.product.ProductDTO;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.servlet.ServletContext;
@@ -16,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Slf4j
 @Component

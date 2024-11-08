@@ -1,9 +1,9 @@
 package com.coma.app.biz.favorite;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("favoriteService")
 public class FavoriteServiceImpl implements FavoriteService{

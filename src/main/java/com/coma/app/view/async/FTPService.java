@@ -1,6 +1,5 @@
-package com.coma.app.view.asycnServlet;
+package com.coma.app.view.async;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -128,11 +127,11 @@ public class FTPService {
         boolean flag = isUpload(folderPath, img_name, file);
 
         if(flag){
-            return folderPath+"default.png";
+            return "default.png";
         }
 
         //넘길 이미지 주소를 전달합니다.
-        return ftpCreateFolder+img_name;
+        return "/"+ftpCreateFolder+img_name;
 //        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+img_name;
     }
     //이미지 업로드 멀티파트, 이미지 폴더, 파일이름
@@ -158,12 +157,12 @@ public class FTPService {
         boolean flag = isUpload(folderPath, img_name, file);
 
         if(flag){
-            return ftpCreateFolder+"default.png";
+            return "/"+ftpCreateFolder+"default.png";
         }
 
 
         //넘길 이미지 주소를 전달합니다.
-        return ftpCreateFolder+img_name;
+        return "/"+ftpCreateFolder+img_name;
 //        return FTPService.UPLOAD_DIRECTORY+ftpCreateFolder+img_name;
     }
 
@@ -194,7 +193,7 @@ public class FTPService {
         boolean flag = isUpload(folderPath, img_name, file);
 
         if(flag){
-            return folderPath+"default.png";
+            return FTPService.UPLOAD_DIRECTORY+"default.png";
         }
 
 
