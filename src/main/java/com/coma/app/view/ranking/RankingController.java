@@ -1,18 +1,16 @@
 package com.coma.app.view.ranking;
 
-import java.util.List;
-
+import com.coma.app.biz.grade.GradeDTO;
+import com.coma.app.biz.grade.GradeService;
+import com.coma.app.biz.member.MemberDTO;
+import com.coma.app.biz.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.coma.app.biz.grade.GradeDTO;
-import com.coma.app.biz.grade.GradeService;
-import com.coma.app.biz.member.MemberDTO;
-import com.coma.app.biz.member.MemberService;
-import org.springframework.web.bind.annotation.RequestParam;
+import java.util.List;
 
 @Slf4j
 @Controller

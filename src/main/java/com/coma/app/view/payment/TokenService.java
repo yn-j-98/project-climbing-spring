@@ -15,8 +15,8 @@ import java.net.http.HttpResponse;
 @Slf4j
 public class TokenService {
 
-    private final static String IMP_KEY = "5647450260826041";
-    private final static String IMP_SECRET = "YpS1lNenwoElzx1zMgszfeWQ8pRFnQTbUCazgFUERxwqqmEMrgNq9qO1Vb54qOA7o54AprftsR0dyYdi";
+    private final static String IMP_KEY = "";//포트원 IMP : 확인 키
+    private final static String IMP_SECRET = "";//포트원 IMP : 암호화 키
 
     // 토큰 발급 요청
     public static PaymentInfoDTO portOne_code() {

@@ -1,9 +1,9 @@
 package com.coma.app.biz.grade;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("gradeService")
 public class GradeServiceImpl implements GradeService{

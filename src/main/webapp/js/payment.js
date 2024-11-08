@@ -8,7 +8,7 @@
 function requestPay() {
 
     var IMP = window.IMP; // imp 객체를 가져온다.
-    IMP.init("imp87461252"); // 고객사 식별 코드
+    IMP.init(""); // 고객사 식별 코드
 
     // let uuid = self.crypto.randomUUID(); // 랜덤 uuid생성 // 기존 배포전 uuid 생성 방법
     let uuid = generateUUID(); // 랜덤 uuid생성 // 기존 배포전 uuid 생성 방법

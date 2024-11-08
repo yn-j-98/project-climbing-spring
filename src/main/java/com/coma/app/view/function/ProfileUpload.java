@@ -1,3 +1,4 @@
+/*
 package com.coma.app.view.function;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class ProfileUpload {
 
                 // 업로드 경로 설정
                 String uploadPath = servletContext.getRealPath("/profile_img/");
-                
+
                 // 사용자 아이디 + 사용자가 올린 파일 형식
                 filename = (String) session.getAttribute("MEMBER_ID") + fileForm;
 
@@ -46,7 +47,8 @@ public class ProfileUpload {
             System.out.println("file upload error");
             return filename; // 오류 발생 시 파일 이름 반환
         }
-        
+
         return filename; // 성공적으로 업로드한 파일 이름 반환
     }
 }
+*/

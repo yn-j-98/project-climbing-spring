@@ -3,7 +3,6 @@ package com.coma.app.view.community;
 import com.coma.app.biz.board.BoardDTO;
 import com.coma.app.biz.reply.ReplyDTO;
 import com.coma.app.biz.reply.ReplyService;
-
 import com.coma.app.view.annotation.LoginCheck;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
